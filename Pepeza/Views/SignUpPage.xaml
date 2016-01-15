@@ -22,7 +22,7 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid DataContext="{StaticResource User}"
-          Background="#FFFFFFFF"
+          Background="{StaticResource pageBackground}"
           >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -85,41 +85,39 @@
                        Visibility="{Binding ArePasswordsMatching ,Mode=TwoWay , Converter={StaticResource converter}}"
                        Name="txtBlockPassMatch"
                        Style="{StaticResource txtBlockError}"/>
-                <StackPanel Orientation="Horizontal">
-                    <ProgressRing 
-                    Visibility="{Binding ShowProgressRing , Converter={StaticResource converter}}"
-                    IsActive="True"
-                    Name="progressRingAccount" 
-                    Style="{StaticResource progressRingStyle}"
-                   />
-                    <TextBlock 
-                        Visibility="{Binding ShowProgressRing , Converter={StaticResource converter}}"
-                       Style="{StaticResource txtBlockStatus}"
-                       Text="just a second..."
-                       Name="txtBlockRingCaption"
-                       />
-                </StackPanel>
                 <Button Style="{StaticResource btnStyle}"
                     Name="btnSignUp"
                     IsEnabled="{Binding CanUserSignUp}"
-                    CommandParameter="{Binding}"
-                    Content="Sign up" 
+                    CommandParameter="{Binding}" 
                     HorizontalAlignment="Center"
-                    Command="{Binding SignUpCommand, Source={StaticResource VMSignUp}}"/>
+                    Command="{Binding SignUpCommand, Source={StaticResource VMSignUp}}">
+                    <Button.Content>
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            MaxHeight="35">
+                            <ProgressRing Height="20"
+                                    IsActive="True"
+                                          Width="20"
+                                          Visibility="Collapsed"
+                                          />
+                            <TextBlock Text="Sign Up" 
+                                       TextLineBounds="Tight"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <StackPanel Orientation="Horizontal" Height="49">
                     <TextBlock 
                     Margin="48,0,0,0"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
                     Foreground="#FF000000"
-                    Text="I already have an account ,"
+                    Text="I already have an account ?"
                     Name="txtBlockHaveAccount"
                     FontSize="16"
                        />
-                    <HyperlinkButton Content="Login" 
-                                 Foreground="Blue"
-                                 FontSize="16"
-                                 VerticalAlignment="Bottom"
+                    <HyperlinkButton Content="  Login" 
+                                 Style="{StaticResource hlbtnStyle}"
                              NavigateUri="/Views/LoginPage.xaml"
                              Name="hypBtnLogin"
                              />

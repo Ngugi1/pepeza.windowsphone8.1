@@ -35,5 +35,10 @@ namespace Pepeza.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
+
+        private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
