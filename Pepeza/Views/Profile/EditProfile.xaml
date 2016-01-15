@@ -1,0 +1,100 @@
+﻿<Page
+    x:Class="Pepeza.Views.EditProfile"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views"
+    xmlns:VisibilityConverter="using:Pepeza.ViewModels"
+    xmlns:header="using:Pepeza.CustomControls"
+    xmlns:converter="using:Pepeza.ViewModels.Converters"
+    xmlns:userprofile="using:Pepeza.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <VisibilityConverter:VMUpdateProfile x:Key="CmdUpdateProfile" />
+            <VisibilityConverter:BoolVisibilityConverter x:Key="converter"/>
+            <converter:QuickVisibilityConverter x:Key="QuickConverer"/>
+            <header:PageHeader x:Key="PageHeader"/>
+            <userprofile:User x:Key="UserValidator"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary  Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid 
+        Name="RootGrid"
+        DataContext="{StaticResource UserValidator}"
+        Background="{StaticResource pageBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Style="{StaticResource HeaderStackPanel}">
+            <TextBlock Text="Update Profile"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Margin="28,12"
+                       />
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <TextBox 
+                Name="txtBoxUsername"
+                IsSpellCheckEnabled="False"
+                Text="{Binding Username ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                PlaceholderText="select username"
+                Style="{StaticResource txtBoxStyle}"
+                Header="Username"
+                Margin="0,24,0,0"
+                
+                     />
+            <TextBlock 
+                Name="txtBlockUsernameError"
+                Visibility="{Binding IsUsernameValid ,Mode=TwoWay,Converter={StaticResource converter}}"
+                Style="{StaticResource txtBlockError}"
+                Text="username is already taken or invalid"
+                />
+            <TextBox Header="Email"
+                     PlaceholderText="e.g.  someone@gmail.com"
+                     Name="txtBoxEmail"
+                    IsSpellCheckEnabled="False"
+                     Margin="12"
+                     Text="{Binding Email ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource txtBoxStyle}"
+                     />
+            <TextBlock Name="txtBlockEmailError"
+                       Visibility="{Binding IsEmailValid ,Mode=TwoWay, Converter={StaticResource converter}}"
+                       Style="{StaticResource txtBlockError}"
+                       Text="Email is invalid or is already in use"
+                       />
+            <Button Name="btnUpdateProfile"
+                    Style="{StaticResource btnStyle}"
+                    Height="50"
+                    HorizontalAlignment="Center"
+                        CommandParameter="{Binding}"
+                        Command="{Binding CMDUpdateProf, Source={StaticResource CmdUpdateProfile}}"
+                        IsEnabled="{Binding CanUserSignUp , Mode=TwoWay}"
+                        Margin="8,16"
+                        >
+                <StackPanel Margin="0"
+                            Orientation="Horizontal"
+                            >
+                    <ProgressRing Width="25" Height="25"
+                                  Name="ProgressRingUpdating"
+                                  IsEnabled="True"
+                                   Visibility="{Binding ShowProgressRing, Converter={StaticResource QuickConverer}}"
+                                  Margin="0,0,2,0"
+                                  IsActive="True"
+                                  />
+                    <TextBlock Text="Update" 
+                               Height="25"
+                               VerticalAlignment="Center"
+                               Name="txtBlockContent"/>
+                </StackPanel>
+            </Button>
+            <TextBlock Style="{StaticResource txtBlockError}"
+                       Text="{Binding  StatusMessage , Mode=TwoWay}"
+                       />
+        </StackPanel>
+    </Grid>
+</Page>

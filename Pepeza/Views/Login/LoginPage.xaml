@@ -30,8 +30,18 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!--Here we do some adaptive UI-->
-        <pageHeader:PageHeader Grid.Row="0" />
+        <StackPanel 
+            Orientation="Horizontal"
+            Style="{StaticResource HeaderStackPanel}">
+            <Image Source="/Assets/Images/icon.png"
+                   Margin="4"
+                   />
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                       Text="Login"
+                       Margin="24,4"
+                       VerticalAlignment="Bottom"
+                       />
+        </StackPanel>
         <StackPanel 
     		x:Name="relPanelParent"
     		Grid.Row="1" >

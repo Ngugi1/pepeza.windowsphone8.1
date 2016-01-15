@@ -15,7 +15,7 @@ namespace Pepeza.Models
     {
         #region Validation Properties
         //Validattion properties
-        private bool _showProgressRing = true;
+        private bool _showProgressRing;
 
         public bool ShowProgressRing
         {

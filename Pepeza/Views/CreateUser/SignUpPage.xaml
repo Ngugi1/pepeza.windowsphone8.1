@@ -111,7 +111,7 @@
                     Margin="48,0,0,0"
                     VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
-                    Foreground="#FF000000"
+                    Foreground="{StaticResource mainForeground}"
                     Text="I already have an account ?"
                     Name="txtBlockHaveAccount"
                     FontSize="16"
