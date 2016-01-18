@@ -1,4 +1,5 @@
 ﻿using Pepeza.Validation;
+using Pepeza.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +14,10 @@ namespace Pepeza.Models
     /// </summary>
     public class User : INotifyPropertyChanged
     {
+        public SignUpPage rootPage { get; set; }
         #region Validation Properties
         //Validattion properties
-        private bool _showProgressRing;
+        private bool _showProgressRing = false;
 
         public bool ShowProgressRing
         {
@@ -29,7 +31,7 @@ namespace Pepeza.Models
 
 
 
-        private bool _canUserSignUp = true;
+        private bool _canUserSignUp = false;
 
         public bool CanUserSignUp
         {
@@ -103,9 +105,9 @@ namespace Pepeza.Models
             set
             {
                 _username = value;
-                OnPropertyChanged("Username");
                 IsUsernameValid = UserValidation.IsUsernameValid(_username);
                 CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
+                OnPropertyChanged("Username");
             }
         }
 

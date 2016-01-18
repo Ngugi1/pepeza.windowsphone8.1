@@ -34,11 +34,17 @@ namespace Pepeza.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            this.Frame.Navigate(typeof(SignUpPage));
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            this.Frame.GoBack();
+        }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.ToastFieldsIncomplete.Message = "This is a  new message";
         }
     }
 }

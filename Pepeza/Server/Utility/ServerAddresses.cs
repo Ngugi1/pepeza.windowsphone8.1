@@ -8,6 +8,6 @@ namespace Pepeza.Server.Utility
 {
     public class ServerAddresses
     {
-        public static string BASE_URL { get; set; }
-    }
+      public static string BASE_URL { get { return "http://localhost:8000"; } }
+     }
 }

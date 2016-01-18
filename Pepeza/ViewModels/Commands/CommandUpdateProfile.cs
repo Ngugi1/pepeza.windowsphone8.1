@@ -26,38 +26,8 @@ namespace Pepeza.ViewModels.Commands
         public async void Execute(object parameter)
         {
 
-            ProfileInfo result = null;
-            //Get the datacontext of the grid
-            User usr = parameter as User;
-            //enable progress ring and disable the button
-            usr.ShowProgressRing = true;
-            usr.CanUserSignUp = false;
-            usr.StatusMessage = "";
-            //Now check for internet connectivity
-            Network connection = new Network();
-            if (!connection.HasInternetConnection)
-            {
-                //Make the call to the server
-                RequestUser request = new RequestUser(ServerAddresses.BASE_URL);
-                await request.searchUsers("ngu");
-                result = await request.updateUserProfile(new ProfileInfo() { email = usr.Email, username = usr.Username });
-                //Done , do some clean up and navigate back to the profile page
-
-            }
-            else
-            {
-                setStausMessage("Please check your internet connection", usr);
-            }
-
-
         }
-        private void setStausMessage(string message, User usr)
-        {
-            usr.CanUserSignUp = true;
-            usr.ShowProgressRing = false;
-            usr.StatusMessage = message;
-        }
-
+        
     }
 }
 

@@ -9,6 +9,7 @@
     <SolidColorBrush Color="Red" x:Key="fgRed"/>
     <SolidColorBrush Color="#FFFFFFFF" x:Key="pageBackground"/>
     <SolidColorBrush Color="#127575" x:Key="mainForeground"/>
+    <SolidColorBrush Color="#00BAD4" x:Key="BtnBackground"/>
     <!--TextBox header template-->
     <DataTemplate x:Key="HeaderTemplate">
         <TextBlock 
@@ -75,14 +76,13 @@
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="FontWeight" Value="Thin"/>
-        <Setter Property="Foreground" Value="#FF000000"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Background" Value="#33000000"/>
+        <Setter Property="Background" Value="#00BAD4"/>
     </Style>
     
     <!--HyperLink Button Style-->
     <Style TargetType="HyperlinkButton" x:Key="hlbtnStyle">
-        <Setter Property="Foreground" Value="Blue"/>
+        <Setter Property="Foreground" Value="#00BAD4"/>
         <Setter Property="FontSize" Value="16"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>

@@ -98,16 +98,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Connectivity\Network.cs" />
     <Compile Include="Server\Requests\RequestUser.cs" />
-    <Compile Include="Server\ServerModels\Login.cs" />
-    <Compile Include="Server\ServerModels\UserInfo.cs" />
+    <Compile Include="Server\ServerModels\User\Login.cs" />
+    <Compile Include="Server\ServerModels\User\SignUp.cs" />
+    <Compile Include="Server\ServerModels\User\UserInfo.cs" />
     <Compile Include="Server\Utility\ServerAddresses.cs" />
+    <Compile Include="Utitlity\Constants.cs" />
     <Compile Include="Validation\UserValidation.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
-    <Compile Include="ViewModels\Commands\CommandSignUp.cs" />
     <Compile Include="ViewModels\Commands\CommandUpdateProfile.cs" />
     <Compile Include="ViewModels\Converters\BoolVisibilityConverter.cs" />
     <Compile Include="ViewModels\Converters\QuickVisibilityConverter.cs" />
-    <Compile Include="ViewModels\ViewModelSignUp.cs" />
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
     <Compile Include="ViewModels\ViewModelLogin.cs" />
     <Compile Include="Views\Profile\EditProfile.xaml.cs">
@@ -186,6 +186,9 @@
     </Reference>
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Toastinet">
+      <HintPath>..\packages\Toastinet.2.8\lib\wpa81\Toastinet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 //using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Pepeza.Validation
@@ -26,23 +27,26 @@ namespace Pepeza.Validation
             return false;
         }
 
-        public static bool IsEmailValid(string email)
+        public static bool IsEmailValid(string inputEmail)
         {
-  //          return new EmailAddressAttribute().IsValid(email);
-            return true;
+            string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
+                  @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
+                  @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            Regex re = new Regex(strRegex);
+            if (re.IsMatch(inputEmail))
+                return (true);
+            else
+                return (false);
         }
 
         public static bool IsUsernameValid(string username)
         {
-            if (username.Length > 4)
+            if (username.Length >= 4 && username.Any(char.IsLetterOrDigit))
             {
-                if (username.Any(char.IsLetterOrDigit))
-                {
-                    if (username.Contains("_")) return true;
-                    return true;
-                }
+                if (username.Contains("_")) return true;
+                return true;
             }
-            return false;
+            return false;  
         }
     }
 }
