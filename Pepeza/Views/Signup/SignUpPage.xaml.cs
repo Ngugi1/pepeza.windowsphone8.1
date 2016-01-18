@@ -82,7 +82,6 @@ namespace Pepeza.Views
                     {
                         //Save API Token and go to main Page
                         showToast(results[Constants.APITOKEN]);
-
                     }
                 }
             }

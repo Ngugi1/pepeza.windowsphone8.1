@@ -149,20 +149,11 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <Toast:Toastinet Duration="3"
-                         Grid.Row="1"
-                        VerticalAlignment="Bottom"
-                       
+        <Toast:Toastinet 
+            Style="{StaticResource ToastStyle}"
+                       Grid.Row="1"
                                  x:FieldModifier="Public"
                                  x:Name="ToastFieldsIncomplete"
-                                 Height="40"
-                                 AnimationType="LeftToRight"
-                                 Canvas.ZIndex="1"
-                                 Width="Auto"
-                                 TextWrapping="Wrap"
-                                 FontSize="15"
-                                 FontFamily="Segoe UI"
-                                 Background="Red"
                                  ></Toast:Toastinet>
     </Grid>
 </Page>

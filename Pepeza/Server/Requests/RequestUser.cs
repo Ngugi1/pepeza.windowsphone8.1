@@ -113,6 +113,48 @@ namespace Pepeza.Server.Requests
             }
             return resConent;
         }
+        public static async Task<Dictionary<string, string>> updateUserProfile(Dictionary<string,string> toUpdate)
+        {
+            //Get API token and add it to the header
+            HttpClient client = getHttpClient();
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "3c9a07ef152faef51461ae0dbf247a4b");
+            Dictionary<string, string> resContent = new Dictionary<string, string>();
+            if (!checkInternetConnection())
+            {
+                HttpResponseMessage response;
+                try
+                {
+                    response = await client.PutAsJsonAsync("user", toUpdate);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        //Updated 
+                        JObject obj = await response.Content.ReadAsAsync<JObject>();
+                        resContent.Add(Constants.UPDATED, (string)obj["message"]);
+                    }
+                    else
+                    {
+                        //Not succcessful
+                        resContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    //Error occoured
+                    resContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                resContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return resContent;
+        }
+
+        /// <summary>
+        /// 
+        /// Prepares a httpclient and adds all headers
+        /// </summary>
+        /// <returns></returns>
         private static HttpClient getHttpClient()
         {
             HttpClient client = new HttpClient();

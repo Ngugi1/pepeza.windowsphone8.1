@@ -42,7 +42,7 @@ namespace Pepeza.Views
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.GoBack();
+            this.Frame.Navigate(typeof(SignUpPage));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

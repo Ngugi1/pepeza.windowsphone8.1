@@ -1,8 +1,9 @@
 ﻿<Page
-    x:Class="Pepeza.Views.userProfile"
+    x:Class="Pepeza.Views.UserProfile"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pepeza.Views"
+    xmlns:Toast="using:Toastinet"
     xmlns:pageHeader="using:Pepeza.CustomControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,82 +29,113 @@
         </Grid.RowDefinitions>
         <!--Header section-->
         <StackPanel 
+          Orientation="Horizontal"
          Style="{StaticResource HeaderStackPanel}"
          Grid.Row="0"
            >
+            <Image Source="/Assets/Images/icon.png"
+                   Margin="8,4"
+                   />
             <TextBlock 
                 Grid.Row="0"
-                VerticalAlignment="Bottom"
-                Margin="16,18"
                 Text="Profile"
                 Style="{StaticResource TitleTextBlockStyle}"/>
         </StackPanel>
-    <!--Page contents-->
+        <!--Page contents-->
         <ScrollViewer Grid.Row="1">
-        <StackPanel x:Name="relativePanel" Grid.Row="1">
+            <StackPanel x:Name="relativePanel"
+                        Grid.Row="1">
                 <StackPanel
                            Name="relativePanelProfPic"
                            Height="Auto"
                            >
                     <Rectangle Height="192"
                              Margin="16,24,0,0"
-                         Name="ellipseProfilePic"
+                         Name="rectangleProfilePic"
                          Width="192"
                          >
                         <Rectangle.Fill>
                             <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
                         </Rectangle.Fill>
                     </Rectangle>
-                    <!--<AppBarButton Icon="Edit"
-                              Foreground="White"
-                              />-->
-                </StackPanel>
-                <StackPanel 
-                MaxHeight="60"
-                Orientation="Horizontal">
-                <AppBarButton Icon="Account"
-                   IsEnabled="False"
+                    <StackPanel>
+                        <StackPanel 
+                        MaxHeight="60"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                            <AppBarButton Icon="Account"
                    Style="{StaticResource AppBarBtnStyle}"
                    Name="appBarButtonAccount"
-                   Margin="8"
-                              Foreground="#00BAD4"
-                          />
-                <TextBlock Text="ngugi"
+                         />
+                            <TextBlock Text="ngugi"
                        Style="{StaticResource txtBlockDisplay}"
                         VerticalAlignment="Bottom"
                         Name="txtBlockUsername"
                        Margin="4"
                       />
 
-            </StackPanel>
-            <StackPanel
-                MaxHeight="60"
-                Orientation="Horizontal"
-                >
-                <AppBarButton Icon="Mail"
-                              Foreground="#00BAD4"
-                         IsEnabled="False"
-                         Style="{StaticResource AppBarBtnStyle}"
-                         Name="appBarbtnMail"
-                          Margin="8,10"
-                          />
-                <TextBlock 
-                    Style="{StaticResource  txtBlockDisplay}"
-                     Text="ngugindunguapps@gmail.com"
-                     Name="txtblockEmail"
-                     Margin="8,10"
+                        </StackPanel>
+                        
+                        <TextBlock 
+                            Name="txtBlockFullName"
+                            Visibility="Collapsed"
+                    HorizontalAlignment="Center"
+                            Text=""
+                            Style= "{StaticResource txtBlockDisplay}"/>
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            MaxHeight="60"
+                            Orientation="Horizontal">
+                            <AppBarButton Icon="Mail" 
+                                          Content="Update"
+                                          VerticalAlignment="Bottom"
+                                          Style="{StaticResource AppBarBtnStyle}"
+                                          />
+                            <TextBlock 
+                           Style="{StaticResource  txtBlockDisplay}"
+                           Name="txtblockEmail"
+                            Text="ngugi@gmail.com"
+                                
+                                VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                           Margin="8,24,10,0"
                          />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
 
-            </StackPanel>               
-        </StackPanel>
+                <StackPanel
+                    Name="stackPanelAddFirstLastName"
+                    Margin="16,0,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    >
+                    <TextBox 
+                		PlaceholderText="Firstname"
+                		MaxLength="10"      
+                        Name="txtBoxFirstName"
+                		Margin="16,4"
+                		Width="150"
+                                 />
+                    <TextBox
+                        Name="txtBoxLastName"
+                		PlaceholderText="Lastname"
+                		Width="150"
+                		Margin="16,4"
+                        />
+                </StackPanel>
+            </StackPanel>
         </ScrollViewer>
-        
+        <Toast:Toastinet 
+            Name="ToastNetErrors"
+            Grid.Row="1"
+            Style="{StaticResource ToastStyle}"/>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Background="#127575 ">
-            <AppBarButton Icon="Edit"
+            <AppBarButton Icon="Accept"
                           Foreground="#00BAD4"
-                          Content="Edit"
+                          Content="Update"
                           Name="appBarBtnEditDetails"
                           Click="editProfileClicked"
                           />
