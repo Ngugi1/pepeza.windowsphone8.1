@@ -189,6 +189,35 @@ namespace Pepeza.Server.Requests
 
             return responseContent;
         }
+        /// <summary>
+        /// Deactivate user account such that no results appear on search
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<Dictionary<string, string>> deactivateUser(Dictionary<string,string> toDeactivate)
+        {
+            HttpClient client = getHttpClient();
+            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "41a39ee7986c6a8e61fb6e6495bfe053");
+            if (checkInternetConnection())
+            {
+                HttpResponseMessage message = await client.PutAsJsonAsync("deactivate", toDeactivate);
+                if (message.StatusCode == HttpStatusCode.OK)
+                {
+                    responseContent.Add(Constants.UPDATED, message.StatusCode.ToString());
+                }
+                else
+                {
+                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                //No internet connection
+                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return responseContent;
+        }
+
 
         /// <summary>
         /// 
@@ -208,6 +237,8 @@ namespace Pepeza.Server.Requests
             Network network = new Network();
             return network.HasInternetConnection;
         }
+       
+
     }
 
 }
