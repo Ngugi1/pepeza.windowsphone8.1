@@ -150,6 +150,46 @@ namespace Pepeza.Server.Requests
             return resContent;
         }
 
+        public static async Task<Dictionary<string, string>> logout()
+        { 
+            //Get API-TOKEN 
+            HttpClient client = getHttpClient();
+            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "3c9a07ef152faef51461ae0dbf247a4b");
+            HttpResponseMessage response;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.PutAsync("logout", null);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        //Successfull
+                        responseContent.Add(Constants.UPDATED, "Logged Out");
+
+                    }
+                    else
+                    {
+                        //something went wrong 
+                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                //Please check internet connection
+                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+
+            return responseContent;
+        }
+
         /// <summary>
         /// 
         /// Prepares a httpclient and adds all headers

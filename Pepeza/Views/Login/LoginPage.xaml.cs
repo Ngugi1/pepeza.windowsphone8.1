@@ -35,9 +35,10 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.Frame.Navigate(typeof(SignUpPage));
+            //this.Frame.Navigate(typeof(SignUpPage));
+            Dictionary<string,string> results = await RequestUser.logout();
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
