@@ -129,8 +129,8 @@
     		x:Name="relPanelParent"
     		Grid.Row="1" >
             <!--Controls Section-->
-            <TextBox Header="username / email"
-    			x:Name="textBoxUsername"
+            <TextBox Header="username/email"
+    			Name="textBoxUsername"
                 Margin="0,24,0,0"
                 Text="{Binding Username}"
     			PlaceholderText="enter email or username"
@@ -141,14 +141,6 @@
                 Password="{Binding Password}"
     			PlaceholderText="enter your password"
     			Style="{StaticResource passBoxStyle}"/>
-            <Button
-                HorizontalAlignment="Center"
-    			x:Name="btnLogin"
-                Content="Login"
-                
-                CommandParameter="{Binding}"
-                Style="{StaticResource btnStyle}"
-    			/>
 
             <TextBlock Name="txtBlockLoginStaus"
                        
@@ -156,6 +148,24 @@
                        Style="{StaticResource txtBlockError}"
                        Text="Logging failled"
                        />
+            <StackPanel Orientation="Horizontal">
+            <Button
+                HorizontalAlignment="Center"
+                Margin="120,8,8,8"
+    			x:Name="btnLogin"
+                Content="Login"
+                Click="btnLogin_Click"
+                CommandParameter="{Binding}"
+                Style="{StaticResource btnStyle}"
+    			/>
+                <ProgressRing 
+                    Name="PRLogin"
+                    Visibility="Collapsed"
+                    Style="{StaticResource PRstyle}"
+                    />
+                
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal">
                 <TextBlock 
                                Style="{StaticResource  txtBlockStatus}"
@@ -171,20 +181,19 @@
                         Click="hypBtnSignUp_Click"
     			                     />
             </StackPanel>
-            <Button Content="Login" 
-                    Style="{StaticResource Btn}"
-                        
-                    />
         </StackPanel>
-        <Toast:Toastinet Duration="1"
-                                 x:Name="ToastFieldsIncomplete"
-                                 Height="35"
-                                 Message="Make sure all fields are correctly filled"
-                                 AnimationType="LeftToRight"
-                                 Canvas.ZIndex="1"
-                                 Width="300"
-                                 FontFamily="Segoe UI"
-                                 Background="{StaticResource BtnBackground}"
+        <Toast:Toastinet 
+                         Grid.Row="1"
+                         Duration="4"
+                         VerticalAlignment="Bottom"
+                         x:Name="ToastFieldsIncomplete"
+                         Height="35"
+                          Message="Make sure all fields are correctly filled"
+                          AnimationType="LeftToRight"
+                          Canvas.ZIndex="1"
+                          FontFamily="Segoe UI"
+                          Background="Red"
+                          FontSize="14"
                                  ></Toast:Toastinet>
     </Grid>
 </Page>

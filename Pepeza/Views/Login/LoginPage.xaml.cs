@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Pepeza.Server.Requests;
+using Pepeza.Server.ServerModels;
+using Pepeza.Utitlity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,6 +48,47 @@ namespace Pepeza.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.ToastFieldsIncomplete.Message = "This is a  new message";
+        }
+
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            //just make a request provided fields are not empty 
+            if (!txtBoxPassword.Password.Equals("") && !textBoxUsername.Text.Equals(""))
+            {
+                //Update UI 
+                PRLogin.Visibility = Visibility.Visible;
+                txtBlockLoginStaus.Visibility = Visibility.Collapsed;
+                btnLogin.Opacity = 0.5;
+                //Make the request 
+                Dictionary<string,string> results = await RequestUser.loginUser(getData());
+                if (results.ContainsKey(Constants.APITOKEN))
+                {
+                    //Save token
+                    ToastFieldsIncomplete.Message = results[Constants.APITOKEN];
+                }
+                else if(results.ContainsKey(Constants.ERROR))
+                {
+                    //Notify the UI of the error
+                    ToastFieldsIncomplete.Message = results[Constants.ERROR];
+
+                }
+                else if (results.ContainsKey(Constants.LOG_FAILED))
+                {
+                    txtBlockLoginStaus.Text = Constants.INVALIDCREDENTIALS;
+                    txtBlockLoginStaus.Visibility = Visibility.Visible;
+
+                }
+               
+                PRLogin.Visibility = Visibility.Collapsed;
+                btnLogin.Opacity = 1;
+            }
+            
+        }
+
+        private  Login getData()
+        {
+
+            return new Login() { username = textBoxUsername.Text.Trim(), password = txtBoxPassword.Password.Trim() };
         }
     }
 }

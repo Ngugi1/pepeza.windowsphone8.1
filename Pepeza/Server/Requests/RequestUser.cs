@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -41,10 +42,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    HttpClient client = new HttpClient();
-                    client.BaseAddress = new Uri(ServerAddresses.BASE_URL);
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    HttpClient client = getHttpClient();
                     HttpResponseMessage response = await client.PostAsJsonAsync("user", toPost);
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
                     {
@@ -68,11 +66,66 @@ namespace Pepeza.Server.Requests
             }
             return resContent;
         }
+        /// <summary>
+        /// Checks whether username is available
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static async Task<bool> userDoesNotExist(string username)
         {
             return true;
         }
-   
+
+        /// <summary>
+        /// Logs in a user a
+        /// </summary>
+        /// <param name="toLog"></param>
+        /// <returns>API-TOKEN</returns>
+        public static async Task<Dictionary<string, string>> loginUser(Login toLog)
+        {
+            Dictionary<string, string> resConent = new Dictionary<string, string>();
+            HttpClient client = getHttpClient();
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.PutAsJsonAsync("login", toLog);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        JObject jobject = await response.Content.ReadAsAsync<JObject>();
+                        resConent.Add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
+                    }
+                    else
+                    {
+                        resConent.Add(Constants.LOG_FAILED, Constants.INVALIDCREDENTIALS);
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error :" + ex.Message);
+                    resConent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                resConent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return resConent;
+        }
+        private static HttpClient getHttpClient()
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(ServerAddresses.BASE_URL);
+            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            return client;
+        }
+        private static bool checkInternetConnection()
+        {
+            Network network = new Network();
+            return network.HasInternetConnection;
+        }
     }
 
 }

@@ -13,5 +13,7 @@ namespace Pepeza.Utitlity
         public static string NO_INTERNET_CONNECTION { get { return "Please check your internet connection!"; } }
         public static string ERROR { get { return "ERROR"; }  }
         public static string EMAIL_EXISTS { get { return "Email is already in use, please enter a different email"; } }
+        public static string INVALIDCREDENTIALS { get { return "Wrong username / password combination"; }}
+        public static string LOG_FAILED { get { return "LOG_FAILED"; } }
     }
 }
