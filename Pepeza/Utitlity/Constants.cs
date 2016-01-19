@@ -16,5 +16,6 @@ namespace Pepeza.Utitlity
         public static string INVALIDCREDENTIALS { get { return "Wrong username / password combination"; }}
         public static string LOG_FAILED { get { return "LOG_FAILED"; } }
         public static string UPDATED { get { return "UPDATED"; }  }
+        public static string SUCCESS {get{return "SUCCESS";} }
     }
 }

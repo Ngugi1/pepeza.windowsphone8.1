@@ -218,6 +218,34 @@ namespace Pepeza.Server.Requests
             return responseContent;
         }
 
+        public static async Task<Dictionary<string, string>> getUser()
+        {
+            //get API Token
+            HttpClient client = getHttpClient();
+            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "e7be6c98232024d8aaf0a96f5e71053a");
+            HttpResponseMessage response;
+            if (checkInternetConnection())
+            {
+                response = await client.GetAsync("user");
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    string userDetails = JsonConvert.SerializeObject(await response.Content.ReadAsAsync<JObject>());
+                    responseContent.Add(Constants.SUCCESS, userDetails);
+                }
+                else
+                {
+                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+               //Network conectivity
+                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return responseContent;
+        }
+
 
         /// <summary>
         /// 

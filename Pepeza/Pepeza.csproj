@@ -102,7 +102,7 @@
     <Compile Include="Server\ServerModels\User\SignUp.cs" />
     <Compile Include="Server\ServerModels\User\UserInfo.cs" />
     <Compile Include="Server\Utility\ServerAddresses.cs" />
-    <Compile Include="Server\Validation\Utitlity\Constants.cs" />
+    <Compile Include="Utitlity\Constants.cs" />
     <Compile Include="Server\Validation\UserValidation.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
     <Compile Include="ViewModels\Commands\CommandUpdateProfile.cs" />
