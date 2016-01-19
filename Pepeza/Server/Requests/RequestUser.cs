@@ -27,6 +27,7 @@ namespace Pepeza.Server.Requests
     class RequestUser
     {
 
+        private static  HttpClient client { get; set; }
         /// <summary>
         /// This method creates a new user in the system
         /// </summary>
@@ -245,7 +246,45 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
+        public static async Task<Dictionary<string, string>> searchUser(Dictionary<string,string> query)
+        {
+            HttpClient client = getHttpClient();
+            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            HttpResponseMessage response = null;
+            int start = int.Parse(query["start"]);
+            int limit = int.Parse(query["limit"]);
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "96789ef08f034454bc60815407a2e4e3");
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync("search/user/0/2/ngugi");
+                    var con = response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //success
+                        responseContent.Add(Constants.SUCCESS, JsonConvert.SerializeObject(await response.Content.ReadAsAsync<JObject>()));
+                    }
+                    else
+                    {
+                        //error
+                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
 
+                    }
+                }
+                catch
+                {
+                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                //Notify we have no internet 
+                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+
+            return responseContent;
+        }
 
         /// <summary>
         /// 
@@ -254,7 +293,7 @@ namespace Pepeza.Server.Requests
         /// <returns></returns>
         private static HttpClient getHttpClient()
         {
-            HttpClient client = new HttpClient();
+            client = new HttpClient();
             client.BaseAddress = new Uri(ServerAddresses.BASE_URL);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -264,6 +303,13 @@ namespace Pepeza.Server.Requests
         {
             Network network = new Network();
             return network.HasInternetConnection;
+        }
+        /// <summary>
+        /// Cancel a pending request
+        /// </summary>
+        public static void cancelRequest()
+        {
+            client.CancelPendingRequests();
         }
        
 
