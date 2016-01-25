@@ -62,7 +62,7 @@ namespace Pepeza.Views
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong
-                        ToastNetErrors.Message = results[Constants.ERROR];   
+                        //ToastNetErrors.Message = results[Constants.ERROR];   
                     }
                     else if (results.ContainsKey(Constants.UPDATED))
                     {

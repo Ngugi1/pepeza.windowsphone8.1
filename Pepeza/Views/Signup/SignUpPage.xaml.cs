@@ -59,7 +59,6 @@ namespace Pepeza.Views
         //Now make the request to the server
         private async void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-
             User user = btnSignUp.CommandParameter as User;
             if (user.CanUserSignUp)
             {
@@ -82,6 +81,12 @@ namespace Pepeza.Views
                     {
                         //Save API Token and go to main Page
                         showToast(results[Constants.APITOKEN]);
+                    }
+                    else if (results.ContainsKey(Constants.INVALID_DATA))
+                    {
+                        //update UI Accordinglly
+                        processErrors(results, user);
+                        
                     }
                 }
             }
@@ -116,6 +121,39 @@ namespace Pepeza.Views
         {
         
         }
+
+        private void processErrors(Dictionary<string, string> errors , User usr)
+        {
+               if(errors.ContainsKey("1"))
+               {
+                        usr.IsUsernameValid = false;
+                        txtBlockUsernameStatus.Text = errors["1"];
+                        errors.Remove("1");
+               }
+                if(errors.ContainsKey("2"))
+                    {
+                        usr.IsUsernameValid = false;
+                        txtBlockUsernameStatus.Text = errors["2"];
+                        errors.Remove("2");
+                    }
+            if(errors.ContainsKey("3"))
+                    {
+                        usr.IsPasswordValid = false;
+                        txtBlockPassStatus.Text = errors["3"];
+                        errors.Remove("3");
+                    }
+            if(errors.ContainsKey("4"))
+                    {
+                        usr.IsEmailValid = false;
+                        txtBlockEmailStatus.Text = errors["4"];
+                        errors.Remove("4");
+                    }
+            if(errors.ContainsKey("5")){
+                        usr.IsEmailValid = false;
+                        txtBlockEmailStatus.Text = errors["5"];
+                        errors.Remove("5");
+                    }
+            }
+        } 
         
     }
-}

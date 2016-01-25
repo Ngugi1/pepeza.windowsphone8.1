@@ -39,9 +39,9 @@ namespace Pepeza.Views
         {
             //this.Frame.Navigate(typeof(SignUpPage));
             //Dictionary<string,string> results = await RequestUser.logout();
-            //await RequestUser.deactivateUser(new Dictionary<string, string>() {{"password","password10"}});
+            //await RequestUser.deactivateUser();
             //await RequestUser.getUser();
-            await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"},{"start","0"},{"limit","10"} });
+           //await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"}});
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)

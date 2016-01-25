@@ -17,5 +17,6 @@ namespace Pepeza.Utitlity
         public static string LOG_FAILED { get { return "LOG_FAILED"; } }
         public static string UPDATED { get { return "UPDATED"; }  }
         public static string SUCCESS {get{return "SUCCESS";} }
+        public static string INVALID_DATA { get { return "INVALID_DATA"; }}
     }
 }

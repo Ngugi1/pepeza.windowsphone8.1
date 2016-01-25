@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Server.Utility
 {
-    public class ServerAddresses
+    public class Addresses
     {
-      public static string BASE_URL { get { return "http://localhost:8000"; } }
-     }
+        public static string BASE_URL { get { return "http://localhost:8000"; } }
+    }
 }

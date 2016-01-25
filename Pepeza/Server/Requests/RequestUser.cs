@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pepeza.Db.Models;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models;
 using Pepeza.Server.Connectivity;
 using Pepeza.Server.ServerModels;
@@ -44,15 +45,21 @@ namespace Pepeza.Server.Requests
                 try
                 {
                     HttpClient client = getHttpClient();
-                    HttpResponseMessage response = await client.PostAsJsonAsync("user", toPost);
+                    HttpResponseMessage response = await client.PostAsJsonAsync(UserAddresses.NEW_USER, toPost);
+                    JObject jsonObject = null;
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
                     {
-                        JObject jsonObject = await response.Content.ReadAsAsync<JObject>();
+                        //read response 
+                        jsonObject = await response.Content.ReadAsAsync<JObject>();
                         resContent.Add(Constants.APITOKEN ,(string)jsonObject[Constants.APITOKEN]);
+                        Settings.add(Constants.APITOKEN, (string)jsonObject[Constants.APITOKEN]);
                     }
-                    else
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        resContent.Add(Constants.ERROR, Constants.EMAIL_EXISTS);
+                        JArray errors = await response.Content.ReadAsAsync<JArray>();
+                        resContent = getJArrayKeys(errors);
+                        resContent.Add(Constants.INVALID_DATA, Constants.INVALID_DATA);
+                       
                     }
                 }
                 catch (Exception ex)
@@ -90,11 +97,13 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    HttpResponseMessage response = await client.PutAsJsonAsync("login", toLog);
+                    HttpResponseMessage response = await client.PutAsJsonAsync(UserAddresses.LOGIN_USER, toLog);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         JObject jobject = await response.Content.ReadAsAsync<JObject>();
+                        //save API Token to Isolated Strorage
                         resConent.Add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
+                        Settings.add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
                     }
                     else
                     {
@@ -118,14 +127,14 @@ namespace Pepeza.Server.Requests
         {
             //Get API token and add it to the header
             HttpClient client = getHttpClient();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "3c9a07ef152faef51461ae0dbf247a4b");
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
             Dictionary<string, string> resContent = new Dictionary<string, string>();
             if (!checkInternetConnection())
             {
                 HttpResponseMessage response;
                 try
                 {
-                    response = await client.PutAsJsonAsync("user", toUpdate);
+                    response = await client.PutAsJsonAsync(UserAddresses.UPDATE_USER, toUpdate);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Updated 
@@ -156,13 +165,13 @@ namespace Pepeza.Server.Requests
             //Get API-TOKEN 
             HttpClient client = getHttpClient();
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "3c9a07ef152faef51461ae0dbf247a4b");
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
             HttpResponseMessage response;
             if (checkInternetConnection())
             {
                 try
                 {
-                    response = await client.PutAsync("logout", null);
+                    response = await client.PutAsync(UserAddresses.LOGOUT, null);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Successfull
@@ -194,14 +203,14 @@ namespace Pepeza.Server.Requests
         /// Deactivate user account such that no results appear on search
         /// </summary>
         /// <returns></returns>
-        public static async Task<Dictionary<string, string>> deactivateUser(Dictionary<string,string> toDeactivate)
+        public static async Task<Dictionary<string, string>> deactivateUser()
         {
             HttpClient client = getHttpClient();
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "41a39ee7986c6a8e61fb6e6495bfe053");
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
             if (checkInternetConnection())
             {
-                HttpResponseMessage message = await client.PutAsJsonAsync("deactivate", toDeactivate);
+                HttpResponseMessage message = await client.PutAsync(UserAddresses.DEACTIVATE_USER, null);
                 if (message.StatusCode == HttpStatusCode.OK)
                 {
                     responseContent.Add(Constants.UPDATED, message.StatusCode.ToString());
@@ -224,11 +233,12 @@ namespace Pepeza.Server.Requests
             //get API Token
             HttpClient client = getHttpClient();
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "e7be6c98232024d8aaf0a96f5e71053a");
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
+           
             HttpResponseMessage response;
             if (checkInternetConnection())
             {
-                response = await client.GetAsync("user");
+                response = await client.GetAsync(UserAddresses.GET_USER);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string userDetails = JsonConvert.SerializeObject(await response.Content.ReadAsAsync<JObject>());
@@ -251,14 +261,12 @@ namespace Pepeza.Server.Requests
             HttpClient client = getHttpClient();
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
             HttpResponseMessage response = null;
-            int start = int.Parse(query["start"]);
-            int limit = int.Parse(query["limit"]);
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, "96789ef08f034454bc60815407a2e4e3");
+            client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
             if (checkInternetConnection())
             {
                 try
                 {
-                    response = await client.GetAsync("search/user/0/2/ngugi");
+                    response = await client.GetAsync(UserAddresses.SEARCH_USER + "?q=" + (string)query["key"]);
                     var con = response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
@@ -294,7 +302,7 @@ namespace Pepeza.Server.Requests
         private static HttpClient getHttpClient()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri(ServerAddresses.BASE_URL);
+            client.BaseAddress = new Uri(UserAddresses.BASE_URL);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return client;
@@ -311,8 +319,19 @@ namespace Pepeza.Server.Requests
         {
             client.CancelPendingRequests();
         }
-       
-
+        //gets all the values from a jsonArray 
+        public static Dictionary<string,string> getJArrayKeys(JArray jArray)
+        {
+            Dictionary<string, string> values = new Dictionary<string, string>();
+            foreach (JObject item in jArray)
+            {
+                foreach (JProperty property in item.Properties())
+                {
+                    values.Add(property.Name, (string)property.Value);
+                }
+            }
+            return values;
+        }
     }
 
 }

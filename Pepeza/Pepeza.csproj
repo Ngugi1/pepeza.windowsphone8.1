@@ -89,6 +89,7 @@
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Db\Models\LocalUserInfo.cs" />
+    <Compile Include="IsolatedSettings\Settings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -101,7 +102,8 @@
     <Compile Include="Server\ServerModels\User\Login.cs" />
     <Compile Include="Server\ServerModels\User\SignUp.cs" />
     <Compile Include="Server\ServerModels\User\UserInfo.cs" />
-    <Compile Include="Server\Utility\ServerAddresses.cs" />
+    <Compile Include="Server\Utility\Addresses.cs" />
+    <Compile Include="Server\Utility\UserAddresses.cs" />
     <Compile Include="Utitlity\Constants.cs" />
     <Compile Include="Server\Validation\UserValidation.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
