@@ -1,8 +1,10 @@
-﻿using Pepeza.Server.Requests;
+﻿using Pepeza.IsolatedSettings;
+using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -42,6 +44,9 @@ namespace Pepeza.Views
             //await RequestUser.deactivateUser();
             //await RequestUser.getUser();
            //await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"}});
+            //await RequestUser.checkUsernameAvalability("ngugi");
+            //await RequestUser.checkEmailAvailability("ngugi@gmail.com");
+            Debug.WriteLine("===================================" + Settings.getValue(Constants.APITOKEN));
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
@@ -68,7 +73,9 @@ namespace Pepeza.Views
                 if (results.ContainsKey(Constants.APITOKEN))
                 {
                     //Save token
-                    ToastFieldsIncomplete.Message = results[Constants.APITOKEN];
+                    ToastFieldsIncomplete.Message = (string)Settings.getValue((string)Constants.APITOKEN);
+                    //Navigate to deactivate account
+                    this.Frame.Navigate(typeof(Views.Account.DeactivateAccount));
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {

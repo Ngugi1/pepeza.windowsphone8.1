@@ -58,7 +58,6 @@
             <!--Controls Section-->
             <TextBox Header="username/email"
     			Name="textBoxUsername"
-                Margin="0,24,0,0"
                 Text="{Binding Username}"
     			PlaceholderText="enter email or username"
     			Style="{StaticResource txtBoxStyle}"
@@ -68,9 +67,7 @@
                 Password="{Binding Password}"
     			PlaceholderText="enter your password"
     			Style="{StaticResource passBoxStyle}"/>
-
             <TextBlock Name="txtBlockLoginStaus"
-                       
                        Visibility="{Binding IsErrorVisible , Converter={StaticResource converter}}"
                        Style="{StaticResource txtBlockError}"
                        Text="Logging failled"
@@ -94,13 +91,12 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
-                <TextBlock 
-                               Style="{StaticResource  txtBlockStatus}"
-                               Margin="36,8,4,8"
-                        FontSize="16"
-                               Name="txtBlockNoAccount"
-                               Text="Don't have an Account?"
-                               />
+                <TextBlock Style="{StaticResource  txtBlockStatus}"
+                           Margin="36,8,4,8"
+                           FontSize="16"
+                           Name="txtBlockNoAccount"
+                           Text="Don't have an Account?"
+                            />
                 <HyperlinkButton Content="Sign Up"
                         Name="hypBtnSignUp" 
                                  Margin="4"

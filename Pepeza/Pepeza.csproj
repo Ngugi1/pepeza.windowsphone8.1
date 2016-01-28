@@ -112,6 +112,9 @@
     <Compile Include="ViewModels\Converters\QuickVisibilityConverter.cs" />
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
     <Compile Include="ViewModels\ViewModelLogin.cs" />
+    <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
+      <DependentUpon>DeactivateAccount.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Profile\EditProfile.xaml.cs">
       <DependentUpon>EditProfile.xaml</DependentUpon>
     </Compile>
@@ -155,6 +158,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\Account\DeactivateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Profile\EditProfile.xaml">
       <SubType>Designer</SubType>

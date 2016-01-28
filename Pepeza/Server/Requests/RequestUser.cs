@@ -44,7 +44,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    HttpClient client = getHttpClient();
+                    HttpClient client = getHttpClient(false);
                     HttpResponseMessage response = await client.PostAsJsonAsync(UserAddresses.NEW_USER, toPost);
                     JObject jsonObject = null;
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
@@ -59,7 +59,6 @@ namespace Pepeza.Server.Requests
                         JArray errors = await response.Content.ReadAsAsync<JArray>();
                         resContent = getJArrayKeys(errors);
                         resContent.Add(Constants.INVALID_DATA, Constants.INVALID_DATA);
-                       
                     }
                 }
                 catch (Exception ex)
@@ -79,11 +78,77 @@ namespace Pepeza.Server.Requests
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static async Task<bool> userDoesNotExist(string username)
+        public static async Task<Dictionary<string,string>> checkUsernameAvalability(string username)
         {
-            return true;
-        }
+            HttpClient client = getHttpClient(false);
+            Dictionary<string,string> isAvailable = new Dictionary<string,string>();
+            HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(UserAddresses.USER_EXISTS + username);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        //Get the JSON string
+                        JObject obj = await response.Content.ReadAsAsync<JObject>();
+                        isAvailable.Add(Constants.USER_EXISTS, (string)obj["message"]);
+                    }
+                    else
+                    {
+                        //Request was unsuccessfull
+                        isAvailable.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        Debug.WriteLine(await response.Content.ReadAsAsync<JObject>());
 
+                    }
+                }
+                catch
+                {
+                    isAvailable.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                isAvailable.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return isAvailable;
+        }
+        public static async Task<Dictionary<string, string>> checkEmailAvailability(string email)
+        {
+            HttpClient client = getHttpClient(false);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> isEmailAvailable = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(UserAddresses.EMAIL_EXISTS + "?e=" + email);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        //Request was successfull 
+                        JObject jobject = await response.Content.ReadAsAsync<JObject>();
+                        isEmailAvailable.Add(Constants.EMAIL_EXISTS, (string)jobject["message"]);
+                    }
+                    else
+                    {
+                        //Some error in the request 
+                        isEmailAvailable.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    //Unknown error 
+                    isEmailAvailable.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    Debug.WriteLine(response.Content.ReadAsAsync<JObject>());
+                }
+            }
+            else
+            {
+                //Error in network connection 
+                isEmailAvailable.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return isEmailAvailable;
+        }
         /// <summary>
         /// Logs in a user a
         /// </summary>
@@ -92,7 +157,7 @@ namespace Pepeza.Server.Requests
         public static async Task<Dictionary<string, string>> loginUser(Login toLog)
         {
             Dictionary<string, string> resConent = new Dictionary<string, string>();
-            HttpClient client = getHttpClient();
+            HttpClient client = getHttpClient(false);
             if (checkInternetConnection())
             {
                 try
@@ -104,6 +169,7 @@ namespace Pepeza.Server.Requests
                         //save API Token to Isolated Strorage
                         resConent.Add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
                         Settings.add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
+                        Debug.WriteLine("==================*******************" + Settings.getValue("X-API-TOKEN"));
                     }
                     else
                     {
@@ -126,8 +192,7 @@ namespace Pepeza.Server.Requests
         public static async Task<Dictionary<string, string>> updateUserProfile(Dictionary<string,string> toUpdate)
         {
             //Get API token and add it to the header
-            HttpClient client = getHttpClient();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
+            HttpClient client = getHttpClient(true);
             Dictionary<string, string> resContent = new Dictionary<string, string>();
             if (!checkInternetConnection())
             {
@@ -163,9 +228,8 @@ namespace Pepeza.Server.Requests
         public static async Task<Dictionary<string, string>> logout()
         { 
             //Get API-TOKEN 
-            HttpClient client = getHttpClient();
+            HttpClient client = getHttpClient(true);
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
             HttpResponseMessage response;
             if (checkInternetConnection())
             {
@@ -205,9 +269,8 @@ namespace Pepeza.Server.Requests
         /// <returns></returns>
         public static async Task<Dictionary<string, string>> deactivateUser()
         {
-            HttpClient client = getHttpClient();
+            HttpClient client = getHttpClient(true);
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
             if (checkInternetConnection())
             {
                 HttpResponseMessage message = await client.PutAsync(UserAddresses.DEACTIVATE_USER, null);
@@ -231,10 +294,8 @@ namespace Pepeza.Server.Requests
         public static async Task<Dictionary<string, string>> getUser()
         {
             //get API Token
-            HttpClient client = getHttpClient();
+            HttpClient client = getHttpClient(true);
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN,(string)Settings.getValue(Constants.APITOKEN));
-           
             HttpResponseMessage response;
             if (checkInternetConnection())
             {
@@ -258,10 +319,9 @@ namespace Pepeza.Server.Requests
         }
         public static async Task<Dictionary<string, string>> searchUser(Dictionary<string,string> query)
         {
-            HttpClient client = getHttpClient();
+            HttpClient client = getHttpClient(true);
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
             HttpResponseMessage response = null;
-            client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
             if (checkInternetConnection())
             {
                 try
@@ -299,12 +359,13 @@ namespace Pepeza.Server.Requests
         /// Prepares a httpclient and adds all headers
         /// </summary>
         /// <returns></returns>
-        private static HttpClient getHttpClient()
+        private static HttpClient getHttpClient(bool addHeader)
         {
             client = new HttpClient();
             client.BaseAddress = new Uri(UserAddresses.BASE_URL);
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if (addHeader) client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
             return client;
         }
         private static bool checkInternetConnection()

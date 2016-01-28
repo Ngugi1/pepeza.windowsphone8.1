@@ -10,7 +10,7 @@ namespace Pepeza.IsolatedSettings
         public static void add(string key, object value)
         {
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (settings.Containers.ContainsKey(key))
+            if (settings.Values.ContainsKey(key))
             {
                 settings.Values.Remove(key);
                 settings.Values.Add(key, value);
@@ -23,13 +23,21 @@ namespace Pepeza.IsolatedSettings
         public static object getValue(string key)
         {
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (settings.Containers.ContainsKey(key))
+            if (settings.Values.ContainsKey(key))
             {
-                return settings.Containers[key];
+                return settings.Values[key];
             }
             else
             {
                 return null;
+            }
+        }
+        public static void remove(string key)
+        {
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey(key))
+            {
+                settings.Values.Remove(key);
             }
         }
     }
