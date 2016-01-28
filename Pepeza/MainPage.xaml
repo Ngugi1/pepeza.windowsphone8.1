@@ -7,7 +7,132 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Grid>
-
+    <Page.Resources>
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Thickness x:Key="PivotPortraitThemePadding">19,38,0,0</Thickness>
+        <Thickness x:Key="PivotLandscapeThemePadding">19,25,0,0</Thickness>
+        <Style x:Key="CustomPivot" TargetType="Pivot">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+            <Setter Property="Background" Value="Teal"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <Grid />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Pivot">
+                        <Grid x:Name="RootElement"  
+                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="Orientation">
+                                    <VisualState x:Name="Portrait">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotPortraitThemePadding}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Landscape">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotLandscapeThemePadding}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentControl x:Name="TitleContentControl" ContentTemplate="{TemplateBinding TitleTemplate}" Content="{TemplateBinding Title}" Style="{StaticResource PivotTitleContentControlStyle}" Height="30" VerticalAlignment="Top"/>
+                            <ScrollViewer 
+                                Background="White"
+                                x:Name="ScrollViewer" HorizontalSnapPointsAlignment="Center" HorizontalSnapPointsType="MandatorySingle" HorizontalScrollBarVisibility="Hidden" Margin="{TemplateBinding Padding}" Grid.Row="1" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalSnapPointsType="None" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" VerticalContentAlignment="Stretch" ZoomMode="Disabled">
+                                <PivotPanel x:Name="Panel" VerticalAlignment="Stretch">
+                                    <PivotHeaderPanel x:Name="Header" 
+                                                      Margin="0"
+                                                      Height="Auto"
+                                                      
+                                                     Background="Teal">
+                                        <PivotHeaderPanel.RenderTransform>
+                                            <CompositeTransform x:Name="HeaderTranslateTransform" TranslateX="0"/>
+                                        </PivotHeaderPanel.RenderTransform>
+                                    </PivotHeaderPanel>
+                                    <ItemsPresenter x:Name="PivotItemPresenter">
+                                        <ItemsPresenter.RenderTransform>
+                                            <TranslateTransform x:Name="ItemsPresenterTranslateTransform" X="0"/>
+                                        </ItemsPresenter.RenderTransform>
+                                    </ItemsPresenter>
+                                </PivotPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid Margin="0,0,0,0"
+          
+          Background="Teal">
+        <Pivot 
+            Style="{StaticResource CustomPivot}">
+            <Pivot.Title>
+                    <TextBlock Text="Pepeza"
+                           Margin="0"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+                </Pivot.Title>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="boards" 
+                             FontWeight="ExtraLight"
+                               FontSize="36"/>
+                </PivotItem.Header>
+            </PivotItem>
+            <PivotItem >
+                <PivotItem.Header>
+                <TextBlock 
+                    Text="notices" FontSize="36"
+                    FontWeight="ExtraLight"
+                    />
+                </PivotItem.Header>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock 
+                        Text="following" 
+                        FontWeight="ExtraLight"
+                        FontSize="36"/>
+                </PivotItem.Header>
+            </PivotItem>
+        </Pivot>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar
+             IsOpen="False"
+            Background="{StaticResource mainForeground}">
+            <AppBarButton Icon="Add" 
+                           Content="new item"
+                           Foreground="Black"
+                          IsCompact="True"/>
+            <AppBarButton IsCompact="True"
+                          Content="search"
+                          Foreground="Black"
+                          Icon="Find"/>
+            <AppBarButton Icon="SelectAll"/>
+            
+        </CommandBar>
+        
+    </Page.BottomAppBar>
 </Page>

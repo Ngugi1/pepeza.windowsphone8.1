@@ -15,10 +15,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+    <StackPanel Background="{StaticResource PrimaryColor}">
     <StackPanel
         Orientation="Horizontal"
         Height="{StaticResource AppBarThemeMinHeight}"
-        Background="{StaticResource PrimaryColor}">
+        >
         <Image Source="/Assets/Images/icon.png"
                Width="50"
                Height="50"
@@ -31,5 +32,7 @@
             VerticalAlignment="Bottom"
             Foreground="{StaticResource fgWhite}"
              Text="Pepeza"/>
+    </StackPanel>
+        <TextBlock Text=""/>
     </StackPanel>
 </UserControl>

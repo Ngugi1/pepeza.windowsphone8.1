@@ -115,6 +115,9 @@
     <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
       <DependentUpon>DeactivateAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Boards\AddBoard.xaml.cs">
+      <DependentUpon>AddBoard.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Profile\EditProfile.xaml.cs">
       <DependentUpon>EditProfile.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\Account\DeactivateAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Boards\AddBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
