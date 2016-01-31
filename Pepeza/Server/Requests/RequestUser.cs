@@ -194,12 +194,13 @@ namespace Pepeza.Server.Requests
             //Get API token and add it to the header
             HttpClient client = getHttpClient(true);
             Dictionary<string, string> resContent = new Dictionary<string, string>();
-            if (!checkInternetConnection())
+            if (checkInternetConnection())
             {
                 HttpResponseMessage response;
                 try
                 {
                     response = await client.PutAsJsonAsync(UserAddresses.UPDATE_USER, toUpdate);
+                    
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Updated 
@@ -209,6 +210,7 @@ namespace Pepeza.Server.Requests
                     else
                     {
                         //Not succcessful
+                        string s = await response.Content.ReadAsStringAsync();
                         resContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
@@ -317,7 +319,7 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
-        public static async Task<Dictionary<string, string>> searchUser(Dictionary<string,string> query)
+        public static async Task<Dictionary<string, string>> searchUser(string query)
         {
             HttpClient client = getHttpClient(true);
             Dictionary<string, string> responseContent = new Dictionary<string, string>();
@@ -326,12 +328,12 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(UserAddresses.SEARCH_USER + "?q=" + (string)query["key"]);
+                    response = await client.GetAsync(UserAddresses.SEARCH_USER + "?q=" + query);
                     var con = response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
                         //success
-                        responseContent.Add(Constants.SUCCESS, JsonConvert.SerializeObject(await response.Content.ReadAsAsync<JObject>()));
+                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
                     else
                     {

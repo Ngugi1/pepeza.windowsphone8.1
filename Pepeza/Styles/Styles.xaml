@@ -39,8 +39,7 @@
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}"/>
         <Setter Property="Foreground" Value="{StaticResource mainForeground}"/>
-        <Setter Property="BorderBrush" Value="#FF7A7A7A"/>
-    </Style>
+        </Style>
     <!--TextBlock Styles-->
     <Style TargetType="TextBlock" x:Key="txtBlockError">
         <Setter Property="TextLineBounds" Value="TrimToBaseline"/>
@@ -136,5 +135,11 @@
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Background" Value="Red" />   
+    </Style>
+    <!--Pivot header style-->
+    <Style TargetType="TextBlock" x:Name="txtBlockPivotHeader">
+        <Setter Property="FontWeight" Value="ExtraLight"/>
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="Margin" Value="4,0,0,0"/>
     </Style>
 </ResourceDictionary>

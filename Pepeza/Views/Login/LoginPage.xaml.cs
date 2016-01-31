@@ -37,7 +37,7 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override  void OnNavigatedTo(NavigationEventArgs e)
         {
             //this.Frame.Navigate(typeof(SignUpPage));
             //Dictionary<string,string> results = await RequestUser.logout();
@@ -75,7 +75,7 @@ namespace Pepeza.Views
                     //Save token
                     ToastFieldsIncomplete.Message = (string)Settings.getValue((string)Constants.APITOKEN);
                     //Navigate to deactivate account
-                    this.Frame.Navigate(typeof(Views.Account.DeactivateAccount));
+                    this.Frame.Navigate(typeof(MainPage));
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {

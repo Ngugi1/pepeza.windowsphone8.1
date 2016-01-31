@@ -58,7 +58,7 @@ namespace Pepeza.Views
                 {
 
                     Dictionary<string, string> results = await RequestUser.updateUserProfile(new Dictionary<string, string>() { {"firstName" , txtBoxFirstName.Text.Trim()}, 
-                {"lastName", txtBoxLastName.Text.Trim()}});
+                {"lastName", txtBoxLastName.Text.Trim() },{"username" ,"Jaja10"}});
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong

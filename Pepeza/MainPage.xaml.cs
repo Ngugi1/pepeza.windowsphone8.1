@@ -44,5 +44,22 @@ namespace Pepeza
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
         }
+
+       
+
+        private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Views.Search));
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AppBarButtonProfile_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Views.UserProfile));
+        }
     }
 }
