@@ -173,6 +173,7 @@ namespace Pepeza.Server.Requests
                     }
                     else
                     {
+                        var x = response.Content.ReadAsStringAsync();
                         resConent.Add(Constants.LOG_FAILED, Constants.INVALIDCREDENTIALS);
                     }
                     

@@ -80,6 +80,12 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <SDKReference Include="Microsoft.VCLibs, version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.WP81, Version=3.10.2">
+      <Name>SQLite for Windows Phone 8.1</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -91,7 +97,11 @@
     <Compile Include="CustomControls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Db\Models\LocalUserInfo.cs" />
+    <Compile Include="Db\DbHelpers\DbConstants.cs" />
+    <Compile Include="Db\DbHelpers\DbHelper.cs" />
+    <Compile Include="Db\DbHelpers\User\UserHelper.cs" />
+    <Compile Include="Db\Models\Orgs\OrgInfo.cs" />
+    <Compile Include="Db\Models\Users\UserInfo.cs" />
     <Compile Include="IsolatedSettings\Settings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -108,6 +118,8 @@
     <Compile Include="Server\ServerModels\User\UserInfo.cs" />
     <Compile Include="Server\Utility\Addresses.cs" />
     <Compile Include="Server\Utility\UserAddresses.cs" />
+    <Compile Include="SQLiteWrappers\SQLite.cs" />
+    <Compile Include="SQLiteWrappers\SQLiteAsync.cs" />
     <Compile Include="Utitlity\Constants.cs" />
     <Compile Include="Server\Validation\UserValidation.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
@@ -118,6 +130,9 @@
     <Compile Include="ViewModels\ViewModelLogin.cs" />
     <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
       <DependentUpon>DeactivateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\SetUpPage.xaml.cs">
+      <DependentUpon>SetUpPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
@@ -177,6 +192,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Account\SetUpPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Boards\AddBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -223,6 +242,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

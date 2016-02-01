@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pepeza.Server.Requests;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -43,6 +44,7 @@ namespace Pepeza
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
+            RequestUser.getUser();
         }
 
        

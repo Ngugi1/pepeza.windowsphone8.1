@@ -2,6 +2,7 @@
 using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
+using Pepeza.Views.Account;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,7 +47,6 @@ namespace Pepeza.Views
            //await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"}});
             //await RequestUser.checkUsernameAvalability("ngugi");
             //await RequestUser.checkEmailAvailability("ngugi@gmail.com");
-            Debug.WriteLine("===================================" + Settings.getValue(Constants.APITOKEN));
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
@@ -75,13 +75,12 @@ namespace Pepeza.Views
                     //Save token
                     ToastFieldsIncomplete.Message = (string)Settings.getValue((string)Constants.APITOKEN);
                     //Navigate to deactivate account
-                    this.Frame.Navigate(typeof(MainPage));
+                    this.Frame.Navigate(typeof(SetUpPage));
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {
                     //Notify the UI of the error
                     ToastFieldsIncomplete.Message = results[Constants.ERROR];
-
                 }
                 else if (results.ContainsKey(Constants.LOG_FAILED))
                 {
