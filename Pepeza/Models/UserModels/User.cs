@@ -12,7 +12,7 @@ namespace Pepeza.Models
     /// <summary>
     /// This model belongs to the signup page , binds to all the properties 
     /// </summary>
-    public class User : INotifyPropertyChanged
+    public class User : Bindable
     {
         public SignUpPage rootPage { get; set; }
         #region Validation Properties
@@ -25,7 +25,7 @@ namespace Pepeza.Models
             set
             {
                 _showProgressRing = value;
-                OnPropertyChanged("ShowProgressRing");
+                onPropertyChanged("ShowProgressRing");
             }
         }
 
@@ -39,7 +39,7 @@ namespace Pepeza.Models
             set
             {
                 _canUserSignUp = value;
-                OnPropertyChanged("CanUserSignUp");
+                onPropertyChanged("CanUserSignUp");
             }
         }
 
@@ -50,7 +50,7 @@ namespace Pepeza.Models
             set
             {
                 _isUsernameValid = value;
-                OnPropertyChanged("IsUsernameValid");
+                onPropertyChanged("IsUsernameValid");
 
 
             }
@@ -64,7 +64,7 @@ namespace Pepeza.Models
             set
             {
                 _isEmailValid = value;
-                OnPropertyChanged("IsEmailValid");
+                onPropertyChanged("IsEmailValid");
             }
         }
 
@@ -76,8 +76,8 @@ namespace Pepeza.Models
             set
             {
                 _isPasswordValid = value;
-                OnPropertyChanged("IsPasswordValid");
-                OnPropertyChanged("CanSignUp");
+                onPropertyChanged("IsPasswordValid");
+                onPropertyChanged("CanSignUp");
             }
         }
 
@@ -89,7 +89,7 @@ namespace Pepeza.Models
             set
             {
                 _arePasswordsMatching = value;
-                OnPropertyChanged("ArePasswordsMatching");
+                onPropertyChanged("ArePasswordsMatching");
             }
         }
 
@@ -107,7 +107,7 @@ namespace Pepeza.Models
                 _username = value;
                 IsUsernameValid = UserValidation.IsUsernameValid(_username);
                 CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
-                OnPropertyChanged("Username");
+                onPropertyChanged("Username");
             }
         }
 
@@ -121,7 +121,7 @@ namespace Pepeza.Models
             {
                 _email = value;
                 IsEmailValid = UserValidation.IsEmailValid(_email);
-                OnPropertyChanged("Email");
+                onPropertyChanged("Email");
                 CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
             }
         }
@@ -135,7 +135,7 @@ namespace Pepeza.Models
             set
             {
                 _password = value;
-                OnPropertyChanged("Password");
+                onPropertyChanged("Password");
                 IsPasswordValid = UserValidation.IsPasswordValid(_password);
                 CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
             }
@@ -150,7 +150,7 @@ namespace Pepeza.Models
             {
                 _passwordConfirm = value;
                 ArePasswordsMatching = _password.Equals(_passwordConfirm);
-                OnPropertyChanged("PasswordConfirm");
+                onPropertyChanged("PasswordConfirm");
                 CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
             }
         }
@@ -161,15 +161,11 @@ namespace Pepeza.Models
         public string StatusMessage
         {
             get { return statusMessage; }
-            set { statusMessage = value; OnPropertyChanged("StatusMessage"); }
+            set 
+            { statusMessage = value; 
+                onPropertyChanged("StatusMessage"); 
+            }
         }
 
-
-
-        private void OnPropertyChanged(string property)
-        {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(property));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

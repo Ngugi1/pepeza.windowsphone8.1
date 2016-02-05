@@ -1,4 +1,5 @@
 ﻿using Pepeza.Server.Requests;
+using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,6 +63,11 @@ namespace Pepeza
         private void AppBarButtonProfile_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.UserProfile));
+        }
+
+        private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddOrg));
         }
     }
 }

@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Data;
 namespace Pepeza.ViewModels
 {
 
-    class BoolVisibilityConverter : IValueConverter
+    public class BoolVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

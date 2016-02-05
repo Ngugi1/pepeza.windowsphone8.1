@@ -73,8 +73,7 @@
                     Name="btnDeactivateAccount"
                     Click="btnDeactivateAccount_Click"
                     Content="deactivate account"
-                    Style="{StaticResource btnStyle}"
-                    />
+                      />
                 <ProgressRing Style="{StaticResource PRstyle}" 
                              Visibility="Collapsed"
                               Name="deactivateProgressRing"

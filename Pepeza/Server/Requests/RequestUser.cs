@@ -25,7 +25,7 @@ namespace Pepeza.Server.Requests
     /// <summary>
     /// create , update profile , login user ,get user ,get user profile,deacivate account , forgot password , search user
     /// </summary>
-    class RequestUser
+    class RequestUser : BaseRequest
     {
 
         private static  HttpClient client { get; set; }
@@ -87,7 +87,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(UserAddresses.USER_EXISTS + username);
+                    response = await client.GetAsync(UserAddresses.USER_EXISTS +"?="+ username);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Get the JSON string
@@ -355,46 +355,6 @@ namespace Pepeza.Server.Requests
             }
 
             return responseContent;
-        }
-
-        /// <summary>
-        /// 
-        /// Prepares a httpclient and adds all headers
-        /// </summary>
-        /// <returns></returns>
-        private static HttpClient getHttpClient(bool addHeader)
-        {
-            client = new HttpClient();
-            client.BaseAddress = new Uri(UserAddresses.BASE_URL);
-            client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            if (addHeader) client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
-            return client;
-        }
-        private static bool checkInternetConnection()
-        {
-            Network network = new Network();
-            return network.HasInternetConnection;
-        }
-        /// <summary>
-        /// Cancel a pending request
-        /// </summary>
-        public static void cancelRequest()
-        {
-            client.CancelPendingRequests();
-        }
-        //gets all the values from a jsonArray 
-        public static Dictionary<string,string> getJArrayKeys(JArray jArray)
-        {
-            Dictionary<string, string> values = new Dictionary<string, string>();
-            foreach (JObject item in jArray)
-            {
-                foreach (JProperty property in item.Properties())
-                {
-                    values.Add(property.Name, (string)property.Value);
-                }
-            }
-            return values;
         }
     }
 

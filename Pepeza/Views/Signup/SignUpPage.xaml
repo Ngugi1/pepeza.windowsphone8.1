@@ -19,7 +19,7 @@
             <QuickConverter:QuickVisibilityConverter x:Key="QuickConverter"/>
             <PersonModel:User x:Key="User"/>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+               <ResourceDictionary Source="/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -52,7 +52,6 @@
                     Header="Username"    
                     Text="{Binding Username, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
                     Name="txtBoxUsername"
-                    Margin="4,16,4,4"
                     Style="{StaticResource txtBoxStyle}"
                     IsSpellCheckEnabled="False"
                     LostFocus="txtBoxUsername_LostFocus"
@@ -102,12 +101,12 @@
                        Style="{StaticResource txtBlockError}"/>
 
                 <Button 
-                    Style="{StaticResource btnStyle}"
                     Name="btnSignUp"
                     CommandParameter="{Binding}" 
                     Click="btnSignUp_Click" 
                     HorizontalAlignment="Center"
                     Content="Sign Up"
+                    IsEnabled="True"
                     />
                 <StackPanel Orientation="Horizontal"
                          Visibility="{Binding ShowProgressRing ,Converter={StaticResource QuickConverter}}"

@@ -28,11 +28,11 @@ namespace Pepeza.Views
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+        
         public LoginPage()
         {
-            this.InitializeComponent();
+            this.InitializeComponent(); 
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -47,6 +47,11 @@ namespace Pepeza.Views
            //await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"}});
             //await RequestUser.checkUsernameAvalability("ngugi");
             //await RequestUser.checkEmailAvailability("ngugi@gmail.com");
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey(Constants.APITOKEN))
+            {
+                this.Frame.Navigate(typeof(MainPage));
+            }  
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
@@ -99,6 +104,15 @@ namespace Pepeza.Views
         {
 
             return new Login() { username = textBoxUsername.Text.Trim(), password = txtBoxPassword.Password.Trim() };
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey(Constants.APITOKEN))
+            {
+                this.Frame.Navigate(typeof(MainPage));
+            }
         }
     }
 }

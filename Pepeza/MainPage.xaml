@@ -63,7 +63,8 @@
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" 
                           Name="AppBtnAdd"
-                          Label="add"   
+                          Label="add" 
+                              Click="AppBtnAdd_Click"
                            Content="new item"
                            Foreground="Black"
                           IsCompact="True">

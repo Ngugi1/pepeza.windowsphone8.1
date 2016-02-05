@@ -68,13 +68,12 @@
                        Text="Email is invalid or is already in use"
                        />
             <Button Name="btnUpdateProfile"
-                    Style="{StaticResource btnStyle}"
                     Height="50"
                     HorizontalAlignment="Center"
-                        CommandParameter="{Binding}"
-                        Command="{Binding CMDUpdateProf, Source={StaticResource CmdUpdateProfile}}"
-                        IsEnabled="{Binding CanUserSignUp , Mode=TwoWay}"
-                        Margin="8,16"
+                    CommandParameter="{Binding}"
+                    Command="{Binding CMDUpdateProf, Source={StaticResource CmdUpdateProfile}}"
+                    IsEnabled="{Binding CanUserSignUp , Mode=TwoWay}"
+                    Margin="8,16"
                         >
                 <StackPanel Margin="0"
                             Orientation="Horizontal"

@@ -11,6 +11,7 @@
     <SolidColorBrush Color="#FFFFFFFF" x:Key="pageBackground"/>
     <SolidColorBrush Color="#127575" x:Key="mainForeground"/>
     <SolidColorBrush Color="#00BAD4" x:Key="BtnBackground"/>
+    <SolidColorBrush Color="#FF7A7A7A" x:Key="txtBoxBorderBrush"/>
     <!--TextBox header template-->
     <DataTemplate x:Key="HeaderTemplate">
         <TextBlock 
@@ -34,7 +35,8 @@
     </Style>
     <!--TextBox Styles-->
     <Style TargetType="TextBox" x:Key="txtBoxStyle">
-        <Setter Property="Margin" Value="12"/>
+        <Setter Property="Margin" Value="16,8"/>
+        <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}"/>
         <Setter Property="FontFamily" Value="Segoe UI Light"/>
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}"/>
@@ -58,7 +60,7 @@
     <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontWeight" Value="SemiLight"/>
         <Setter Property="FontSize" Value="24"/>
-        <Setter Property="Margin" Value="24,20,24,0"/>
+        <Setter Property="Margin" Value="16,8"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
     </Style>
@@ -83,23 +85,12 @@
     </Style>
     <!--Password Box Style-->
     <Style TargetType="PasswordBox" x:Name="passBoxStyle">
-        <Setter Property="Margin" Value="4"/>
-        <Setter Property="BorderBrush" Value="#FF7A7A7A"/>
-        <Setter Property="Width" Value="350"/>
+        <Setter Property="Margin" Value="16,8"/>
+        <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}"/>
         <Setter Property="FontWeight" Value="Thin"/>
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}"/>
     </Style>
-    <!--Button styles-->
-    <Style TargetType="Button" x:Key="btnStyle">
-        <Setter Property="Margin" Value="8"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="Width" Value="150"/>
-        <Setter Property="FontWeight" Value="Thin"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Background" Value="#00BAD4"/>
-    </Style>
+   
     
     <!--HyperLink Button Style-->
     <Style TargetType="HyperlinkButton" x:Key="hlbtnStyle">
@@ -141,5 +132,162 @@
         <Setter Property="FontWeight" Value="ExtraLight"/>
         <Setter Property="FontSize" Value="30"/>
         <Setter Property="Margin" Value="4,0,0,0"/>
+    </Style>
+
+<!--Button Style -->
+    <Thickness x:Key="PhoneBorderThickness">0</Thickness>
+    <FontFamily x:Key="PhoneFontFamilyNormal">Segoe UI</FontFamily>
+    <FontWeight x:Key="PhoneButtonFontWeight">Thin</FontWeight>
+    <x:Double x:Key="TextStyleLargeFontSize">18.14</x:Double>
+    <Thickness x:Key="PhoneButtonContentPadding">9.5,0,9.5,3.5</Thickness>
+    <x:Double x:Key="PhoneButtonMinHeight">57.5</x:Double>
+    <x:Double x:Key="PhoneButtonMinWidth">109</x:Double>
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BtnBackground}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="{ThemeResource PhoneBorderThickness}"/>
+        <Setter Property="FontFamily" Value="{ThemeResource PhoneFontFamilyNormal}"/>
+        <Setter Property="FontWeight" Value="{ThemeResource PhoneButtonFontWeight}"/>
+        <Setter Property="FontSize" Value="{ThemeResource TextStyleLargeFontSize}"/>
+        <Setter Property="Padding" Value="{ThemeResource PhoneButtonContentPadding}"/>
+        <Setter Property="MinHeight" Value="{ThemeResource PhoneButtonMinHeight}"/>
+        <Setter Property="MinWidth" Value="{ThemeResource PhoneButtonMinWidth}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="Grid" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="Pressed" To="PointerOver">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                    <VisualTransition From="PointerOver" To="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                    <VisualTransition From="Pressed" To="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="Grid"/>
+                                        </Storyboard>
+                                    </VisualTransition>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="PointerOver"/>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="Grid"/>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                   
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="Border">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBorderThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BtnBackground}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                   
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="{ThemeResource PhoneTouchTargetOverhang}">
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--CustomPivot Style-->
+    <Thickness x:Key="PivotPortraitThemePadding">19,38,0,0</Thickness>
+    <Thickness x:Key="PivotLandscapeThemePadding">19,25,0,0</Thickness>
+    <Style x:Key="CustomPivot" TargetType="Pivot">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource mainForeground}"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Pivot">
+                    <Grid x:Name="RootElement"  
+                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="Orientation">
+                                <VisualState x:Name="Portrait">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotPortraitThemePadding}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Landscape">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotLandscapeThemePadding}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentControl x:Name="TitleContentControl" 
+                                            ContentTemplate="{TemplateBinding TitleTemplate}"
+                                            Content="{TemplateBinding Title}"
+                                            Style="{StaticResource PivotTitleContentControlStyle}"
+                                            Height="40"
+                                            VerticalAlignment="Top"/>
+                        <ScrollViewer 
+                                Background="White"
+                                x:Name="ScrollViewer" HorizontalSnapPointsAlignment="Center" HorizontalSnapPointsType="MandatorySingle" HorizontalScrollBarVisibility="Hidden" Margin="{TemplateBinding Padding}" Grid.Row="1" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalSnapPointsType="None" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" VerticalContentAlignment="Stretch" ZoomMode="Disabled">
+                            <PivotPanel x:Name="Panel" VerticalAlignment="Stretch">
+                                <PivotHeaderPanel x:Name="Header" 
+                                                      Margin="0"
+                                                      Height="40"
+                                                     Background="{StaticResource mainForeground}">
+                                    <PivotHeaderPanel.RenderTransform>
+                                        <CompositeTransform x:Name="HeaderTranslateTransform" TranslateX="0"/>
+                                    </PivotHeaderPanel.RenderTransform>
+                                </PivotHeaderPanel>
+                                <ItemsPresenter x:Name="PivotItemPresenter">
+                                    <ItemsPresenter.RenderTransform>
+                                        <TranslateTransform x:Name="ItemsPresenterTranslateTransform" X="0"/>
+                                    </ItemsPresenter.RenderTransform>
+                                </ItemsPresenter>
+                            </PivotPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
