@@ -36,7 +36,7 @@ namespace Pepeza
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
 
@@ -45,7 +45,10 @@ namespace Pepeza
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
-            RequestUser.getUser();
+            await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId","2"},{ "username", "updatedorg1" }, { "name", "Sample" }, { "description","This is a sample description for all of the boaerd"} });
+            await OrgsService.search("update");
+            await OrgsService.getOrg(2);
+            await OrgsService.deleteOrg(2);
         }
 
        
