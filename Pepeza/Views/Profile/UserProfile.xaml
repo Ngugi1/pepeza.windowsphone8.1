@@ -1,10 +1,8 @@
 ﻿<Page
-    x:Class="Pepeza.Views.UserProfile"
+    x:Class="Pepeza.Views.Profile.UserProfile"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza.Views"
-    xmlns:Toast="using:Toastinet"
-    xmlns:pageHeader="using:Pepeza.CustomControls"
+    xmlns:local="using:Pepeza.Views.Profile"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -67,7 +65,7 @@
                    Style="{StaticResource AppBarBtnStyle}"
                    Name="appBarButtonAccount"
                          />
-                            <TextBlock Text="ngugi"
+                            <TextBlock Text="{Binding username}"
                        Style="{StaticResource txtBlockDisplay}"
                         VerticalAlignment="Bottom"
                         Name="txtBlockUsername"
@@ -75,26 +73,28 @@
                       />
 
                         </StackPanel>
-                        
+
                         <TextBlock 
                             Name="txtBlockFullName"
-                            Visibility="Collapsed"
+                            Visibility="Visible"
                     HorizontalAlignment="Center"
-                            Text=""
+                            Text="{Binding fullname}"
                             Style= "{StaticResource txtBlockDisplay}"/>
                         <StackPanel
                             HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
                             MaxHeight="60"
                             Orientation="Horizontal">
                             <AppBarButton Icon="Mail" 
                                           Content="Update"
                                           VerticalAlignment="Bottom"
+              
                                           Style="{StaticResource AppBarBtnStyle}"
                                           />
                             <TextBlock 
                            Style="{StaticResource  txtBlockDisplay}"
                            Name="txtblockEmail"
-                            Text="ngugi@gmail.com"
+                            Text="{Binding email}"
                                 
                                 VerticalAlignment="Center"
                             HorizontalAlignment="Center"
@@ -112,7 +112,9 @@
                     >
                     <TextBox 
                 		PlaceholderText="Firstname"
-                		MaxLength="10"      
+                		MaxLength="10"  
+                     
+                        Text="{Binding fname}"
                         Name="txtBoxFirstName"
                 		Margin="16,4"
                 		Width="150"
@@ -121,21 +123,23 @@
                         Name="txtBoxLastName"
                 		PlaceholderText="Lastname"
                 		Width="150"
+                        Text="{Binding lname}"
                 		Margin="16,4"
                         />
                 </StackPanel>
+                <ProgressRing Name="PRUpdateProfile"
+                              Width="50"
+                              Height="50"
+                              />
+           
             </StackPanel>
         </ScrollViewer>
-        <Toast:Toastinet 
-            Name="ToastNetErrors"
-            Grid.Row="1"
-            Style="{StaticResource ToastStyle}"/>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Background="#127575 ">
-            <AppBarButton Icon="Accept"
-                          Foreground="#00BAD4"
-                          Content="Update"
+            <AppBarButton Foreground="#00BAD4"
+                          Label="update"
+                          Icon="Accept"
                           Name="appBarBtnEditDetails"
                           Click="editProfileClicked"
                           />

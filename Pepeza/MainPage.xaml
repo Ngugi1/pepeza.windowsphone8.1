@@ -31,7 +31,7 @@
                             Style="{StaticResource txtBlockPivotHeader}"
                                />
                 </PivotItem.Header>
-            </PivotItem>
+                          </PivotItem>
             <PivotItem >
                 <PivotItem.Header>
                 <TextBlock 
@@ -50,21 +50,21 @@
         </Pivot>
     </Grid>
     <Page.BottomAppBar>
-        
+  
         <CommandBar
-             ClosedDisplayMode="Compact"
              IsOpen="False"
             Background="{StaticResource mainForeground}">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Click="AppBarButtonProfile_Click"  Label="Profile"/>
+                <AppBarButton Click="AppBarButtonProfile_Click"
+                              Label="profile"/>
                 <AppBarButton Label="settings"/>
                 <AppBarButton Label="logout"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" 
-                          Name="AppBtnAdd"
-                          Label="add" 
-                              Click="AppBtnAdd_Click"
+                           Name="AppBtnAdd"
+                           Label="add" 
+                           Click="AppBtnAdd_Click"
                            Content="new item"
                            Foreground="Black"
                           IsCompact="True">

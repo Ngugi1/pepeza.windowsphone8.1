@@ -14,9 +14,20 @@ namespace Pepeza.Models
     /// </summary>
     public class User : Bindable
     {
-        public SignUpPage rootPage { get; set; }
         #region Validation Properties
         //Validattion properties
+        private bool _isOverallErrorTextBlockVisible = false;
+
+        public bool IsoverAllErrorsVisible
+        {
+            get { return _isOverallErrorTextBlockVisible; }
+            set
+            {
+                _isOverallErrorTextBlockVisible = value;
+                 onPropertyChanged("IsoverAllErrorsVisible");
+            }
+        }
+        
         private bool _showProgressRing = false;
 
         public bool ShowProgressRing
@@ -51,7 +62,6 @@ namespace Pepeza.Models
             {
                 _isUsernameValid = value;
                 onPropertyChanged("IsUsernameValid");
-
 
             }
         }
@@ -106,7 +116,11 @@ namespace Pepeza.Models
             {
                 _username = value;
                 IsUsernameValid = UserValidation.IsUsernameValid(_username);
-                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
+                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, 
+                    ArePasswordsMatching , 
+                    Username , 
+                    Password ,
+                    Email , PasswordConfirm);
                 onPropertyChanged("Username");
             }
         }
@@ -122,7 +136,8 @@ namespace Pepeza.Models
                 _email = value;
                 IsEmailValid = UserValidation.IsEmailValid(_email);
                 onPropertyChanged("Email");
-                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
+                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching ,Username ,Password ,
+                    Email , PasswordConfirm);
             }
         }
 
@@ -137,7 +152,8 @@ namespace Pepeza.Models
                 _password = value;
                 onPropertyChanged("Password");
                 IsPasswordValid = UserValidation.IsPasswordValid(_password);
-                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
+                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, 
+                    IsUsernameValid, ArePasswordsMatching , Username , Password , Email , PasswordConfirm);
             }
         }
 
@@ -151,7 +167,7 @@ namespace Pepeza.Models
                 _passwordConfirm = value;
                 ArePasswordsMatching = _password.Equals(_passwordConfirm);
                 onPropertyChanged("PasswordConfirm");
-                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching);
+                CanUserSignUp = UserValidation.CanUserSignUp(IsEmailValid, IsPasswordValid, IsUsernameValid, ArePasswordsMatching , Username , Password , Email ,PasswordConfirm);
             }
         }
 
@@ -162,7 +178,8 @@ namespace Pepeza.Models
         {
             get { return statusMessage; }
             set 
-            { statusMessage = value; 
+            { 
+                statusMessage = value;
                 onPropertyChanged("StatusMessage"); 
             }
         }

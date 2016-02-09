@@ -42,6 +42,9 @@ VerticalAlignment="Center"
                    />
             <ProgressRing Height="100"
                           Width="100"
+                          Background="Transparent"
+                          IsActive="True"
+                          IsEnabled="True"
                           Foreground="White"
                           />
         </StackPanel>

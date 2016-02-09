@@ -4,6 +4,7 @@ using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -107,7 +108,7 @@ namespace Pepeza.Views
             Dictionary<string, string> searchResults = await RequestUser.searchUser(txtBoxSearch.Text.Trim());
             if (searchResults.ContainsKey(Constants.SUCCESS))
             {
-                List<Person> source = new List<Person>();
+                ObservableCollection<Person> source = new ObservableCollection<Person>();
                 //Get the key 
                 JObject result = JObject.Parse(searchResults[Constants.SUCCESS]);
                 JArray jArray = JArray.Parse(result["results"].ToString());
@@ -129,9 +130,8 @@ namespace Pepeza.Views
                 else
                 {
                     //No results found 
-                    txtBlockWhat.Text = "No results matched your query";
+                    NoResults();
                     source.Clear();
-                    txtBlockWhat.Visibility = Visibility.Visible;
                 }
                 if (source != null)
                 {
@@ -157,11 +157,61 @@ namespace Pepeza.Views
                         break;
                     case 1:
                         //search boards
+                        
                         break;
                     case 2:
                         //search orgs 
+                        ProgressRingSearch.Visibility = Visibility.Visible;
+                        await searchOrg();
+                        ProgressRingSearch.Visibility = Visibility.Collapsed;
                         break;
                 }
+        }
+
+        private async Task searchOrg()
+        {
+            ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
+            Dictionary<string, string> result = await OrgsService.search(txtBoxSearch.Text.Trim());
+            if (result.ContainsKey(Constants.SUCCESS))
+            {
+                //Get the results
+                JObject obj = JObject.Parse(result[Constants.SUCCESS].ToString());
+                JArray jArray = JArray.Parse(obj["results"].ToString());
+               if(jArray.Count!=0)
+               {
+                txtBlockWhat.Visibility = Visibility.Collapsed;
+                for (int i = 0; i < jArray.Count; i++)
+                {
+                    JObject row = JObject.Parse(jArray[i].ToString());
+                    Organization org = new Organization()
+                    {
+                         Id = (int)row["id"],
+                         Name = (string)row["name"],
+                         Description = (string)row["description"],
+                         Score = (double)row["score"],
+                         Username =(string)row["username"]
+                    };
+                    collection.Add(org);
+                }
+
+               }
+               else
+               {
+                   NoResults();
+                   collection.Clear();
+               }
+
+               if (collection != null)
+               {
+                   listViewSearchOrgs.ItemsSource = collection;
+               }
+                
+            }
+        }
+        public  void NoResults()
+        {
+            txtBlockWhat.Text = "No results matched your query";
+            txtBlockWhat.Visibility = Visibility.Visible;
         }
     }
 }

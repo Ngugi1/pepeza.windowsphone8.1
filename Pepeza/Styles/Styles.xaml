@@ -290,4 +290,51 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    
+    
+    <!--Orgs data template -->
+    <DataTemplate x:Key="ListViewOrgsTemplate">
+        <Grid 
+        Background="{StaticResource pageBackground}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Ellipse Height="{ThemeResource AppBarThemeMinHeight}"
+                 Width="{ThemeResource AppBarThemeMinHeight}"
+                 Stroke="{StaticResource mainForeground}"
+                 Grid.RowSpan="2"
+                 >
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg"
+                            />
+                </Ellipse.Fill>
+            </Ellipse>
+            <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                   Text="my organisation"
+                   Grid.Column="1"
+                   TextTrimming="CharacterEllipsis"
+                   Foreground="Black"
+                   />
+            <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    Grid.Column="1">
+                <TextBlock Text="boards"
+                       Margin="8"
+                       FontSize="15"
+                       Foreground="Black"
+                       FontWeight="Bold"
+                       />
+                <TextBlock Text="25"
+                       FontSize="15"
+                       Foreground="Black"
+                       Margin="4,4,8,0"/>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

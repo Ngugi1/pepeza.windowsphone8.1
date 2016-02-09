@@ -100,8 +100,12 @@
     </Compile>
     <Compile Include="Db\DbHelpers\DbConstants.cs" />
     <Compile Include="Db\DbHelpers\DbHelper.cs" />
+    <Compile Include="Db\DbHelpers\DBHelperBase.cs" />
+    <Compile Include="Db\DbHelpers\Orgs\OrgHelper.cs" />
+    <Compile Include="Db\DbHelpers\User\EmailHelper.cs" />
     <Compile Include="Db\DbHelpers\User\UserHelper.cs" />
     <Compile Include="Db\Models\Orgs\OrgInfo.cs" />
+    <Compile Include="Db\Models\Users\Email.cs" />
     <Compile Include="Db\Models\Users\UserInfo.cs" />
     <Compile Include="IsolatedSettings\Settings.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -109,6 +113,7 @@
     </Compile>
     <Compile Include="Models\Base\Bindable.cs" />
     <Compile Include="Models\OrgsModels\Constants\StatusMessages.cs" />
+    <Compile Include="Models\Search Models\Organization.cs" />
     <Compile Include="Models\UserModels\GetUser.cs" />
     <Compile Include="Models\OrgsModels\AddOrgModel.cs" />
     <Compile Include="Models\UserModels\ProfileInfo.cs" />
@@ -147,9 +152,6 @@
     </Compile>
     <Compile Include="Views\Orgs\AddOrg.xaml.cs">
       <DependentUpon>AddOrg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Profile\EditProfile.xaml.cs">
-      <DependentUpon>EditProfile.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Login\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -205,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Account\DeactivateAccount.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -214,10 +220,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Orgs\AddOrg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Profile\EditProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

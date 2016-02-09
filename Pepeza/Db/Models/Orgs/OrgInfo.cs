@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Orgs
 {
-    class OrgInfo
+    public class OrgInfo
     {
         [PrimaryKey]
         public int id { get; set; }
-        [Unique]
-        public string userId { get; set; }
+        public int userId { get; set; }
         [MaxLength(20)]
         public string username { get; set; }
-        [MaxLength(20)]
+        [MaxLength(100)]
         public string name { get; set; }
+        [MaxLength(250)]
         public string description { get; set; }
         public DateTime dateCreated { get; set; }
         public string timezone_create { get; set; }

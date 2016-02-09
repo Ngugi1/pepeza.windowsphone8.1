@@ -98,6 +98,7 @@
                 <TextBlock Text="password mismatch"
                        Visibility="{Binding ArePasswordsMatching ,Mode=TwoWay , Converter={StaticResource converter}}"
                        Name="txtBlockPassMatch"
+                         
                        Style="{StaticResource txtBlockError}"/>
 
                 <Button 
@@ -106,10 +107,19 @@
                     Click="btnSignUp_Click" 
                     HorizontalAlignment="Center"
                     Content="Sign Up"
-                    IsEnabled="True"
+                    IsEnabled="{Binding CanUserSignUp , Mode=TwoWay}"
                     />
+                <TextBlock 
+                    Text="{Binding StatusMessage}"
+                    Style="{StaticResource txtBlockError}"
+                    Visibility="{Binding IsoverAllErrorsVisible , 
+                    Converter={StaticResource QuickConverter} 
+                    }" 
+                   
+                           />
                 <StackPanel Orientation="Horizontal"
-                         Visibility="{Binding ShowProgressRing ,Converter={StaticResource QuickConverter}}"
+                         Visibility="{Binding ShowProgressRing 
+                    ,Converter={StaticResource QuickConverter}}"
                             >
                     <ProgressRing
                         Margin="8"
@@ -148,11 +158,5 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-        <Toast:Toastinet 
-            Style="{StaticResource ToastStyle}"
-                       Grid.Row="1"
-                                 x:FieldModifier="Public"
-                                 x:Name="ToastFieldsIncomplete"
-                                 ></Toast:Toastinet>
     </Grid>
 </Page>

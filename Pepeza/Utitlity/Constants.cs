@@ -19,5 +19,6 @@ namespace Pepeza.Utitlity
         public static string SUCCESS {get{return "SUCCESS";} }
         public static string INVALID_DATA { get { return "INVALID_DATA"; }}
         public static string USER_EXISTS { get { return "USER_EXISTS"; } }
+        public static string USERID { get { return "USERID"; } }
     }
 }

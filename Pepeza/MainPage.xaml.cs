@@ -45,10 +45,10 @@ namespace Pepeza
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
             // this event is handled for you.
-            await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId","2"},{ "username", "updatedorg1" }, { "name", "Sample" }, { "description","This is a sample description for all of the boaerd"} });
-            await OrgsService.search("update");
-            await OrgsService.getOrg(2);
-            await OrgsService.deleteOrg(2);
+            //await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId","2"},{ "username", "updatedorg1" }, { "name", "Sample" }, { "description","This is a sample description for all of the boaerd"} });
+            //await OrgsService.search("update");
+            //await OrgsService.getOrg(2);
+            //await OrgsService.deleteOrg(2);
         }
 
        
@@ -65,7 +65,7 @@ namespace Pepeza
 
         private void AppBarButtonProfile_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Views.UserProfile));
+            this.Frame.Navigate(typeof(Views.Profile.UserProfile));
         }
 
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)

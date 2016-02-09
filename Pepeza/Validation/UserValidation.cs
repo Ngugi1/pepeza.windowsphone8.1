@@ -11,9 +11,11 @@ namespace Pepeza.Validation
 {
     public class UserValidation : ValidationBase
     {
-        public static bool CanUserSignUp(bool isEmailValid , bool isUsernameValid , bool arePassMatching,bool isPasswordValid)
+        public static bool CanUserSignUp(bool isEmailValid , bool isUsernameValid , bool arePassMatching,
+            bool isPasswordValid , string username , string password , string email , string passwordConfirm)
         {
-            return isEmailValid && isEmailValid && arePassMatching && isPasswordValid;
+            return isEmailValid && isEmailValid && arePassMatching && isPasswordValid && !string.IsNullOrWhiteSpace(email)
+                &&!string.IsNullOrWhiteSpace(password)&&!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(passwordConfirm);
         }
         public static bool IsPasswordValid(string password)
         {

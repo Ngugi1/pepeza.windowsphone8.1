@@ -60,6 +60,11 @@ namespace Pepeza.Server.Requests
                         resContent = getJArrayKeys(errors);
                         resContent.Add(Constants.INVALID_DATA, Constants.INVALID_DATA);
                     }
+                    else
+                    {
+                        Debug.WriteLine(Constants.UNKNOWNERROR);
+                        resContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
                 }
                 catch (Exception ex)
                 {

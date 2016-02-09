@@ -1,8 +1,10 @@
-﻿using Pepeza.Models;
+﻿using Pepeza.IsolatedSettings;
+using Pepeza.Models;
 using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels.User;
 using Pepeza.Utitlity;
 using Pepeza.Validation;
+using Pepeza.Views.Account;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -65,22 +67,23 @@ namespace Pepeza.Views
                 //If so make a request to create user
                 if(AllFieldsNotEmpty())
                 {
-                    showToast("Some fields are missing or incorrectly filled");
+                    showTextBlock("Some fields are missing or incorrectly filled" , user);
                 }
                 else
                 {
                     user.ShowProgressRing = true;
-                    btnSignUp.Opacity = 0.5;
+                    user.CanUserSignUp = false;
                     Dictionary<string, string> results = await RequestUser.CreateUser(getData(user));
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //Notify the user about the error
-                        showToast(results[Constants.ERROR]);
+                       showTextBlock(results[Constants.ERROR] , user);
                     }
                     else if(results.ContainsKey(Constants.APITOKEN))
                     {
                         //Save API Token and go to main Page
-                        showToast(results[Constants.APITOKEN]);
+                        Settings.add(Constants.APITOKEN, results[Constants.APITOKEN]);
+                        this.Frame.Navigate(typeof(SetUpPage));
                     }
                     else if (results.ContainsKey(Constants.INVALID_DATA))
                     {
@@ -92,10 +95,17 @@ namespace Pepeza.Views
             }
             else
             {
-                showToast("Please fill the fields above");
+                showTextBlock("Please fill the fields above" ,user);
             }
             user.ShowProgressRing = false;
-            btnSignUp.Opacity = 1;
+            user.CanUserSignUp = true;
+        }
+
+        private void showTextBlock(string message ,User user)
+        {
+            user.IsoverAllErrorsVisible = true;
+            user.StatusMessage = message;
+           
         }
         //check that no fields are empty 
         private bool AllFieldsNotEmpty()
@@ -106,11 +116,6 @@ namespace Pepeza.Views
                 passBoxRepeat.Password.Equals("");
         }
 
-        //show the toast
-        private void showToast(string message)
-        {
-            ToastFieldsIncomplete.Message = message;
-        }
 
         private SignUp getData(User user)
         {
@@ -119,7 +124,7 @@ namespace Pepeza.Views
 
         private async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
-        
+         
         }
 
         private void processErrors(Dictionary<string, string> errors , User usr)
