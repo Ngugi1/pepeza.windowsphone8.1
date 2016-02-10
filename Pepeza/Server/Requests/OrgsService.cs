@@ -186,7 +186,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(string.Format(UserAddresses.GET_USER_ORGS , orgID));
+                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_ORG_BOARDS, orgID));
                     if (response.IsSuccessStatusCode)
                     {
                         //Got boards for the org 
@@ -212,6 +212,40 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
-    
+        public async static Task<Dictionary<string, string>> getUserOrgs(int orgId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_USER_ORGS, orgId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //Got boards for the org 
+                        string x = await response.Content.ReadAsStringAsync();
+                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        //Nothing here
+                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                //Not connected 
+                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return responseContent;
+        }
     }
 }

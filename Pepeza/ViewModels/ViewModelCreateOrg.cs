@@ -11,7 +11,7 @@ using Pepeza.Server.Validation;
 
 namespace Pepeza.ViewModels
 {
-    class ViewModelCreateOrg
+    public class ViewModelCreateOrg
     {
         public AddOrgModel Org { get; set; }
         public CommandAddOrg AddOrg { get; set; }

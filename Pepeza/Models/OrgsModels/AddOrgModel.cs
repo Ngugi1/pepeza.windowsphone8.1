@@ -11,7 +11,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Pepeza.Models.OrgsModels
 {
-    class AddOrgModel : Bindable
+    public class AddOrgModel : Bindable
     {
         public ViewModelCreateOrg viewModel { get; set; }
         public AddOrgModel(ViewModelCreateOrg viewModel)

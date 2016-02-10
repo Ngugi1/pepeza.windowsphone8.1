@@ -121,5 +121,16 @@
                        HorizontalAlignment="Center"
                        />
         </StackPanel>
+        <StackPanel 
+            VerticalAlignment="Center"
+            Grid.Row="1">
+            <TextBlock Text="Error occoured"
+                       Name="txtBlockStatus"
+                       Visibility="Collapsed"
+                       Style="{StaticResource txtBlockDisplay}"
+                       HorizontalAlignment="Center"
+                       />
+           
+        </StackPanel>
     </Grid>
 </Page>

@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Models\Base\Bindable.cs" />
     <Compile Include="Models\OrgsModels\Constants\StatusMessages.cs" />
+    <Compile Include="Models\OrgsModels\EditOrgModel.cs" />
     <Compile Include="Models\Search Models\Organization.cs" />
     <Compile Include="Models\UserModels\GetUser.cs" />
     <Compile Include="Models\OrgsModels\AddOrgModel.cs" />
@@ -155,6 +156,9 @@
     </Compile>
     <Compile Include="Views\Login\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\EditOrg.xaml.cs">
+      <DependentUpon>EditOrg.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Orgs\OrgProfile.xaml.cs">
       <DependentUpon>OrgProfile.xaml</DependentUpon>
@@ -230,6 +234,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Login\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orgs\EditOrg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

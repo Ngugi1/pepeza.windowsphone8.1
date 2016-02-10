@@ -14,7 +14,9 @@ namespace Pepeza.Server.Validation
             if (!string.IsNullOrEmpty(name) &&
                 !string.IsNullOrWhiteSpace(name) && name.Length >= 3)
             {
-                return name.Any(char.IsLetterOrDigit);
+                if (name.Any(char.IsLetterOrDigit))
+                    return true;
+                return false;
             }
             else
             {

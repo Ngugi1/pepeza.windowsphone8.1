@@ -52,6 +52,8 @@
                 </Grid.ColumnDefinitions>
                 <Ellipse Grid.Row="0"
                  Height="120"
+                         StrokeThickness="2"
+                         Stroke="{StaticResource mainForeground}"
                  HorizontalAlignment="Left"
                  Margin="16,8"
                  Width="120"
@@ -96,6 +98,7 @@
                     >
             <AppBarButton Icon="Edit" Label="edit"
                           IsCompact="True"
+                          Click="EditProfilleClick"
                           />
         </CommandBar>
     </Page.BottomAppBar>

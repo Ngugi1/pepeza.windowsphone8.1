@@ -54,9 +54,10 @@ namespace Pepeza.Views.Orgs
         }
         private async void loadUserBoards(Person selected)
         {
+            txtBlockStatus.Visibility = Visibility.Collapsed;
             if (selected != null)
             {
-                Dictionary<string, string> results = await OrgsService.getOrgBoards(selected.id);
+                Dictionary<string, string> results = await OrgsService.getUserOrgs(selected.id);
                 if (results != null)
                 {
                     #region Retrieve Data
@@ -71,18 +72,16 @@ namespace Pepeza.Views.Orgs
                             {
                                 JObject org = JObject.Parse(orgs[i].ToString());
                                 Organization item = new Organization();
-                               
-                                    item.Id = (int)org["id"];
-                                    item.Name = (string)org["name"];
-                                    item.Username = (string)org["username"];
-                                    item.Description = (string)org["description"];
-                                    item.dateUpdated = (DateTime)org["dateUpdated"]["date"];
-                                    item.dateCreated = (DateTime)org["dateCreated"]["date"];
-                                    item.timezone_created = (string)org["dateCreated"]["timezone"];
-                                    item.timezone_updated = (string)org["dateUpdated"]["timezone"];
-                                    item.timezone_type_create = (string)org["dateCreated"]["timezone_type"];
-                                    item.timezone_type_updated = (string)org["dateUpdated"]["timezone_type"];
-
+                                item.Id = (int)org["id"];
+                                item.Name = (string)org["name"];
+                                item.Username = (string)org["username"];
+                                item.Description = (string)org["description"];
+                                item.dateUpdated = (DateTime)org["dateUpdated"]["date"];
+                                item.dateCreated = (DateTime)org["dateCreated"]["date"];
+                                item.timezone_created = (string)org["dateCreated"]["timezone"];
+                                item.timezone_updated = (string)org["dateUpdated"]["timezone"];
+                                item.timezone_type_create = (string)org["dateCreated"]["timezone_type"];
+                                item.timezone_type_updated = (string)org["dateUpdated"]["timezone_type"];
                                
                                 UserOrganisations.Add(item);
                             }
@@ -97,6 +96,8 @@ namespace Pepeza.Views.Orgs
                     else
                     {
                         //Display the error
+                        txtBlockStatus.Text = results[Constants.ERROR];
+                        txtBlockStatus.Visibility = Visibility.Visible;
                     }
                     #endregion
                 }

@@ -42,5 +42,11 @@ namespace Pepeza.Views.Orgs
             }
             //Start the search 
         }
+
+        private void EditProfilleClick(object sender, RoutedEventArgs e)
+        {
+            Organization org = RootGrid.DataContext as Organization;
+            if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Pepeza.ViewModels.Commands
 {
-    class CommandAddOrg : ICommand
+    public class CommandAddOrg : ICommand
     {
         public ViewModelCreateOrg viewModel { get; set; }
         public CommandAddOrg(ViewModelCreateOrg viewModel)
