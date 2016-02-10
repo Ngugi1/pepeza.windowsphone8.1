@@ -193,7 +193,9 @@
                 <ListView
                     Margin="8"
                     Foreground="Red"   
-                    Name="listViewSearchOrgs">
+                    Name="listViewSearchOrgs"
+                    SelectionChanged="listViewSearchOrgs_SelectionChanged"
+                    >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

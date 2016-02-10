@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
@@ -31,6 +32,8 @@ namespace Pepeza.Views
     
     public sealed partial class Search : Page
     {
+        ObservableCollection<Person> source = new ObservableCollection<Person>();
+        ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
         public Search()
         {
             this.InitializeComponent();
@@ -48,6 +51,7 @@ namespace Pepeza.Views
         }
         private async void txtBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            Settings.add(Constants.SEARCH_KEY,(sender as TextBox).Text);
             //Call the method from the server 
              if (TextBoxReady())
              {
@@ -92,23 +96,26 @@ namespace Pepeza.Views
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TextBoxReady())
-            {
-                await generalSearch();
-            }
-            else
-            {
-                updateWhatToSearch();
-            }
+            
+                if (TextBoxReady())
+                {
+                    await generalSearch();
+                }
+                else
+                {
+                    updateWhatToSearch();
+                }
+            
+            
            
         }
         private async Task searchUser()
         {
+            source.Clear();
             //ListViewUser.Items.Clear();
             Dictionary<string, string> searchResults = await RequestUser.searchUser(txtBoxSearch.Text.Trim());
             if (searchResults.ContainsKey(Constants.SUCCESS))
             {
-                ObservableCollection<Person> source = new ObservableCollection<Person>();
                 //Get the key 
                 JObject result = JObject.Parse(searchResults[Constants.SUCCESS]);
                 JArray jArray = JArray.Parse(result["results"].ToString());
@@ -170,7 +177,7 @@ namespace Pepeza.Views
 
         private async Task searchOrg()
         {
-            ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
+            collection.Clear();
             Dictionary<string, string> result = await OrgsService.search(txtBoxSearch.Text.Trim());
             if (result.ContainsKey(Constants.SUCCESS))
             {
@@ -212,6 +219,13 @@ namespace Pepeza.Views
         {
             txtBlockWhat.Text = "No results matched your query";
             txtBlockWhat.Visibility = Visibility.Visible;
+        }
+
+        private void listViewSearchOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Get selected Item
+            Organization org = (sender as ListView).SelectedItem as Organization;
+            this.Frame.Navigate(typeof(Views.Orgs.OrgProfile), org);
         }
     }
 }

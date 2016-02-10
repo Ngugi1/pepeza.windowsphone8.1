@@ -8,7 +8,7 @@
     <SolidColorBrush Color="Cyan" x:Key="colorCyan"/>
     <SolidColorBrush Color="White" x:Key="fgWhite"/>
     <SolidColorBrush Color="Red" x:Key="fgRed"/>
-    <SolidColorBrush Color="#FFFFFFFF" x:Key="pageBackground"/>
+    <SolidColorBrush Color="WhiteSmoke" x:Key="pageBackground"/>
     <SolidColorBrush Color="#127575" x:Key="mainForeground"/>
     <SolidColorBrush Color="#00BAD4" x:Key="BtnBackground"/>
     <SolidColorBrush Color="#FF7A7A7A" x:Key="txtBoxBorderBrush"/>
