@@ -53,7 +53,12 @@ namespace Pepeza.Models.Search_Models
                 onPropertyChanged("Name");
             }
         }
-
+        public DateTime dateCreated { get; set; }
+        public string timezone_created { get; set; }
+        public string timezone_type_create { get; set; }
+        public DateTime  dateUpdated { get; set; }
+        public string timezone_updated { get; set; }
+        public string timezone_type_updated { get; set; }
 
 
     }

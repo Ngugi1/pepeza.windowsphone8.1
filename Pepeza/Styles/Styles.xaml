@@ -217,7 +217,7 @@
         </Setter>
     </Style>
 
-    <!--CustomPivot Style-->
+    <!--CustomPivot Style for main page-->
     <Thickness x:Key="PivotPortraitThemePadding">19,38,0,0</Thickness>
     <Thickness x:Key="PivotLandscapeThemePadding">19,25,0,0</Thickness>
     <Style x:Key="CustomPivot" TargetType="Pivot">
@@ -267,7 +267,7 @@
                                             Height="40"
                                             VerticalAlignment="Top"/>
                         <ScrollViewer 
-                                Background="White"
+                                Background="{StaticResource pageBackground}"
                                 x:Name="ScrollViewer" HorizontalSnapPointsAlignment="Center" HorizontalSnapPointsType="MandatorySingle" HorizontalScrollBarVisibility="Hidden" Margin="{TemplateBinding Padding}" Grid.Row="1" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalSnapPointsType="None" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" VerticalContentAlignment="Stretch" ZoomMode="Disabled">
                             <PivotPanel x:Name="Panel" VerticalAlignment="Stretch">
                                 <PivotHeaderPanel x:Name="Header" 
@@ -291,8 +291,81 @@
         </Setter>
     </Style>
     
-    
-    
+    <!--Custom Pivot style for search-->
+    <Style x:Key="CustomPivotSearch" TargetType="Pivot">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource mainForeground}"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Pivot">
+                    <Grid x:Name="RootElement"  
+                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
+                              VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="Orientation">
+                                <VisualState x:Name="Portrait">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotPortraitThemePadding}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Landscape">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" Storyboard.TargetName="TitleContentControl">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PivotLandscapeThemePadding}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentControl x:Name="TitleContentControl" 
+                                            ContentTemplate="{TemplateBinding TitleTemplate}"
+                                            Content="{TemplateBinding Title}"
+                                            Style="{StaticResource PivotTitleContentControlStyle}"
+                                            Height="0"
+                                            VerticalAlignment="Top"/>
+                        <ScrollViewer 
+                                x:Name="ScrollViewer" 
+                                    HorizontalSnapPointsAlignment="Center" 
+                                    HorizontalSnapPointsType="MandatorySingle" 
+                                    HorizontalScrollBarVisibility="Hidden" Margin="{TemplateBinding Padding}" Grid.Row="1" Template="{StaticResource ScrollViewerScrollBarlessTemplate}" VerticalSnapPointsType="None" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled" VerticalContentAlignment="Stretch" ZoomMode="Disabled">
+                            <PivotPanel x:Name="Panel" 
+                                        Background="{StaticResource pageBackground}"
+                                        VerticalAlignment="Stretch">
+                                <PivotHeaderPanel x:Name="Header" 
+                                                      Margin="0"
+                                                      Height="40"
+                                                     Background="{StaticResource mainForeground}">
+                                    <PivotHeaderPanel.RenderTransform>
+                                        <CompositeTransform x:Name="HeaderTranslateTransform" TranslateX="0"/>
+                                    </PivotHeaderPanel.RenderTransform>
+                                </PivotHeaderPanel>
+                                <ItemsPresenter x:Name="PivotItemPresenter">
+                                    <ItemsPresenter.RenderTransform>
+                                        <TranslateTransform x:Name="ItemsPresenterTranslateTransform" X="0"/>
+                                    </ItemsPresenter.RenderTransform>
+                                </ItemsPresenter>
+                            </PivotPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!--Orgs data template -->
     <DataTemplate x:Key="ListViewOrgsTemplate">
         <Grid 

@@ -3,6 +3,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -226,6 +227,15 @@ namespace Pepeza.Views
             //Get selected Item
             Organization org = (sender as ListView).SelectedItem as Organization;
             this.Frame.Navigate(typeof(Views.Orgs.OrgProfile), org);
+        }
+
+        private void ListViewUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Person selected = (sender as ListView).SelectedItem as Person;
+            if (selected != null)
+            {
+                this.Frame.Navigate(typeof(UserOrgs), selected);
+            }
         }
     }
 }

@@ -186,10 +186,11 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_ORG_BOARDS, orgID));
+                    response = await client.GetAsync(string.Format(UserAddresses.GET_USER_ORGS , orgID));
                     if (response.IsSuccessStatusCode)
                     {
                         //Got boards for the org 
+                        string x = await response.Content.ReadAsStringAsync();
                         responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
                     else

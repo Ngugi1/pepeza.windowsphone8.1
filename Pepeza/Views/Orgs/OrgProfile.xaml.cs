@@ -40,6 +40,7 @@ namespace Pepeza.Views.Orgs
                 Organization org = e.Parameter as Organization;
                 RootGrid.DataContext = org;
             }
+            //Start the search 
         }
     }
 }

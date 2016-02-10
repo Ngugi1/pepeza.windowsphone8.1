@@ -18,7 +18,6 @@
     <Grid Margin="0,0,0,0"
           Background="{StaticResource mainForeground}">
         <Pivot 
-
             Style="{StaticResource CustomPivot}">
             <Pivot.Title>
                     <TextBlock Text="Pepeza"
@@ -45,6 +44,14 @@
                     <TextBlock 
                         Text="following" 
                         Style="{StaticResource txtBlockPivotHeader}"/>
+                </PivotItem.Header>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock 
+                        Text="organizations" 
+                        Style="{StaticResource txtBlockPivotHeader}"/>
+
                 </PivotItem.Header>
             </PivotItem>
         </Pivot>

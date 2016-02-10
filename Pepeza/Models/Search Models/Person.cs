@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Models.Search_Models
 {
-    class Person
+    public class Person
     {
         public int id { get; set; }
 

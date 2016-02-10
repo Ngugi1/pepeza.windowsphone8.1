@@ -17,6 +17,7 @@ namespace Pepeza.Server.Utility
         public static string UPDATE_USER { get { return "user/edit"; } }
         public static string DEACTIVATE_USER { get { return "user/deactivate"; } }
         public static string SEARCH_USER { get { return "users/search"; } }
+        public static string GET_USER_ORGS { get { return "users/{0}/organizations"; } }
 
     }
 }
