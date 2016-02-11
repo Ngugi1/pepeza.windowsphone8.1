@@ -84,10 +84,15 @@
                                 </Style>
                             </MenuFlyout.MenuFlyoutPresenterStyle>
                             <MenuFlyoutItem 
+                                 Margin="0"
                                 Click="AppBtnAddBoardClick"
                                 HorizontalAlignment="Stretch"
-                                >Board</MenuFlyoutItem>
-                            <MenuFlyoutItem Click="AppBtnAdd_Click">organisation</MenuFlyoutItem>
+                                >board</MenuFlyoutItem>
+                            <MenuFlyoutItem 
+                            Margin="0"
+                                Click="AppBtnAdd_Click"
+                                >organization
+                            </MenuFlyoutItem>
                         </MenuFlyout>
                     </AppBarButton.Flyout>    
                 </AppBarButton>

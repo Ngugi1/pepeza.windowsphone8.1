@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Users
 {
-    public class Email
+    public class TEmail
     {
         //TODO 
         [PrimaryKey]

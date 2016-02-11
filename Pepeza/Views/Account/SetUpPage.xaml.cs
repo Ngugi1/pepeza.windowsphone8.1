@@ -50,7 +50,7 @@ namespace Pepeza.Views.Account
             {
                 //Was successfull , insert user information in local database
                 JObject info = JObject.Parse(getUser[Constants.SUCCESS]);
-                UserInfo userInfo = new UserInfo()
+                TUserInfo userInfo = new TUserInfo()
                 {
                      id = (int)info["id"] ,
                      emailId = (int)info["email"]["id"], 
@@ -72,7 +72,7 @@ namespace Pepeza.Views.Account
                 Settings.add(Constants.USERID, (int)info["id"]);
                 Debug.WriteLine("ID in local storage" + Settings.getValue(Constants.USERID));
                 //Go ahead and get email data and insert it
-                Email emailInfo = new Email()
+                TEmail emailInfo = new TEmail()
                {
                    emailID = (int)info["email"]["id"],
                    email = (string)info["email"]["email"],
@@ -88,7 +88,7 @@ namespace Pepeza.Views.Account
 
                 Debug.WriteLine(await EmailHelper.add(emailInfo));
                 //Insert the org details   and insert in local db
-                 OrgInfo orgInfo = new OrgInfo()
+                 TOrgInfo orgInfo = new TOrgInfo()
                  {
                      id = (int)info["organizationId"]["id"],
                      userId = (int)info["organizationId"]["userId"],

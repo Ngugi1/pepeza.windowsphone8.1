@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Orgs
 {
-    public class OrgInfo
+    public class TOrgInfo
     {
         [PrimaryKey]
         public int id { get; set; }

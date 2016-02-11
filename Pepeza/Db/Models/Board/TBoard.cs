@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Board
 {
-    public class Board
+    public class TBoard
     {
         public int id { get; set; }
         public int orgID { get; set; }

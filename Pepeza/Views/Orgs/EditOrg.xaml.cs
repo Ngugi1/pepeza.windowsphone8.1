@@ -68,7 +68,7 @@ namespace Pepeza.Views.Orgs
             if (results != null && results.ContainsKey(Constants.SUCCESS))
             {
                 //Update the information n the local database
-                OrgInfo info = await OrgHelper.get(org.Id);
+                TOrgInfo info = await OrgHelper.get(org.Id);
                 info.name = model.Name;
                 info.description = model.Desc;
                int k =  await OrgHelper.update(info);

@@ -10,23 +10,23 @@ namespace Pepeza.Db.DbHelpers
 {
     public class OrgHelper : DBHelperBase
     {
-        public async static Task<OrgInfo> get(int id)
+        public async static Task<TOrgInfo> get(int id)
         {
-            OrgInfo info = null;
+            TOrgInfo info = null;
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
-               info=  await connection.GetAsync<OrgInfo>(id);
+               info=  await connection.GetAsync<TOrgInfo>(id);
             }
             return info;
         }
-        public async static Task<List<OrgInfo>> getAllOrgs()
+        public async static Task<List<TOrgInfo>> getAllOrgs()
         {
-             List<OrgInfo> orgs = null;
+             List<TOrgInfo> orgs = null;
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
-                orgs = await connection.Table<OrgInfo>().ToListAsync();
+                orgs = await connection.Table<TOrgInfo>().ToListAsync();
             }
             return orgs;
         }

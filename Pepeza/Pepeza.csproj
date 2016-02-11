@@ -98,16 +98,17 @@
     <Compile Include="CustomControls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Db\DbHelpers\Board\BoardHelper.cs" />
     <Compile Include="Db\DbHelpers\DbConstants.cs" />
     <Compile Include="Db\DbHelpers\DbHelper.cs" />
     <Compile Include="Db\DbHelpers\DBHelperBase.cs" />
     <Compile Include="Db\DbHelpers\Orgs\OrgHelper.cs" />
     <Compile Include="Db\DbHelpers\User\EmailHelper.cs" />
     <Compile Include="Db\DbHelpers\User\UserHelper.cs" />
-    <Compile Include="Db\Models\Board\Board.cs" />
-    <Compile Include="Db\Models\Orgs\OrgInfo.cs" />
-    <Compile Include="Db\Models\Users\Email.cs" />
-    <Compile Include="Db\Models\Users\UserInfo.cs" />
+    <Compile Include="Db\Models\Board\TBoard.cs" />
+    <Compile Include="Db\Models\Orgs\TOrgInfo.cs" />
+    <Compile Include="Db\Models\Users\TEmail.cs" />
+    <Compile Include="Db\Models\Users\TUserInfo.cs" />
     <Compile Include="IsolatedSettings\Settings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

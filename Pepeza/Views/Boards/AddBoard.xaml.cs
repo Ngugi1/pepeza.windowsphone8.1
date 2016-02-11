@@ -1,8 +1,15 @@
-﻿using Pepeza.Db.DbHelpers;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.DbHelpers;
+using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.Models.BoardModels;
+using Pepeza.Server.Requests;
+using Pepeza.Server.Validation;
+using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -35,10 +42,10 @@ namespace Pepeza.Views.Boards
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected  async override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Load all the organisatios
-            List<OrgInfo> orgs = await  OrgHelper.getAllOrgs();
+            List<TOrgInfo> orgs = await OrgHelper.getAllOrgs();
             foreach (var item in orgs)
             {
                 if (item.username == null)
@@ -50,14 +57,65 @@ namespace Pepeza.Views.Boards
             comboOrgs.SelectedIndex = 0;
         }
 
-        private void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)
+        private async void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)
         {
+            progressRingAddBoard.Visibility = Visibility.Visible;
+            txtBlockStatus.Visibility = Visibility.Collapsed;
             var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
-            OrgInfo info = comboOrgs.SelectedItem as OrgInfo;
-            if (board.CanCreate)
+            TOrgInfo info = comboOrgs.SelectedItem as TOrgInfo;
+            if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
             {
                 //Go ahead and create the account
 
+                Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
+                {
+                    {"orgId" ,info.id.ToString()} ,{"name" , board.Name} , {"description" , board.Desc} 
+                });
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    //Update local database
+                    insertBoardToDb(results, board, info);
+                    this.Frame.GoBack();
+                }
+                else
+                {
+                    //Display errors 
+                    txtBlockStatus.Visibility = Visibility.Visible;
+                    txtBlockStatus.Text = results[Constants.ERROR];
+                }
+            }
+            else
+            {
+                //Show errors 
+                toastInvalidData.Message = "Please fill in the fields correctly";
+            }
+            progressRingAddBoard.Visibility = Visibility.Collapsed;
+        }
+
+        private async void insertBoardToDb(Dictionary<string, string> results,Board model, TOrgInfo org)
+        {
+            try
+            {
+                JObject board = JObject.Parse(results[Constants.SUCCESS]);
+                TBoard toInsert = new TBoard();
+                toInsert.id = (int)board["id"];
+                    toInsert.name = (string)model.Name;
+                    toInsert.desc = (string)model.Desc;
+                    toInsert.orgID = (int)org.id;
+                    toInsert.dateUpdated = (DateTime)board["dateUpdated"]["date"];
+                    toInsert.dateCreated = (DateTime)board["dateCreated"]["date"];
+                    toInsert.timezone_created = (string)board["dateCreated"]["timezone"];
+                    toInsert.timezone_updated = (string)board["dateUpdated"]["timezone"];
+                    toInsert.timezone_type_created = (int)board["dateCreated"]["timezone_type"];
+                    toInsert.timezone_type_updated = (int)board["dateUpdated"]["timezone_type"];
+               
+
+                int K = await BoardHelper.addBoard(toInsert);
+                Debug.WriteLine("Affeected Rows ================> " + K);
+            }
+            catch (SQLite.SQLiteException ex)
+            {
+                Debug.WriteLine(ex.ToString() + " ==================================== ");
             }
         }
     }

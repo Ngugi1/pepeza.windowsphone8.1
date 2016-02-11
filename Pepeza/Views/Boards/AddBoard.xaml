@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pepeza.Views.Boards"
-    xmlns:board="using:Pepeza.Models.BoardModels"
+   xmlns:board="using:Pepeza.Models.BoardModels"
+    xmlns:toast="using:Toastinet"
     xmlns:con="using:Pepeza.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -37,6 +38,8 @@
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition  Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -106,7 +109,33 @@
                        Style="{StaticResource txtBlockError}"
                        Visibility="{Binding IsDescValid , Converter={StaticResource converter}}"
                        />
+            <TextBlock Name="txtBlockStatus" 
+                       Style="{StaticResource txtBlockError}"
+                       Grid.Row="6"/>
+            <ProgressRing Grid.Row="7"
+                          Height="100"
+                          Name="progressRingAddBoard"
+                          IsActive="True"
+                          Background="Transparent"
+                          IsEnabled="True"
+                          Visibility="Collapsed"
+                          FlowDirection="RightToLeft"
+                          Foreground="{StaticResource BtnBackground}"
+                          Width="100"/>
         </Grid>
+        <toast:Toastinet 
+            Grid.Row="1"
+            Height="40"  
+            Foreground="Black"
+            Background="Red"
+            FontWeight="SemiBold"
+            FontSize="14"
+            VerticalAlignment="Top"
+            Name="toastInvalidData"
+            AnimationType="Vertical"
+            Duration="3"
+            />
+
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource mainForeground}">

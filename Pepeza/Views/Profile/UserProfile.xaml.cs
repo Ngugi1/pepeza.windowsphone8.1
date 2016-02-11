@@ -123,8 +123,8 @@ namespace Pepeza.Views.Profile
         {
             var connection = DbHelper.DbConnectionAsync();
             int userId = (int)Settings.getValue(Constants.USERID);
-            Db.Models.UserInfo info = await connection.GetAsync<Db.Models.UserInfo>(userId);
-            Email emailInfo = await connection.GetAsync<Email>(info.emailId);
+            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>(userId);
+            TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
             Debug.WriteLine(emailInfo.email);
             return new ProfileData()
             {
