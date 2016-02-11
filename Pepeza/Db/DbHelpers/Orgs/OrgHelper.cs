@@ -1,4 +1,5 @@
 ﻿using Pepeza.Db.Models.Orgs;
+using Pepeza.Models.Search_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,15 @@ namespace Pepeza.Db.DbHelpers
             }
             return info;
         }
-       
+        public async static Task<List<OrgInfo>> getAllOrgs()
+        {
+             List<OrgInfo> orgs = null;
+            var connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                orgs = await connection.Table<OrgInfo>().ToListAsync();
+            }
+            return orgs;
+        }
     }
 }

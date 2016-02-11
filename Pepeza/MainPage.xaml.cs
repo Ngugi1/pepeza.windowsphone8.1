@@ -1,4 +1,5 @@
 ﻿using Pepeza.Server.Requests;
+using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
@@ -71,6 +72,11 @@ namespace Pepeza
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AddOrg));
+        }
+
+        private void AppBtnAddBoardClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddBoard));
         }
     }
 }
