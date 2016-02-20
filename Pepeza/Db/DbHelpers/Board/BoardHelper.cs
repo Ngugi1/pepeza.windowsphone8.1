@@ -26,7 +26,16 @@ namespace Pepeza.Db.DbHelpers.Board
             if (connection != null)
             {
                  boards= await connection.Table<TBoard>().ToListAsync();
+                 if (boards != null)
+                 {
+                     foreach (TBoard board in boards)
+                     {
+                         Db.Models.Orgs.TOrgInfo orgInfo = await connection.GetAsync<Db.Models.Orgs.TOrgInfo>(board.orgID);
+                         board.organisation = orgInfo.name;
+                     }
+                 }
             }
+
             return boards;
         }
     }

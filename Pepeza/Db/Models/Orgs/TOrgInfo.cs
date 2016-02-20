@@ -13,7 +13,7 @@ namespace Pepeza.Db.Models.Orgs
         public int id { get; set; }
         public int userId { get; set; }
         [MaxLength(20)]
-        public string username { get; set; }
+        public string username {get; set;}
         [MaxLength(100)]
         public string name { get; set; }
         [MaxLength(250)]

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pepeza"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Jumper="using:QKit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -39,6 +40,7 @@
                     />
                     
                 </PivotItem.Header>
+                <Jumper:GenericJumpList Name="QJumpList">
                 <ListView Name="ListViewBoards" 
                           >
                     <ListView.ItemTemplate>
@@ -65,11 +67,11 @@
                             <TextBlock 
                                     Grid.Row="0"
                                     Text="{Binding name}"
+                                FontWeight="Thin"
                                     Margin="8"
-                                    FontWeight="Bold"
                                     Foreground="Black"
                                     Grid.Column="1"
-                                    Style="{StaticResource ListViewItemTextBlockStyle}">
+                                    Style="{StaticResource GroupHeaderTextBlockStyle}">
                             </TextBlock>
                             <TextBlock Text="{Binding desc}"
                                         Grid.Row="1"
@@ -98,6 +100,7 @@
                     </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                </Jumper:GenericJumpList>
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
@@ -133,9 +136,10 @@
                                     Grid.Row="0"
                                     Text="{Binding username}"
                                     Margin="8"
+                                    FontWeight="Thin"
                                     Foreground="Black"
                                     Grid.Column="1"
-                                    Style="{StaticResource ListViewItemTextBlockStyle}">
+                                    Style="{StaticResource  GroupHeaderTextBlockStyle}">
                                 </TextBlock>
                                 <TextBlock Text="{Binding name}"
                                         Grid.Row="1"

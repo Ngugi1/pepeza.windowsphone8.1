@@ -136,12 +136,12 @@
     <Compile Include="Server\Utility\BoardAddresses.cs" />
     <Compile Include="Server\Utility\OrgsAddresses.cs" />
     <Compile Include="Server\Utility\UserAddresses.cs" />
-    <Compile Include="Validation\OrgValidation.cs" />
-    <Compile Include="Validation\ValidationBase.cs" />
+    <Compile Include="Styles\Validation\OrgValidation.cs" />
+    <Compile Include="Styles\Validation\ValidationBase.cs" />
     <Compile Include="SQLiteWrappers\SQLite.cs" />
     <Compile Include="SQLiteWrappers\SQLiteAsync.cs" />
     <Compile Include="Utitlity\Constants.cs" />
-    <Compile Include="Validation\UserValidation.cs" />
+    <Compile Include="Styles\Validation\UserValidation.cs" />
     <Compile Include="ViewModels\Commands\CommandAddOrg.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
     <Compile Include="ViewModels\Commands\CommandUpdateProfile.cs" />
@@ -289,6 +289,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="QKit">
+      <HintPath>..\packages\QKit.0.4.1\lib\wpa81\QKit.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>

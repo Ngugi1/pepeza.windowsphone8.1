@@ -3,6 +3,7 @@ using Pepeza.Db.Models.Orgs;
 using Pepeza.Server.Requests;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
+using QKit.JumpList;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -48,9 +49,11 @@ namespace Pepeza
             // handling the hardware Back button by registering for the
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
-
             boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
-            ListViewBoards.ItemsSource = boards.OrderByDescending(t => t.dateCreated);
+            var groupedBoards = JumpListHelper.ToGroups(boards,t=>t.name,t=>t.organisation);
+            QJumpList.ReleaseItemsSource();
+            ListViewBoards.ItemsSource = groupedBoards;
+            QJumpList.ApplyItemsSource();
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
             ListViewOrgs.ItemsSource = orgs;
         }
