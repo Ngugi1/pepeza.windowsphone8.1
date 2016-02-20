@@ -19,5 +19,15 @@ namespace Pepeza.Db.DbHelpers.Board
             }
             return affectedRows;
         }
+        public async static Task<List<Db.Models.Board.TBoard>> fetchAllBoards()
+        {
+            List<TBoard> boards = null;
+            var connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                 boards= await connection.Table<TBoard>().ToListAsync();
+            }
+            return boards;
+        }
     }
 }

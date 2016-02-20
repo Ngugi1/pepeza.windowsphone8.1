@@ -50,21 +50,19 @@ namespace Pepeza.Views.Account
             {
                 //Was successfull , insert user information in local database
                 JObject info = JObject.Parse(getUser[Constants.SUCCESS]);
-                TUserInfo userInfo = new TUserInfo()
-                {
-                     id = (int)info["id"] ,
-                     emailId = (int)info["email"]["id"], 
-                     firstName = (string)info["firstName"],
-                     lastName = (string)info["lastName"],
-                     organizationId = (int)info["organizationId"]["id"],
-                     username = (string)info["username"],
-                     dateUpdated = Convert.ToDateTime((string)info["dateUpdated"]["date"]),
-                     time_zone_updated = (string)info["dateUpdated"]["timezone"],
-                     time_zone_type_updated = (int)info["dateUpdated"]["timezone_type"],
-                     dateCreated = Convert.ToDateTime((string)info["dateCreated"]["date"]),
-                     time_zone_created = (string)info["dateCreated"]["timezone"],
-                     time_zone_type_created = (int)info["dateCreated"]["timezone_type"]
-                };
+                TUserInfo userInfo = new TUserInfo();
+                userInfo.id = (int)info["id"];
+                userInfo.emailId = (int)info["email"]["id"];
+                userInfo.firstName = (string)info["firstName"];
+                userInfo.lastName = (string)info["lastName"];
+                userInfo.organizationId = (int)info["organization"]["id"];
+                userInfo.username = (string)info["username"];
+                userInfo.dateUpdated = Convert.ToDateTime((string)info["dateUpdated"]["date"]);
+                userInfo.time_zone_updated = (string)info["dateUpdated"]["timezone"];
+                userInfo.time_zone_type_updated = (int)info["dateUpdated"]["timezone_type"];
+                userInfo.dateCreated = Convert.ToDateTime((string)info["dateCreated"]["date"]);
+                userInfo.time_zone_created = (string)info["dateCreated"]["timezone"];
+                userInfo.time_zone_type_created = (int)info["dateCreated"]["timezone_type"];
                 Debug.WriteLine(await UserHelper.add(userInfo));
 
                 //Save user ID to isolated storage
@@ -90,17 +88,17 @@ namespace Pepeza.Views.Account
                 //Insert the org details   and insert in local db
                  TOrgInfo orgInfo = new TOrgInfo()
                  {
-                     id = (int)info["organizationId"]["id"],
-                     userId = (int)info["organizationId"]["userId"],
-                     username = (string)info["organizationId"]["username"],
-                     name = (string)info["organizationId"]["name"],
-                     description = (string)info["organizationId"]["description"],
-                     dateCreated = (DateTime)info["organizationId"]["dateCreated"]["date"],
-                     dateUpdated = (DateTime)info["organizationId"]["dateUpdated"]["date"],
-                     timezone_create = (string)info["organizationId"]["dateCreated"]["timezone"],
-                     timezone_updated = (string)info["organizationId"]["dateUpdated"]["timezone"],
-                     timezone_type_created = (int)info["organizationId"]["dateCreated"]["timezone_type"],
-                     timezone_type_updated = (int)info["organizationId"]["dateUpdated"]["timezone_type"]
+                     id = (int)info["organization"]["id"],
+                     userId = (int)info["organization"]["userId"],
+                     username = (string)info["organization"]["username"],
+                     name = (string)info["organization"]["name"],
+                     description = (string)info["organization"]["description"],
+                     dateCreated = (DateTime)info["organization"]["dateCreated"]["date"],
+                     dateUpdated = (DateTime)info["organization"]["dateUpdated"]["date"],
+                     timezone_create = (string)info["organization"]["dateCreated"]["timezone"],
+                     timezone_updated = (string)info["organization"]["dateUpdated"]["timezone"],
+                     timezone_type_created = (int)info["organization"]["dateCreated"]["timezone_type"],
+                     timezone_type_updated = (int)info["organization"]["dateUpdated"]["timezone_type"]
                  };
                  Debug.WriteLine(await OrgHelper.add(orgInfo));
                  this.Frame.Navigate(typeof(MainPage));

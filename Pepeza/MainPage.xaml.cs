@@ -1,8 +1,11 @@
-﻿using Pepeza.Server.Requests;
+﻿using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Orgs;
+using Pepeza.Server.Requests;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -25,10 +28,11 @@ namespace Pepeza
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        ObservableCollection<TBoard> boards;
+        ObservableCollection<TOrgInfo> orgs;
         public MainPage()
         {
             this.InitializeComponent();
-
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
@@ -40,16 +44,15 @@ namespace Pepeza
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: Prepare page for display here.
-
             // TODO: If your application contains multiple pages, ensure that you are
             // handling the hardware Back button by registering for the
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
-            //await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId","2"},{ "username", "updatedorg1" }, { "name", "Sample" }, { "description","This is a sample description for all of the boaerd"} });
-            //await OrgsService.search("update");
-            //await OrgsService.getOrg(2);
-            //await OrgsService.deleteOrg(2);
+
+            boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
+            ListViewBoards.ItemsSource = boards.OrderByDescending(t => t.dateCreated);
+            orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
+            ListViewOrgs.ItemsSource = orgs;
         }
 
        
