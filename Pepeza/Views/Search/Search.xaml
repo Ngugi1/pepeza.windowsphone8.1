@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pepeza.Views"
     xmlns:Perso="using:Pepeza.Models.Search_Models"
+    xmlns:QKit="using:QKit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -42,6 +43,7 @@
                         Style="{StaticResource txtBlockPivotHeader}"/>
                 </PivotItem.Header>
                 <ListView
+                    
                     Margin="8"
                     Foreground="Red"   
                     Name="ListViewUser"
@@ -71,7 +73,6 @@
                                     Grid.Row="0"
                                     Text="{Binding username}"
                                     Margin="8"
-                                    FontWeight="Bold"
                                     Foreground="Black"
                                     Grid.Column="1"
                                     Style="{StaticResource ListViewItemTextBlockStyle}">
@@ -102,6 +103,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+               
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
@@ -109,6 +111,54 @@
                                Text="boards"
                                />
                 </PivotItem.Header>
+                <ListView Name="ListViewBoards">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Height="80"
+                                         Width="80"
+                                        Grid.RowSpan="3">
+                                    <Ellipse.Fill>
+                                        <ImageBrush 
+                                            ImageSource="/Assets/Images/profile.jpg"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <TextBlock 
+                                    Grid.Row="0"
+                                    Text="{Binding name}"
+                                FontWeight="Thin"
+                                    Margin="8"
+                                    Foreground="Black"
+                                    Grid.Column="1"
+                                    Style="{StaticResource GroupHeaderTextBlockStyle}">
+                                </TextBlock>
+                   <Line 
+                        X1="5"     
+                        Y1="10"
+                        Grid.Row="2"
+                        X2="10"
+                        Stroke="{StaticResource mainForeground}"
+                        StrokeThickness="0.5"
+                        Y2="10"
+                        Margin="8"
+                        Grid.Column="1"
+                        Stretch="Fill"
+                                      />
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </PivotItem>
             <PivotItem Margin="19,0,19,-0.5">
                 <PivotItem.Header>
@@ -204,7 +254,11 @@
             Name="txtBlockWhat"
                    Foreground="Black"
                    Grid.Row="1"
-                   Style="{ThemeResource ListViewItemTextBlockStyle}"
+            TextAlignment="Center"
+            Margin="8"
+                   FontWeight="ExtraLight"
+            TextWrapping="Wrap"       
+            Style="{ThemeResource ListViewItemTextBlockStyle}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    />

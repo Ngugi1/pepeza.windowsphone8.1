@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,14 +34,23 @@ namespace Pepeza.Views
     
     public sealed partial class Search : Page
     {
-        ObservableCollection<Person> source = new ObservableCollection<Person>();
-        ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
+        /// <summary>
+        /// collections to hold search results
+        /// </summary>
+        /// 
+        #region Collections
+        ObservableCollection<Person> personSource = new ObservableCollection<Person>();
+        ObservableCollection<Organization> orgSource = new ObservableCollection<Organization>();
+        ObservableCollection<Models.Search_Models.Board> boardSource = new ObservableCollection<Models.Search_Models.Board>();
+        #endregion
         public Search()
         {
             this.InitializeComponent();
+            HardwareButtons.BackPressed+=HardwareButtons_BackPressed;
             
         }
 
+        #region Controls' Events
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -48,11 +58,56 @@ namespace Pepeza.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-           
+            this.Frame.BackStack.Clear();  
         }
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (TextBoxReady())
+            {
+                await generalSearch();
+            }
+            else
+            {
+                updateWhatToSearch();
+            }
+
+
+
+        }
+        private void listViewSearchOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Get selected Item
+            Organization org = (sender as ListView).SelectedItem as Organization;
+            this.Frame.Navigate(typeof(Views.Orgs.OrgProfile), org);
+        }
+        private void ListViewUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Person selected = (sender as ListView).SelectedItem as Person;
+            if (selected != null)
+            {
+                this.Frame.Navigate(typeof(UserOrgs), selected);
+            }
+        }
+        /// <summary>
+        /// Navigate Back to mainpage
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage));
+            e.Handled = true;
+        }
+        /// <summary>
+        /// Begin search
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void txtBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Settings.add(Constants.SEARCH_KEY,(sender as TextBox).Text);
+           //Clear previous search results 
+            clearPreviousResults();
             //Call the method from the server 
              if (TextBoxReady())
              {
@@ -66,7 +121,21 @@ namespace Pepeza.Views
              }
             
         }
+        #endregion
+        #region Utility Functions
+        /// <summary>
+        /// Prepares all list views for the next search
+        /// </summary>
+        private void clearPreviousResults()
+        {
+            personSource.Clear();
+            boardSource.Clear();
+            orgSource.Clear();
+        }
 
+        /// <summary>
+        /// Updates the UI on what is to be searched based on pivot selection
+        /// </summary>
         private void updateWhatToSearch()
         {
             if (!TextBoxReady())
@@ -89,31 +158,51 @@ namespace Pepeza.Views
                 txtBlockWhat.Visibility = Visibility.Collapsed;
             }
         }
-
+/// <summary>
+/// Checks if text is valid for search
+/// </summary>
+/// <returns></returns>
         private bool TextBoxReady()
         {
             return (!string.IsNullOrEmpty(txtBoxSearch.Text.Trim())&&!string.IsNullOrWhiteSpace(txtBoxSearch.Text.Trim()));
         }
-
-        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void NoResults()
         {
-            
-                if (TextBoxReady())
-                {
-                    await generalSearch();
-                }
-                else
-                {
-                    updateWhatToSearch();
-                }
-            
-            
-           
+            txtBlockWhat.Text = "No results matched your query";
+            txtBlockWhat.Visibility = Visibility.Visible;
         }
+        /// <summary>
+        /// Prepare UI for search , collapse message txtblock and show progress ring
+        /// </summary>
+        /// <param name="searching"></param>
+        public void IsSearching(bool searching = true)
+        {
+            if (searching)
+            {
+                ProgressRingSearch.Visibility = Visibility.Visible;
+                txtBlockWhat.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                ProgressRingSearch.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void displayErrors(string error)
+        {
+            txtBlockWhat.Text = error;
+            txtBlockWhat.Visibility = Visibility.Visible;
+        }
+        #endregion
+
+        #region Searches
+        /// <summary>
+        /// Sesrch for users remotely
+        /// </summary>
+        /// <returns></returns>
         private async Task searchUser()
         {
-            source.Clear();
-            //ListViewUser.Items.Clear();
+            personSource.Clear();
+            txtBlockWhat.Visibility = Visibility.Collapsed;
             Dictionary<string, string> searchResults = await RequestUser.searchUser(txtBoxSearch.Text.Trim());
             if (searchResults.ContainsKey(Constants.SUCCESS))
             {
@@ -122,7 +211,6 @@ namespace Pepeza.Views
                 JArray jArray = JArray.Parse(result["results"].ToString());
                 if (jArray.Count != 0)
                 {
-                    txtBlockWhat.Visibility = Visibility.Collapsed;
                     for (int i = 0; i < jArray.Count; i++)
                     {
                         JObject row = JObject.Parse(jArray[i].ToString());
@@ -132,26 +220,30 @@ namespace Pepeza.Views
                         p.firstname = (string)row["firstName"];
                         p.lastname = (string)row["lastName"];
                         p.fullname = p.firstname + " " + p.lastname;
-                        source.Add(p);
+                        personSource.Add(p);
                     }
                 }
                 else
                 {
                     //No results found 
                     NoResults();
-                    source.Clear();
+                    personSource.Clear();
                 }
-                if (source != null)
+                if (personSource != null)
                 {
-                    ListViewUser.ItemsSource = source;
+                    ListViewUser.ItemsSource = personSource;
                 }
             }
             else if (searchResults.ContainsKey(Constants.ERROR))
             {
                 //Display the error
-                txtBlockWhat.Text = searchResults[Constants.ERROR];
+               displayErrors(searchResults[Constants.ERROR]);
             }       
         }
+        /// <summary>
+        /// Determine which u=item to search based on selection on the pivot
+        /// </summary>
+        /// <returns></returns>
         private async Task generalSearch()
         {
                 //go ahead and search ]
@@ -159,26 +251,84 @@ namespace Pepeza.Views
                 {
                     case 0:
                         //search users
-                        ProgressRingSearch.Visibility = Visibility.Visible;
+                        IsSearching();
                         await searchUser();
-                        ProgressRingSearch.Visibility = Visibility.Collapsed;
+                        IsSearching(false);
                         break;
                     case 1:
                         //search boards
-                        
+                        IsSearching();
+                         await searchBoards();
+                         IsSearching(false);
                         break;
                     case 2:
                         //search orgs 
-                        ProgressRingSearch.Visibility = Visibility.Visible;
+                        IsSearching();
                         await searchOrg();
-                        ProgressRingSearch.Visibility = Visibility.Collapsed;
+                        IsSearching(false);
                         break;
                 }
         }
 
+        /// <summary>
+        /// Search for boards online
+        /// </summary>
+        /// <returns></returns>
+        private async Task searchBoards()
+         {
+            boardSource.Clear();
+            try
+            {
+
+                Dictionary<string, string> results = await BoardService.searchBoard(txtBoxSearch.Text);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    //We have some results 
+                    JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                    if (objResults != null)
+                    {
+                        //Go ahead and get a list 
+                        JArray jArrayResults = JArray.Parse(objResults["results"].ToString());
+                        if (jArrayResults.Count > 0)
+                        {
+                            foreach (var board in jArrayResults)
+                            {
+                                Models.Search_Models.Board searchedBoard = new Models.Search_Models.Board();
+                                searchedBoard.id = (int)board["id"];
+                                searchedBoard.name = (string)board["name"];
+                                searchedBoard.score = (double)board["score"];
+                                boardSource.Add(searchedBoard);
+                            }
+                        }
+                        else
+                        {
+                            //We have no results
+                            boardSource.Clear();
+                            NoResults();
+                        }
+                    }
+                    else
+                    {
+                        boardSource.Clear();
+                        NoResults();
+                    }
+                }
+                else
+                {
+                    //We had some errors
+                    displayErrors(results[Constants.ERROR]);
+                }
+                ListViewBoards.ItemsSource = boardSource;
+            }
+            catch(Exception)
+            {
+                displayErrors(Constants.UNKNOWNERROR);
+            }
+        }
+
         private async Task searchOrg()
         {
-            collection.Clear();
+            orgSource.Clear();
             Dictionary<string, string> result = await OrgsService.search(txtBoxSearch.Text.Trim());
             if (result.ContainsKey(Constants.SUCCESS))
             {
@@ -199,43 +349,29 @@ namespace Pepeza.Views
                          Score = (double)row["score"],
                          Username =(string)row["username"]
                     };
-                    collection.Add(org);
+                    orgSource.Add(org);
                 }
 
                }
                else
                {
                    NoResults();
-                   collection.Clear();
+                   orgSource.Clear();
                }
 
-               if (collection != null)
+               if (orgSource != null)
                {
-                   listViewSearchOrgs.ItemsSource = collection;
+                   listViewSearchOrgs.ItemsSource = orgSource;
                }
-                
+
             }
-        }
-        public  void NoResults()
-        {
-            txtBlockWhat.Text = "No results matched your query";
-            txtBlockWhat.Visibility = Visibility.Visible;
-        }
-
-        private void listViewSearchOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Get selected Item
-            Organization org = (sender as ListView).SelectedItem as Organization;
-            this.Frame.Navigate(typeof(Views.Orgs.OrgProfile), org);
-        }
-
-        private void ListViewUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Person selected = (sender as ListView).SelectedItem as Person;
-            if (selected != null)
+            else
             {
-                this.Frame.Navigate(typeof(UserOrgs), selected);
+                //Some errors occoured , handle with a toast
+                displayErrors(result[Constants.ERROR]);
             }
         }
+        #endregion
+        
     }
 }

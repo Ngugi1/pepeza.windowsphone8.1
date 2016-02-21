@@ -117,6 +117,7 @@
     <Compile Include="Models\BoardModels\Board.cs" />
     <Compile Include="Models\OrgsModels\Constants\StatusMessages.cs" />
     <Compile Include="Models\OrgsModels\EditOrgModel.cs" />
+    <Compile Include="Models\Search Models\Board.cs" />
     <Compile Include="Models\Search Models\Organization.cs" />
     <Compile Include="Models\UserModels\GetUser.cs" />
     <Compile Include="Models\OrgsModels\AddOrgModel.cs" />
