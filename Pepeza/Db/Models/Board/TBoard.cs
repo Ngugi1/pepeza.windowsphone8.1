@@ -9,6 +9,7 @@ namespace Pepeza.Db.Models.Board
 {
     public class TBoard
     {
+        [PrimaryKey]
         public int id { get; set; }
         public int orgID { get; set; }
         public string name { get; set; }

@@ -31,6 +31,7 @@ namespace Pepeza
     {
         ObservableCollection<TBoard> boards;
         ObservableCollection<TOrgInfo> orgs;
+        Boolean selected = false;
         public MainPage()
         {
             this.InitializeComponent();
@@ -44,11 +45,13 @@ namespace Pepeza
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             // TODO: Prepare page for display here.
             // TODO: If your application contains multiple pages, ensure that you are
             // handling the hardware Back button by registering for the
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
+            selected = false;
             boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
             var groupedBoards = JumpListHelper.ToGroups(boards,t=>t.name,t=>t.organisation);
             QJumpList.ReleaseItemsSource();
@@ -56,6 +59,7 @@ namespace Pepeza
             QJumpList.ApplyItemsSource();
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
             ListViewOrgs.ItemsSource = orgs;
+            selected = true;
         }
 
        
@@ -83,6 +87,14 @@ namespace Pepeza
         private void AppBtnAddBoardClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AddBoard));
+        }
+
+        private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Get the selected board and navigate to profile/notices
+            TBoard board = (sender as ListView).SelectedItem as TBoard;
+            if(board!=null&& selected==true)this.Frame.Navigate(typeof(UpdateBoard) , board);
+            ListViewBoards.SelectedItem = null;
         }
     }
 }

@@ -1,0 +1,116 @@
+﻿<Page
+    x:Class="Pepeza.Views.Boards.UpdateBoard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views.Boards"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid 
+        Background="{StaticResource pageBackground}"
+        x:Name="LayoutRoot">
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel 
+                Style="{StaticResource HeaderStackPanel}">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                       Text="edit board"
+                       />
+        </StackPanel>
+        <Grid Grid.Row="1" x:Name="ContentRoot" 
+              Margin="19,9.5,19,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+            <Ellipse Width="120"
+                     Height="120"
+                     HorizontalAlignment="Left">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
+                </Ellipse.Fill>
+            </Ellipse>
+                <AppBarButton Icon="Edit"
+                              IsCompact="True"
+                              Foreground="Black"
+                              VerticalAlignment="Bottom"
+                              />
+          </StackPanel>
+            <TextBox Style="{StaticResource txtBoxStyle}"
+                     TextChanged="txtBoxName_TextChanged"
+                     Name="txtBoxName"
+                     Grid.Row="1"
+                     MaxLength="100"
+                     PlaceholderText="{Binding name}"
+                     Text="{Binding name}"
+                     Header="name"
+                     />
+            <TextBlock Text="name should be at least 3 characters"
+                       Grid.Row="2"
+                       Name="txtBlockIsNameValid"
+                       Visibility="Collapsed"
+                       Style="{StaticResource txtBlockError}"/>
+            <TextBox Header="description"
+                     Grid.Row="3"
+                     Name="txtBoxDesc"
+                     TextChanged="txtBoxDesc_TextChanged"
+                     MaxLength="250"
+                     Text="{Binding desc}"
+                     PlaceholderText="{Binding desc}"
+                     Style="{StaticResource txtBoxStyle}"
+                     />
+            <TextBlock Grid.Row="4"
+                       Name="txtBlockIsDescvalid"
+                       Visibility="Collapsed"
+                       Style="{ThemeResource txtBlockError}"
+                       Text="describe your organisation in not less than 10 characters"/>
+            <TextBlock Text="oops , something went wrong" 
+                       Grid.Row="5"
+                       Name="txtBlockStatus"
+                       Visibility="Collapsed"
+                       Style="{StaticResource txtBlockError}"/>
+            <ProgressRing Height="100"
+                          Width="100"
+                          Visibility="Collapsed"
+                          Name="PRUpdateBoard"
+                          Background="Transparent"
+                          Foreground="{StaticResource mainForeground}"
+                          IsActive="True"
+                          IsEnabled="True"
+                          Grid.Row="6"
+                          />
+        </Grid>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Background="{StaticResource mainForeground}">
+            <AppBarButton Icon="Accept" 
+                          IsEnabled="True"
+                          Label="update"
+                          Name="AppBarButtonUpdate"
+                          Click="AppBarButtonUpdate_Click"
+                          IsCompact="True"
+                          />
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

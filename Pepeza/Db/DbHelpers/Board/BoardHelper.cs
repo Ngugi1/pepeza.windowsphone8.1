@@ -31,12 +31,30 @@ namespace Pepeza.Db.DbHelpers.Board
                      foreach (TBoard board in boards)
                      {
                          Db.Models.Orgs.TOrgInfo orgInfo = await connection.GetAsync<Db.Models.Orgs.TOrgInfo>(board.orgID);
-                         board.organisation = orgInfo.name;
+                         if (orgInfo.name.Equals("My Boards"))
+                         {
+                             board.organisation = "#my boards";
+                         }
+                         else
+                         {
+                             board.organisation = orgInfo.name;
+                         }
+                         
                      }
                  }
             }
 
             return boards;
+        }
+        public async static Task<TBoard> getBoard(int boardId)
+        {
+            TBoard result = null;
+            var connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                result = await connection.GetAsync<TBoard>(boardId);
+            }
+            return result;
         }
     }
 }

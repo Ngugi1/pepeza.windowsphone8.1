@@ -58,7 +58,6 @@ namespace Pepeza.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.Frame.BackStack.Clear();  
         }
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -95,6 +95,10 @@
     <Compile Include="BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\NavigationHelper.cs" />
+    <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="CustomControls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
@@ -159,6 +163,9 @@
     </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\UpdateBoard.xaml.cs">
+      <DependentUpon>UpdateBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Orgs\AddOrg.xaml.cs">
       <DependentUpon>AddOrg.xaml</DependentUpon>
@@ -239,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Boards\AddBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Boards\UpdateBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

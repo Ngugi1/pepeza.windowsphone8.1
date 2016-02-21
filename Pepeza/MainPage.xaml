@@ -40,8 +40,10 @@
                     />
                     
                 </PivotItem.Header>
-                <Jumper:GenericJumpList Name="QJumpList">
-                <ListView Name="ListViewBoards" 
+                <Jumper:GenericJumpList Name="QJumpList" 
+                                        >
+                <ListView Name="ListViewBoards"
+                          SelectionChanged="ListViewBoards_SelectionChanged"
                           >
                     <ListView.ItemTemplate>
                     <DataTemplate>
