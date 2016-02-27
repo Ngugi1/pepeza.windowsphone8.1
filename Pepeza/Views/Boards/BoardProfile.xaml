@@ -49,7 +49,10 @@
                 </Ellipse>
                 <Button VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
+                        IsEnabled="True"
                         Content="Follow board"
+                        Name="btnFollow"
+                        Click="btnFollow_Click"
                         Margin="16,0"
                         />
             </Grid>

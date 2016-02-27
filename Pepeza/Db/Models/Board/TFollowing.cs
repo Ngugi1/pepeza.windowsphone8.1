@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Pepeza.Models;
+using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pepeza.Models.BoardModels
+namespace Pepeza.Db.Models.Board
 {
-    public class FetchedBoard : Bindable
+    class TFollowing : Bindable
     {
         private int _id;
-
+        [PrimaryKey]
         public int Id
         {
             get { return _id; }

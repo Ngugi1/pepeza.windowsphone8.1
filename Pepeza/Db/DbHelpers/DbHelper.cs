@@ -26,6 +26,7 @@ namespace Pepeza.Db.DbHelpers
             connection.CreateTableAsync<TUserInfo>();
             connection.CreateTableAsync<TEmail>();
             connection.CreateTableAsync<TBoard>();
+            connection.CreateTableAsync<TFollowing>();
         }
 
         /// <summary>

@@ -103,6 +103,7 @@
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Db\DbHelpers\Board\BoardHelper.cs" />
+    <Compile Include="Db\DbHelpers\Board\FollowingHelper.cs" />
     <Compile Include="Db\DbHelpers\DbConstants.cs" />
     <Compile Include="Db\DbHelpers\DbHelper.cs" />
     <Compile Include="Db\DbHelpers\DBHelperBase.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Db\DbHelpers\User\EmailHelper.cs" />
     <Compile Include="Db\DbHelpers\User\UserHelper.cs" />
     <Compile Include="Db\Models\Board\TBoard.cs" />
+    <Compile Include="Db\Models\Board\TFollowing.cs" />
     <Compile Include="Db\Models\Orgs\TOrgInfo.cs" />
     <Compile Include="Db\Models\Users\TEmail.cs" />
     <Compile Include="Db\Models\Users\TUserInfo.cs" />
