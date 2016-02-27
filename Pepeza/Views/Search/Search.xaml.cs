@@ -376,7 +376,6 @@ namespace Pepeza.Views
             }
         }
         #endregion
-
         private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Pepeza.Models.Search_Models.Board board = (sender as ListView).SelectedItem as Pepeza.Models.Search_Models.Board;

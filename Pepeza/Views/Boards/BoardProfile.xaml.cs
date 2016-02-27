@@ -141,8 +141,8 @@ namespace Pepeza.Views
         }
         private async Task checkIfBoardIsFollowed(int boardId)
         {
-            TFollowing following = await FollowingHelper.getFollowingBoard(boardId);
-            if (following != null)
+            bool following = await FollowingHelper.getFollowingBoard(boardId);
+            if (following)
             {
                 //Board is already followed , disable button
                 btnFollow.IsEnabled = false;

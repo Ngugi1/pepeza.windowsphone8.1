@@ -11,7 +11,7 @@ namespace Pepeza.Db.Models.Board
     class TFollowing : Bindable
     {
         private int _id;
-        [PrimaryKey]
+        [Unique]
         public int Id
         {
             get { return _id; }

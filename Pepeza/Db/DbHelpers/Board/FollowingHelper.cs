@@ -10,14 +10,36 @@ namespace Pepeza.Db.DbHelpers.Board
 {
     class FollowingHelper : DBHelperBase
     {
-        public static async Task<TFollowing> getFollowingBoard(int boardId)
+        public static async  Task<bool> getFollowingBoard(int boardId)
         {
-            TFollowing following = null; 
-
-            SQLiteAsyncConnection connedtion = DbHelper.DbConnectionAsync();
-            if (connedtion != null)
+            bool following = false;
+            try
             {
-                following = await connedtion.GetAsync<TFollowing>(boardId);
+                SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    List<TFollowing> tfollow = await connection.QueryAsync<TFollowing>("SELECT * FROM TFollowing WHERE Id=? LIMIT 1", boardId);
+                    if (tfollow.Count > 0) following = true;
+                    else
+                    {
+                        following = false;
+                    }
+                }
+            }
+            catch(InvalidOperationException ex)
+            {
+                following = false;
+            }
+            
+            return following;
+        }
+        public static async Task<List<TFollowing>> getAll()
+        {
+            List<TFollowing> following = new List<TFollowing>();
+            SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                following = await connection.Table<TFollowing>().ToListAsync();
             }
             return following;
         }

@@ -1,4 +1,5 @@
-﻿using Pepeza.Db.Models.Board;
+﻿using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Server.Requests;
 using Pepeza.Views.Boards;
@@ -31,6 +32,7 @@ namespace Pepeza
     {
         ObservableCollection<TBoard> boards;
         ObservableCollection<TOrgInfo> orgs;
+        ObservableCollection<TFollowing> following;
         Boolean selected = false;
         public MainPage()
         {
@@ -57,8 +59,21 @@ namespace Pepeza
             QJumpList.ReleaseItemsSource();
             ListViewBoards.ItemsSource = groupedBoards;
             QJumpList.ApplyItemsSource();
+            
+            //Orgs alpha groups
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
-            ListViewOrgs.ItemsSource = orgs;
+            var orgAlphaGroup = JumpListHelper.ToAlphaGroups(orgs, t => t.name);
+            AlphaListOrgs.ReleaseItemsSource();
+            ListViewOrgs.ItemsSource = orgAlphaGroup;
+            AlphaListOrgs.ApplyItemsSource();
+
+           
+            //Set up followers
+            following = new ObservableCollection<TFollowing>(await FollowingHelper.getAll());
+            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.Name);
+            AlphaListFollowing.ReleaseItemsSource();
+            ListViewFollowing.ItemsSource = alphaGroups;
+            AlphaListFollowing.ApplyItemsSource();
             selected = true;
         }
 
@@ -94,7 +109,35 @@ namespace Pepeza
             //Get the selected board and navigate to profile/notices
             TBoard board = (sender as ListView).SelectedItem as TBoard;
             if(board!=null&& selected==true)this.Frame.Navigate(typeof(UpdateBoard) , board);
-            ListViewBoards.SelectedItem = null;
+        }
+
+        private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int selectedIndex = (sender as Pivot).SelectedIndex;
+            switch (selectedIndex)
+            {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+                    //Here load all the boards which the user is following 
+
+                    break;
+                default:
+
+                    break;
+            }
+        }
+
+        private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

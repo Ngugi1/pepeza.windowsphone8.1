@@ -19,6 +19,8 @@
     <Grid Margin="0,0,0,0"
           Background="{StaticResource mainForeground}">
         <Pivot 
+            Name="pivotMainPage"
+            SelectionChanged="pivotMainPage_SelectionChanged"
             Style="{StaticResource CustomPivot}">
             <Pivot.Title>
                     <TextBlock Text="Pepeza"
@@ -110,8 +112,92 @@
                         Text="orgs" 
                         Style="{StaticResource txtBlockPivotHeader}"/>
                 </PivotItem.Header>
+                <Jumper:AlphaJumpList Name="AlphaListOrgs">
                 <ListView Name="ListViewOrgs">
-                    <ListView.ItemTemplate>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Height="70"
+                                         Width="70"
+                                         Margin="4,8,4,0"
+                                           VerticalAlignment="Center"
+                                        Grid.RowSpan="3">
+                                        <Ellipse.Fill>
+                                            <ImageBrush 
+                                            ImageSource="/Assets/Images/profile.jpg"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock 
+                                    Grid.Row="0"
+                                    Text="{Binding username}"
+                                    Margin="8"
+                                    FontWeight="Thin"
+                                    Foreground="Black"
+                                    Grid.Column="1"
+                                    Style="{StaticResource  GroupHeaderTextBlockStyle}">
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding name}"
+                                        Grid.Row="1"
+                                        Style="{ThemeResource  ListViewItemSubheaderTextBlockStyle}"
+                                        Grid.Column="2"
+                                        FontWeight="Medium"
+                                        Margin="12,4,4,0"
+                                        Foreground="Black"
+                                       VerticalAlignment="Bottom"
+                                        TextWrapping="NoWrap"
+                                        TextTrimming="WordEllipsis"
+                                           />
+                                    <TextBlock Style="{ThemeResource ListViewItemContentTextBlockStyle}"
+                                           Foreground="Black"
+                                           TextTrimming="WordEllipsis"
+                                           TextWrapping="NoWrap"
+                                           Text="{Binding description}"
+                                           Grid.Row="2"
+                                           Margin="12,4,4,4"
+                                           Grid.Column="1"
+                                           />
+                                    <Line X1="5" 
+                                      Y1="10"
+                                      Grid.Row="3"
+                                      X2="10"
+                                      Stroke="{StaticResource mainForeground}"
+                                      StrokeThickness="0.5"
+                                      Y2="10"
+                                      Margin="8"
+                                      Grid.Column="1"
+                                      Stretch="Fill"
+                                      />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Jumper:AlphaJumpList>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock 
+                        Text="following" 
+                        Style="{StaticResource txtBlockPivotHeader}"/>
+
+                </PivotItem.Header>
+                <!--Alpha jumplist for Following Pivot-->
+                <Jumper:AlphaJumpList
+                    Margin="4"
+                    Name="AlphaListFollowing">
+                    <ListView Name="ListViewFollowing"
+                          SelectionChanged="ListViewFollowing_SelectionChanged"
+                          >
+                        <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -124,10 +210,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Ellipse Height="70"
-                                         Width="70"
-                                         Margin="4,8,4,0"
-                                           VerticalAlignment="Center"
+                                <Ellipse Height="80"
+                                         Width="80"
                                         Grid.RowSpan="3">
                                     <Ellipse.Fill>
                                         <ImageBrush 
@@ -136,57 +220,41 @@
                                 </Ellipse>
                                 <TextBlock 
                                     Grid.Row="0"
-                                    Text="{Binding username}"
+                                    Text="{Binding Name}"
+                                FontWeight="Thin"
                                     Margin="8"
-                                    FontWeight="Thin"
                                     Foreground="Black"
                                     Grid.Column="1"
-                                    Style="{StaticResource  GroupHeaderTextBlockStyle}">
+                                    Style="{StaticResource GroupHeaderTextBlockStyle}">
                                 </TextBlock>
-                                <TextBlock Text="{Binding name}"
+                                <TextBlock Text="{Binding Description}"
                                         Grid.Row="1"
                                         Style="{ThemeResource  ListViewItemSubheaderTextBlockStyle}"
                                         Grid.Column="2"
-                                        FontWeight="Medium"
-                                        Margin="12,4,4,0"
+                                        Margin="12,4"
                                         Foreground="Black"
                                        VerticalAlignment="Bottom"
                                         TextWrapping="NoWrap"
                                         TextTrimming="WordEllipsis"
                                            />
-                                <TextBlock Style="{ThemeResource ListViewItemContentTextBlockStyle}"
-                                           Foreground="Black"
-                                           TextTrimming="WordEllipsis"
-                                           TextWrapping="NoWrap"
-                                           Text="{Binding description}"
-                                           Grid.Row="2"
-                                           Margin="12,4,4,4"
-                                           Grid.Column="1"
-                                           />
-                                <Line X1="5" 
-                                      Y1="10"
-                                      Grid.Row="3"
-                                      X2="10"
-                                      Stroke="{StaticResource mainForeground}"
-                                      StrokeThickness="0.5"
-                                      Y2="10"
-                                      Margin="8"
-                                      Grid.Column="1"
-                                      Stretch="Fill"
+                                <Line 
+                        X1="5"     
+                        Y1="10"
+                        Grid.Row="2"
+                        X2="10"
+                        Stroke="{StaticResource mainForeground}"
+                        StrokeThickness="0.5"
+                        Y2="10"
+                        Margin="8"
+                        Grid.Column="1"
+                        Stretch="Fill"
                                       />
+
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-
                 </ListView>
-            </PivotItem>
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock 
-                        Text="following" 
-                        Style="{StaticResource txtBlockPivotHeader}"/>
-
-                </PivotItem.Header>
+                </Jumper:AlphaJumpList>
             </PivotItem>
         </Pivot>
     </Grid>
