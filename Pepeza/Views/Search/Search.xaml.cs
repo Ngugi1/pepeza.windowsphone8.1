@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.IsolatedSettings;
+using Pepeza.Models.BoardModels;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
@@ -43,6 +45,7 @@ namespace Pepeza.Views
         ObservableCollection<Organization> orgSource = new ObservableCollection<Organization>();
         ObservableCollection<Models.Search_Models.Board> boardSource = new ObservableCollection<Models.Search_Models.Board>();
         #endregion
+        bool fetching = false;
         public Search()
         {
             this.InitializeComponent();
@@ -230,7 +233,7 @@ namespace Pepeza.Views
                 }
                 if (personSource != null)
                 {
-                    ListViewUser.ItemsSource = personSource;
+                    ListViewUser.ItemsSource = personSource.Distinct();
                 }
             }
             else if (searchResults.ContainsKey(Constants.ERROR))
@@ -256,7 +259,7 @@ namespace Pepeza.Views
                         break;
                     case 1:
                         //search boards
-                        IsSearching();
+                         IsSearching();
                          await searchBoards();
                          IsSearching(false);
                         break;
@@ -275,7 +278,7 @@ namespace Pepeza.Views
         /// <returns></returns>
         private async Task searchBoards()
          {
-            boardSource.Clear();
+             boardSource.Clear();
             try
             {
 
@@ -297,6 +300,8 @@ namespace Pepeza.Views
                                 searchedBoard.name = (string)board["name"];
                                 searchedBoard.score = (double)board["score"];
                                 boardSource.Add(searchedBoard);
+                                boardSource.Distinct();
+
                             }
                         }
                         else
@@ -317,7 +322,7 @@ namespace Pepeza.Views
                     //We had some errors
                     displayErrors(results[Constants.ERROR]);
                 }
-                ListViewBoards.ItemsSource = boardSource;
+                ListViewBoards.ItemsSource = boardSource.Distinct();
             }
             catch(Exception)
             {
@@ -360,7 +365,7 @@ namespace Pepeza.Views
 
                if (orgSource != null)
                {
-                   listViewSearchOrgs.ItemsSource = orgSource;
+                   listViewSearchOrgs.ItemsSource = orgSource.Distinct();
                }
 
             }
@@ -371,6 +376,24 @@ namespace Pepeza.Views
             }
         }
         #endregion
-        
+
+        private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Pepeza.Models.Search_Models.Board board = (sender as ListView).SelectedItem as Pepeza.Models.Search_Models.Board;
+            if (board != null)
+            {
+                this.Frame.Navigate(typeof(BoardProfile), board.id);
+            }
+        }
+        private void prepareSearchBoardDetails(bool isFetching)
+        {
+
+        }
+        /// <summary>
+        /// Get board details asyc 
+        /// </summary>
+        /// <param name="boardId">Integer representing the board key </param>
+        /// <returns></returns>
+
     }
 }

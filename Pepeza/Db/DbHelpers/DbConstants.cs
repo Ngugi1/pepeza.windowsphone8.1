@@ -8,6 +8,6 @@ namespace Pepeza.Db.DbHelpers
 {
     class DbConstants
     {
-        public static string DB_PATH { get { return "pepeza.db"; }}
+        public static string  DB_PATH { get { return "pepeza.db"; }}
     }
 }

@@ -37,7 +37,7 @@
             <ListView Name="ListViewUserBoards"
                       Margin="16,8"
                       >
-                <ListView.ItemTemplate>
+              <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.RowDefinitions>

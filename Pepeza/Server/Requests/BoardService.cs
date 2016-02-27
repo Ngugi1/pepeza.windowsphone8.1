@@ -62,6 +62,10 @@ namespace Pepeza.Server.Requests
                         //Return data 
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.REQUEST_NOT_COMPELETED);
+                    }
                 }
                 catch
                 {

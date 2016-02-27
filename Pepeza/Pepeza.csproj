@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="Models\Base\Bindable.cs" />
     <Compile Include="Models\BoardModels\Board.cs" />
+    <Compile Include="Models\BoardModels\FetchedBoard.cs" />
     <Compile Include="Models\OrgsModels\Constants\StatusMessages.cs" />
     <Compile Include="Models\OrgsModels\EditOrgModel.cs" />
     <Compile Include="Models\Search Models\Board.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="ViewModels\Commands\CommandUpdateProfile.cs" />
     <Compile Include="ViewModels\Converters\BoolVisibilityConverter.cs" />
     <Compile Include="ViewModels\Converters\QuickVisibilityConverter.cs" />
+    <Compile Include="ViewModels\ViewModelBoardProfile.cs" />
     <Compile Include="ViewModels\ViewModelCreateOrg.cs" />
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
     <Compile Include="ViewModels\ViewModelLogin.cs" />
@@ -160,6 +162,9 @@
     </Compile>
     <Compile Include="Views\Account\SetUpPage.xaml.cs">
       <DependentUpon>SetUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardProfile.xaml.cs">
+      <DependentUpon>BoardProfile.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
@@ -242,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Account\SetUpPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Boards\BoardProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

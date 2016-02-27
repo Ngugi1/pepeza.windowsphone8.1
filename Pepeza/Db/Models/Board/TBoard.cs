@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Pepeza.Models;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,30 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Board
 {
-    public class TBoard
+    public class TBoard :Bindable
     {
         [PrimaryKey]
         public int id { get; set; }
         public int orgID { get; set; }
-        public string name { get; set; }
-        public string desc { get; set; }
+        private string _name;
+
+        public string name
+        {
+            get { return _name; }
+            set { _name = value;
+
+            onPropertyChanged("name");
+            }
+        }
+
+        private string _desc;
+
+        public string desc
+        {
+            get { return _desc; }
+            set { _desc = value; onPropertyChanged("desc"); }
+        }
+
         [Ignore]
         public string organisation { get; set; }
         public DateTime dateCreated { get; set; }
