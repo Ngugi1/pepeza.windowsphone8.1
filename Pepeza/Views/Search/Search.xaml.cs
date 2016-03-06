@@ -81,7 +81,7 @@ namespace Pepeza.Views
         {
             //Get selected Item
             Organization org = (sender as ListView).SelectedItem as Organization;
-            this.Frame.Navigate(typeof(Views.Orgs.OrgProfile), org);
+            this.Frame.Navigate(typeof(Views.Orgs.OrgProfileAndBoards), org);
         }
         private void ListViewUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -384,15 +384,5 @@ namespace Pepeza.Views
                 this.Frame.Navigate(typeof(BoardProfile), board.id);
             }
         }
-        private void prepareSearchBoardDetails(bool isFetching)
-        {
-
-        }
-        /// <summary>
-        /// Get board details asyc 
-        /// </summary>
-        /// <param name="boardId">Integer representing the board key </param>
-        /// <returns></returns>
-
     }
 }
