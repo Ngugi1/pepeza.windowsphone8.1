@@ -182,13 +182,15 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.PutAsync(string.Format(BoardAddresses.FOLLOW, boardId) , null);
+                    response = await client.PostAsync(string.Format(BoardAddresses.FOLLOW ,boardId),null);
                     if (response.IsSuccessStatusCode)
                     {
+                       
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
                     else
                     {
+                        var dbug = response.Content.ReadAsStringAsync();
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }

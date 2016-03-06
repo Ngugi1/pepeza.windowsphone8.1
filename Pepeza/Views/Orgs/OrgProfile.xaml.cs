@@ -1,9 +1,14 @@
-﻿using Pepeza.Models.Search_Models;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.Models.Orgs;
+using Pepeza.Models.Search_Models;
+using Pepeza.Server.Requests;
+using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -33,12 +38,13 @@ namespace Pepeza.Views.Orgs
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 Organization org = e.Parameter as Organization;
-                RootGrid.DataContext = org;
+                //Get the org profile 
+                await getOrgDetails(org.Id);
             }
             //Start the search 
         }
@@ -48,5 +54,41 @@ namespace Pepeza.Views.Orgs
             Organization org = RootGrid.DataContext as Organization;
             if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
         }
+        private async Task getOrgDetails(int orgID)
+        {
+           //Prepare UI for loading
+            SCVOrgProfile.Opacity = 0.5;
+            PRGetOrgDetails.Visibility = Visibility.Visible;
+
+            //get the details 
+            Dictionary<string, string> results = await OrgsService.getOrg(orgID);
+            if (results.ContainsKey(Constants.SUCCESS))
+            {
+                JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                TOrgInfo info = new TOrgInfo()
+                {
+                     id = (int)objResults["id"],
+                     userId = (int)objResults["userId"],
+                     username = (string)objResults["username"],
+                     description = (string)objResults["description"],
+                     name =(string)objResults["name"],
+                     dateCreated = (DateTime)objResults["dateCreated"]["date"],
+                     dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
+                     timezone_create = (string)objResults["dateCreated"]["timezone"],
+                     timezone_updated = (string)objResults["dateUpdated"]["timezone"],
+                     timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
+                     timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
+                };
+                RootGrid.DataContext = info;
+                SCVOrgProfile.Opacity = 1;
+            }
+            else
+            {
+                //There was an error , throw a toast
+                SCVOrgProfile.Opacity = 1;
+                toastErros.Message = results[Constants.ERROR];
+            }
+            PRGetOrgDetails.Visibility = Visibility.Collapsed;
+        } 
     }
 }

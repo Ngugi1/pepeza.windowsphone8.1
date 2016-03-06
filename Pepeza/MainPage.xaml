@@ -139,14 +139,15 @@
                                     </Ellipse>
                                     <TextBlock 
                                     Grid.Row="0"
-                                    Text="{Binding username}"
+                                    Text="{Binding name}"
                                     Margin="8"
                                     FontWeight="Thin"
                                     Foreground="Black"
+                                    TextTrimming="WordEllipsis"
                                     Grid.Column="1"
                                     Style="{StaticResource  GroupHeaderTextBlockStyle}">
                                     </TextBlock>
-                                    <TextBlock Text="{Binding name}"
+                                    <TextBlock Text="{Binding username}"
                                         Grid.Row="1"
                                         Style="{ThemeResource  ListViewItemSubheaderTextBlockStyle}"
                                         Grid.Column="2"

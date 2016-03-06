@@ -84,7 +84,7 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.WP81, Version=3.10.2">
+    <SDKReference Include="SQLite.WP81, Version=3.11.1">
       <Name>SQLite for Windows Phone 8.1</Name>
     </SDKReference>
   </ItemGroup>
@@ -186,6 +186,9 @@
     <Compile Include="Views\Orgs\OrgProfile.xaml.cs">
       <DependentUpon>OrgProfile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Orgs\OrgProfileAndBoards.xaml.cs">
+      <DependentUpon>OrgProfileAndBoards.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
       <DependentUpon>UserOrgs.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Orgs\OrgProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Orgs\OrgProfileAndBoards.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
