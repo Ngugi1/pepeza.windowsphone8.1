@@ -36,6 +36,7 @@
                       Background="{StaticResource pageBackground}">
             <ListView Name="ListViewUserBoards"
                       Margin="16,8"
+                      SelectionChanged="ListViewUserBoards_SelectionChanged"
                       >
               <ListView.ItemTemplate>
                     <DataTemplate>

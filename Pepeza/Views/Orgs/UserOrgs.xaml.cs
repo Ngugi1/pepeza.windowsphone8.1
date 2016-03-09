@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -31,9 +32,9 @@ namespace Pepeza.Views.Orgs
         private ObservableCollection<Organization> UserOrganisations = new ObservableCollection<Organization>();
         public UserOrgs()
         {
-
             this.InitializeComponent();
         }
+
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -49,6 +50,10 @@ namespace Pepeza.Views.Orgs
                 person = (e.Parameter as Person);
                 HeaderStackPanel.DataContext = person;
                 loadUserBoards(person);
+            }
+            else
+            {
+                //Try to load from the local storage
             }
 
         }
@@ -103,6 +108,12 @@ namespace Pepeza.Views.Orgs
                 }
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
+        }
+
+        private void ListViewUserBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Organization org = (sender as ListView).SelectedItem as Organization;
+            if (org != null) this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
         }
     }
 }

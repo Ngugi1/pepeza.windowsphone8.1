@@ -113,7 +113,7 @@
                         Style="{StaticResource txtBlockPivotHeader}"/>
                 </PivotItem.Header>
                 <Jumper:AlphaJumpList Name="AlphaListOrgs">
-                <ListView Name="ListViewOrgs">
+                <ListView Name="ListViewOrgs" SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -262,6 +262,7 @@
     <Page.BottomAppBar>
   
         <CommandBar
+            x:Name="BottomCommandBar"
              IsOpen="False"
             Background="{StaticResource mainForeground}">
             <CommandBar.SecondaryCommands>
@@ -277,27 +278,8 @@
                               Background="BlueViolet"
                            Content="new item"
                            Foreground="Black"
-                          IsCompact="True">
-                    <AppBarButton.Flyout>
-                        
-                        <MenuFlyout>
-                            <MenuFlyout.MenuFlyoutPresenterStyle>
-                                <Style TargetType="MenuFlyoutPresenter" x:Name="ghhgh">
-                                    <Setter Property="RequestedTheme" Value="Default"/>
-                                </Style>
-                            </MenuFlyout.MenuFlyoutPresenterStyle>
-                            <MenuFlyoutItem 
-                                 Margin="0"
-                                Click="AppBtnAddBoardClick"
-                                HorizontalAlignment="Stretch"
-                                >board</MenuFlyoutItem>
-                            <MenuFlyoutItem 
-                            Margin="0"
-                                Click="AppBtnAdd_Click"
-                                >organization
-                            </MenuFlyoutItem>
-                        </MenuFlyout>
-                    </AppBarButton.Flyout>    
+                          IsCompact="True"
+                              Click="AppBtnAdd_Click">   
                 </AppBarButton>
                 <AppBarButton IsCompact="True"
                           Label="search"

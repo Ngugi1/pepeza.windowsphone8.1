@@ -27,17 +27,14 @@
         </Grid.RowDefinitions>
         <!--Header section-->
         <StackPanel 
-          Orientation="Horizontal"
+          Orientation="Vertical"
          Style="{StaticResource HeaderStackPanel}"
          Grid.Row="0"
            >
-            <Image Source="/Assets/Images/icon.png"
-                   Margin="8,4"
-                   />
-            <TextBlock 
-                Grid.Row="0"
-                Text="Profile"
-                Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding username}"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       />
+           
         </StackPanel>
         <!--Page contents-->
         <ScrollViewer Grid.Row="1">

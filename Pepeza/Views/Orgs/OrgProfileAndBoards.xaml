@@ -137,7 +137,7 @@
                                />
                 </PivotItem.Header>
                 <Grid>
-                <ListView Name="ListViewOrgBoards">
+                <ListView Name="ListViewOrgBoards" SelectionChanged="ListViewOrgBoards_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

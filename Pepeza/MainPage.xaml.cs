@@ -1,7 +1,9 @@
 ﻿using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
+using Pepeza.Views;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
 using QKit.JumpList;
@@ -13,6 +15,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,7 +36,7 @@ namespace Pepeza
         ObservableCollection<TBoard> boards;
         ObservableCollection<TOrgInfo> orgs;
         ObservableCollection<TFollowing> following;
-        Boolean selected = false;
+        Boolean isSelected = false;
         public MainPage()
         {
             this.InitializeComponent();
@@ -53,12 +56,13 @@ namespace Pepeza
             // handling the hardware Back button by registering for the
             // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
             // If you are using the NavigationHelper provided by some templates,
-            selected = false;
+            isSelected = false;
             boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
             var groupedBoards = JumpListHelper.ToGroups(boards,t=>t.name,t=>t.organisation);
             QJumpList.ReleaseItemsSource();
             ListViewBoards.ItemsSource = groupedBoards;
             QJumpList.ApplyItemsSource();
+            ListViewBoards.SelectedItem = null;
             
             //Orgs alpha groups
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
@@ -66,15 +70,16 @@ namespace Pepeza
             AlphaListOrgs.ReleaseItemsSource();
             ListViewOrgs.ItemsSource = orgAlphaGroup;
             AlphaListOrgs.ApplyItemsSource();
-
-           
+            ListViewOrgs.SelectedItem = null;
             //Set up followers
             following = new ObservableCollection<TFollowing>(await FollowingHelper.getAll());
             var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.Name);
             AlphaListFollowing.ReleaseItemsSource();
             ListViewFollowing.ItemsSource = alphaGroups;
             AlphaListFollowing.ApplyItemsSource();
-            selected = true;
+            ListViewFollowing.SelectedItem = null;
+            isSelected = true;
+            this.Frame.BackStack.Clear();
         }
 
        
@@ -96,24 +101,52 @@ namespace Pepeza
 
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddOrg));
+            switch ((pivotMainPage.SelectedIndex))
+            {
+                case 0:
+                    //Notices
+                    MessageDialog dialog = new MessageDialog("Coming soon");
+                    dialog.ShowAsync();
+                    break;
+                case 1:
+                    //boards
+                    this.Frame.Navigate(typeof(AddBoard));
+                    break;
+                case 2:
+                    //orgs 
+                    this.Frame.Navigate(typeof(AddOrg));
+                    break;
+                case 3:
+                    //following 
+                    break;
+                default:
+                    break;
+            }
         }
 
-        private void AppBtnAddBoardClick(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(AddBoard));
-        }
+       
 
         private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Get the selected board and navigate to profile/notices
             TBoard board = (sender as ListView).SelectedItem as TBoard;
-            if(board!=null&& selected==true)this.Frame.Navigate(typeof(UpdateBoard) , board);
+            if(board!=null&& isSelected==true)
+            {
+                this.Frame.Navigate(typeof(BoardProfile) , board.id);
+            }
         }
 
         private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int selectedIndex = (sender as Pivot).SelectedIndex;
+            if (selectedIndex != 3)
+            {
+                AppBtnAdd.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AppBtnAdd.Visibility = Visibility.Collapsed;
+            }
             switch (selectedIndex)
             {
                 case 0:
@@ -127,7 +160,7 @@ namespace Pepeza
                     break;
                 case 3:
                     //Here load all the boards which the user is following 
-
+                    //Hide the add button 
                     break;
                 default:
 
@@ -136,8 +169,27 @@ namespace Pepeza
         }
 
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {   
+            //Following is just a board , push the user to board profile
+            TFollowing selected = ((sender as ListView).SelectedItem as TFollowing);
+            if (selected != null && isSelected == true)
+            {
+                this.Frame.Navigate(typeof(BoardProfile), selected.Id);
+
+            }
+        }
+
+        private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+            TOrgInfo org = (sender as ListView).SelectedItem as TOrgInfo;
+
+            if (org != null && isSelected == true)
+            {
+                this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization(){ Id = org.id});
+            }
         }
+
+       
     }
 }

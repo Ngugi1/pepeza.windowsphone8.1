@@ -45,12 +45,9 @@ namespace Pepeza.Views
         ObservableCollection<Organization> orgSource = new ObservableCollection<Organization>();
         ObservableCollection<Models.Search_Models.Board> boardSource = new ObservableCollection<Models.Search_Models.Board>();
         #endregion
-        bool fetching = false;
         public Search()
         {
             this.InitializeComponent();
-            HardwareButtons.BackPressed+=HardwareButtons_BackPressed;
-            
         }
 
         #region Controls' Events
@@ -90,16 +87,6 @@ namespace Pepeza.Views
             {
                 this.Frame.Navigate(typeof(UserOrgs), selected);
             }
-        }
-        /// <summary>
-        /// Navigate Back to mainpage
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MainPage));
-            e.Handled = true;
         }
         /// <summary>
         /// Begin search

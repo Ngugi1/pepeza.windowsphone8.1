@@ -1,7 +1,10 @@
 ﻿using Pepeza.Db.DbHelpers;
+using Pepeza.Db.DbHelpers.User;
+using Pepeza.Db.Models;
 using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
+using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -71,6 +74,8 @@ namespace Pepeza.Views.Profile
         }
         private async void editProfileClicked(object sender, RoutedEventArgs e)
         {
+            string lname = txtBoxLastName.Text.Trim();
+            string fname = txtBoxFirstName.Text.Trim();
             if (appBarBtnEditDetails.Label.Equals("update"))
             {
                 if (txtBoxFirstName.Text.All(char.IsLetter))
@@ -78,8 +83,8 @@ namespace Pepeza.Views.Profile
 
                     Dictionary<string, string> results = await
                         RequestUser.updateUserProfile(new Dictionary<string, string>() 
-                        { {"firstName" , txtBoxFirstName.Text.Trim()}, 
-                {"lastName", txtBoxLastName.Text.Trim() }});
+                        { {"firstName" , fname}, 
+                {"lastName", lname}});
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong
@@ -87,6 +92,11 @@ namespace Pepeza.Views.Profile
                     }
                     else if (results.ContainsKey(Constants.UPDATED))
                     {
+                        //Get the object with given user ID
+                        TUserInfo info = await UserHelper.getUserInfo();
+                        info.firstName = fname;
+                        info.lastName = lname;
+                        await UserHelper.update(info);
                         //Hide textboxes and update the textblock
                         updateUI();
                     }

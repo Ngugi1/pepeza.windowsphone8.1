@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -38,7 +39,6 @@ namespace Pepeza.Views.Orgs
         {
             this.InitializeComponent();
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -173,6 +173,12 @@ namespace Pepeza.Views.Orgs
             StackPanelLoading.Visibility = Visibility.Collapsed;
             ListViewOrgBoards.Opacity = 1;
             return true;
+        }
+
+        private void ListViewOrgBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TBoard board = (sender as ListView).SelectedItem as TBoard;
+            this.Frame.Navigate(typeof(BoardProfile), board.id);
         }
     }
 }
