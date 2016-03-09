@@ -7,6 +7,7 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.ViewModels;
+using Pepeza.Views.Orgs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -34,7 +36,6 @@ namespace Pepeza.Views
     /// </summary>
     public sealed partial class BoardProfile : Page
     {
-        Models.Search_Models.Board board = null;
         FetchedBoard boardFetched = null;
         int waitingToGoBackTime = 0;
         DispatcherTimer timer = new DispatcherTimer();
@@ -42,6 +43,8 @@ namespace Pepeza.Views
         {
             this.InitializeComponent();
         }
+
+      
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -50,10 +53,17 @@ namespace Pepeza.Views
         /// ally used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            int boardId = (int)(e.Parameter);
-            stackPanelLoading.Visibility = Visibility.Visible;
-            ContentRoot.Opacity = 0.7;
-            await getBoardDetailsAsync(boardId);
+            if (e.Parameter != null)
+            {
+                int boardId = (int)(e.Parameter);
+                stackPanelLoading.Visibility = Visibility.Visible;
+                ContentRoot.Opacity = 0.7;
+                await getBoardDetailsAsync(boardId);
+            }
+            else
+            {
+                //Was back Navigation
+            }
         }
         public  async Task getBoardDetailsAsync(int boardId)
         {
@@ -75,7 +85,7 @@ namespace Pepeza.Views
                     Timezone_Type_Updated = (int)objResults["dateUpdated"]["timezone_type"]
                 };
                 await checkIfBoardIsFollowed(boardFetched.Id);
-                ContentRoot.DataContext = boardFetched;
+                rootGrid.DataContext = boardFetched;
             }
             else
             {

@@ -39,21 +39,12 @@ namespace Pepeza.Views.Boards
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+           
         }
-
-        void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
-
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
         /// </summary>
-        public NavigationHelper NavigationHelper
-        {
-            get { return this.navigationHelper; }
-        }
+       
 
         #region NavigationHelper registration
 
@@ -72,8 +63,7 @@ namespace Pepeza.Views.Boards
         /// handlers that cannot cancel the navigation request.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedTo(e);
-            //Get the parameters
+             //Get the parameters
             if (e.Parameter != null)
             {
                 board = e.Parameter as TBoard;
@@ -84,7 +74,7 @@ namespace Pepeza.Views.Boards
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            this.navigationHelper.OnNavigatedFrom(e);
+            
         }
 
         #endregion

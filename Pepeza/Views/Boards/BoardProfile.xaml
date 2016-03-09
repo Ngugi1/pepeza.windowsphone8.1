@@ -5,8 +5,8 @@
     xmlns:local="using:Pepeza.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     xmlns:Toast="using:Toastinet"
+    mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <StackPanel Style="{StaticResource HeaderStackPanel}">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                           Text="board profile"
+                           Text="{Binding Name}"
                            />
         </StackPanel>
         <Grid Grid.Row="1"

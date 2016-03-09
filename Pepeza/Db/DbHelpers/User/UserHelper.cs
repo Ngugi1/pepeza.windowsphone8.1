@@ -1,4 +1,7 @@
 ﻿using Pepeza.Db.Models;
+using Pepeza.Db.Models.Orgs;
+using Pepeza.IsolatedSettings;
+using Pepeza.Utitlity;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,16 @@ namespace Pepeza.Db.DbHelpers.User
 {
     class UserHelper : DBHelperBase
     {
+        public async static Task<TUserInfo> getUserInfo()
+        {
+            TUserInfo info = null;
+            SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                info = await connection.GetAsync<TUserInfo>((int)Settings.getValue(Constants.USERID));
+            }
+            return info;
+        } 
        
     }
 }
