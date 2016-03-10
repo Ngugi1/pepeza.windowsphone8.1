@@ -81,9 +81,7 @@ namespace Pepeza.Views
                     }
                     else if(results.ContainsKey(Constants.APITOKEN))
                     {
-                        //Save API Token and go to main Page
-                        Settings.add(Constants.APITOKEN, results[Constants.APITOKEN]);
-                        this.Frame.Navigate(typeof(SetUpPage));
+                        this.Frame.Navigate(typeof(SetUpPage) ,results);
                     }
                     else if (results.ContainsKey(Constants.INVALID_DATA))
                     {

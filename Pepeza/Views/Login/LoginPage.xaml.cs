@@ -1,4 +1,8 @@
-﻿using Pepeza.IsolatedSettings;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.Models;
+using Pepeza.Db.Models.Orgs;
+using Pepeza.Db.Models.Users;
+using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
@@ -80,7 +84,7 @@ namespace Pepeza.Views
                     //Save token
                     ToastFieldsIncomplete.Message = (string)Settings.getValue((string)Constants.APITOKEN);
                     //Navigate to deactivate account
-                    this.Frame.Navigate(typeof(SetUpPage));
+                    this.Frame.Navigate(typeof(SetUpPage) , results);
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {
@@ -99,6 +103,7 @@ namespace Pepeza.Views
             }
             
         }
+
 
         private  Login getData()
         {

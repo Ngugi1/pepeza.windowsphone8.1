@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -42,71 +43,78 @@ namespace Pepeza.Views.Account
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected  async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Get all the user info and save it to the database
-            Dictionary<string, string> getUser = await RequestUser.getUser();
-            if (getUser.ContainsKey(Constants.SUCCESS)&&getUser!=null)
+            if(e.Parameter!=null)
             {
-                //Was successfull , insert user information in local database
-                JObject info = JObject.Parse(getUser[Constants.SUCCESS]);
-                TUserInfo userInfo = new TUserInfo();
-                userInfo.id = (int)info["id"];
-                userInfo.emailId = (int)info["email"]["id"];
-                userInfo.firstName = (string)info["firstName"];
-                userInfo.lastName = (string)info["lastName"];
-                userInfo.organizationId = (int)info["organization"]["id"];
-                userInfo.username = (string)info["username"];
-                userInfo.dateUpdated = Convert.ToDateTime((string)info["dateUpdated"]["date"]);
-                userInfo.time_zone_updated = (string)info["dateUpdated"]["timezone"];
-                userInfo.time_zone_type_updated = (int)info["dateUpdated"]["timezone_type"];
-                userInfo.dateCreated = Convert.ToDateTime((string)info["dateCreated"]["date"]);
-                userInfo.time_zone_created = (string)info["dateCreated"]["timezone"];
-                userInfo.time_zone_type_created = (int)info["dateCreated"]["timezone_type"];
-                Debug.WriteLine(await UserHelper.add(userInfo));
-
-                //Save user ID to isolated storage
-                int id = (int)info["id"];
-                Settings.add(Constants.USERID, (int)info["id"]);
-                Debug.WriteLine("ID in local storage" + Settings.getValue(Constants.USERID));
-                //Go ahead and get email data and insert it
-                TEmail emailInfo = new TEmail()
-               {
-                   emailID = (int)info["email"]["id"],
-                   email = (string)info["email"]["email"],
-                   verified = (string)info["email"]["verified"],
-                   dateVerified = (string)info["email"]["dateVerified"],
-                   dateCreated = Convert.ToDateTime(info["email"]["dateCreated"]["date"]),
-                   dateUpdated = Convert.ToDateTime(info["email"]["dateUpdated"]["date"]),
-                   timezone_created = (string)info["email"]["dateCreated"]["timezone"],
-                   timezone_updated = (string)info["email"]["dateUpdated"]["timezone"],
-                   timezone_type_created = (int)info["email"]["dateCreated"]["timezone_type"],
-                   timezone_type_updated = (int)info["email"]["dateUpdated"]["timezone_type"],
-               };
-
-                Debug.WriteLine(await EmailHelper.add(emailInfo));
-                //Insert the org details   and insert in local db
-                 TOrgInfo orgInfo = new TOrgInfo()
-                 {
-                     id = (int)info["organization"]["id"],
-                     userId = (int)info["organization"]["userId"],
-                     username = (string)info["organization"]["username"],
-                     name = (string)info["organization"]["name"],
-                     description = (string)info["organization"]["description"],
-                     dateCreated = (DateTime)info["organization"]["dateCreated"]["date"],
-                     dateUpdated = (DateTime)info["organization"]["dateUpdated"]["date"],
-                     timezone_create = (string)info["organization"]["dateCreated"]["timezone"],
-                     timezone_updated = (string)info["organization"]["dateUpdated"]["timezone"],
-                     timezone_type_created = (int)info["organization"]["dateCreated"]["timezone_type"],
-                     timezone_type_updated = (int)info["organization"]["dateUpdated"]["timezone_type"]
-                 };
-                 Debug.WriteLine(await OrgHelper.add(orgInfo));
-                 this.Frame.Navigate(typeof(MainPage));
-            }
-            else
-            {
-                //Some error occoured
+                Dictionary<string,string> userdetails = e.Parameter as Dictionary<string,string>;
+                await getUserDetailsAndBoards(userdetails);
+                this.Frame.Navigate(typeof(MainPage));
             }
         }
+        private async Task getUserDetailsAndBoards(Dictionary<string, string> results)
+        {
+            JObject details = JObject.Parse(results[Constants.APITOKEN]);
+            //Save api token 
+            Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
+
+            JObject profileInfo = JObject.Parse(details["user"].ToString());
+            //Save User ID
+            Settings.add(Constants.USERID, (int)profileInfo["id"]);
+            //Get profile info 
+            TUserInfo userInfo = new TUserInfo()
+            {
+                id = (int)profileInfo["id"],
+                emailId = (int)profileInfo["email"]["id"],
+                firstName = (string)profileInfo["firstName"],
+                lastName = (string)profileInfo["lastName"],
+                organizationId = (int)profileInfo["organization"]["id"],
+                username = (string)profileInfo["username"],
+                dateUpdated = Convert.ToDateTime((string)profileInfo["dateUpdated"]["date"]),
+                time_zone_updated = (string)profileInfo["dateUpdated"]["timezone"],
+                time_zone_type_updated = (int)profileInfo["dateUpdated"]["timezone_type"],
+                dateCreated = Convert.ToDateTime((string)profileInfo["dateCreated"]["date"]),
+                time_zone_created = (string)profileInfo["dateCreated"]["timezone"],
+                time_zone_type_created = (int)profileInfo["dateCreated"]["timezone_type"]
+            };
+            //Get email iformation 
+            TEmail emailInfo = new TEmail()
+            {
+                emailID = (int)profileInfo["email"]["id"],
+                email = (string)profileInfo["email"]["email"],
+                verified = (string)profileInfo["email"]["verified"],
+                dateVerified = (string)profileInfo["email"]["dateVerified"],
+                dateCreated = Convert.ToDateTime(profileInfo["email"]["dateCreated"]["date"]),
+                dateUpdated = Convert.ToDateTime(profileInfo["email"]["dateUpdated"]["date"]),
+                timezone_created = (string)profileInfo["email"]["dateCreated"]["timezone"],
+                timezone_updated = (string)profileInfo["email"]["dateUpdated"]["timezone"],
+                timezone_type_created = (int)profileInfo["email"]["dateCreated"]["timezone_type"],
+                timezone_type_updated = (int)profileInfo["email"]["dateUpdated"]["timezone_type"],
+            };
+
+            //Get user orgs
+            JObject dedefaultOrg = JObject.Parse(details["user"]["organization"].ToString());
+            TOrgInfo defaultOrgInfo = new TOrgInfo()
+            {
+                id = (int)dedefaultOrg["id"],
+                userId = (int)dedefaultOrg["userId"],
+                username = (string)dedefaultOrg["username"],
+                name = (string)dedefaultOrg["name"],
+                description = (string)dedefaultOrg["description"],
+                dateCreated = (DateTime)dedefaultOrg["dateCreated"]["date"],
+                dateUpdated = (DateTime)dedefaultOrg["dateUpdated"]["date"],
+                timezone_create = (string)dedefaultOrg["dateCreated"]["timezone"],
+                timezone_updated = (string)dedefaultOrg["dateUpdated"]["timezone"],
+                timezone_type_created = (int)dedefaultOrg["dateCreated"]["timezone_type"],
+                timezone_type_updated = (int)dedefaultOrg["dateUpdated"]["timezone_type"]
+            };
+
+            //Now insert all to a local database
+            await UserHelper.add(userInfo);
+            await OrgHelper.add(defaultOrgInfo);
+            await EmailHelper.add(emailInfo);
+        }
+
     }
 }
