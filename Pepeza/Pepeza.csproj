@@ -150,6 +150,7 @@
     <Compile Include="SQLiteWrappers\SQLiteAsync.cs" />
     <Compile Include="Utitlity\Constants.cs" />
     <Compile Include="Styles\Validation\UserValidation.cs" />
+    <Compile Include="Utitlity\PageStateConstants.cs" />
     <Compile Include="ViewModels\Commands\CommandAddOrg.cs" />
     <Compile Include="ViewModels\Commands\CommandLogin.cs" />
     <Compile Include="ViewModels\Commands\CommandUpdateProfile.cs" />

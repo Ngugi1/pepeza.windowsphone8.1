@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
@@ -46,21 +48,77 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            areBoardsLoaded = false;
             if (e.Parameter != null)
             {
                 Organization org = e.Parameter as Organization;
                 OrgID = org.Id;
-                //Get the org profile 
-                await getOrgDetails(org.Id);
             }
+                  
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                areBoardsLoaded = false;
+                if (e.Parameter != null)
+                {
+                    Organization org = e.Parameter as Organization;
+                    OrgID = org.Id;
+                    //Get the org profile 
+                    await getOrgDetails(org.Id);
+                }
+            }
+            else if(e.NavigationMode == NavigationMode.Back)
+            {
+                loadPageState();
+            }
+            
+        }
+
+        private void loadPageState()
+        {
+            loadBoardsLocally(OrgID);
+            loadProfileLocally();
+        }
+
+        private void loadProfileLocally()
+        {
+            fetchingProfile(true);
+            //Load saved datacontext 
+            JObject savedProfile = JObject.Parse((string)Settings.getValue(PageStateConstants.ORG_PROFILE));
+
+            RootGrid.DataContext = new TOrgInfo()
+            {
+                id = (int)savedProfile["id"],
+                userId = (int)savedProfile["userId"],
+                username = (string)savedProfile["username"],
+                description = (string)savedProfile["description"],
+                name = (string)savedProfile["name"] 
+            };
+            fetchingProfile(false);
+        }
+
+        private void loadBoardsLocally(int orgId)
+        {
+            fetchingBoards(true);
+            var serialBoards = JsonConvert.DeserializeObject(Settings.getValue(PageStateConstants.ORG_BOARDS).ToString());
+            JArray savedState = JArray.Parse(serialBoards.ToString());
+            ObservableCollection<TBoard> collection = new ObservableCollection<TBoard>();
+            foreach (var item in savedState)
+            {
+                collection.Add(new TBoard()
+                {
+                     id = (int)item["id"],
+                     name = (string)item["name"],
+                     desc = (string)item["desc"],
+                     orgID = (int)item["orgID"],
+                     organisation = (string)item["organisation"]
+                });
+            }
+            ListViewOrgBoards.ItemsSource = collection;
+            fetchingBoards(false);
         }
         private async Task getOrgDetails(int orgID)
         {
             //Prepare UI for loading
-            SCVOrgProfile.Opacity = 0.5;
-            PRGetOrgDetails.Visibility = Visibility.Visible;
-
+            fetchingProfile(true);
             //get the details 
             Dictionary<string, string> results = await OrgsService.getOrg(orgID);
             if (results.ContainsKey(Constants.SUCCESS))
@@ -81,8 +139,6 @@ namespace Pepeza.Views.Orgs
                     timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
                 };
                 RootGrid.DataContext = info;
-                SCVOrgProfile.Opacity = 1;
-                isProfileLoaded = true;
             }
             else
             {
@@ -91,7 +147,7 @@ namespace Pepeza.Views.Orgs
                 isProfileLoaded = false;
                 toastErros.Message = results[Constants.ERROR];
             }
-            PRGetOrgDetails.Visibility = Visibility.Collapsed;
+            fetchingProfile(false);
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -126,9 +182,7 @@ namespace Pepeza.Views.Orgs
         private async Task<bool> fetchOrgBoards(int orgId)
         {
             //start the progress bar
-            StackPanelLoading.Visibility = Visibility.Visible;
-            ListViewOrgBoards.Opacity = 0.5;
-
+            fetchingBoards(true);
             Dictionary<string,string> orgBoards = await OrgsService.getOrgBoards(orgId);
             if (orgBoards != null && orgBoards.ContainsKey(Constants.SUCCESS))
             {
@@ -164,21 +218,52 @@ namespace Pepeza.Views.Orgs
             else
             {
                 //something went wrong , try again later
-               
-                StackPanelLoading.Visibility = Visibility.Collapsed;
-                ListViewOrgBoards.Opacity = 1;
                 toastErrorsInBoards.Message = orgBoards[Constants.ERROR];
                 return false;
             }
-            StackPanelLoading.Visibility = Visibility.Collapsed;
-            ListViewOrgBoards.Opacity = 1;
+            fetchingBoards(false);
             return true;
         }
-
         private void ListViewOrgBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            savePageState();
             TBoard board = (sender as ListView).SelectedItem as TBoard;
             this.Frame.Navigate(typeof(BoardProfile), board.id);
+        }
+        private  void savePageState()
+        {
+            //Save the boards 
+             Settings.add(PageStateConstants.ORG_BOARDS, JsonConvert.SerializeObject(ListViewOrgBoards.ItemsSource));
+            //Save the profile information
+             Settings.add(PageStateConstants.ORG_PROFILE, JsonConvert.SerializeObject(RootGrid.DataContext));
+        }
+        private void fetchingProfile(bool isFetching)
+        {
+            if (isFetching)
+            {
+                SCVOrgProfile.Opacity = 0.5;
+                PRGetOrgDetails.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SCVOrgProfile.Opacity = 1;
+                isProfileLoaded = true;
+                PRGetOrgDetails.Visibility = Visibility.Collapsed;
+            }
+        }
+        private void fetchingBoards(bool isFetching)
+        {
+            if (isFetching)
+            {
+                StackPanelLoading.Visibility = Visibility.Visible;
+                ListViewOrgBoards.Opacity = 0.5;
+            }
+            else
+            {
+                StackPanelLoading.Visibility = Visibility.Collapsed;
+                ListViewOrgBoards.Opacity = 1;
+                areBoardsLoaded = true;
+            }
         }
     }
 }
