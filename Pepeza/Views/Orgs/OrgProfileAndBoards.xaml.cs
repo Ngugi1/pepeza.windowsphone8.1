@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pepeza.Db.DbHelpers;
+using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.IsolatedSettings;
@@ -34,6 +36,7 @@ namespace Pepeza.Views.Orgs
     
     public sealed partial class OrgProfileAndBoards : Page
     {
+        ObservableCollection<TBoard> boards = new ObservableCollection<TBoard>();
         public bool areBoardsLoaded { get; set; }
         public bool isProfileLoaded { get; set; }
         public int OrgID { get; set; }
@@ -74,11 +77,11 @@ namespace Pepeza.Views.Orgs
 
         private void loadPageState()
         {
-            loadBoardsLocally(OrgID);
-            loadProfileLocally();
+            restoreBoards(OrgID);
+            restoreProfile();
         }
 
-        private void loadProfileLocally()
+        private void restoreProfile()
         {
             fetchingProfile(true);
             //Load saved datacontext 
@@ -95,7 +98,7 @@ namespace Pepeza.Views.Orgs
             fetchingProfile(false);
         }
 
-        private void loadBoardsLocally(int orgId)
+        private void restoreBoards(int orgId)
         {
             fetchingBoards(true);
             var serialBoards = JsonConvert.DeserializeObject(Settings.getValue(PageStateConstants.ORG_BOARDS).ToString());
@@ -119,35 +122,52 @@ namespace Pepeza.Views.Orgs
         {
             //Prepare UI for loading
             fetchingProfile(true);
-            //get the details 
-            Dictionary<string, string> results = await OrgsService.getOrg(orgID);
-            if (results.ContainsKey(Constants.SUCCESS))
+            //Determine whethe to get them locally or online , check that the org ID exists locally or not 
+            if (OrgHelper.get(orgID) != null)
             {
-                JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                TOrgInfo info = new TOrgInfo()
-                {
-                    id = (int)objResults["id"],
-                    userId = (int)objResults["userId"],
-                    username = (string)objResults["username"],
-                    description = (string)objResults["description"],
-                    name = (string)objResults["name"],
-                    dateCreated = (DateTime)objResults["dateCreated"]["date"],
-                    dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                    timezone_create = (string)objResults["dateCreated"]["timezone"],
-                    timezone_updated = (string)objResults["dateUpdated"]["timezone"],
-                    timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
-                    timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
-                };
-                RootGrid.DataContext = info;
+                await loadProfileLocally();
             }
             else
             {
-                //There was an error , throw a toast
-                SCVOrgProfile.Opacity = 1;
-                isProfileLoaded = false;
-                toastErros.Message = results[Constants.ERROR];
+                Dictionary<string, string> results = await OrgsService.getOrg(orgID);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                    TOrgInfo info = new TOrgInfo()
+                    {
+                        id = (int)objResults["id"],
+                        userId = (int)objResults["userId"],
+                        username = (string)objResults["username"],
+                        description = (string)objResults["description"],
+                        name = (string)objResults["name"],
+                        dateCreated = (DateTime)objResults["dateCreated"]["date"],
+                        dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
+                        timezone_create = (string)objResults["dateCreated"]["timezone"],
+                        timezone_updated = (string)objResults["dateUpdated"]["timezone"],
+                        timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
+                        timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
+                    };
+                    RootGrid.DataContext = info;
+                }
+                else
+                {
+                    //There was an error , throw a toast
+                    SCVOrgProfile.Opacity = 1;
+                    isProfileLoaded = false;
+                    toastErros.Message = results[Constants.ERROR];
+                }
             }
             fetchingProfile(false);
+        }
+
+        private async Task loadProfileLocally()
+        {
+            RootGrid.DataContext = await OrgHelper.get(OrgID);
+        }
+
+        private async Task loadBoardsLocally()
+        {    
+            boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllBoards(OrgID));
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -183,43 +203,49 @@ namespace Pepeza.Views.Orgs
         {
             //start the progress bar
             fetchingBoards(true);
-            Dictionary<string,string> orgBoards = await OrgsService.getOrgBoards(orgId);
-            if (orgBoards != null && orgBoards.ContainsKey(Constants.SUCCESS))
+            if (OrgHelper.get(orgId) != null)
             {
-                ObservableCollection<TBoard> boards = new ObservableCollection<TBoard>();
-                //Object objResults = JObject.Parse(orgBoards[Constants.SUCCESS]);
-                JArray boardArray = JArray.Parse(orgBoards[Constants.SUCCESS]);
-                if (boardArray.Count > 0)
-                {
-                    foreach (var board in boardArray)
-                    {
-                        boards.Add(new TBoard()
-                        {
-                            id = (int)board["id"],
-                            name = (string)board["name"],
-                            desc = (string)board["description"],
-                            orgID = orgId,
-                            dateCreated = (DateTime)board["dateCreated"]["date"],
-                            dateUpdated = (DateTime)board["dateUpdated"]["date"],
-                            timezone_created = (string)board["dateCreated"]["timezone"],
-                            timezone_updated = (string)board["dateUpdated"]["timezone"],
-                            timezone_type_created = (int)board["dateCreated"]["timezone_type"],
-                            timezone_type_updated = (int)board["dateUpdated"]["timezone_type"]
-
-                        });
-                    }
-                    ListViewOrgBoards.ItemsSource = boards;
-                }
-                else
-                {
-                    //No boards boy
-                }
+                await loadBoardsLocally();
             }
             else
             {
-                //something went wrong , try again later
-                toastErrorsInBoards.Message = orgBoards[Constants.ERROR];
-                return false;
+                Dictionary<string, string> orgBoards = await OrgsService.getOrgBoards(orgId);
+                if (orgBoards != null && orgBoards.ContainsKey(Constants.SUCCESS))
+                {
+                    //Object objResults = JObject.Parse(orgBoards[Constants.SUCCESS]);
+                    JArray boardArray = JArray.Parse(orgBoards[Constants.SUCCESS]);
+                    if (boardArray.Count > 0)
+                    {
+                        foreach (var board in boardArray)
+                        {
+                            boards.Add(new TBoard()
+                            {
+                                id = (int)board["id"],
+                                name = (string)board["name"],
+                                desc = (string)board["description"],
+                                orgID = orgId,
+                                dateCreated = (DateTime)board["dateCreated"]["date"],
+                                dateUpdated = (DateTime)board["dateUpdated"]["date"],
+                                timezone_created = (string)board["dateCreated"]["timezone"],
+                                timezone_updated = (string)board["dateUpdated"]["timezone"],
+                                timezone_type_created = (int)board["dateCreated"]["timezone_type"],
+                                timezone_type_updated = (int)board["dateUpdated"]["timezone_type"]
+
+                            });
+                        }
+                        ListViewOrgBoards.ItemsSource = boards;
+                    }
+                    else
+                    {
+                        //No boards boy
+                    }
+                }
+                else
+                {
+                    //something went wrong , try again later
+                    toastErrorsInBoards.Message = orgBoards[Constants.ERROR];
+                    return false;
+                }
             }
             fetchingBoards(false);
             return true;

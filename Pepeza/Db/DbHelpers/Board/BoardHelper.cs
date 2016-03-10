@@ -46,6 +46,33 @@ namespace Pepeza.Db.DbHelpers.Board
 
             return boards;
         }
+        public async static Task<List<TBoard>> fetchAllBoards(int orgId)
+        {
+            List<TBoard> boards = null;
+            var connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                boards = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE orgID=?",orgId);
+                if (boards != null)
+                {
+                    foreach (TBoard board in boards)
+                    {
+                        Db.Models.Orgs.TOrgInfo orgInfo = await connection.GetAsync<Db.Models.Orgs.TOrgInfo>(board.orgID);
+                        if (orgInfo.name.Equals("My Boards"))
+                        {
+                            board.organisation = "#my boards";
+                        }
+                        else
+                        {
+                            board.organisation = orgInfo.name;
+                        }
+
+                    }
+                }
+            }
+
+            return boards;
+        }
         public async static Task<TBoard> getBoard(int boardId)
         {
             TBoard result = null;

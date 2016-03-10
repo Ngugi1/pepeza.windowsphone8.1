@@ -17,6 +17,7 @@ namespace Pepeza.Db.DbHelpers
             if (connection != null)
             {
                info=  await connection.GetAsync<TOrgInfo>(id);
+               if (info.username == null) info.username = info.name;
             }
             return info;
         }

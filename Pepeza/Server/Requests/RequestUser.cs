@@ -52,7 +52,6 @@ namespace Pepeza.Server.Requests
                         //read response 
                         jsonObject = await response.Content.ReadAsAsync<JObject>();
                         resContent.Add(Constants.APITOKEN ,(string)jsonObject[Constants.APITOKEN]);
-                        Settings.add(Constants.APITOKEN, (string)jsonObject[Constants.APITOKEN]);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
@@ -170,11 +169,9 @@ namespace Pepeza.Server.Requests
                     HttpResponseMessage response = await client.PutAsJsonAsync(UserAddresses.LOGIN_USER, toLog);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        JObject jobject = await response.Content.ReadAsAsync<JObject>();
+                        var jobject = await response.Content.ReadAsStringAsync();
                         //save API Token to Isolated Strorage
-                        resConent.Add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
-                        Settings.add(Constants.APITOKEN, (string)jobject[Constants.APITOKEN]);
-                        Debug.WriteLine("==================*******************" + Settings.getValue("X-API-TOKEN"));
+                        resConent.Add(Constants.APITOKEN, jobject);
                     }
                     else
                     {
