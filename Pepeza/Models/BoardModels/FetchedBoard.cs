@@ -10,7 +10,7 @@ namespace Pepeza.Models.BoardModels
     {
         private int _id;
 
-        public int Id
+        public int id
         {
             get { return _id; }
             set
@@ -22,7 +22,7 @@ namespace Pepeza.Models.BoardModels
 
         private int _orgId;
 
-        public int OrgId
+        public int OrgID
         {
             get { return _orgId; }
             set
@@ -33,7 +33,7 @@ namespace Pepeza.Models.BoardModels
         }
         private string _name;
 
-        public string Name
+        public string name
         {
             get { return _name; }
             set
@@ -45,7 +45,7 @@ namespace Pepeza.Models.BoardModels
 
         private string _description;
 
-        public string Description
+        public string desc
         {
             get { return _description; }
             set

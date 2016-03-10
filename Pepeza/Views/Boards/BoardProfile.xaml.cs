@@ -37,14 +37,10 @@ namespace Pepeza.Views
     public sealed partial class BoardProfile : Page
     {
         FetchedBoard boardFetched = null;
-        int waitingToGoBackTime = 0;
-        DispatcherTimer timer = new DispatcherTimer();
         public BoardProfile()
         {
             this.InitializeComponent();
         }
-
-      
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -59,45 +55,66 @@ namespace Pepeza.Views
                 stackPanelLoading.Visibility = Visibility.Visible;
                 ContentRoot.Opacity = 0.7;
                 await getBoardDetailsAsync(boardId);
+
             }
             else
             {
                 //Was back Navigation
             }
         }
-        public  async Task getBoardDetailsAsync(int boardId)
+        public async Task getBoardDetailsAsync(int boardId)
         {
-            Dictionary<string, string> results = await BoardService.getBoard(boardId);
-            if (results != null && results.ContainsKey(Constants.SUCCESS))
+            //Determine whether to load board details locally or online
+            TBoard localBoard = await BoardHelper.getBoard(boardId);
+            if (localBoard != null)
             {
-                JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                boardFetched = new FetchedBoard()
-                {
-                    Id = (int)objResults["id"],
-                    OrgId = (int)objResults["orgId"],
-                    Name = (string)objResults["name"],
-                    Description = (string)objResults["description"],
-                    DateCreated = (DateTime)objResults["dateCreated"]["date"],
-                    DateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                    Timezone_created = (string)objResults["dateCreated"]["timezone"],
-                    Timezone_Updated = (string)objResults["dateUpdated"]["timezone"],
-                    Timezone_Type_Created = (int)objResults["dateCreated"]["timezone_type"],
-                    Timezone_Type_Updated = (int)objResults["dateUpdated"]["timezone_type"]
-                };
-                await checkIfBoardIsFollowed(boardFetched.Id);
-                rootGrid.DataContext = boardFetched;
+                rootGrid.DataContext = localBoard;
+                isFetchingDetails(false);
             }
             else
             {
-                //Show some error message 
-                stackPanelLoading.Visibility = Visibility.Collapsed;
-                toasterror.Message = results[Constants.ERROR];
-                timer.Interval = new TimeSpan(0, 0, 0, 0,1500);
-                timer.Start();
-                timer.Tick += timer_Tick;
+                Dictionary<string, string> results = await BoardService.getBoard(boardId);
+                if (results != null && results.ContainsKey(Constants.SUCCESS))
+                {
+                    JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                    boardFetched = new FetchedBoard()
+                    {
+                        id = (int)objResults["id"],
+                        OrgID = (int)objResults["orgId"],
+                        name = (string)objResults["name"],
+                        desc = (string)objResults["description"],
+                        DateCreated = (DateTime)objResults["dateCreated"]["date"],
+                        DateUpdated = (DateTime)objResults["dateUpdated"]["date"],
+                        Timezone_created = (string)objResults["dateCreated"]["timezone"],
+                        Timezone_Updated = (string)objResults["dateUpdated"]["timezone"],
+                        Timezone_Type_Created = (int)objResults["dateCreated"]["timezone_type"],
+                        Timezone_Type_Updated = (int)objResults["dateUpdated"]["timezone_type"]
+                    };
+                    await checkIfBoardIsFollowed(boardFetched.id);
+                    rootGrid.DataContext = boardFetched;
+                }
+                else
+                {
+                    //Show some error message 
+                    stackPanelLoading.Visibility = Visibility.Collapsed;
+                    toasterror.Message = results[Constants.ERROR];
+                }
+                isFetchingDetails(false);
             }
-            stackPanelLoading.Visibility = Visibility.Collapsed;
-            ContentRoot.Opacity = 1;
+            await isBoardMine(boardId);
+        }
+
+        private async Task  isBoardMine(int id)
+        {
+            if (await BoardHelper.getBoard(id) != null)
+            {
+                //You own this board
+                btnFollow.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                btnFollow.Visibility = Visibility.Visible;
+            }
         }
         public async Task followBoard(int boardId)
         {
@@ -111,16 +128,16 @@ namespace Pepeza.Views
                 btnFollow.IsEnabled = false;
                 await FollowingHelper.add(new TFollowing()
                 {
-                     Id = boardFetched.Id,
-                     OrgId = boardFetched.OrgId,
-                     Name = boardFetched.Name,
-                     Description = boardFetched.Description,
-                     DateCreated = boardFetched.DateCreated,
-                     DateUpdated = boardFetched.DateUpdated,
-                     Timezone_created = boardFetched.Timezone_created,
-                     Timezone_Updated = boardFetched.Timezone_Updated,
-                     Timezone_Type_Created = boardFetched.Timezone_Type_Created,
-                     Timezone_Type_Updated = boardFetched.Timezone_Type_Updated 
+                    Id = boardFetched.id,
+                    OrgId = boardFetched.OrgID,
+                    Name = boardFetched.name,
+                    Description = boardFetched.desc,
+                    DateCreated = boardFetched.DateCreated,
+                    DateUpdated = boardFetched.DateUpdated,
+                    Timezone_created = boardFetched.Timezone_created,
+                    Timezone_Updated = boardFetched.Timezone_Updated,
+                    Timezone_Type_Created = boardFetched.Timezone_Type_Created,
+                    Timezone_Type_Updated = boardFetched.Timezone_Type_Updated
                 });
             }
             else
@@ -134,20 +151,11 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void timer_Tick(object sender, object e)
-        {
-            waitingToGoBackTime++;
-            if (waitingToGoBackTime >= 4)
-            {
-                timer.Stop();
-                this.Frame.GoBack();
-
-            }
-        }
+      
         private async void btnFollow_Click(object sender, RoutedEventArgs e)
         {
             FetchedBoard board = ContentRoot.DataContext as FetchedBoard;
-            await followBoard(board.Id);
+            await followBoard(board.id);
         }
         private async Task checkIfBoardIsFollowed(int boardId)
         {
@@ -163,6 +171,14 @@ namespace Pepeza.Views
                 btnFollow.IsEnabled = true;
             }
         }
-    }
+        private void isFetchingDetails(bool isloading)
+        {
+            if (!isloading)
+            {
+                stackPanelLoading.Visibility = Visibility.Collapsed;
+                ContentRoot.Opacity = 1;
+            }
+        }
 
+    }
 }

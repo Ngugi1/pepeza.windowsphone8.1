@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <StackPanel Style="{StaticResource HeaderStackPanel}">
             <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                           Text="{Binding Name}"
+                           Text="{Binding name}"
                            />
         </StackPanel>
         <Grid Grid.Row="1"
@@ -64,7 +64,7 @@
                        />
             <TextBlock Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
                        Foreground="Black"
-                       Text="{Binding  Name}"
+                       Text="{Binding  name}"
                        Name="txtBlockName"
                        Grid.Row="2"
                        Margin="18,8"
@@ -86,7 +86,7 @@
                 Padding="0,0,0,12"
                 Grid.Row="4"
                 Name="txtBlockDesc"
-                Text="{Binding Description}"
+                Text="{Binding desc}"
                 Margin="18,8"
                 Foreground="Black"
                 Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
