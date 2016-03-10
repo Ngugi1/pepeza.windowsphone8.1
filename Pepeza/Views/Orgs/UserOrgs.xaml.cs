@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
@@ -45,17 +47,49 @@ namespace Pepeza.Views.Orgs
         {
             //Display loading bar if boards are not ready 
             //Cater for error messages 
-            if (e.Parameter != null)
+            if (e.NavigationMode == NavigationMode.New)
             {
-                person = (e.Parameter as Person);
-                HeaderStackPanel.DataContext = person;
-                loadUserBoards(person);
+                if (e.Parameter != null)
+                {
+                    person = (e.Parameter as Person);
+                    HeaderStackPanel.DataContext = person;
+                    loadUserBoards(person);
+                }
+                else
+                {
+                    //Try to load from the local storage
+                }
             }
-            else
+            else if(e.NavigationMode == NavigationMode.Back)
             {
-                //Try to load from the local storage
+                //Load data locally
+                loadUserOrgsLocally();
             }
 
+        }
+
+        private void loadUserOrgsLocally()
+        {
+            isfetchingOrgs(true);
+            ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
+            var savedState = JsonConvert.DeserializeObject(Settings.getValue(PageStateConstants.USER_ORGS).ToString());
+            JArray savedOrgs = JArray.Parse(savedState.ToString());
+            if (savedOrgs.Count > 0)
+            {
+                //TODO:: Get the collection 
+                foreach (var item in savedOrgs)
+                {
+                    UserOrganisations.Add(new Organization()
+                    {
+                         Id = (int)item["Id"],
+                         Name =(string)item["Name"],
+                         Description = (string)item["Description"],
+                         Username = (string)item["Username"]
+                    });
+                }
+                ListViewUserBoards.ItemsSource = UserOrganisations;
+                isfetchingOrgs(false);
+            }
         }
         private async void loadUserBoards(Person selected)
         {
@@ -87,11 +121,10 @@ namespace Pepeza.Views.Orgs
                                 item.timezone_updated = (string)org["dateUpdated"]["timezone"];
                                 item.timezone_type_create = (string)org["dateCreated"]["timezone_type"];
                                 item.timezone_type_updated = (string)org["dateUpdated"]["timezone_type"];
-                               
                                 UserOrganisations.Add(item);
                             }
                             ListViewUserBoards.ItemsSource = UserOrganisations;
-                            StackPanelLoading.Visibility = Visibility.Collapsed;
+                            isfetchingOrgs(false);
                         }
                         else
                         {
@@ -107,13 +140,29 @@ namespace Pepeza.Views.Orgs
                     #endregion
                 }
             }
-            StackPanelLoading.Visibility = Visibility.Collapsed;
+            isfetchingOrgs(false);
         }
 
         private void ListViewUserBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //Start saving page state
+            Settings.add(PageStateConstants.USER_ORGS, JsonConvert.SerializeObject(ListViewUserBoards.ItemsSource));
+            //Prepare parameters to pass
             Organization org = (sender as ListView).SelectedItem as Organization;
             if (org != null) this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
+
         }
+        private void isfetchingOrgs(bool isfetching)
+        {
+            if (isfetching)
+            {
+                StackPanelLoading.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                StackPanelLoading.Visibility = Visibility.Collapsed;
+            }
+        }
+    
     }
 }

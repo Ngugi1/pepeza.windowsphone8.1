@@ -10,5 +10,6 @@ namespace Pepeza.Utitlity
     {
         public static string ORG_BOARDS { get { return "ORG_BOARDS"; } }
         public static string ORG_PROFILE { get { return "ORG_PROFILE"; } }
+        public static string USER_ORGS { get { return "USER_ORGS"; } }
     }
 }
