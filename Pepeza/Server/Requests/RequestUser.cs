@@ -46,12 +46,11 @@ namespace Pepeza.Server.Requests
                 {
                     HttpClient client = getHttpClient(false);
                     HttpResponseMessage response = await client.PostAsJsonAsync(UserAddresses.NEW_USER, toPost);
-                    JObject jsonObject = null;
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
                     {
                         //read response 
-                        jsonObject = await response.Content.ReadAsAsync<JObject>();
-                        resContent.Add(Constants.APITOKEN ,(string)jsonObject[Constants.APITOKEN]);
+                        
+                        resContent.Add(Constants.APITOKEN ,await response.Content.ReadAsStringAsync());
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {

@@ -40,5 +40,10 @@ namespace Pepeza.IsolatedSettings
                 settings.Values.Remove(key);
             }
         }
+        public static void clearSettings()
+        {
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            settings.Values.Clear();
+        }
     }
 }

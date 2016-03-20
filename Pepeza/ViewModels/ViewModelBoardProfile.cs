@@ -39,10 +39,10 @@ namespace Pepeza.ViewModels
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 boardFetched = new FetchedBoard()
                {
-                   Id = (int)objResults["id"],
-                   OrgId = (int)objResults["orgId"],
-                   Name = (string)objResults["name"],
-                   Description = (string)objResults["description"],
+                   id = (int)objResults["id"],
+                   OrgID = (int)objResults["orgId"],
+                   name = (string)objResults["name"],
+                   desc = (string)objResults["description"],
                    DateCreated = (DateTime)objResults["dateCreated"]["date"],
                    DateUpdated = (DateTime)objResults["dateUpdated"]["date"],
                    Timezone_created = (string)objResults["dateCreated"]["timezone"],
