@@ -46,15 +46,18 @@ namespace Pepeza.Views.Boards
         {
             //Load all the organisatios
             List<TOrgInfo> orgs = await OrgHelper.getAllOrgs();
-            foreach (var item in orgs)
+            if (orgs.Count > 0)
             {
-                if (item.username == null)
+                foreach (var item in orgs)
                 {
-                    item.username = "my boards";
+                    if (item.username == null)
+                    {
+                        item.username = "my boards";
+                    }
                 }
+                comboOrgs.ItemsSource = orgs;
+                comboOrgs.SelectedIndex = 0;
             }
-            comboOrgs.ItemsSource = orgs;
-            comboOrgs.SelectedIndex = 0;
         }
 
         private async void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)

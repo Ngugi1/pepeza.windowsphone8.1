@@ -164,7 +164,6 @@ namespace Pepeza.Views.Orgs
         {
             RootGrid.DataContext = await OrgHelper.get(OrgID);
         }
-
         private async Task loadBoardsLocally()
         {    
             boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllBoards(OrgID));

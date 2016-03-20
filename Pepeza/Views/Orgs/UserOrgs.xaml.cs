@@ -53,7 +53,7 @@ namespace Pepeza.Views.Orgs
                 {
                     person = (e.Parameter as Person);
                     HeaderStackPanel.DataContext = person;
-                    loadUserBoards(person);
+                    loadUserBoards(person.id);
                 }
                 else
                 {
@@ -91,12 +91,12 @@ namespace Pepeza.Views.Orgs
                 isfetchingOrgs(false);
             }
         }
-        private async void loadUserBoards(Person selected)
+        public async  void loadUserBoards(int selected)
         {
             txtBlockStatus.Visibility = Visibility.Collapsed;
             if (selected != null)
             {
-                Dictionary<string, string> results = await OrgsService.getUserOrgs(selected.id);
+                Dictionary<string, string> results = await OrgsService.getUserOrgs(selected);
                 if (results != null)
                 {
                     #region Retrieve Data

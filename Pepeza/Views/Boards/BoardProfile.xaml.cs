@@ -103,7 +103,6 @@ namespace Pepeza.Views
             }
             await isBoardMine(boardId);
         }
-
         private async Task  isBoardMine(int id)
         {
             if (await BoardHelper.getBoard(id) != null)
@@ -151,7 +150,6 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-      
         private async void btnFollow_Click(object sender, RoutedEventArgs e)
         {
             FetchedBoard board = ContentRoot.DataContext as FetchedBoard;
@@ -179,6 +177,5 @@ namespace Pepeza.Views
                 ContentRoot.Opacity = 1;
             }
         }
-
     }
 }
