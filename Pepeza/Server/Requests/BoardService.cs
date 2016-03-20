@@ -235,5 +235,35 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+        public async static Task<Dictionary<string, string>> getBoardNotices(int boardId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(string.Format(BoardAddresses.LOAD_NOTICES, boardId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 }

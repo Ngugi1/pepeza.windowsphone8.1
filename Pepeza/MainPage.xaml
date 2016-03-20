@@ -113,7 +113,8 @@
                         Style="{StaticResource txtBlockPivotHeader}"/>
                 </PivotItem.Header>
                 <Jumper:AlphaJumpList Name="AlphaListOrgs">
-                <ListView Name="ListViewOrgs" SelectionChanged="ListViewOrgs_SelectionChanged">
+                <ListView Name="ListViewOrgs" 
+                          SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -268,8 +269,8 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton Click="AppBarButtonProfile_Click"
                               Label="profile"/>
-                <AppBarButton Label="settings"/>
-                <AppBarButton Label="logout"/>
+                <AppBarButton Label="deactivate account" Click="AppBarButton_Settings"/>
+                <AppBarButton Label="logout" Click="AppBarButton_Logout"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" 

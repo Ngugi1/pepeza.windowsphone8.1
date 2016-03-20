@@ -3,8 +3,11 @@ using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
+using Pepeza.Utitlity;
 using Pepeza.Views;
+using Pepeza.Views.Account;
 using Pepeza.Views.Boards;
+using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
 using QKit.JumpList;
 using System;
@@ -50,12 +53,9 @@ namespace Pepeza
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            // TODO: Prepare page for display here.
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
+            //Clear the backstack 
+            this.Frame.BackStack.Clear();
+            //Load data 
             isSelected = false;
             boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
             var groupedBoards = JumpListHelper.ToGroups(boards,t=>t.name,t=>t.organisation);
@@ -81,32 +81,25 @@ namespace Pepeza
             isSelected = true;
             this.Frame.BackStack.Clear();
         }
-
-       
-
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
         }
-
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
-
         private void AppBarButtonProfile_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Profile.UserProfile));
         }
-
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch ((pivotMainPage.SelectedIndex))
             {
                 case 0:
                     //Notices
-                    MessageDialog dialog = new MessageDialog("Coming soon");
-                    dialog.ShowAsync();
+                    this.Frame.Navigate(typeof(AddNoticePage));
                     break;
                 case 1:
                     //boards
@@ -123,19 +116,19 @@ namespace Pepeza
                     break;
             }
         }
-
-       
-
         private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Get the selected board and navigate to profile/notices
             TBoard board = (sender as ListView).SelectedItem as TBoard;
             if(board!=null&& isSelected==true)
             {
-                this.Frame.Navigate(typeof(BoardProfile) , board.id);
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                   {"id",board.id.ToString()},{"name" , board.name}
+                };
+                this.Frame.Navigate(typeof(BoardProfileAndBoards) , parameters);
             }
         }
-
         private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int selectedIndex = (sender as Pivot).SelectedIndex;
@@ -167,18 +160,20 @@ namespace Pepeza
                     break;
             }
         }
-
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   
             //Following is just a board , push the user to board profile
             TFollowing selected = ((sender as ListView).SelectedItem as TFollowing);
             if (selected != null && isSelected == true)
             {
-                this.Frame.Navigate(typeof(BoardProfile), selected.Id);
+                Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                   {"id",selected.Id.ToString()},{"name" , selected.Name}
+                };
+                this.Frame.Navigate(typeof(BoardProfile), parameters);
 
             }
         }
-
         private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -189,7 +184,18 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization(){ Id = org.id});
             }
         }
+        private void AppBarButton_Logout(object sender, RoutedEventArgs e)
+        {
+            if(LocalUserHelper.clearLocalSettingsForUser())
+            {
+                //terminate the application 
+                App.Current.Exit();
+            }
+        }
 
-       
+        private void AppBarButton_Settings(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(DeactivateAccount));
+        }
     }
 }
