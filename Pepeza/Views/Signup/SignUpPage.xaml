@@ -151,9 +151,8 @@
                        />
                     <HyperlinkButton Content="  Login" 
                                      Click="hypBtnLogin_Click"  
-                             Style="{StaticResource hlbtnStyle}"
-                             NavigateUri="/Views/LoginPage.xaml"
-                             Name="hypBtnLogin"
+                                     Style="{StaticResource hlbtnStyle}"
+                                     Name="hypBtnLogin"
                              />
                 </StackPanel>
             </StackPanel>

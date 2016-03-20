@@ -37,7 +37,6 @@ namespace Pepeza.Views.Account
         {
             this.InitializeComponent();
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -110,10 +109,21 @@ namespace Pepeza.Views.Account
                 timezone_type_updated = (int)dedefaultOrg["dateUpdated"]["timezone_type"]
             };
 
+
+            //get all the user organisations 
+
+
             //Now insert all to a local database
-            await UserHelper.add(userInfo);
-            await OrgHelper.add(defaultOrgInfo);
-            await EmailHelper.add(emailInfo);
+            try
+            {
+                await UserHelper.add(userInfo);
+                await OrgHelper.add(defaultOrgInfo);
+                await EmailHelper.add(emailInfo);
+            }
+            catch (Exception ex)
+            {
+                var x = ex.ToString() + " ```````````````````````" + ex.Message;
+            }
         }
 
     }

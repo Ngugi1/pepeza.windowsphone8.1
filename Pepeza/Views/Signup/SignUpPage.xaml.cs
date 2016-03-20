@@ -32,7 +32,7 @@ namespace Pepeza.Views
     {
         public SignUpPage()
         {
-                this.InitializeComponent(); 
+                this.InitializeComponent();
         }
 
         /// <summary>
