@@ -117,7 +117,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(OrgsAddresses.GET_ORG + orgId);
+                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_ORG ,orgId));
                     if (response.IsSuccessStatusCode)
                     {
                         //Got the org 
@@ -141,6 +141,7 @@ namespace Pepeza.Server.Requests
                 //Not connected
                 responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
+            var x = response.Content.ReadAsStringAsync();
             return responseContent;
         }
         public async static Task<Dictionary<string, string>> deleteOrg(int orgID)

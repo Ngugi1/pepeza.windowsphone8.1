@@ -75,7 +75,6 @@ namespace Pepeza.Db.DbHelpers
         }
         public static SQLiteAsyncConnection DbConnectionAsync()
         {
-            new SQLiteAsyncConnection("ngugi.db");
             return new SQLiteAsyncConnection(DbConstants.DB_PATH);
         }   
         public static SQLiteConnection DbConnection()

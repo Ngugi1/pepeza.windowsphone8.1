@@ -162,7 +162,7 @@ namespace Pepeza.Views.Orgs
 
         private async Task loadProfileLocally()
         {
-            RootGrid.DataContext = await OrgHelper.get(OrgID);
+            RootGrid.DataContext = OrgHelper.get(OrgID);
         }
         private async Task loadBoardsLocally()
         {    
@@ -222,15 +222,8 @@ namespace Pepeza.Views.Orgs
                             {
                                 id = (int)board["id"],
                                 name = (string)board["name"],
-                                desc = (string)board["description"],
                                 orgID = orgId,
-                                dateCreated = (DateTime)board["dateCreated"]["date"],
-                                dateUpdated = (DateTime)board["dateUpdated"]["date"],
-                                timezone_created = (string)board["dateCreated"]["timezone"],
-                                timezone_updated = (string)board["dateUpdated"]["timezone"],
-                                timezone_type_created = (int)board["dateCreated"]["timezone_type"],
-                                timezone_type_updated = (int)board["dateUpdated"]["timezone_type"]
-
+                                
                             });
                         }
                         ListViewOrgBoards.ItemsSource = boards;

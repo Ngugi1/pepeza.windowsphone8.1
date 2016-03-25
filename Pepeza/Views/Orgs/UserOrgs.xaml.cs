@@ -115,12 +115,6 @@ namespace Pepeza.Views.Orgs
                                 item.Name = (string)org["name"];
                                 item.Username = (string)org["username"];
                                 item.Description = (string)org["description"];
-                                item.dateUpdated = (DateTime)org["dateUpdated"]["date"];
-                                item.dateCreated = (DateTime)org["dateCreated"]["date"];
-                                item.timezone_created = (string)org["dateCreated"]["timezone"];
-                                item.timezone_updated = (string)org["dateUpdated"]["timezone"];
-                                item.timezone_type_create = (string)org["dateCreated"]["timezone_type"];
-                                item.timezone_type_updated = (string)org["dateUpdated"]["timezone_type"];
                                 UserOrganisations.Add(item);
                             }
                             ListViewUserBoards.ItemsSource = UserOrganisations;

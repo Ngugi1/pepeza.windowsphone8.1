@@ -65,7 +65,7 @@ namespace Pepeza.Views
         public async Task getBoardDetailsAsync(int boardId)
         {
             //Determine whether to load board details locally or online
-            TBoard localBoard = await BoardHelper.getBoard(boardId);
+            TBoard localBoard = BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
                 rootGrid.DataContext = localBoard;
@@ -105,7 +105,7 @@ namespace Pepeza.Views
         }
         private async Task  isBoardMine(int id)
         {
-            if (await BoardHelper.getBoard(id) != null)
+            if (BoardHelper.getBoard(id) != null)
             {
                 //You own this board
                 btnFollow.Visibility = Visibility.Collapsed;

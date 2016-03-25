@@ -123,7 +123,7 @@ namespace Pepeza.Views.Boards
         private async void updateLocalDatabase(JObject objResults , string desc ,string name)
         {
             //Get board with given Id , then update it
-            TBoard toUpdate = await BoardHelper.getBoard(board.id);
+            TBoard toUpdate = BoardHelper.getBoard(board.id);
             toUpdate.dateUpdated = (DateTime)objResults["dateUpdated"]["date"];
             toUpdate.timezone_updated = (string)objResults["dateUpdated"]["timezone"];
             toUpdate.timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"];

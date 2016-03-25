@@ -73,13 +73,21 @@ namespace Pepeza.Db.DbHelpers.Board
 
             return boards;
         }
-        public async static Task<TBoard> getBoard(int boardId)
+        public static TBoard getBoard(int boardId)
         {
             TBoard result = null;
-            var connection = DbHelper.DbConnectionAsync();
+            var connection = DbHelper.DbConnection();
             if (connection != null)
             {
-                result = await connection.GetAsync<TBoard>(boardId);
+                try
+                {
+                    result = connection.Query<TBoard>("SELECT * FROM TBoard WHERE id=?", boardId).FirstOrDefault();
+                }
+                catch
+                {
+                    result = null;
+                }
+               
             }
             return result;
         }

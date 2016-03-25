@@ -196,8 +196,8 @@ namespace Pepeza.Views
             if (searchResults.ContainsKey(Constants.SUCCESS))
             {
                 //Get the key 
-                JObject result = JObject.Parse(searchResults[Constants.SUCCESS]);
-                JArray jArray = JArray.Parse(result["results"].ToString());
+                
+                JArray jArray = JArray.Parse(searchResults[Constants.SUCCESS]);
                 if (jArray.Count != 0)
                 {
                     for (int i = 0; i < jArray.Count; i++)
@@ -272,12 +272,8 @@ namespace Pepeza.Views
                 Dictionary<string, string> results = await BoardService.searchBoard(txtBoxSearch.Text);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
-                    //We have some results 
-                    JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                    if (objResults != null)
-                    {
                         //Go ahead and get a list 
-                        JArray jArrayResults = JArray.Parse(objResults["results"].ToString());
+                       JArray jArrayResults = JArray.Parse(results[Constants.SUCCESS].ToString());
                         if (jArrayResults.Count > 0)
                         {
                             foreach (var board in jArrayResults)
@@ -297,12 +293,7 @@ namespace Pepeza.Views
                             boardSource.Clear();
                             NoResults();
                         }
-                    }
-                    else
-                    {
-                        boardSource.Clear();
-                        NoResults();
-                    }
+                   
                 }
                 else
                 {
@@ -324,8 +315,7 @@ namespace Pepeza.Views
             if (result.ContainsKey(Constants.SUCCESS))
             {
                 //Get the results
-                JObject obj = JObject.Parse(result[Constants.SUCCESS].ToString());
-                JArray jArray = JArray.Parse(obj["results"].ToString());
+                JArray jArray = JArray.Parse(result[Constants.SUCCESS].ToString());
                if(jArray.Count!=0)
                {
                 txtBlockWhat.Visibility = Visibility.Collapsed;
@@ -336,7 +326,6 @@ namespace Pepeza.Views
                     {
                          Id = (int)row["id"],
                          Name = (string)row["name"],
-                         Description = (string)row["description"],
                          Score = (double)row["score"],
                          Username =(string)row["username"]
                     };
