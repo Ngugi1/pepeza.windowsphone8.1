@@ -61,7 +61,7 @@ namespace Pepeza.Views
         }
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            clearPreviousResults();
             if (TextBoxReady())
             {
                 await generalSearch();
@@ -70,8 +70,6 @@ namespace Pepeza.Views
             {
                 updateWhatToSearch();
             }
-
-
 
         }
         private void listViewSearchOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -117,7 +115,12 @@ namespace Pepeza.Views
         /// </summary>
         private void clearPreviousResults()
         {
-            personSource.Clear();
+            if (personSource.Count > 0)
+            {
+                personSource.Clear();
+                int count = personSource.Count;
+            }
+           
             boardSource.Clear();
             orgSource.Clear();
         }
@@ -218,16 +221,14 @@ namespace Pepeza.Views
                     NoResults();
                     personSource.Clear();
                 }
-                if (personSource != null)
-                {
-                    ListViewUser.ItemsSource = personSource.Distinct();
-                }
             }
             else if (searchResults.ContainsKey(Constants.ERROR))
             {
                 //Display the error
-               displayErrors(searchResults[Constants.ERROR]);
-            }       
+                personSource.Clear();
+                displayErrors(searchResults[Constants.ERROR]);
+            }
+            ListViewUser.ItemsSource = personSource.Distinct();
         }
         /// <summary>
         /// Determine which u=item to search based on selection on the pivot
@@ -240,6 +241,7 @@ namespace Pepeza.Views
                 {
                     case 0:
                         //search users
+                       
                         IsSearching();
                         await searchUser();
                         IsSearching(false);
@@ -298,12 +300,14 @@ namespace Pepeza.Views
                 else
                 {
                     //We had some errors
+                    boardSource.Clear();
                     displayErrors(results[Constants.ERROR]);
                 }
                 ListViewBoards.ItemsSource = boardSource.Distinct();
             }
             catch(Exception)
             {
+                clearPreviousResults();
                 displayErrors(Constants.UNKNOWNERROR);
             }
         }
@@ -338,18 +342,14 @@ namespace Pepeza.Views
                    NoResults();
                    orgSource.Clear();
                }
-
-               if (orgSource != null)
-               {
-                   listViewSearchOrgs.ItemsSource = orgSource.Distinct();
-               }
-
             }
             else
             {
                 //Some errors occoured , handle with a toast
+                orgSource.Clear();
                 displayErrors(result[Constants.ERROR]);
             }
+            listViewSearchOrgs.ItemsSource = orgSource.Distinct();
         }
         #endregion
         private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
