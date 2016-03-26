@@ -127,5 +127,6 @@ namespace Pepeza.Models.BoardModels
                 onPropertyChanged("DateCreated");
             }
         }
+        public string following { get; set; }
     }
 }

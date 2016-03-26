@@ -206,6 +206,38 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+        public async static Task<Dictionary<string, string>> unfollowBoard(int boardId)
+        {
+            HttpClient client = getHttpClient(true);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    int userId = int.Parse(IsolatedSettings.Settings.getValue(Constants.USERID).ToString());
+                    response = await client.DeleteAsync(string.Format(BoardAddresses.UNFOLLOW_BOARD, boardId, userId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results; 
+
+        }
         public async static Task<Dictionary<string, string>> getboardFollowers(int boardId)
         {
             HttpClient client = getHttpClient(true);

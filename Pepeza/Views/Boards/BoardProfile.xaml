@@ -47,13 +47,16 @@
                         <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
                     </Ellipse.Fill>
                 </Ellipse>
-                <Button VerticalAlignment="Bottom"
+                <ToggleButton VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         IsEnabled="True"
+                        Background="{StaticResource BtnBackground}"
                         Content="Follow board"
                         Name="btnFollow"
-                        Click="btnFollow_Click"
+                        Checked="btnFollow_Checked"
+                        Unchecked="btnFollow_Unchecked"
                         Margin="16,0"
+                        BorderBrush="Transparent"
                         />
             </Grid>
             <TextBlock Grid.Row="1"

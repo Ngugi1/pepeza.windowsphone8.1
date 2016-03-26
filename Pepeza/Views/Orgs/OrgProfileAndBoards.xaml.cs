@@ -190,7 +190,6 @@ namespace Pepeza.Views.Orgs
                     break;
                 default
                 :
-
                     break;
             }
         }
