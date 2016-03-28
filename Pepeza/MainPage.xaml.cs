@@ -13,9 +13,11 @@ using QKit.JumpList;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -184,12 +186,20 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization(){ Id = org.id});
             }
         }
-        private void AppBarButton_Logout(object sender, RoutedEventArgs e)
+        private async void AppBarButton_Logout(object sender, RoutedEventArgs e)
         {
-            if(LocalUserHelper.clearLocalSettingsForUser())
+            Dictionary<string, string> logout =  await RequestUser.logout();
+            if (logout.ContainsKey(Constants.SUCCESS))
             {
-                //terminate the application 
-                App.Current.Exit();
+                if (await LocalUserHelper.clearLocalSettingsForUser())
+                {
+                    //Redirect to login page 
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
+            }
+            else
+            {
+                Debug.WriteLine("Failed to logout!");
             }
         }
 
@@ -197,5 +207,7 @@ namespace Pepeza
         {
             this.Frame.Navigate(typeof(DeactivateAccount));
         }
+
+       
     }
 }

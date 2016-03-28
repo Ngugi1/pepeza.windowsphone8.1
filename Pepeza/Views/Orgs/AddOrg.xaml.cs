@@ -117,11 +117,12 @@ namespace Pepeza.Views.Orgs
                 if (results.ContainsKey(Constants.USER_EXISTS))
                 {
                     //Check the valu
-                    if ((int.Parse(results[Constants.USER_EXISTS]))==1)
+                    if ((int.Parse(results[Constants.USER_EXISTS]))==0)
                     {
-                        //Switch back to tick , no error messages
+                        //User doesn't exist 
                         switchRingAppBtn(false);
                         model.IsUsernameValid = true;
+                        model.CanCreateOrg = false;
                     }
                     else
                     {

@@ -45,9 +45,15 @@ namespace Pepeza.Views.Account
             Dictionary<string,string> result = await RequestUser.deactivateUser();
             if (result.ContainsKey(Constants.UPDATED))
             {
-                //Log out the user automatically
-                Settings.remove(Constants.APITOKEN);
-                this.Frame.Navigate(typeof(LoginPage));
+                if (await LocalUserHelper.clearLocalSettingsForUser())
+                {
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
+                else
+                {
+                    txtBlockStatus.Text = result[Constants.ERROR];
+                }
+         
             }
             else
             {

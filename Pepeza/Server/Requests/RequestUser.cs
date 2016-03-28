@@ -243,7 +243,7 @@ namespace Pepeza.Server.Requests
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Successfull
-                        responseContent.Add(Constants.UPDATED, "Logged Out");
+                        responseContent.Add(Constants.SUCCESS, "Logged Out");
 
                     }
                     else

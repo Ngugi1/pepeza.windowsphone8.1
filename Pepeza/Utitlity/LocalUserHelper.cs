@@ -9,10 +9,10 @@ namespace Pepeza.Utitlity
 {
     class LocalUserHelper
     {
-        public static bool clearLocalSettingsForUser()
+        public async static Task<bool> clearLocalSettingsForUser()
         {
             bool isClear = false;
-            if (Db.DbHelpers.DbHelper.dropDatabase())
+            if (await Db.DbHelpers.DbHelper.dropDatabase())
             {
                 Settings.clearSettings();
                 isClear = true;

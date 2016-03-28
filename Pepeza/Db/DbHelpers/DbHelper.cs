@@ -31,22 +31,20 @@ namespace Pepeza.Db.DbHelpers
             connection.CreateTableAsync<TFollowing>();
             connection.CreateTableAsync<TNotice>();
         }
-        public static bool dropDatabase()
+        public async static Task<bool> dropDatabase()
         {
             bool isDeleted = false;
             try
             {
+
                 var conn = DbConnectionAsync();
-                conn.DropTableAsync<TOrgInfo>();
-                conn.DropTableAsync<TUserInfo>();
-                conn.DropTableAsync<TEmail>();
-                conn.DropTableAsync<TBoard>();
-                conn.DropTableAsync<TFollowing>();
-                //var file = ApplicationData.Current.LocalFolder.GetFilesAsync();
-                //foreach (var item in file.GetResults())
-                //{
-                //    item.DeleteAsync(StorageDeleteOption.PermanentDelete);
-                //}
+                await conn.DropTableAsync<TOrgInfo>();
+                await conn.DropTableAsync<TUserInfo>();
+                await conn.DropTableAsync<TEmail>();
+                await conn.DropTableAsync<TBoard>();
+                await conn.DropTableAsync<TFollowing>();
+                await conn.DropTableAsync<TNotice>();
+                var file = await checkDBExistsAsync(DbConstants.DB_PATH);
                 isDeleted = true;
             }
             catch (Exception)
