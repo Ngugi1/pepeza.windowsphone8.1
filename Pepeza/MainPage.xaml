@@ -112,7 +112,7 @@
                         Text="orgs" 
                         Style="{StaticResource txtBlockPivotHeader}"/>
                 </PivotItem.Header>
-                <Jumper:AlphaJumpList Name="AlphaListOrgs">
+                <Jumper:AlphaJumpList Name="AlphaListOrgs" >
                 <ListView Name="ListViewOrgs" 
                           SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemTemplate>
@@ -194,6 +194,7 @@
                 </PivotItem.Header>
                 <!--Alpha jumplist for Following Pivot-->
                 <Jumper:AlphaJumpList
+                    RequestedTheme="Dark"
                     Margin="4"
                     Name="AlphaListFollowing">
                     <ListView Name="ListViewFollowing"

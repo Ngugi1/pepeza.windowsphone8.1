@@ -67,7 +67,7 @@
                     Style="{StaticResource txtBoxStyle}"
                     PlaceholderText="Uniquely identifies your organisation">
                 </TextBox>
-                <AppBarButton Icon="{Binding Org.UsernameValidIcon}"
+                <AppBarButton Icon="{Binding Org.UsernameValidIcon , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
                               Grid.Column="1"
                               Name="AppBtnIsUsernameValid"
                               IsCompact="True"

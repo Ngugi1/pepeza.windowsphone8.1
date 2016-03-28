@@ -33,6 +33,7 @@ namespace Pepeza.Views.Orgs
     public sealed partial class AddOrg : Page
     {
 
+        
         public AddOrg()
         {
             this.InitializeComponent();
@@ -45,6 +46,7 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
         }
 
         private async void btnCreateOrg_Click(object sender, RoutedEventArgs e)
@@ -56,6 +58,7 @@ namespace Pepeza.Views.Orgs
                 OrgValidation.VaidateOrgName(txtBoxOrgName.Text.Trim()) &&
                 OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim()))
             {
+               
                 Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
                 {
                     {"username" , txtBoxUsername.Text.Trim()},
@@ -116,7 +119,7 @@ namespace Pepeza.Views.Orgs
                 Dictionary<string, string> results = await RequestUser.checkUsernameAvalability(model.Username);
                 if (results.ContainsKey(Constants.USER_EXISTS))
                 {
-                    //Check the valu
+                    //Check the value
                     if ((int.Parse(results[Constants.USER_EXISTS]))==0)
                     {
                         //User doesn't exist 

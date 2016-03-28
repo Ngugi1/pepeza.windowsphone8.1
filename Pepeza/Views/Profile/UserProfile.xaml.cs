@@ -78,8 +78,9 @@ namespace Pepeza.Views.Profile
             string fname = txtBoxFirstName.Text.Trim();
             if (appBarBtnEditDetails.Label.Equals("update"))
             {
-                if (txtBoxFirstName.Text.All(char.IsLetter))
+                if (txtBoxFirstName.Text.Any(char.IsLetter))
                 {
+                    StackPanelUpdatingProfile.Visibility = Visibility.Visible;
 
                     Dictionary<string, string> results = await
                         RequestUser.updateUserProfile(new Dictionary<string, string>() 
@@ -101,6 +102,7 @@ namespace Pepeza.Views.Profile
                         updateUI();
                     }
                 }
+                StackPanelUpdatingProfile.Visibility = Visibility.Collapsed;
             }
             else if (appBarBtnEditDetails.Label.Equals("edit"))
             {

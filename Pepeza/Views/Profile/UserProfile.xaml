@@ -44,27 +44,30 @@
                            Name="relativePanelProfPic"
                            Height="Auto"
                            >
-                    <Rectangle Height="192"
+                    <Ellipse Height="192"
+                             HorizontalAlignment="Left"
                              Margin="16,24,0,0"
                          Name="rectangleProfilePic"
                          Width="192"
                          >
-                        <Rectangle.Fill>
+                        <Ellipse.Fill>
                             <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
+                        </Ellipse.Fill>
+                    </Ellipse>
                     <StackPanel>
-                        <StackPanel 
-                        MaxHeight="60"
-                        HorizontalAlignment="Center"
+                        <StackPanel             
+                        HorizontalAlignment="Left"
                         Orientation="Horizontal">
                             <AppBarButton Icon="Account"
                    Style="{StaticResource AppBarBtnStyle}"
-                   Name="appBarButtonAccount"
+                                        Name="appBarButtonAccount"
+                                          Margin="16,24,0,0"
+                                          IsCompact="True"
                          />
                             <TextBlock Text="{Binding username}"
                        Style="{StaticResource txtBlockDisplay}"
                         VerticalAlignment="Bottom"
+                           
                         Name="txtBlockUsername"
                        Margin="4"
                       />
@@ -72,29 +75,28 @@
                         </StackPanel>
 
                         <TextBlock 
+                            Margin="28,24,0,0"
+                            HorizontalAlignment="Left"
                             Name="txtBlockFullName"
                             Visibility="Visible"
-                    HorizontalAlignment="Center"
                             Text="{Binding fullname}"
                             Style= "{StaticResource txtBlockDisplay}"/>
                         <StackPanel
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            MaxHeight="60"
                             Orientation="Horizontal">
                             <AppBarButton Icon="Mail" 
                                           Content="Update"
                                           VerticalAlignment="Bottom"
-              
+                                          Margin="16,24,0,0"
                                           Style="{StaticResource AppBarBtnStyle}"
                                           />
                             <TextBlock 
                            Style="{StaticResource  txtBlockDisplay}"
                            Name="txtblockEmail"
                             Text="{Binding email}"
-                                
-                                VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                            Margin="8,24,10,0"
                          />
                         </StackPanel>
@@ -124,13 +126,27 @@
                 		Margin="16,4"
                         />
                 </StackPanel>
-                <ProgressRing Name="PRUpdateProfile"
-                              Width="50"
-                              Height="50"
-                              />
-           
+                <StackPanel Grid.Row="1"
+                    Visibility="Collapsed"
+                    VerticalAlignment="Center"
+                    Name="StackPanelUpdatingProfile"
+                    >
+                    <ProgressRing Background="Transparent"
+                          Height="100"
+                          Width="100"
+                          IsActive="True"
+                          IsEnabled="True"
+                          Foreground="Teal"/>
+                    <TextBlock Style="{StaticResource txtBlockDisplay}"
+                       Text="updating profile ..."
+                       HorizontalAlignment="Center"
+                       />
+                </StackPanel>
+
+
             </StackPanel>
         </ScrollViewer>
+       
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Background="#127575 ">
