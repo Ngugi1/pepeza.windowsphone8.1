@@ -54,44 +54,31 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0"
+                    Grid.Column="0">
                 <TextBox 
                     TextChanged="txtBoxUsername_TextChanged"
                     MaxLength="20"
-                    Grid.Row="0"
-                    Grid.Column="0"
                     Header="username"
                     Name="txtBoxUsername"
                     TextWrapping="Wrap"
-                    LostFocus="txtBoxUsername_LostFocus"
                     Text="{Binding  Org.Username,UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
                     Style="{StaticResource txtBoxStyle}"
                     PlaceholderText="Uniquely identifies your organisation">
                 </TextBox>
-                <AppBarButton Icon="{Binding Org.UsernameValidIcon , Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
-                              Grid.Column="1"
-                              Name="AppBtnIsUsernameValid"
-                              IsCompact="True"
-                              VerticalAlignment="Bottom"
-                              Foreground="Black"
-                              />
-                <ProgressRing Width="20"
-                              Background="Transparent"
-                              Grid.Column="1"
-                              Visibility="Collapsed"
-                              Margin="0"
-                              VerticalAlignment="Bottom"
-                              Style="{StaticResource PRstyle}"
-                              Height="20"
-                              IsActive="True"
-                              IsEnabled="True"
-                              Name="PRCheckUsernameAvailability"
-                              />
-                <TextBlock Text="username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen"
+                    <TextBlock Text="username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen"
                           Grid.Row="1"
                            Name="txtBlockUsernameStatus"
                            Visibility="{Binding Org.IsUsernameValid , Converter={StaticResource Converter}}"
                            Style="{StaticResource txtBlockError}"
                            />
+                    
+                    <ProgressBar IsIndeterminate="True" Margin="16,4"
+                                 Visibility="Collapsed"
+                                 Name="PBCheckUserName"/>
+                </StackPanel>
+
+                
                 <TextBox Style="{StaticResource txtBoxStyle}"
                          MaxLength="100"
                          Grid.Row="2"
@@ -102,12 +89,6 @@
                          >
                     <TextBox.Header>organisation full name</TextBox.Header>
                 </TextBox>
-                <AppBarButton Icon="{Binding Org.NameValidIcon}" Foreground="Black"
-                              Grid.Row="2"
-                              IsCompact="True"
-                              VerticalAlignment="Bottom"
-                              Grid.Column="1"
-                              />
                 <TextBlock Style="{StaticResource txtBlockError}"
                            Grid.Row="3"
                            Visibility="{Binding Org.IsNameValid , Converter={StaticResource Converter}}"
@@ -123,12 +104,6 @@
                          PlaceholderText="What happens in your organisation ?"
                          >
                 </TextBox>
-                <AppBarButton IsCompact="True"
-                              Grid.Column="1"
-                              Icon="{Binding Org.DescValidIcon}"
-                              VerticalAlignment="Bottom"
-                              Foreground="Black"
-                              Grid.Row="4"/>
                 <TextBlock Style="{StaticResource txtBlockError}"
                            Text="Describe the organisation in at least 10 characters"
                            Visibility="{Binding Org.IsDescValid, Converter={StaticResource Converter}}"

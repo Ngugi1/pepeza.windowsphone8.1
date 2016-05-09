@@ -9,23 +9,18 @@ namespace Pepeza.Server.Validation
 {
     public class OrgValidation : ValidationBase
     {
+         
         public static bool VaidateOrgName(string name)
         {
-            if (!string.IsNullOrEmpty(name) &&
-                !string.IsNullOrWhiteSpace(name) && name.Length >= 3)
+            if (name.Any(char.IsLetterOrDigit) && !String.IsNullOrWhiteSpace(name))
             {
-                if (name.Any(char.IsLetterOrDigit))
-                    return true;
-                return false;
+                return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         public static bool ValidateDescription(string desc)
         {
-            return !string.IsNullOrWhiteSpace(desc) && !string.IsNullOrEmpty(desc) && desc.Length >= 10 && !desc.Any(char.IsSymbol) && !desc.Any(char.IsPunctuation)&&desc.Any(char.IsLetterOrDigit);
+            return !string.IsNullOrWhiteSpace(desc) && !string.IsNullOrEmpty(desc) && desc.Length >= 10 &&desc.Any(char.IsLetterOrDigit);
         }
     }
 }

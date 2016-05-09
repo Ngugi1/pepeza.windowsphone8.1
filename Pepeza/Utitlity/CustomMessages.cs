@@ -12,6 +12,7 @@ namespace Pepeza.Utitlity
         public static string  USERNAME_DEFAULT_ERROR_MESSAGE { get { return "username must contain atleast 4 characters(letters , digits or underscore)"; } }
         public static string EMAIL_DEFAULT_MESSAGE { get { return "Please enter a valid email address"; } }
         public static string EMAIL_NOT_AVAILABLE { get { return "Please enter a valid email address"; } }
+        public static string USERNAME_TAKEN { get { return "Sorry , username is already taken!";} }
 
 
     }

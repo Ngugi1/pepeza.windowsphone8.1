@@ -106,109 +106,47 @@ namespace Pepeza.Views.Orgs
             }
         }
 
-        private async void txtBoxUsername_LostFocus(object sender, RoutedEventArgs e)
-        {
-            AddOrgModel model = (sender as TextBox).DataContext as AddOrgModel;
-
-            if (model.IsUsernameValid && !string.IsNullOrEmpty(txtBoxUsername.Text) && !string.IsNullOrWhiteSpace(txtBoxUsername.Text))
-            {
-                //collapse the status button
-                switchRingAppBtn(true);
-
-                //If it is valid , search for the availability
-                Dictionary<string, string> results = await RequestUser.checkUsernameAvalability(model.Username);
-                if (results.ContainsKey(Constants.USER_EXISTS))
-                {
-                    //Check the value
-                    if ((int.Parse(results[Constants.USER_EXISTS])) == 0)
-                    {
-                        //User doesn't exist 
-                        switchRingAppBtn(false);
-                        model.IsUsernameValid = true;
-                        model.CanCreateOrg = false;
-                    }
-                    else
-                    {
-                        //Username is already taken
-                        switchRingAppBtn(false);
-                        txtBlockUsernameStatus.Text = "Sorry , username is already taken!";
-                        model.IsUsernameValid = false;
-                        AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
-                    }
-                }
-                else
-                {
-                    //Display the error
-                    switchRingAppBtn(false);
-                    txtBlockUsernameStatus.Text = results[Constants.ERROR];
-                    model.IsUsernameValid = false;
-                    AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
-                }
-
-            }
-
-        }
-
-        //Just pass the visibility of one of the items
-        private void switchRingAppBtn(bool visibility)
-        {
-            if (visibility)
-            {
-                PRCheckUsernameAvailability.Visibility = Visibility.Visible;
-                AppBtnIsUsernameValid.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                PRCheckUsernameAvailability.Visibility = Visibility.Collapsed;
-                AppBtnIsUsernameValid.Visibility = Visibility.Visible;
-            }
-
-        }
-
         private async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (OrgValidation.IsUsernameValid(txtBoxUsername.Text.Trim()))
+            ViewModels.ViewModelCreateOrg model = ((sender as TextBox).DataContext )as ViewModels.ViewModelCreateOrg;
+            if (UserValidation.IsUsernameValid(txtBoxUsername.Text.Trim()))
             {
-                AddOrgModel model = (sender as TextBox).DataContext as AddOrgModel;
-                //collapse the status button
-                switchRingAppBtn(true);
-
                 //If it is valid , search for the availability
+                PBCheckUserName.Visibility = Visibility.Visible;
                 Dictionary<string, string> results = await RequestUser.checkUsernameAvalability(txtBoxUsername.Text.Trim());
                 if (results.ContainsKey(Constants.USER_EXISTS))
                 {
+
                     //Check the value
                     if ((int.Parse(results[Constants.USER_EXISTS])) == 0)
                     {
                         //User doesn't exist 
-                        switchRingAppBtn(false);
-                        model.IsUsernameValid = true;
-                        model.CanCreateOrg = false;
+                        model.Org.IsUsernameValid = true;
+                        model.Org.CanCreateOrg = true;
+                        
                     }
                     else
                     {
                         //Username is already taken
-                        switchRingAppBtn(false);
-                        txtBlockUsernameStatus.Text = "Sorry , username is already taken!";
-                        model.IsUsernameValid = false;
-                        AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
+                        txtBlockUsernameStatus.Text = CustomMessages.USERNAME_TAKEN;
+                        model.Org.IsUsernameValid = false;
+                        model.Org.CanCreateOrg = false;
                     }
                 }
                 else
                 {
                     //Display the error
-                    switchRingAppBtn(false);
                     txtBlockUsernameStatus.Text = results[Constants.ERROR];
-                    model.IsUsernameValid = false;
-                    AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
+                    model.Org.IsUsernameValid = false;
                 }
 
             }
             else
             {
-                txtBlockUsernameStatus.Text = "username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen";
+                //Username is invalid 
+                txtBlockUsernameStatus.Text = CustomMessages.USERNAME_DEFAULT_ERROR_MESSAGE;
             }
-
+            PBCheckUserName.Visibility = Visibility.Collapsed;
         }
     }
 }

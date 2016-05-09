@@ -20,15 +20,9 @@ namespace Pepeza.ViewModels
             Org= new AddOrgModel(this);
             AddOrg  = new CommandAddOrg(this);
         }
-        public bool canCreateOrg()
+        public bool canCreateOrg(bool IsUsernameValid, bool IsNameValid, bool IsDescValid)
         {
-            return Org.IsDescValid && Org.IsUsernameValid && Org.IsNameValid && OrgValidation.ValidateDescription(Org.Desc)
-                && OrgValidation.VaidateOrgName(Org.Name) && OrgValidation.IsUsernameValid(Org.Name);
-        }
-         public SymbolIcon getSymbolIcon(bool valid)
-        {
-            if (valid) return new SymbolIcon(Symbol.Accept);
-            return new SymbolIcon(Symbol.Cancel);
+            return IsDescValid && IsUsernameValid && IsNameValid;
         }
     }
 }

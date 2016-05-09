@@ -18,19 +18,19 @@ namespace Pepeza.Models.OrgsModels
         {
             this.viewModel = viewModel;
         }
-        #region Input fields 
+        #region Input fields
         //Org username 
         private string _username;
 
         public string Username
         {
             get { return _username; }
-            set 
+            set
             {
                 _username = value;
                 IsUsernameValid = OrgValidation.IsUsernameValid(_username);
                 onPropertyChanged("Username");
-                CanCreateOrg = viewModel.canCreateOrg();
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
             }
         }
 
@@ -40,15 +40,15 @@ namespace Pepeza.Models.OrgsModels
         public string Name
         {
             get { return _name; }
-            set 
-            { 
+            set
+            {
                 _name = value;
                 onPropertyChanged("Name");
                 IsNameValid = OrgValidation.VaidateOrgName(_name);
-                CanCreateOrg = viewModel.canCreateOrg();
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid ,IsNameValid, IsDescValid);
             }
         }
-        private string  _desc;
+        private string _desc;
 
         //Description of the organisation
         public string Desc
@@ -59,7 +59,7 @@ namespace Pepeza.Models.OrgsModels
                 _desc = value;
                 onPropertyChanged("Desc");
                 IsDescValid = OrgValidation.ValidateDescription(_desc);
-                CanCreateOrg = viewModel.canCreateOrg();
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
             }
         }
         #endregion
@@ -70,11 +70,10 @@ namespace Pepeza.Models.OrgsModels
         public bool IsUsernameValid
         {
             get { return _isUsernameValid; }
-            set 
-            { 
+            set
+            {
                 _isUsernameValid = value;
                 onPropertyChanged("IsUsernameValid");
-                UsernameValidIcon = viewModel.getSymbolIcon(IsUsernameValid);
             }
         }
 
@@ -83,12 +82,11 @@ namespace Pepeza.Models.OrgsModels
         public bool IsNameValid
         {
             get { return _isNameValid; }
-            set 
-            { 
+            set
+            {
                 _isNameValid = value;
                 onPropertyChanged("IsNameValid");
-                NameValidIcon = viewModel.getSymbolIcon(IsNameValid);
-                
+
             }
         }
 
@@ -97,12 +95,11 @@ namespace Pepeza.Models.OrgsModels
         public bool IsDescValid
         {
             get { return _isDescValid; }
-            set 
+            set
             {
                 _isDescValid = value;
                 onPropertyChanged("IsDescValid");
-                DescValidIcon = viewModel.getSymbolIcon(IsDescValid);
-                CanCreateOrg = viewModel.canCreateOrg();
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
             }
         }
 
@@ -124,7 +121,7 @@ namespace Pepeza.Models.OrgsModels
         public bool IsProgressRingVisible
         {
             get { return _isProgressRingVisible; }
-            set 
+            set
             {
                 _isProgressRingVisible = value;
                 onPropertyChanged("IsProgressRingVisible");
@@ -138,35 +135,7 @@ namespace Pepeza.Models.OrgsModels
             get { return _isCheckingUsername; }
             set { _isCheckingUsername = value; }
         }
-        
+
         #endregion
-        #region AppButton Region
-        private SymbolIcon _usernameValidIcon = new SymbolIcon(Symbol.Cancel);
-
-        public SymbolIcon UsernameValidIcon
-        {
-            get { return _usernameValidIcon; }
-            set
-            { _usernameValidIcon = value;
-            onPropertyChanged("UsernameValidIcon");
-            }
-        }
-
-        private SymbolIcon _nameValidIcon = new SymbolIcon(Symbol.Cancel);
-
-        public SymbolIcon NameValidIcon
-        {
-            get { return _nameValidIcon; }
-            set { _nameValidIcon = value; onPropertyChanged("NameValidIcon"); }
-        }
-
-        private SymbolIcon _descValidicon = new SymbolIcon(Symbol.Cancel);
-
-        public SymbolIcon DescValidIcon
-        {
-            get { return _descValidicon; }
-            set { _descValidicon = value; onPropertyChanged("DescValidIcon");}
-            }
-        }
-    #endregion
+    }
 }
