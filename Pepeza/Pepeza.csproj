@@ -148,6 +148,7 @@
     <Compile Include="Server\Utility\NoticeAddresses.cs" />
     <Compile Include="Server\Utility\OrgsAddresses.cs" />
     <Compile Include="Server\Utility\UserAddresses.cs" />
+    <Compile Include="Utitlity\CustomMessages.cs" />
     <Compile Include="Validation\OrgValidation.cs" />
     <Compile Include="Validation\TextNoticeValidation.cs" />
     <Compile Include="Validation\ValidationBase.cs" />

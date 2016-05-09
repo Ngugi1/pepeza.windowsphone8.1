@@ -90,7 +90,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(UserAddresses.USER_EXISTS +"?="+ username);
+                    response = await client.GetAsync(UserAddresses.USER_EXISTS +"?u="+ username);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Get the JSON string
@@ -125,7 +125,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(UserAddresses.EMAIL_EXISTS + "?e=" + email);
+                    response = await client.GetAsync(UserAddresses.EMAIL_EXISTS);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Request was successfull 

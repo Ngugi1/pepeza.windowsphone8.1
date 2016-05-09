@@ -33,7 +33,7 @@ namespace Pepeza.Views.Orgs
     public sealed partial class AddOrg : Page
     {
 
-        
+
         public AddOrg()
         {
             this.InitializeComponent();
@@ -58,7 +58,7 @@ namespace Pepeza.Views.Orgs
                 OrgValidation.VaidateOrgName(txtBoxOrgName.Text.Trim()) &&
                 OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim()))
             {
-               
+
                 Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
                 {
                     {"username" , txtBoxUsername.Text.Trim()},
@@ -72,7 +72,7 @@ namespace Pepeza.Views.Orgs
                         JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
                         int rows = await Db.DbHelpers.OrgHelper.add(new TOrgInfo()
                         {
-                            
+
                             id = (int)orgInfo["id"],
                             username = model.Username,
                             name = model.Name,
@@ -106,11 +106,11 @@ namespace Pepeza.Views.Orgs
             }
         }
 
-        private  async void txtBoxUsername_LostFocus(object sender, RoutedEventArgs e)
+        private async void txtBoxUsername_LostFocus(object sender, RoutedEventArgs e)
         {
-            AddOrgModel model = btnCreate.CommandParameter as AddOrgModel;
-             
-            if (model.IsUsernameValid &&!string.IsNullOrEmpty(txtBoxUsername.Text)&&!string.IsNullOrWhiteSpace(txtBoxUsername.Text))
+            AddOrgModel model = (sender as TextBox).DataContext as AddOrgModel;
+
+            if (model.IsUsernameValid && !string.IsNullOrEmpty(txtBoxUsername.Text) && !string.IsNullOrWhiteSpace(txtBoxUsername.Text))
             {
                 //collapse the status button
                 switchRingAppBtn(true);
@@ -120,7 +120,7 @@ namespace Pepeza.Views.Orgs
                 if (results.ContainsKey(Constants.USER_EXISTS))
                 {
                     //Check the value
-                    if ((int.Parse(results[Constants.USER_EXISTS]))==0)
+                    if ((int.Parse(results[Constants.USER_EXISTS])) == 0)
                     {
                         //User doesn't exist 
                         switchRingAppBtn(false);
@@ -146,10 +146,11 @@ namespace Pepeza.Views.Orgs
                 }
 
             }
-           
+
         }
+
         //Just pass the visibility of one of the items
-        private void switchRingAppBtn( bool visibility)
+        private void switchRingAppBtn(bool visibility)
         {
             if (visibility)
             {
@@ -164,9 +165,50 @@ namespace Pepeza.Views.Orgs
 
         }
 
-        private void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
+        private async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
-            txtBlockUsernameStatus.Text = "username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen";
+            if (OrgValidation.IsUsernameValid(txtBoxUsername.Text.Trim()))
+            {
+                AddOrgModel model = (sender as TextBox).DataContext as AddOrgModel;
+                //collapse the status button
+                switchRingAppBtn(true);
+
+                //If it is valid , search for the availability
+                Dictionary<string, string> results = await RequestUser.checkUsernameAvalability(txtBoxUsername.Text.Trim());
+                if (results.ContainsKey(Constants.USER_EXISTS))
+                {
+                    //Check the value
+                    if ((int.Parse(results[Constants.USER_EXISTS])) == 0)
+                    {
+                        //User doesn't exist 
+                        switchRingAppBtn(false);
+                        model.IsUsernameValid = true;
+                        model.CanCreateOrg = false;
+                    }
+                    else
+                    {
+                        //Username is already taken
+                        switchRingAppBtn(false);
+                        txtBlockUsernameStatus.Text = "Sorry , username is already taken!";
+                        model.IsUsernameValid = false;
+                        AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
+                    }
+                }
+                else
+                {
+                    //Display the error
+                    switchRingAppBtn(false);
+                    txtBlockUsernameStatus.Text = results[Constants.ERROR];
+                    model.IsUsernameValid = false;
+                    AppBtnIsUsernameValid.Icon = new SymbolIcon(Symbol.Cancel);
+                }
+
+            }
+            else
+            {
+                txtBlockUsernameStatus.Text = "username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen";
+            }
+
         }
     }
 }

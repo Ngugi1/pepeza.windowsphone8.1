@@ -47,31 +47,48 @@
                       VerticalScrollBarVisibility="Auto" Margin="0,1.833,0,-2" 
                       >
             <StackPanel Margin="0">
-                <TextBox
+                <StackPanel>
+                    <TextBox
                     TextChanged="txtBoxUsername_TextChanged"    
                     Header="Username"    
                     Text="{Binding Username, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
                     Name="txtBoxUsername"
                     Style="{StaticResource txtBoxStyle}"
                     IsSpellCheckEnabled="False"
-                    LostFocus="txtBoxUsername_LostFocus"
                     PlaceholderText="choose a username"
                          />
+                    <ProgressBar IsIndeterminate="True" 
+                                IsEnabled="True"
+                                 Margin="16,4"
+                                 Name="PBCheckUsername"
+                                 Visibility="Collapsed"
+                                 />
+                </StackPanel>
                 <TextBlock Style="{StaticResource txtBlockError}"
                        Name="txtBlockUsernameStatus" 
                        Visibility="{Binding IsUsernameValid , Mode=TwoWay , Converter={StaticResource converter}}"    
                        Text="username must contain atleast 4 characters(letters , digits or underscore)"
                        />
+                <StackPanel>
                 <TextBox Header="email"
                      Name="txtBoxEmail"
                      InputScope="EmailSmtpAddress"
                      IsSpellCheckEnabled="False"
                      Text="{Binding Email , Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource txtBoxStyle}"
+                     TextChanged="txtBoxEmail_TextChanged"
+                         Style="{StaticResource txtBoxStyle}"
                      PlaceholderText="someone@something.com"
                      />
+                    <ProgressBar IsIndeterminate="True"
+                                 IsEnabled="True"
+                                 Visibility="Collapsed"
+                                 Margin="16,4"
+                                 Name="PBCheckEmail"
+                                 />
+                </StackPanel>
                 <TextBlock Name="txtBlockEmailStatus"
-                       Style="{StaticResource txtBlockError}"     
+                       Style="{StaticResource txtBlockError}" 
+                        
                        Visibility="{Binding Path=IsEmailValid , Mode=TwoWay , Converter={StaticResource converter}}"
                        Text="Please enter a valid email address" 
                        />

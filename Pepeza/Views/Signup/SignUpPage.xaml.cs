@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -40,22 +41,10 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-        }
-
+      
         private void hypBtnLogin_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(LoginPage));
-        }
-       
-        private void txtBoxUsername_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (UserValidation.IsUsernameValid(txtBoxUsername.Text.Trim()))
-            {
-                //check username avaliability 
-
-            }
         }
 
         //Now make the request to the server
@@ -119,12 +108,45 @@ namespace Pepeza.Views
         {
             return new SignUp() { username = user.Username, email = user.Email, password = user.Password };
         }
-
-        private async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
+        //check username availability 
+        private  async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
         {
-         
+            if (!UserValidation.IsUsernameValid(txtBoxUsername.Text.Trim()))
+            {
+                txtBlockUsernameStatus.Text = CustomMessages.USERNAME_DEFAULT_ERROR_MESSAGE;
+            }
+            else
+            {
+                User user = (sender as TextBox).DataContext as User;
+                PBCheckUsername.Visibility = Visibility.Visible;
+                txtBlockUsernameStatus.Visibility = Visibility.Collapsed;
+                //check username avaliability
+                Dictionary<string, string> results = await RequestUser.checkUsernameAvalability(txtBoxUsername.Text.Trim());
+                if (results.ContainsKey(Constants.USER_EXISTS))
+                {
+                    //We have results 
+                    if (results[Constants.USER_EXISTS] == "1")
+                    {
+                        //Username exists
+                        txtBlockUsernameStatus.Text = CustomMessages.USERNAME_NOT_AVAILABLE;
+                        user.IsUsernameValid = false;
+                        txtBlockUsernameStatus.Visibility = Visibility.Visible;
+
+                    }
+                    PBCheckUsername.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    //We have errors
+                    txtBlockUsernameStatus.Text = results[Constants.ERROR];
+                    user.IsUsernameValid = false;
+                    txtBlockUsernameStatus.Visibility = Visibility.Visible;
+                }
+                PBCheckUsername.Visibility = Visibility.Collapsed;
+            }
         }
 
+        //check email availability
         private void processErrors(Dictionary<string, string> errors , User usr)
         {
                if(errors.ContainsKey("1"))
@@ -157,6 +179,41 @@ namespace Pepeza.Views
                         errors.Remove("5");
                     }
             }
+
+        private async void txtBoxEmail_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!UserValidation.IsEmailValid(txtBoxEmail.Text.Trim()))
+            {
+                txtBlockEmailStatus.Text = CustomMessages.EMAIL_DEFAULT_MESSAGE;
+                txtBlockEmailStatus.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                //check whether email is availabe or not 
+                User user = (sender as TextBox).DataContext as User;
+                PBCheckEmail.Visibility = Visibility.Visible;
+                Dictionary<string, string> results = await RequestUser.checkEmailAvailability(txtBoxEmail.Text.Trim());
+                if (results.ContainsKey(Constants.EMAIL_EXISTS))
+                {
+                    if (results[Constants.EMAIL_EXISTS] == "1")
+                    {
+                        //Email already exists
+                        txtBlockEmailStatus.Text = CustomMessages.EMAIL_NOT_AVAILABLE;
+                        txtBlockEmailStatus.Visibility = Visibility.Visible;
+                        user.IsEmailValid = false;
+                    }
+                }
+                else
+                {
+                    txtBlockEmailStatus.Text = results[Constants.ERROR];
+                    txtBlockEmailStatus.Visibility = Visibility.Visible;
+                    user.IsEmailValid = false;
+                }
+                PBCheckEmail.Visibility = Visibility.Collapsed;
+            }
+        }
+
         } 
+
         
     }

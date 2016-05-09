@@ -17,6 +17,29 @@ namespace Pepeza.Models
         #region Validation Properties
         //Validattion properties
         private bool _isOverallErrorTextBlockVisible = false;
+        private bool _isUsernameAvailavle;
+
+        public bool IsUsernameAvailable
+        {
+            get { return _isUsernameAvailavle; }
+            set 
+            { 
+                _isUsernameAvailavle = value;
+                onPropertyChanged("IsUsernameAvailable");
+            }
+        }
+
+        private bool _isEmailAvailable;
+
+        public bool IsEmailAvailable
+        {
+            get { return _isEmailAvailable; }
+            set {
+                _isEmailAvailable = value; 
+                onPropertyChanged("IsEmailAvailable"); }
+
+        }
+        
 
         public bool IsoverAllErrorsVisible
         {
