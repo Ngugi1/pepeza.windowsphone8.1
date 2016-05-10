@@ -79,6 +79,7 @@ namespace Pepeza.Views.Notices
                         {
                             JObject obj = JObject.Parse(results[Constants.SUCCESS]);
                             await NoticeHelper.add(new TNotice() { 
+                            noticeId = (int)obj["id"],
                              boardId = boardID ,
                              title = title,
                              content = desc ,
