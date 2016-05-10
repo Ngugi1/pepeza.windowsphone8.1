@@ -63,7 +63,7 @@ namespace Pepeza.Views.Orgs
             else if(e.NavigationMode == NavigationMode.Back)
             {
                 //Load data locally
-                loadUserOrgsLocally();
+               // loadUserOrgsLocally();
             }
 
         }
@@ -140,7 +140,7 @@ namespace Pepeza.Views.Orgs
         private void ListViewUserBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Start saving page state
-            Settings.add(PageStateConstants.USER_ORGS, JsonConvert.SerializeObject(ListViewUserBoards.ItemsSource));
+            //Settings.add(PageStateConstants.USER_ORGS, JsonConvert.SerializeObject(ListViewUserBoards.ItemsSource));
             //Prepare parameters to pass
             Organization org = (sender as ListView).SelectedItem as Organization;
             if (org != null) this.Frame.Navigate(typeof(OrgProfileAndBoards), org);

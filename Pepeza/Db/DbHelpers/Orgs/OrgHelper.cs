@@ -10,18 +10,19 @@ namespace Pepeza.Db.DbHelpers
 {
     public class OrgHelper : DBHelperBase
     {
-        public  static TOrgInfo get(int id)
+        public  async static Task<TOrgInfo> get(int id)
         {
             TOrgInfo info = null;
-            var connection = DbHelper.DbConnection();
+            var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
                 try
                 {
-                    info = connection.Query<TOrgInfo>("SELECT * FROM TOrgInfo WHERE id=?", id).FirstOrDefault();
+                    info = await connection.GetAsync<TOrgInfo>(id);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    var x = ex.ToString();
                     info = null;
                 }
                

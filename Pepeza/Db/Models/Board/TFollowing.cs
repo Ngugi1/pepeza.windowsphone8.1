@@ -129,6 +129,6 @@ namespace Pepeza.Db.Models.Board
                 onPropertyChanged("DateCreated");
             }
         }
-        public string following { get; set; }
+        public int following { get; set; }
     }
 }

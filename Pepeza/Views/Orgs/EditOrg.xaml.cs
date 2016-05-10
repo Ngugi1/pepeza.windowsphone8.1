@@ -28,7 +28,7 @@ namespace Pepeza.Views.Orgs
     /// </summary>
     public sealed partial class EditOrg : Page
     {
-        Organization org = null;
+        TOrgInfo org = null;
         public EditOrg()
         {
             this.InitializeComponent();
@@ -43,11 +43,11 @@ namespace Pepeza.Views.Orgs
         {
             if (e.Parameter != null)
             {
-               org = e.Parameter as Organization;
+                org = e.Parameter as TOrgInfo;
                 EditOrgModel orgModel = RootGrid.DataContext as EditOrgModel;
-                orgModel.Name = org.Name;
-                orgModel.Desc = org.Description;
-                txtBlockUsername.Text = org.Username;
+                orgModel.Name = org.name;
+                orgModel.Desc = org.description;
+                txtBlockUsername.Text = org.username;
             }
         }
 
@@ -63,12 +63,12 @@ namespace Pepeza.Views.Orgs
 
         private  async void UpdateProfileClick(EditOrgModel model)
         {
-            Dictionary<string, string> results = await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId" , org.Id.ToString()} 
-                ,{"username" ,"ngugi0690"+org.Id},{ "name", model.Name }, { "description", model.Desc } });
+            Dictionary<string, string> results = await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId" , org.id.ToString()} 
+                ,{"username" ,org.username},{ "name", model.Name }, { "description", model.Desc } });
             if (results != null && results.ContainsKey(Constants.SUCCESS))
             {
                 //Update the information n the local database
-                TOrgInfo info = OrgHelper.get(org.Id);
+                TOrgInfo info =  await OrgHelper.get(org.id);
                 info.name = model.Name;
                 info.description = model.Desc;
                int k =  await OrgHelper.update(info);

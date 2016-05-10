@@ -36,6 +36,7 @@ namespace Pepeza.Views.Orgs
     
     public sealed partial class OrgProfileAndBoards : Page
     {
+        bool isOrgMine = false;
         ObservableCollection<TBoard> boards = new ObservableCollection<TBoard>();
         public bool areBoardsLoaded { get; set; }
         public bool isProfileLoaded { get; set; }
@@ -72,6 +73,8 @@ namespace Pepeza.Views.Orgs
             {
                 loadPageState();
             }
+            //check if the org is urs 
+           
             
         }
 
@@ -123,12 +126,19 @@ namespace Pepeza.Views.Orgs
             //Prepare UI for loading
             fetchingProfile(true);
             //Determine whethe to get them locally or online , check that the org ID exists locally or not 
-            if (OrgHelper.get(orgID) != null)
+            TOrgInfo localOrg = await OrgHelper.get(orgID);
+            if (localOrg!=null)
             {
-                await loadProfileLocally();
+                isOrgMine = true;
+                enabeDisableAppBtnEdit(true);
+                RootGrid.DataContext = localOrg;
+                //await loadProfileLocally();
             }
             else
             {
+                //This board doesnt belong to this user and he or she cannot edit it
+                enabeDisableAppBtnEdit(false);
+                isOrgMine = false;
                 Dictionary<string, string> results = await OrgsService.getOrg(orgID);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
@@ -162,7 +172,7 @@ namespace Pepeza.Views.Orgs
 
         private async Task loadProfileLocally()
         {
-            RootGrid.DataContext = OrgHelper.get(OrgID);
+            RootGrid.DataContext = await OrgHelper.get(OrgID);
         }
         private async Task loadBoardsLocally()
         {    
@@ -178,6 +188,14 @@ namespace Pepeza.Views.Orgs
                     //load profile
                     if (!isProfileLoaded)
                     {
+                        if(isOrgMine)
+                        {
+                            enabeDisableAppBtnEdit(true);
+                        }
+                        else
+                        {
+                            enabeDisableAppBtnEdit(false);
+                        }
                         await getOrgDetails(OrgID);
                     }
                     break;
@@ -185,6 +203,7 @@ namespace Pepeza.Views.Orgs
                     //load boards
                     if (!areBoardsLoaded)
                     {
+                        enabeDisableAppBtnEdit(false);
                         areBoardsLoaded= await fetchOrgBoards(OrgID);
                     }
                     break;
@@ -202,7 +221,7 @@ namespace Pepeza.Views.Orgs
         {
             //start the progress bar
             fetchingBoards(true);
-            if (OrgHelper.get(orgId) != null)
+            if (await OrgHelper.get(orgId) != null)
             {
                 await loadBoardsLocally();
             }
@@ -245,8 +264,17 @@ namespace Pepeza.Views.Orgs
         private void ListViewOrgBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             savePageState();
-            TBoard board = (sender as ListView).SelectedItem as TBoard;
-            this.Frame.Navigate(typeof(BoardProfile), board.id);
+            
+                TBoard board = (sender as ListView).SelectedItem as TBoard;
+                if (board != null)
+                {
+                    Dictionary<string, string> parameters = new Dictionary<string, string>()
+                {
+                   {"id",board.id.ToString()},{"name" , board.name}
+                };
+                    this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices), parameters);
+                }
+                       
         }
         private  void savePageState()
         {
@@ -281,6 +309,23 @@ namespace Pepeza.Views.Orgs
                 StackPanelLoading.Visibility = Visibility.Collapsed;
                 ListViewOrgBoards.Opacity = 1;
                 areBoardsLoaded = true;
+            }
+        }
+
+        private void EditProfilleClick(object sender, RoutedEventArgs e)
+        {
+            TOrgInfo org = RootGrid.DataContext as TOrgInfo;
+            if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
+        }
+        private void enabeDisableAppBtnEdit(bool enable)
+        {
+            if (enable)
+            {
+                AppBtnEdit.IsEnabled = true;
+            }
+            else
+            {
+                AppBtnEdit.IsEnabled = false;
             }
         }
     }

@@ -51,7 +51,7 @@
                         HorizontalAlignment="Right"
                         IsEnabled="True"
                         Background="{StaticResource BtnBackground}"
-                        Content="Follow board"
+                        Content="Follow"
                         Name="btnFollow"
                         Checked="btnFollow_Checked"
                         Unchecked="btnFollow_Unchecked"

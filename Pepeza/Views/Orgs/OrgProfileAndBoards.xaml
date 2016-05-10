@@ -213,11 +213,22 @@
                     <toast:Toastinet Height="Auto"
                                      TextWrapping="WrapWholeWords"
                                      Background="{StaticResource mainForeground}"
-Name="toastErrorsInBoards"
+                                     Name="toastErrorsInBoards"
                                      VerticalAlignment="Center"
                                      />
                 </Grid>
             </PivotItem>
         </Pivot>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Background="{StaticResource mainForeground}"
+                    >
+            <AppBarButton Icon="Edit"
+                          Name="AppBtnEdit"
+                          Label="edit"
+                          IsCompact="True"
+                          Click="EditProfilleClick"
+                          />
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
