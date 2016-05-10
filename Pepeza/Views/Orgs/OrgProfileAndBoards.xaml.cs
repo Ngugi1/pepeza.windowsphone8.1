@@ -315,7 +315,16 @@ namespace Pepeza.Views.Orgs
         private void EditProfilleClick(object sender, RoutedEventArgs e)
         {
             TOrgInfo org = RootGrid.DataContext as TOrgInfo;
-            if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
+            if (org.description == null)
+            {
+                toastErros.Message = "Permission Denied!";
+            }
+            else
+            {
+                if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
+                
+            }
+            
         }
         private void enabeDisableAppBtnEdit(bool enable)
         {
