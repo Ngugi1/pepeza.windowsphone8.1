@@ -1,4 +1,5 @@
-﻿using Pepeza.Db.DbHelpers;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.DbHelpers;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.OrgsModels;
 using Pepeza.Models.Search_Models;
@@ -71,7 +72,19 @@ namespace Pepeza.Views.Orgs
                 TOrgInfo info =  await OrgHelper.get(org.id);
                 info.name = model.Name;
                 info.description = model.Desc;
+                JObject obj = JObject.Parse(results[Constants.SUCCESS]);
+                if (obj != null)
+                {
+                    info.timezone_type_updated = (int)obj["dateUpdated"]["timezone_type"];
+                    info.dateUpdated = (DateTime)obj["dateUpdated"]["date"];
+                    info.timezone_updated = (string)obj["dateUpdated"]["timezone"];
+                }
                int k =  await OrgHelper.update(info);
+               
+               this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization() { Id = info.id});
+               this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+               this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+               
             }
             else
             {

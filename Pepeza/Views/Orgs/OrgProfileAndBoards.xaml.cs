@@ -198,6 +198,7 @@ namespace Pepeza.Views.Orgs
                         }
                         await getOrgDetails(OrgID);
                     }
+                    enabeDisableAppBtnEdit(true);
                     break;
                 case 1:
                     //load boards
@@ -206,6 +207,7 @@ namespace Pepeza.Views.Orgs
                         enabeDisableAppBtnEdit(false);
                         areBoardsLoaded= await fetchOrgBoards(OrgID);
                     }
+                    enabeDisableAppBtnEdit(false);
                     break;
                 default
                 :
