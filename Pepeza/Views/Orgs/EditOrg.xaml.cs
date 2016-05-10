@@ -84,7 +84,6 @@ namespace Pepeza.Views.Orgs
                this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization() { Id = info.id});
                this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
                this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-               
             }
             else
             {

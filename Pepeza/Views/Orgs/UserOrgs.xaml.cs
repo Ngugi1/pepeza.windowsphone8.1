@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pepeza.Common;
 using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
@@ -30,14 +31,18 @@ namespace Pepeza.Views.Orgs
     /// </summary>
     public sealed partial class UserOrgs : Page
     {
+ //Page state 
+        private NavigationHelper navigationHelper;
+
         public Person person { get; set; }
         private ObservableCollection<Organization> UserOrganisations = new ObservableCollection<Organization>();
         public UserOrgs()
         {
             this.InitializeComponent();
+            //Register Navigation Helper
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-
-
+        
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -63,7 +68,8 @@ namespace Pepeza.Views.Orgs
             else if(e.NavigationMode == NavigationMode.Back)
             {
                 //Load data locally
-               // loadUserOrgsLocally();
+                
+
             }
 
         }
@@ -144,7 +150,7 @@ namespace Pepeza.Views.Orgs
             //Prepare parameters to pass
             Organization org = (sender as ListView).SelectedItem as Organization;
             if (org != null) this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
-
+    
         }
         private void isfetchingOrgs(bool isfetching)
         {

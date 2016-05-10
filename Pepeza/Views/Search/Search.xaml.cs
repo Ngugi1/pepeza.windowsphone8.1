@@ -48,6 +48,7 @@ namespace Pepeza.Views
         public Search()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
         #region Controls' Events
@@ -58,6 +59,14 @@ namespace Pepeza.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                txtBoxSearch.Text = "";
+                listViewSearchOrgs.ItemsSource = ListViewUser.ItemsSource = ListViewBoards.ItemsSource = null;
+            }
+            PivotSearch.SelectedIndex = 0;
+            updateWhatToSearch();
+            txtBlockWhat.Visibility = Visibility.Visible;
         }
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -193,7 +202,7 @@ namespace Pepeza.Views
         /// <returns></returns>
         private async Task searchUser()
         {
-            personSource.Clear();
+            personSource = new ObservableCollection<Person>();
             txtBlockWhat.Visibility = Visibility.Collapsed;
             Dictionary<string, string> searchResults = await RequestUser.searchUser(txtBoxSearch.Text.Trim());
             if (searchResults.ContainsKey(Constants.SUCCESS))
@@ -267,11 +276,12 @@ namespace Pepeza.Views
         /// <returns></returns>
         private async Task searchBoards()
          {
-             boardSource.Clear();
+             boardSource = new ObservableCollection<Models.Search_Models.Board>();
             try
             {
 
                 Dictionary<string, string> results = await BoardService.searchBoard(txtBoxSearch.Text);
+                boardSource = new ObservableCollection<Models.Search_Models.Board>();
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                         //Go ahead and get a list 
