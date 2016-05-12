@@ -9,6 +9,7 @@ using Pepeza.Views.Account;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
+using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,7 @@ namespace Pepeza
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+            
         }
 
         /// <summary>
@@ -201,6 +203,39 @@ namespace Pepeza
         private void AppBarButton_Settings(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(DeactivateAccount));
+        }
+        private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            FrameworkElement element = sender as FrameworkElement;
+            FlyoutBase flyout = FlyoutBase.GetAttachedFlyout(element);
+            flyout.ShowAt(element);
+        }
+        private async void MenuFlyoutItem_Delete(object sender, RoutedEventArgs e)
+        {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext as TBoard;
+            Dictionary<string, string> deleteResults = await BoardService.deleteBoard(datacontext.id);
+            Dictionary<string,string> isSuccess = await BoardViewHelper.isBoardDeleted(deleteResults , datacontext);
+            if(isSuccess.ContainsKey(Constants.DELETED))
+            {
+                //show toast with given message 
+                boards.Remove(datacontext);
+                ListViewBoards.ItemsSource = boards;
+                ToastSuccessFailure.Message = isSuccess[Constants.DELETED];
+            }
+            else
+            {
+                //toast 
+                ToastSuccessFailure.Message = isSuccess[Constants.NOT_DELETED];
+            }
+        
+        }
+        private void MenuFlyOutEdit_Tapped(object sender, RoutedEventArgs e)
+        {
+            var datacontext = (e.OriginalSource as FrameworkElement).DataContext as TBoard;
+            if (datacontext != null)
+            {
+                this.Frame.Navigate(typeof(UpdateBoard), datacontext);
+            }
         }
 
        

@@ -58,6 +58,7 @@ namespace Pepeza.Views.Orgs
                 {
                     person = (e.Parameter as Person);
                     HeaderStackPanel.DataContext = person;
+                    UserOrganisations.Clear();
                     loadUserBoards(person.id);
                 }
                 else

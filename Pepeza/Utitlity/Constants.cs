@@ -22,5 +22,7 @@ namespace Pepeza.Utitlity
         public static string USER_EXISTS { get { return "USER_EXISTS"; } }
         public static string USERID { get { return "USERID"; } }
         public static string SEARCH_KEY { get { return "SEARCH_KEY"; }}
+        public static string DELETED { get { return "Item deleted successfully"; } }
+        public static string NOT_DELETED { get { return "Sorry , we couldn't delete the item."; } }
     }
 }

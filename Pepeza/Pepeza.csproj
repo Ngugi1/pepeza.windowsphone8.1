@@ -216,6 +216,7 @@
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Signup\SignUpPage.xaml.cs" />
+    <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

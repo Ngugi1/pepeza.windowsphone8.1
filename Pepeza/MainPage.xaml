@@ -5,6 +5,7 @@
     xmlns:local="using:Pepeza"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Jumper="using:QKit"
+    xmlns:toaster="using:Toastinet"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -49,7 +50,7 @@
                           >
                     <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid Holding="Grid_Holding">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -60,6 +61,18 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout Placement="Right">
+                                            <MenuFlyoutItem Text="edit" 
+                                                            Name="MenuFlyOutEdit"
+                                                            Foreground="Black" 
+                                                            Click="MenuFlyOutEdit_Tapped"/>
+                                            <MenuFlyoutItem Text="delete" 
+                                                            Name="MenuFlyoutDelete"
+                                                            Click="MenuFlyoutItem_Delete"
+                                                            Foreground="Red"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
                             <Ellipse Height="80"
                                          Width="80"
                                         Grid.RowSpan="3">
@@ -260,6 +273,18 @@
                 </Jumper:AlphaJumpList>
             </PivotItem>
         </Pivot>
+        <toaster:Toastinet Name="ToastSuccessFailure" 
+                           RequestedTheme="Dark"
+                           Background="{StaticResource mainForeground}"
+                           TextHAlignment="Center"
+                           FontSize="{ThemeResource  TextStyleMediumFontSize}"
+                           Margin="12"
+                           BorderBrush="{ThemeResource PhoneAccentBrush}"
+                           Height="40"
+                           HorizontalContentAlignment="Center"
+                           Grid.Column="1"
+                           >
+        </toaster:Toastinet>
     </Grid>
     <Page.BottomAppBar>
   

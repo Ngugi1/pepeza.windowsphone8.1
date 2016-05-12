@@ -63,10 +63,11 @@ namespace Pepeza.Views
             {
                 txtBoxSearch.Text = "";
                 listViewSearchOrgs.ItemsSource = ListViewUser.ItemsSource = ListViewBoards.ItemsSource = null;
+                PivotSearch.SelectedIndex = 0;
+                updateWhatToSearch();
+                txtBlockWhat.Visibility = Visibility.Visible;
             }
-            PivotSearch.SelectedIndex = 0;
-            updateWhatToSearch();
-            txtBlockWhat.Visibility = Visibility.Visible;
+            
         }
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

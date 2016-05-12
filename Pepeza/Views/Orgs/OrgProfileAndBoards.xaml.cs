@@ -69,11 +69,6 @@ namespace Pepeza.Views.Orgs
                     await getOrgDetails(org.Id);
                 }
             }
-            else if(e.NavigationMode == NavigationMode.Back)
-            {
-                loadPageState();
-            }
-            //check if the org is urs 
            
             
         }
@@ -198,7 +193,6 @@ namespace Pepeza.Views.Orgs
                         }
                         await getOrgDetails(OrgID);
                     }
-                    enabeDisableAppBtnEdit(true);
                     break;
                 case 1:
                     //load boards
@@ -274,9 +268,16 @@ namespace Pepeza.Views.Orgs
                 {
                    {"id",board.id.ToString()},{"name" , board.name}
                 };
-                    this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices), parameters);
+                    if (isOrgMine)
+                    {
+                        this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices), parameters);
+                    }
+                    else
+                    {
+                        this.Frame.Navigate(typeof(BoardProfile), board.id);
+                    }
+                    
                 }
-                       
         }
         private  void savePageState()
         {
