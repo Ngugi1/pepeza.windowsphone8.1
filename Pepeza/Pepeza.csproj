@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="Views\Signup\SignUpPage.xaml.cs" />
     <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
+    <Compile Include="Views\ViewHelpers\OrgViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

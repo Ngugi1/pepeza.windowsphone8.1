@@ -66,10 +66,10 @@
                                             <MenuFlyoutItem Text="edit" 
                                                             Name="MenuFlyOutEdit"
                                                             Foreground="Black" 
-                                                            Click="MenuFlyOutEdit_Tapped"/>
+                                                            Click="MenuFlyOutEditBoard_Tapped"/>
                                             <MenuFlyoutItem Text="delete" 
                                                             Name="MenuFlyoutDelete"
-                                                            Click="MenuFlyoutItem_Delete"
+                                                            Click="MenuFlyoutItemBoard_Delete"
                                                             Foreground="Red"/>
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
@@ -130,7 +130,8 @@
                           SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Holding="OrgGrid_Holding"
+                                      Name="OrgGrid">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -141,6 +142,18 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem 
+                                                Name="MenuFlyoutEdit"
+                                                Click="MenuFlyoutEditOrg_Click"
+                                                Text="edit"/>
+                                            <MenuFlyoutItem 
+                                                Name="MenuFlyoutDelete"
+                                                Click="MenuFlyoutDeleteOrg_Click"
+                                                Text="delete"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
                                     <Ellipse Height="70"
                                          Width="70"
                                          Margin="4,8,4,0"
@@ -279,6 +292,7 @@
                            TextHAlignment="Center"
                            FontSize="{ThemeResource  TextStyleMediumFontSize}"
                            Margin="12"
+                           TextWrapping="Wrap"
                            BorderBrush="{ThemeResource PhoneAccentBrush}"
                            Height="40"
                            HorizontalContentAlignment="Center"

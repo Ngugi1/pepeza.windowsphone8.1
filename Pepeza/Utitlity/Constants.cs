@@ -24,5 +24,6 @@ namespace Pepeza.Utitlity
         public static string SEARCH_KEY { get { return "SEARCH_KEY"; }}
         public static string DELETED { get { return "Item deleted successfully"; } }
         public static string NOT_DELETED { get { return "Sorry , we couldn't delete the item."; } }
+        public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
     }
 }

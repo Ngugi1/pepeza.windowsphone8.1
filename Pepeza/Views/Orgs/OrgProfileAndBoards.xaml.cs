@@ -320,7 +320,7 @@ namespace Pepeza.Views.Orgs
             TOrgInfo org = RootGrid.DataContext as TOrgInfo;
             if (org.description == null)
             {
-                toastErros.Message = "Permission Denied!";
+                toastErros.Message = Constants.PERMISSION_DENIED;
             }
             else
             {

@@ -206,13 +206,17 @@ namespace Pepeza
         }
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
+            showFlyOutMenu(sender, e);
+        }
+        private void showFlyOutMenu(object sender , HoldingRoutedEventArgs e)
+        {
             FrameworkElement element = sender as FrameworkElement;
             FlyoutBase flyout = FlyoutBase.GetAttachedFlyout(element);
             flyout.ShowAt(element);
         }
-        private async void MenuFlyoutItem_Delete(object sender, RoutedEventArgs e)
+        private async void MenuFlyoutItemBoard_Delete(object sender, RoutedEventArgs e)
         {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext as TBoard;
+            var datacontext = getFrameworkElement(e).DataContext as TBoard;
             Dictionary<string, string> deleteResults = await BoardService.deleteBoard(datacontext.id);
             Dictionary<string,string> isSuccess = await BoardViewHelper.isBoardDeleted(deleteResults , datacontext);
             if(isSuccess.ContainsKey(Constants.DELETED))
@@ -229,13 +233,61 @@ namespace Pepeza
             }
         
         }
-        private void MenuFlyOutEdit_Tapped(object sender, RoutedEventArgs e)
+        private void MenuFlyOutEditBoard_Tapped(object sender, RoutedEventArgs e)
         {
-            var datacontext = (e.OriginalSource as FrameworkElement).DataContext as TBoard;
+            var datacontext = getFrameworkElement(e).DataContext as TBoard;
             if (datacontext != null)
             {
                 this.Frame.Navigate(typeof(UpdateBoard), datacontext);
             }
+        }
+
+        private void MenuFlyoutEditOrg_Click(object sender, RoutedEventArgs e)
+        {
+            var datacontext = getFrameworkElement(e).DataContext as TOrgInfo;
+            if (datacontext != null&&datacontext.description!=null)
+            {
+                this.Frame.Navigate(typeof(EditOrg), datacontext);
+            }
+            else
+            {
+                ToastSuccessFailure.Message = Constants.PERMISSION_DENIED;
+            }
+        }
+
+        private async void MenuFlyoutDeleteOrg_Click(object sender, RoutedEventArgs e)
+        {
+            var org = getFrameworkElement(e).DataContext as TOrgInfo;
+            if (org != null && org.description != null)
+            {
+                Dictionary<string, string> delResults = await OrgsService.deleteOrg(org.id);
+                Dictionary<string, string> isSuccess = await OrgViewHelper.isOrgDeleted(org, delResults);
+                if (isSuccess.ContainsKey(Constants.DELETED))
+                {
+                    //Toast success
+                    ToastSuccessFailure.Message = isSuccess[Constants.DELETED];
+                    orgs.Remove(org);
+                    ListViewOrgs.ItemsSource = orgs;
+                }
+                else
+                {
+                    //toast fail
+                    ToastSuccessFailure.Message = isSuccess[Constants.NOT_DELETED];
+                }
+            }
+            else
+            {
+                ToastSuccessFailure.Message = Constants.NOT_DELETED;
+            }
+        }
+        private FrameworkElement getFrameworkElement(RoutedEventArgs e )
+        {
+            return (e.OriginalSource as FrameworkElement);
+        }
+
+        private void OrgGrid_Holding(object sender, HoldingRoutedEventArgs e)
+        {
+            showFlyOutMenu(sender, e);
         }
 
        
