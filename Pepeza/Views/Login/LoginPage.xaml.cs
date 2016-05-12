@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.DbHelpers;
 using Pepeza.Db.Models;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Db.Models.Users;
@@ -55,7 +56,11 @@ namespace Pepeza.Views
             if (settings.Values.ContainsKey(Constants.APITOKEN))
             {
                 this.Frame.Navigate(typeof(MainPage));
-            }  
+            }
+            if (!settings.Values.ContainsKey(DbConstants.DB_CREATED))
+            {
+                DbHelper.createDB();
+            }
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)

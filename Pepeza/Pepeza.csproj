@@ -188,6 +188,9 @@
     <Compile Include="Views\Boards\UpdateBoard.xaml.cs">
       <DependentUpon>UpdateBoard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Configurations\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Notices\AddNoticePage.xaml.cs">
       <DependentUpon>AddNoticePage.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Boards\UpdateBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Configurations\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

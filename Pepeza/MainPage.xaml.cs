@@ -7,6 +7,7 @@ using Pepeza.Utitlity;
 using Pepeza.Views;
 using Pepeza.Views.Account;
 using Pepeza.Views.Boards;
+using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
 using Pepeza.Views.ViewHelpers;
@@ -89,14 +90,7 @@ namespace Pepeza
         {
             this.Frame.Navigate(typeof(Views.Search));
         }
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void AppBarButtonProfile_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Views.Profile.UserProfile));
-        }
+       
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch ((pivotMainPage.SelectedIndex))
@@ -183,27 +177,6 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization(){ Id = org.id});
             }
         }
-        private async void AppBarButton_Logout(object sender, RoutedEventArgs e)
-        {
-            Dictionary<string, string> logout =  await RequestUser.logout();
-            if (logout.ContainsKey(Constants.SUCCESS))
-            {
-                if (await LocalUserHelper.clearLocalSettingsForUser())
-                {
-                    //Redirect to login page 
-                    this.Frame.Navigate(typeof(LoginPage));
-                }
-            }
-            else
-            {
-                Debug.WriteLine("Failed to logout!");
-            }
-        }
-
-        private void AppBarButton_Settings(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DeactivateAccount));
-        }
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
             showFlyOutMenu(sender, e);
@@ -288,6 +261,11 @@ namespace Pepeza
         private void OrgGrid_Holding(object sender, HoldingRoutedEventArgs e)
         {
             showFlyOutMenu(sender, e);
+        }
+
+        private void AppBtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SettingsPage));
         }
 
        

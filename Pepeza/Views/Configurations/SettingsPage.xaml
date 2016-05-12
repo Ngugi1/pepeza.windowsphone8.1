@@ -1,0 +1,71 @@
+﻿<Page
+    x:Class="Pepeza.Views.Configurations.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views.Configurations"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
+    </Page.Resources>
+    <Grid>
+        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      Height="Auto">
+            <StackPanel>
+                <TextBlock Text="Pepeza" 
+                           Margin="16,2"
+                           FontSize="20"
+                           Style="{StaticResource TitleTextBlockStyle}"
+                           />
+                <TextBlock Text="settings"
+                           Margin="16,2"
+                       FontSize="{StaticResource TextStyleExtraLargePlusFontSize}"
+                       Style="{ThemeResource TitleTextBlockStyle}"/>
+                <StackPanel Name="StackPanelProfile"
+                            Tapped="Profile"
+                            >
+                    <TextBlock Text="profile"
+                               Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock Text="Edit or view your profile"
+                               Style="{StaticResource txtBlockDisplay}"
+                           Margin="16,4"/>
+                </StackPanel>
+                <StackPanel Tapped="DeactivateAccount">
+                    <TextBlock Text="deactivate account"
+                               Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock Text="Deactivating your account will suspend your account"
+                           Style="{StaticResource txtBlockDisplay}"
+                           Margin="16,4"/>
+                </StackPanel>
+                <StackPanel Tapped="Logout">
+                    <TextBlock Text="Logout"
+                               Style="{StaticResource TitleTextBlockStyle}"/>
+                    <TextBlock Text="Logging out will have all application data to be cleared"
+                           Style="{StaticResource txtBlockDisplay}"
+                           Margin="16,4"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel VerticalAlignment="Center"
+                    Visibility="Collapsed"
+                    Name="StackPanelInProgress">
+            <ProgressRing Height="150"
+                          
+                          IsActive="True"
+                          Width="150">
+
+            </ProgressRing>
+            <TextBlock Text="just a moment..."
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       />
+        </StackPanel>
+    </Grid>
+</Page>

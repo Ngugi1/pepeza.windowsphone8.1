@@ -307,10 +307,9 @@
              IsOpen="False"
             Background="{StaticResource mainForeground}">
             <CommandBar.SecondaryCommands>
-                <AppBarButton Click="AppBarButtonProfile_Click"
-                              Label="profile"/>
-                <AppBarButton Label="deactivate account" Click="AppBarButton_Settings"/>
-                <AppBarButton Label="logout" Click="AppBarButton_Logout"/>
+                <AppBarButton Click="AppBtnSettings_Click"
+                              Label="settings"/>
+              
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Add" 
