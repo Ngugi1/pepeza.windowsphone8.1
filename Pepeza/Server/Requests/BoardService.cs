@@ -80,7 +80,7 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
-        public async static Task<Dictionary<string, string>> updateBoard(Dictionary<string,string> update)
+        public async static Task<Dictionary<string, string>> updateBoard(Dictionary<string,string> update , int boardID)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
@@ -89,13 +89,14 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.PutAsJsonAsync(string.Format(BoardAddresses.UPDATE_BOARD , update["boardId"]) , update);
+                    response = await client.PutAsJsonAsync(string.Format(BoardAddresses.UPDATE_BOARD, boardID) , update);
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
                     else
                     {
+                        string s = await response.Content.ReadAsStringAsync();
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
@@ -103,6 +104,7 @@ namespace Pepeza.Server.Requests
                 {
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
+               
             }
             else
             {

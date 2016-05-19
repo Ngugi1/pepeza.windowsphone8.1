@@ -125,7 +125,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(UserAddresses.EMAIL_EXISTS);
+                    response = await client.GetAsync(string.Format(UserAddresses.EMAIL_EXISTS , email));
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Request was successfull 
@@ -190,6 +190,47 @@ namespace Pepeza.Server.Requests
                 resConent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
             return resConent;
+        }
+
+        /// <summary>
+        /// Reset user password
+        /// </summary>
+        /// <param name="toUpdate"></param>
+        /// <returns></returns>
+
+        public async static Task<Dictionary<string, string>> resetPassword(string username)
+        {
+            HttpClient client = getHttpClient(false);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            HttpResponseMessage res = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    Dictionary<string,string> toPost = new Dictionary<string,string>();
+                    toPost.Add("username" , username);
+
+                    res = await client.PostAsJsonAsync(UserAddresses.RESET_PASSWORD,toPost);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        JObject obj = await res.Content.ReadAsAsync<JObject>();
+                        results.Add(Constants.SUCCESS, (string)obj["message"]);
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
         }
         public static async Task<Dictionary<string, string>> updateUserProfile(Dictionary<string,string> toUpdate)
         {
