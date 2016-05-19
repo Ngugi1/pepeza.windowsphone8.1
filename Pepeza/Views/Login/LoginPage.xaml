@@ -11,6 +11,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    RequestedTheme="Dark"
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -67,7 +68,7 @@
             <StackPanel Orientation="Horizontal">
                 <Button
                 HorizontalAlignment="Center"
-                Margin="120,8,8,8"
+                Margin="120,8,8,0"
     			x:Name="btnLogin"
                 Content="Login"
                 Click="btnLogin_Click"
@@ -81,8 +82,25 @@
                     />
 
             </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                         HorizontalAlignment="Left"
+                        >
+                <TextBlock Style="{StaticResource txtBlockStatus}"
+                           Text="You forgot your password ?"
+                           FontSize="16"
+                           Margin="36,8,4,0"
+                           />
+                <HyperlinkButton Content="Reset password" 
+                             Margin="4"
+                             HorizontalAlignment="Center"
+                                 Name="hylResetPassword"
+                             Click="hylResetPassword_Click"
+                             Style="{ThemeResource hlbtnStyle}"/>
+            </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        >
                 <TextBlock Style="{StaticResource  txtBlockStatus}"
                            Margin="36,8,4,8"
                            FontSize="16"

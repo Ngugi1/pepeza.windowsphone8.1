@@ -10,6 +10,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Phone.UI.Input;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -38,8 +39,22 @@ namespace Pepeza
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            this.RequestedTheme = ApplicationTheme.Dark;
             DbHelper.createDB();
+        
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            this.Resuming += App_Resuming;
+            
+        }
+
+        void App_Resuming(object sender, object e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void Current_Resuming(object sender, object e)
+        {
+            //throw new NotImplementedException();
         }
 
         void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
@@ -112,8 +127,32 @@ namespace Pepeza
                 }
             }
 
+           
             // Ensure the current window is active
             Window.Current.Activate();
+            //Deal with the statusbar
+            updateStatusBar();
+        }
+        public async static void updateStatusBar()
+        {
+            var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            
+            Binding bh = new Binding();
+            bh.Mode = BindingMode.TwoWay;
+            Color color = (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color;
+            statusBar.BackgroundColor = null;
+            statusBar.BackgroundColor = color;
+            statusBar.BackgroundOpacity = 1;
+            statusBar.ProgressIndicator.Text = "PEPEZA";
+            statusBar.ForegroundColor = Colors.White;
+            statusBar.ProgressIndicator.ProgressValue = 0;
+            await statusBar.ProgressIndicator.ShowAsync();
+            //statusBar.Showing += statusBar_Showing;
+        }
+
+        static void statusBar_Showing(Windows.UI.ViewManagement.StatusBar sender, object args)
+        {
+            App.updateStatusBar();
         }
 
         /// <summary>
@@ -141,6 +180,7 @@ namespace Pepeza
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+            updateStatusBar();
         }
     }
 }

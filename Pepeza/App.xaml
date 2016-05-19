@@ -2,13 +2,14 @@
     x:Class="Pepeza.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza">
+    xmlns:local="using:Pepeza"
+    >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-           <!-- Button custom style-->
+            <!-- Button custom style-->
             <Thickness x:Key="PhoneTouchTargetOverhang">0,9.5</Thickness>
             <SolidColorBrush x:Key="ButtonDisabledBackgroundThemeBrush" Color="Transparent" />
             <ControlTemplate x:Key="CustomButtonDisabledStyle" TargetType="Button">

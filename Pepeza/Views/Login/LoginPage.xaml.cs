@@ -8,6 +8,7 @@ using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
 using Pepeza.Views.Account;
+using Pepeza.Views.Login;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -110,10 +111,10 @@ namespace Pepeza.Views
         }
 
 
-        private  Login getData()
+        private  Pepeza.Server.ServerModels.Login getData()
         {
 
-            return new Login() { username = textBoxUsername.Text.Trim(), password = txtBoxPassword.Password.Trim() };
+            return new Pepeza.Server.ServerModels.Login() { username = textBoxUsername.Text.Trim(), password = txtBoxPassword.Password.Trim() };
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -123,6 +124,11 @@ namespace Pepeza.Views
             {
                 this.Frame.Navigate(typeof(MainPage));
             }
+        }
+
+        private void hylResetPassword_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ResetPasswordPage));
         }
     }
 }
