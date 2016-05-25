@@ -25,9 +25,9 @@ namespace Pepeza.Db.DbHelpers
                     var x = ex.ToString();
                     info = null;
                 }
-               
-               if (info!=null &&info.username == null) 
-                   info.username = info.name;
+
+                if (info != null && info.username == null)
+                    info.username = info.name.ToLower();
             }
             return info;
         }

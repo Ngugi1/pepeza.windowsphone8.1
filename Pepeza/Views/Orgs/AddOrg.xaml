@@ -1,141 +1,145 @@
-﻿<Page
-    x:Class="Pepeza.Views.Orgs.AddOrg"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza.Views.Orgs"
-    xmlns:VM="using:Pepeza.ViewModels"
-    xmlns:Converter="using:Pepeza.ViewModels.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Dark"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+﻿<Page x:Class="Pepeza.Views.Orgs.AddOrg"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Converter="using:Pepeza.ViewModels.Converters"
+      xmlns:VM="using:Pepeza.ViewModels"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Pepeza.Views.Orgs"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:toaster="using:Toastinet"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      RequestedTheme="Light"
+      mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <VM:ViewModelCreateOrg x:Key="Org"/>
-            <VM:BoolVisibilityConverter x:Key="Converter"/>
-            <Converter:QuickVisibilityConverter x:Key="DirectConverter"/>
+            <VM:ViewModelCreateOrg x:Key="Org" />
+            <VM:BoolVisibilityConverter x:Key="Converter" />
+            <Converter:QuickVisibilityConverter x:Key="DirectConverter" />
         </ResourceDictionary>
+
     </Page.Resources>
-    <Grid DataContext="{StaticResource Org}" 
-          Name="RootGrid"
-          Background="{StaticResource pageBackground}"
-         >
+    <Page.DataContext>
+        <VM:ViewModelCreateOrg x:Name="Org" />
+    </Page.DataContext>
+    <Grid Name="RootGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock 
-            Margin="20"   
-            Style="{StaticResource TitleTextBlockStyle}"
-            VerticalAlignment="Bottom"
-            FontWeight="Normal"
-            Foreground="{StaticResource mainForeground}"
-            FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}"
-            Text="Create organisation"/>
-        <ScrollViewer 
-            Grid.Row="1"
-            Background="{StaticResource pageBackground}">
+        <TextBlock Margin="20"
+                   Style="{StaticResource txtBlockPageHeader}"
+                   Text="create organisation" />
+        <ScrollViewer Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0"
-                    Grid.Column="0">
-                <TextBox 
-                    TextChanged="txtBoxUsername_TextChanged"
-                    MaxLength="20"
-                    Header="username"
-                    Name="txtBoxUsername"
-                    TextWrapping="Wrap"
-                    Text="{Binding  Org.Username,UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
-                    Style="{StaticResource txtBoxStyle}"
-                    PlaceholderText="Uniquely identifies your organisation">
-                </TextBox>
-                    <TextBlock Text="username length must be > 2 and can contain lowercase letters ,digits,underscore and hypen"
-                          Grid.Row="1"
-                           Name="txtBlockUsernameStatus"
-                           Visibility="{Binding Org.IsUsernameValid , Converter={StaticResource Converter}}"
-                           Style="{StaticResource txtBlockError}"
-                           />
-                    
-                    <ProgressBar IsIndeterminate="True" Margin="16,4"
-                                 Visibility="Collapsed"
-                                 Name="PBCheckUserName"/>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBox Name="txtBoxUsername"
+                             Header="username"
+                             MaxLength="20"
+                             PlaceholderText="Uniquely identifies your organisation"
+                             Style="{StaticResource txtBoxStyle}"
+                             Text="{Binding Org.Username,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                             TextChanged="txtBoxUsername_TextChanged"
+                             TextWrapping="Wrap" />
+                    <TextBlock Name="txtBlockUsernameStatus"
+                               Grid.Row="1"
+                               Style="{StaticResource txtBlockError}"
+                               Text="username length must be &gt; 2 and can contain lowercase letters ,digits,underscore and hypen"
+                               Visibility="{Binding Org.IsUsernameValid,
+                                                    Converter={StaticResource Converter},
+                                                    Mode=TwoWay}" />
+
+                    <ProgressBar Name="PBCheckUserName"
+                                 Margin="16,4"
+                                 IsIndeterminate="True"
+                                 Visibility="Collapsed" />
                 </StackPanel>
 
-                
-                <TextBox Style="{StaticResource txtBoxStyle}"
-                         MaxLength="100"
+
+                <TextBox Name="txtBoxOrgName"
                          Grid.Row="2"
-                         Name="txtBoxOrgName"
-                         TextWrapping="Wrap"
-                	     PlaceholderText="Actual name of the organisation"
-                         Text="{Binding Org.Name, UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
-                         >
+                         MaxLength="100"
+                         PlaceholderText="Actual name of the organisation"
+                         Style="{StaticResource txtBoxStyle}"
+                         Text="{Binding Org.Name,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        Mode=TwoWay}"
+                         TextWrapping="Wrap">
                     <TextBox.Header>organisation full name</TextBox.Header>
                 </TextBox>
-                <TextBlock Style="{StaticResource txtBlockError}"
+                <TextBlock Name="txtBlockNameStatus"
                            Grid.Row="3"
-                           Visibility="{Binding Org.IsNameValid , Converter={StaticResource Converter}}"
-                           Text="Orgainsation name can be at least 3 characters"
-                           />
-                <TextBox Style="{StaticResource txtBoxStyle}"
-                         MaxLength="250"
-                         Grid.Row="4"
-                         Name="txtBoxOrgDesc"
-                         Header="Description"
-                         TextWrapping="Wrap"
-                         Text="{Binding Org.Desc , UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
-                         PlaceholderText="What happens in your organisation ?"
-                         >
-                </TextBox>
-                <TextBlock Style="{StaticResource txtBlockError}"
-                           Text="Describe the organisation in at least 10 characters"
-                           Visibility="{Binding Org.IsDescValid, Converter={StaticResource Converter}}"
-                           Grid.Row="5"
-                           />
-                <StackPanel Orientation="Horizontal"
-                            Grid.Row="7"
-                            Grid.ColumnSpan="2"
-                            HorizontalAlignment="Center"
-                            >
-                    <Button Content="create"
-                            Name="btnCreate"
-                            Click="btnCreateOrg_Click"
-                            CommandParameter="{Binding Org}"
-                            IsEnabled="{Binding Org.CanCreateOrg}"
-                            Command="{Binding AddOrg.viewModel.AddOrg}"
-                            />
-                    <ProgressRing Style="{StaticResource PRstyle}"
-                                  IsActive="True"
-                                  IsEnabled="True"
-                                  Visibility="{Binding Org.IsProgressRingVisible , Converter={StaticResource DirectConverter}}"
-                     
-                                  />
-                </StackPanel>
-                <TextBlock Name="TxtBlockCreateOrgStatus"
-                           Visibility="Collapsed"
                            Style="{StaticResource txtBlockError}"
+                           Text="Orgainsation name can be at least 3 characters"
+                           Visibility="{Binding Org.IsNameValid,
+                                                Converter={StaticResource Converter},
+                                                Mode=TwoWay}" />
+                <TextBox Name="txtBoxOrgDesc"
+                         Grid.Row="4"
+                         Header="Description"
+                         MaxLength="250"
+                         PlaceholderText="What happens in your organisation ?"
+                         Style="{StaticResource txtBoxStyle}"
+                         Text="{Binding Org.Desc,
+                                        UpdateSourceTrigger=PropertyChanged,
+                                        Mode=TwoWay}"
+                         TextWrapping="Wrap" />
+                <TextBlock Name="txtBlockDescStatus"
+                           Grid.Row="5"
+                           Style="{StaticResource txtBlockError}"
+                           Text="Describe the organisation in at least 10 characters"
+                           Visibility="{Binding Org.IsDescValid,
+                                                Converter={StaticResource Converter},
+                                                Mode=TwoWay}" />
+                <TextBlock Name="TxtBlockCreateOrgStatus"
                            Grid.Row="6"
-                           />
+                           Margin="12"
+                           Style="{StaticResource txtBlockError}"
+                           Visibility="Collapsed" />
+                <StackPanel Grid.Row="7"
+                            Grid.ColumnSpan="2"
+                            Margin="22"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <StackPanel Width="{Binding ActualWidth, ElementName=RootGrid}" Visibility="{Binding Org.IsProgressRingVisible, Converter={StaticResource DirectConverter}}">
+                        <ProgressBar Margin="12" Visibility="{Binding Org.IsProgressRingVisible, Converter={StaticResource DirectConverter}}" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   Style="{StaticResource txtBlockWait}"
+                                   Text="creating org..." />
+                    </StackPanel>
+                </StackPanel>
             </Grid>
-                   </ScrollViewer>
-          
+        </ScrollViewer>
+
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Name="btnCreate"
+                          Click="btnCreateOrg_Click"
+                          CommandParameter="{Binding Org}"
+                          Icon="Accept"
+                          IsEnabled="{Binding Org.CanCreateOrg,
+                                              Mode=TwoWay}"
+                          Label="create" />
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

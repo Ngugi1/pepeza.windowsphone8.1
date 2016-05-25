@@ -31,6 +31,7 @@ namespace Pepeza.Server.Requests
                 else
                 {
                     var content = response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Error is here ==================> " + content);
                     responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }

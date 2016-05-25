@@ -39,28 +39,7 @@ namespace Pepeza.Views.Account
         {
         }
 
-        private async void btnDeactivateAccount_Click(object sender, RoutedEventArgs e)
-        {
-            isProgressRingVisible(true);
-            Dictionary<string,string> result = await RequestUser.deactivateUser();
-            if (result.ContainsKey(Constants.UPDATED))
-            {
-                if (await LocalUserHelper.clearLocalSettingsForUser())
-                {
-                    this.Frame.Navigate(typeof(LoginPage));
-                }
-                else
-                {
-                    txtBlockStatus.Text = result[Constants.ERROR];
-                }
-         
-            }
-            else
-            {
-                txtBlockStatus.Text = result[Constants.ERROR];
-            }
-            isProgressRingVisible(false);
-        }
+        
         private void isProgressRingVisible(bool visible)
         {
             if (visible)
@@ -71,6 +50,30 @@ namespace Pepeza.Views.Account
             {
                 deactivateProgressRing.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private async void AppBarDeactivateClick(object sender, RoutedEventArgs e)
+        {
+            isProgressRingVisible(true);
+            txtBlockStatus.Text = "";
+            Dictionary<string, string> result = await RequestUser.deactivateUser();
+            if (result.ContainsKey(Constants.UPDATED))
+            {
+                if (await LocalUserHelper.clearLocalSettingsForUser())
+                {
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
+                else
+                {
+                    txtBlockStatus.Text = result[Constants.ERROR];
+                }
+
+            }
+            else
+            {
+                txtBlockStatus.Text = result[Constants.ERROR];
+            }
+            isProgressRingVisible(false);
         }
     }
 }

@@ -49,6 +49,9 @@ namespace Pepeza.Views.Orgs
                 orgModel.Name = org.name;
                 orgModel.Desc = org.description;
                 txtBlockUsername.Text = org.username;
+                orgModel.CanUpdateProfile = false;
+                orgModel.isDescModified = false;
+                orgModel.isNameModified = false;
             }
         }
 
@@ -64,6 +67,7 @@ namespace Pepeza.Views.Orgs
 
         private  async void UpdateProfileClick(EditOrgModel model)
         {
+            stackPanelUpdating.Visibility = Visibility.Visible;
             Dictionary<string, string> results = await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId" , org.id.ToString()} 
                 ,{"username" ,org.username},{ "name", model.Name }, { "description", model.Desc } });
             if (results != null && results.ContainsKey(Constants.SUCCESS))
@@ -90,6 +94,7 @@ namespace Pepeza.Views.Orgs
                 //There was an error , display it
                 txtBlockStatus.Text = results[Constants.ERROR];
             }
+            stackPanelUpdating.Visibility = Visibility.Collapsed;
         }
     }
 }

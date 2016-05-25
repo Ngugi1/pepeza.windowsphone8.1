@@ -20,9 +20,10 @@ namespace Pepeza.ViewModels
             Org= new AddOrgModel(this);
             AddOrg  = new CommandAddOrg(this);
         }
-        public bool canCreateOrg(bool IsUsernameValid, bool IsNameValid, bool IsDescValid)
+        public bool canCreateOrg(bool IsUsernameValid, bool IsNameValid, bool IsDescValid , bool isDescModifird , bool isUsernameModified
+            ,bool isNameModified)
         {
-            return IsDescValid && IsUsernameValid && IsNameValid;
+            return IsDescValid && IsUsernameValid && IsNameValid && isDescModifird && isNameModified && isUsernameModified;
         }
     }
 }

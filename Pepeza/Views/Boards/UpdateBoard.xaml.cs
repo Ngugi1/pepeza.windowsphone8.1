@@ -2,6 +2,8 @@
 using Pepeza.Common;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
+using Pepeza.IsolatedSettings;
+using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
@@ -35,6 +37,7 @@ namespace Pepeza.Views.Boards
         bool canUpdate = false, isNameValid = true, isDescvalid = true;
         private NavigationHelper navigationHelper;
         TBoard board = null;
+        int boardID, orgID;
         public UpdateBoard()
         {
             this.InitializeComponent();
@@ -66,8 +69,19 @@ namespace Pepeza.Views.Boards
              //Get the parameters
             if (e.Parameter != null)
             {
-                board = e.Parameter as TBoard;
-                LayoutRoot.DataContext = board;
+                if (e.Parameter.GetType() == typeof(TBoard))
+                {
+                    board = e.Parameter as TBoard;
+                    boardID = board.id;
+                    orgID = board.orgID;
+                    LayoutRoot.DataContext = board;
+                }
+                else
+                {
+                    boardID = (e.Parameter as FetchedBoard).id;
+                    orgID = (e.Parameter as FetchedBoard).OrgID;
+                    LayoutRoot.DataContext = e.Parameter as FetchedBoard;
+                }
             }
             AppBarButtonUpdate.IsEnabled = canUpdate;
         }
@@ -103,8 +117,8 @@ namespace Pepeza.Views.Boards
          
             //Make the request 
             Dictionary<string, string> results = await  BoardService.updateBoard(new Dictionary<string, string>(){
-                {"name" , name} , {"description" , desc},{"boardId" , board.id.ToString()}
-            });
+                {"orgId",orgID.ToString()} , {"name" , name} , {"description" , desc}
+            } , boardID);
             if (results != null && results.ContainsKey(Constants.SUCCESS))
             {
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
@@ -123,7 +137,7 @@ namespace Pepeza.Views.Boards
         private async void updateLocalDatabase(JObject objResults , string desc ,string name)
         {
             //Get board with given Id , then update it
-            TBoard toUpdate = BoardHelper.getBoard(board.id);
+            TBoard toUpdate = await BoardHelper.getBoard(board.id);
             toUpdate.dateUpdated = (DateTime)objResults["dateUpdated"]["date"];
             toUpdate.timezone_updated = (string)objResults["dateUpdated"]["timezone"];
             toUpdate.timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"];

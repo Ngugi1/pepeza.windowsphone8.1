@@ -28,22 +28,29 @@
         <Setter Property="Margin" Value="4,8,8,8" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
+    <!--  Profile pic  -->
+    <Style x:Key="RectProfPic" TargetType="Rectangle">
+        <Setter Property="Height" Value="192" />
+        <Setter Property="Width" Value="192" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Stroke" Value="{ThemeResource PhoneAccentBrush}" />
+    </Style>
     <!--  TextBox header template  -->
     <DataTemplate x:Key="HeaderTemplate">
         <TextBlock FontFamily="Segoe UI Light"
-                   Foreground="{StaticResource mainForeground}"
+                   FontSize="22"
+                   Foreground="{StaticResource PhoneForegroundBrush}"
                    Style="{StaticResource BaseTextBlockStyle}"
                    Text="{Binding}" />
     </DataTemplate>
 
     <!--  Progress Ring  -->
     <Style x:Key="PRstyle" TargetType="ProgressRing">
-        <Setter Property="Height" Value="40" />
+        <Setter Property="Height" Value="120" />
         <Setter Property="Margin" Value="8" />
-        <Setter Property="Width" Value="40" />
-        <Setter Property="MinWidth" Value="40" />
-        <Setter Property="Foreground" Value="{StaticResource BtnBackground}" />
-        <Setter Property="Background" Value="{StaticResource pageBackground}" />
+        <Setter Property="Width" Value="120" />
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="IsActive" Value="True" />
         <Setter Property="IsEnabled" Value="True" />
     </Style>
@@ -53,21 +60,31 @@
         <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}" />
         <Setter Property="FontFamily" Value="Segoe UI Light" />
         <Setter Property="FontWeight" Value="Light" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
-        <Setter Property="Foreground" Value="{StaticResource mainForeground}" />
+
     </Style>
     <!--  TextBlock Styles  -->
     <Style x:Key="txtBlockError" TargetType="TextBlock">
         <Setter Property="TextLineBounds" Value="TrimToBaseline" />
-        <Setter Property="Foreground" Value="{StaticResource fgRed}" />
-        <Setter Property="Margin" Value="8,4" />
-        <Setter Property="Width" Value="300" />
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+        <Setter Property="Margin" Value="16,4" />
         <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="18" />
     </Style>
+
     <Style x:Key="txtBlockStatus" TargetType="TextBlock">
         <Setter Property="Margin" Value="8,4" />
-        <Setter Property="Foreground" Value="{StaticResource mainForeground}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}" />
+    </Style>
+
+    <Style x:Key="txtBlockStyleProfileOwner"
+           BasedOn="{StaticResource TitleTextBlockStyle}"
+           TargetType="TextBlock">
+        <Setter Property="Margin" Value="28,24,0,0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <!--  TextBlock Header  -->
@@ -99,6 +116,7 @@
         <Setter Property="FontFamily" Value="Segoe UI Light" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Text" Value="Justify"/>
         <Setter Property="Foreground" Value="{StaticResource mainForeground}" />
     </Style>
     <!--  txtBlockListViewItemHeader  -->
@@ -121,19 +139,35 @@
         <Setter Property="Margin" Value="12,4" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
+
+    <!--  TextBlock Waiting status  -->
+    <Style x:Key="txtBlockWait"
+           BasedOn="{StaticResource txtBlockDisplay}"
+           TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+    </Style>
+    <!--  Page Header Descriptor  -->
+    <Style x:Key="txtBlockPageHeader"
+           BasedOn="{StaticResource TitleTextBlockStyle}"
+           TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{StaticResource TextStyleExtraExtraLargeFontSize}" />
+        <Setter Property="Foreground" Value="{ThemeResource TextBoxButtonForegroundThemeBrush}" />
+        <Setter Property="Typography.Capitals" Value="SmallCaps" />
+    </Style>
     <!--  Password Box Style  -->
     <Style x:Name="passBoxStyle" TargetType="PasswordBox">
         <Setter Property="Margin" Value="16,8" />
         <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}" />
         <Setter Property="FontWeight" Value="Thin" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
     </Style>
 
 
     <!--  HyperLink Button Style  -->
     <Style x:Key="hlbtnStyle" TargetType="HyperlinkButton">
-        <Setter Property="Foreground" Value="#00BAD4" />
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
 
@@ -143,11 +177,23 @@
         <Setter Property="Margin" Value="8,4" />
         <Setter Property="Width" Value="20" />
     </Style>
+    <!--  ProgressBar -Indeterminate style  -->
+    <Style TargetType="ProgressBar">
+        <Setter Property="IsIndeterminate" Value="True" />
+        <Setter Property="IsEnabled" Value="True" />
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+    </Style>
+
     <!--  AppBarButton Styles  -->
-    <Style x:Key="AppBarBtnStyle" TargetType="AppBarButton">
+    <Style TargetType="AppBarButton">
         <Setter Property="IsCompact" Value="True" />
-        <Setter Property="Foreground" Value="#00BAD4" />
-        <Setter Property="Margin" Value="8,10" />
+        <Setter Property="Foreground" Value="{StaticResource PhoneAccentBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <!--  Command Bar Style  -->
+    <Style TargetType="CommandBar">
+        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
     </Style>
     <!--  Header stackpanel  -->
     <Style x:Key="HeaderStackPanel" TargetType="StackPanel">
@@ -157,13 +203,13 @@
     <!--  Toast style  -->
     <Style x:Key="ToastStyle" TargetType="Toast:Toastinet">
         <Setter Property="Duration" Value="3" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
         <Setter Property="Height" Value="40" />
         <Setter Property="Canvas.ZIndex" Value="1" />
         <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="White" />
         <Setter Property="FontFamily" Value="Segoe UI" />
-        <Setter Property="Background" Value="Red" />
+        <Setter Property="Background" Value="{ThemeResource PhoneAccentBrush}" />
     </Style>
     <!--  Pivot header style  -->
     <Style x:Name="txtBlockPivotHeader" TargetType="TextBlock">
@@ -273,7 +319,7 @@
         <Setter Property="Margin" Value="4" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}" />
-        <Setter Property="Background" Value="{StaticResource mainForeground}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -319,7 +365,7 @@
                                       Grid.Row="1"
                                       Margin="{TemplateBinding Padding}"
                                       VerticalContentAlignment="Stretch"
-                                      Background="{StaticResource pageBackground}"
+                                      Background="Transparent"
                                       HorizontalScrollBarVisibility="Hidden"
                                       HorizontalSnapPointsAlignment="Center"
                                       HorizontalSnapPointsType="MandatorySingle"
@@ -332,7 +378,7 @@
                                 <PivotHeaderPanel x:Name="Header"
                                                   Height="40"
                                                   Margin="0"
-                                                  Background="{StaticResource mainForeground}">
+                                                  Background="Transparent">
                                     <PivotHeaderPanel.RenderTransform>
                                         <CompositeTransform x:Name="HeaderTranslateTransform" TranslateX="0" />
                                     </PivotHeaderPanel.RenderTransform>
@@ -354,7 +400,7 @@
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Foreground" Value="{ThemeResource PhoneForegroundBrush}" />
-        <Setter Property="Background" Value="{StaticResource mainForeground}" />
+        <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -410,11 +456,11 @@
                                       ZoomMode="Disabled">
                             <PivotPanel x:Name="Panel"
                                         VerticalAlignment="Stretch"
-                                        Background="{StaticResource pageBackground}">
+                                        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                 <PivotHeaderPanel x:Name="Header"
                                                   Height="40"
                                                   Margin="0"
-                                                  Background="{StaticResource mainForeground}">
+                                                  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                     <PivotHeaderPanel.RenderTransform>
                                         <CompositeTransform x:Name="HeaderTranslateTransform" TranslateX="0" />
                                     </PivotHeaderPanel.RenderTransform>
@@ -532,6 +578,120 @@
                        Grid.Column="2"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding desc}" />
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="ListSettings">
+        <Grid Width="{Binding ActualWidth,
+                              ElementName=GridParent}"
+              Holding="Grid_Holding"
+              Style="{StaticResource GridListViewItemTemplate}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding name}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding desc}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ListViewSearchUserTemplate">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="8"
+                       Foreground="Black"
+                       Style="{StaticResource ListViewItemTextBlockStyle}"
+                       Text="{Binding username}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Margin="12,4"
+                       VerticalAlignment="Top"
+                       Foreground="Black"
+                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                       Text="{Binding fullname}"
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="ListViewSearchBoards">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.RowSpan="1" Style="{StaticResource RectanglePicThumbnail}">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="8"
+                       FontWeight="Thin"
+                       Foreground="Black"
+                       Style="{StaticResource GroupHeaderTextBlockStyle}"
+                       Text="{Binding name}" />
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="ListViewSearchOrgs">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.RowSpan="2"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource RectanglePicThumbnail}">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="8"
+                       Foreground="Black"
+                       Style="{StaticResource ListViewItemTextBlockStyle}"
+                       Text="{Binding Username}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Margin="12,4"
+                       VerticalAlignment="Top"
+                       FontWeight="Medium"
+                       Foreground="Black"
+                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                       Text="{Binding Name}"
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
+
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

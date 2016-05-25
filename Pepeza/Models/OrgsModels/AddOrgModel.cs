@@ -29,8 +29,9 @@ namespace Pepeza.Models.OrgsModels
             {
                 _username = value;
                 IsUsernameValid = OrgValidation.IsUsernameValid(_username);
+                isUsernameModified = true;
                 onPropertyChanged("Username");
-                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid, isUsernameModified, isDescModified, isNameModified);
             }
         }
 
@@ -45,7 +46,8 @@ namespace Pepeza.Models.OrgsModels
                 _name = value;
                 onPropertyChanged("Name");
                 IsNameValid = OrgValidation.VaidateOrgName(_name);
-                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid ,IsNameValid, IsDescValid);
+                isNameModified = true;
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid, isUsernameModified, isDescModified, isNameModified);
             }
         }
         private string _desc;
@@ -59,7 +61,8 @@ namespace Pepeza.Models.OrgsModels
                 _desc = value;
                 onPropertyChanged("Desc");
                 IsDescValid = OrgValidation.ValidateDescription(_desc);
-                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
+                isDescModified = true;
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid , isUsernameModified , isDescModified , isNameModified);
             }
         }
         #endregion
@@ -99,7 +102,7 @@ namespace Pepeza.Models.OrgsModels
             {
                 _isDescValid = value;
                 onPropertyChanged("IsDescValid");
-                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid);
+                CanCreateOrg = viewModel.canCreateOrg(IsUsernameValid, IsNameValid, IsDescValid, isUsernameModified, isDescModified, isNameModified);
             }
         }
 
@@ -135,6 +138,9 @@ namespace Pepeza.Models.OrgsModels
             get { return _isCheckingUsername; }
             set { _isCheckingUsername = value; }
         }
+        public bool isUsernameModified { get; set; }
+        public bool isNameModified { get; set; }
+        public bool isDescModified { get; set; }
 
         #endregion
     }

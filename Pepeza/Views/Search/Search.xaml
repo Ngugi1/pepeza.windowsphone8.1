@@ -1,269 +1,88 @@
-﻿<Page
-    x:Class="Pepeza.Views.Search"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza.Views"
-    xmlns:Perso="using:Pepeza.Models.Search_Models"
-    xmlns:QKit="using:QKit"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Dark"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+﻿<Page x:Class="Pepeza.Views.Search"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Perso="using:Pepeza.Models.Search_Models"
+      xmlns:QKit="using:QKit"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Pepeza.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      RequestedTheme="Light"
+      mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
-        <Grid
-        Margin="0,4,0,0"
-        Background="{StaticResource mainForeground}">
+        <Grid Margin="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="70" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Pivot Style="{StaticResource CustomPivotSearch}"
-               Grid.Row="1"
-               Background="WhiteSmoke"
-               Name="PivotSearch"
-               SelectionChanged="Pivot_SelectionChanged"
-               Margin="0,12,0,0"
-               SelectedIndex="0"
-               Grid.ColumnSpan="2"
-               >
-                <PivotItem>
+            <TextBox Name="txtBoxSearch"
+                     Grid.Column="0"
+                     Height="{ThemeResource TextControlThemeMinWidth}"
+                     Margin="12,8"
+                     HorizontalAlignment="Stretch"
+                     Background="Transparent"
+                     Padding="8"
+                     PlaceholderText="search people,boards and organisations"
+                     TextChanged="txtBoxSearch_TextChanged" />
+            <Pivot Name="PivotSearch"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   Margin="0"
+                   SelectedIndex="0"
+                   SelectionChanged="Pivot_SelectionChanged"
+                   Style="{StaticResource CustomPivotSearch}">
+                <PivotItem Margin="19.5,0,19,0">
                     <PivotItem.Header>
-                        <TextBlock 
-                        Text="people" 
-                        Style="{StaticResource txtBlockPivotHeader}"/>
+                        <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="people" />
                     </PivotItem.Header>
-                    <ListView
-                    
-                    Margin="8"
-                    Foreground="Red"   
-                    Name="ListViewUser"
-                    SelectionChanged="ListViewUser_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse Height="80"
-                                         Width="80"
-                                        Grid.RowSpan="3">
-                                        <Ellipse.Fill>
-                                            <ImageBrush 
-                                            ImageSource="/Assets/Images/profile.jpg"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock 
-                                    Grid.Row="0"
-                                    Text="{Binding username}"
-                                    Margin="8"
-                                    Foreground="Black"
-                                    Grid.Column="1"
-                                    Style="{StaticResource ListViewItemTextBlockStyle}">
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding fullname}"
-                                        Grid.Row="1"
-                                        Style="{ThemeResource  ListViewItemSubheaderTextBlockStyle}"
-                                        Grid.Column="2"
-                                        Margin="12,4"
-                                        Foreground="Black"
-                                       VerticalAlignment="Bottom"
-                                        TextWrapping="NoWrap"
-                                        TextTrimming="WordEllipsis"
-                                           />
-                                    <Line X1="5" 
-                                      Y1="10"
-                                      Grid.Row="2"
-                                      X2="10"
-                                      Stroke="{StaticResource mainForeground}"
-                                      StrokeThickness="0.5"
-                                      Y2="10"
-                                      Margin="8"
-                                      Grid.Column="1"
-                                      Stretch="Fill"
-                                      />
-
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <ListView Name="ListViewUser"
+                              ItemTemplate="{StaticResource ListViewSearchUserTemplate}"
+                              SelectionChanged="ListViewUser_SelectionChanged" />
 
                 </PivotItem>
-                <PivotItem>
+                <PivotItem Margin="19.5,0,19,0">
                     <PivotItem.Header>
-                        <TextBlock Style="{StaticResource txtBlockPivotHeader}"
-                               Text="boards"
-                               />
+                        <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
                     </PivotItem.Header>
-                    <ListView Name="ListViewBoards" SelectionChanged="ListViewBoards_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse Height="80"
-                                         Width="80"
-                                        Grid.RowSpan="3">
-                                        <Ellipse.Fill>
-                                            <ImageBrush 
-                                            ImageSource="/Assets/Images/profile.jpg"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock 
-                                    Grid.Row="0"
-                                    Text="{Binding name}"
-                                FontWeight="Thin"
-                                    Margin="8"
-                                    Foreground="Black"
-                                    Grid.Column="1"
-                                    Style="{StaticResource GroupHeaderTextBlockStyle}">
-                                    </TextBlock>
-                                    <Line 
-                        X1="5"     
-                        Y1="10"
-                        Grid.Row="2"
-                        X2="10"
-                        Stroke="{StaticResource mainForeground}"
-                        StrokeThickness="0.5"
-                        Y2="10"
-                        Margin="8"
-                        Grid.Column="1"
-                        Stretch="Fill"
-                                      />
-
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <ListView Name="ListViewBoards"
+                              ItemTemplate="{StaticResource ListViewSearchBoards}"
+                              SelectionChanged="ListViewBoards_SelectionChanged" />
                 </PivotItem>
-                <PivotItem Margin="19,0,19,-0.5">
+                <PivotItem Margin="19.5,0,19,0">
                     <PivotItem.Header>
-                        <TextBlock 
-                        Text="organizations" 
-                        Style="{StaticResource txtBlockPivotHeader}"/>
+                        <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="organizations" />
                     </PivotItem.Header>
-                    <ListView
-                    Margin="8"
-                    Foreground="Red"   
-                    Name="listViewSearchOrgs"
-                    SelectionChanged="listViewSearchOrgs_SelectionChanged"
-                    >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse Height="70"
-                                         Width="70"
-                                         Margin="4,8,4,0"
-                                           VerticalAlignment="Center"
-                                        Grid.RowSpan="3">
-                                        <Ellipse.Fill>
-                                            <ImageBrush 
-                                            ImageSource="/Assets/Images/profile.jpg"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock 
-                                    Grid.Row="0"
-                                    Text="{Binding Username}"
-                                    Margin="8"
-                                    Foreground="Black"
-                                    Grid.Column="1"
-                                    Style="{StaticResource ListViewItemTextBlockStyle}">
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding Name}"
-                                        Grid.Row="1"
-                                        Style="{ThemeResource  ListViewItemSubheaderTextBlockStyle}"
-                                        Grid.Column="2"
-                                        FontWeight="Medium"
-                                        Margin="12,4,4,0"
-                                        Foreground="Black"
-                                       VerticalAlignment="Bottom"
-                                        TextWrapping="NoWrap"
-                                        TextTrimming="WordEllipsis"
-                                           />
-                                    <Line X1="5" 
-                                      Y1="10"
-                                      Grid.Row="2"
-                                      X2="10"
-                                      Stroke="{StaticResource mainForeground}"
-                                      StrokeThickness="0.5"
-                                      Y2="10"
-                                      Margin="8"
-                                      Grid.Column="1"
-                                      Stretch="Fill"
-                                      />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <ListView Name="listViewSearchOrgs"
+                              ItemTemplate="{StaticResource ListViewSearchOrgs}"
+                              SelectionChanged="listViewSearchOrgs_SelectionChanged" />
                 </PivotItem>
             </Pivot>
-            <TextBox 
-                PlaceholderText="search people,boards and organisations"
-                HorizontalAlignment="Stretch"
-                Padding="8"
-                Name="txtBoxSearch"
-                TextChanged="txtBoxSearch_TextChanged"  
-                Margin="12,8"
-                Height="{ThemeResource TextControlThemeMinWidth}"
-                Grid.Column="0"
-                />
-            <TextBlock 
-            Name="txtBlockWhat"
-                   Foreground="Black"
-                   Grid.Row="1"
-            TextAlignment="Center"
-            Margin="8"
-                   FontWeight="ExtraLight"
-            TextWrapping="Wrap"       
-            Style="{ThemeResource ListViewItemTextBlockStyle}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   />
-            <ProgressRing Grid.Row="1"
-                      Height="120"
-                      Name="ProgressRingSearch"
-                      Visibility="Collapsed"
-                      Foreground="{StaticResource mainForeground}"
-                      Width="120"
-                      Background="Transparent"
-                      IsActive="True"
-                      />
+            <TextBlock Name="txtBlockWhat"
+                       Grid.Row="1"
+                       Margin="8"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="28"
+                       FontWeight="ExtraLight"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{ThemeResource ListViewItemTextBlockStyle}"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" />
+            <ProgressRing Name="ProgressRingSearch"
+                          Grid.Row="1"
+                          Style="{StaticResource PRstyle}"
+                          Visibility="Collapsed" />
         </Grid>
     </Grid>
 </Page>

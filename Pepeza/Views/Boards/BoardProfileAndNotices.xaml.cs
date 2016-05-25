@@ -29,14 +29,14 @@ namespace Pepeza.Views.Boards
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class BoardProfileAndBoards : Page
+    public sealed partial class BoardProfileAndNotices : Page
     {
         FetchedBoard boardFetched = null;
         bool isProfileLoaded, areNoticesLoaded;
         int boardId;
         string boardname;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
-        public BoardProfileAndBoards()
+        public BoardProfileAndNotices()
         {
             this.InitializeComponent();
         }
@@ -51,7 +51,7 @@ namespace Pepeza.Views.Boards
             {
                 var parameters = (Dictionary<string,string>)(e.Parameter);
                 boardId = int.Parse(parameters["id"]);
-                txtBlockTopheader.Text= boardname = parameters["name"];
+                txtBlockTopheader.Text= boardname = parameters["name"].ToLower();
                 stackPanelLoading.Visibility = Visibility.Visible;
                 ContentRoot.Opacity = 0.7;
                 await getBoardDetailsAsync(boardId);
@@ -65,7 +65,7 @@ namespace Pepeza.Views.Boards
         public async Task getBoardDetailsAsync(int boardId)
         {
             //Determine whether to load board details locally or online
-            TBoard localBoard = BoardHelper.getBoard(boardId);
+            TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
                 rootGrid.DataContext = localBoard;
@@ -107,10 +107,11 @@ namespace Pepeza.Views.Boards
         }
           private async Task  isBoardMine(int id)
           {
-            if (BoardHelper.getBoard(id) != null)
+            if (await BoardHelper.getBoard(id) != null)
             {
                 //You own this board
                 btnFollow.Visibility = Visibility.Collapsed;
+                
             }
             else
             {
@@ -119,7 +120,7 @@ namespace Pepeza.Views.Boards
         }
         public async Task followBoard(int boardId)
         {
-            btnFollow.Content = "following board";
+            btnFollow.Content = "Following";
             Dictionary<string, string> results = await BoardService.followBoard(boardId);
             if (results.ContainsKey(Constants.SUCCESS))
             {
@@ -192,6 +193,8 @@ namespace Pepeza.Views.Boards
                         ContentRoot.Opacity = 0.7;
                         await getBoardDetailsAsync(boardId);
                     }
+                    enableAppBarEdit(true);
+                   
                     break;
                 case 1:
                     //Load notices if not loaded already
@@ -200,9 +203,22 @@ namespace Pepeza.Views.Boards
                         StackPanelLoadingNotices.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
                     }
+                    enableAppBarEdit(false);
                     break;
                 default :
                     break;
+            }
+        }
+
+        private void enableAppBarEdit(bool enable)
+        {
+            if (enable)
+            {
+                AppBtnEdit.IsEnabled = true;
+            }
+            else
+            {
+                AppBtnEdit.IsEnabled = false;
             }
         }
         private async void loadBoardNotices(int boardId)
@@ -246,6 +262,14 @@ namespace Pepeza.Views.Boards
             }
 
             StackPanelLoadingNotices.Visibility = Visibility.Collapsed;
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            var board = rootGrid.DataContext;
+
+        
+            this.Frame.Navigate(typeof(UpdateBoard), board);
         }
     }
 }

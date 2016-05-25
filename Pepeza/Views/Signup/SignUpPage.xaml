@@ -1,179 +1,154 @@
-﻿<Page
-    x:Class="Pepeza.Views.SignUpPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza.Views"
-    xmlns:Toast="using:Toastinet"
-    xmlns:QuickConverter="using:Pepeza.ViewModels.Converters"
-    xmlns:PersonModel="using:Pepeza.Models"
-    xmlns:VisibilityConverter="using:Pepeza.ViewModels"
-    xmlns:pageHeader="using:Pepeza.CustomControls"
-    xmlns:VM="using:Pepeza.ViewModels"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Dark"
-    >
+﻿<Page x:Class="Pepeza.Views.SignUpPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:PersonModel="using:Pepeza.Models"
+      xmlns:QuickConverter="using:Pepeza.ViewModels.Converters"
+      xmlns:Toast="using:Toastinet"
+      xmlns:VM="using:Pepeza.ViewModels"
+      xmlns:VisibilityConverter="using:Pepeza.ViewModels"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Pepeza.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:pageHeader="using:Pepeza.CustomControls"
+      RequestedTheme="Light"
+      mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
-            <VisibilityConverter:BoolVisibilityConverter x:Key="converter"/>
-            <QuickConverter:QuickVisibilityConverter x:Key="QuickConverter"/>
-            <PersonModel:User x:Key="User"/>
+            <VisibilityConverter:BoolVisibilityConverter x:Key="converter" />
+            <QuickConverter:QuickVisibilityConverter x:Key="QuickConverter" />
+            <PersonModel:User x:Key="User" />
             <ResourceDictionary.MergedDictionaries>
-               <ResourceDictionary Source="/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid DataContext="{StaticResource User}"
+    <Grid Name="rootGrid"
           Background="{StaticResource pageBackground}"
-          >
+          DataContext="{StaticResource User}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel 
-            Orientation="Horizontal"
-            Style="{StaticResource HeaderStackPanel}">
-            <Image Source="/Assets/Images/icon.png"
-                   Margin="8,4"
-                   />
-            <TextBlock Text="Create Account"
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Margin="16"
                        VerticalAlignment="Bottom"
-                       Margin="16"
-                       Style="{StaticResource TitleTextBlockStyle}"
-                       />
+                       Style="{StaticResource txtBlockPageHeader}"
+                       Text="Create Account" />
         </StackPanel>
         <ScrollViewer Grid.Row="1"
+                      Margin="0,1.833,0,-2"
                       HorizontalScrollMode="Auto"
-                      VerticalScrollBarVisibility="Auto" Margin="0,1.833,0,-2" 
-                      >
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="0">
                 <StackPanel>
-                    <TextBox
-                    TextChanged="txtBoxUsername_TextChanged"    
-                    Header="Username"    
-                    Text="{Binding Username, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
-                    Name="txtBoxUsername"
-                    Style="{StaticResource txtBoxStyle}"
-                    IsSpellCheckEnabled="False"
-                    PlaceholderText="choose a username"
-                         />
-                    <ProgressBar IsIndeterminate="True" 
-                                IsEnabled="True"
+                    <TextBox Name="txtBoxUsername"
+                             Header="Username"
+                             IsSpellCheckEnabled="False"
+                             PlaceholderText="choose a username"
+                             Style="{StaticResource txtBoxStyle}"
+                             Text="{Binding Username,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="txtBoxUsername_TextChanged" />
+                    <ProgressBar Name="PBCheckUsername"
                                  Margin="16,4"
-                                 Name="PBCheckUsername"
-                                 Visibility="Collapsed"
-                                 />
-                </StackPanel>
-                <TextBlock Style="{StaticResource txtBlockError}"
-                       Name="txtBlockUsernameStatus" 
-                       Visibility="{Binding IsUsernameValid , Mode=TwoWay , Converter={StaticResource converter}}"    
-                       Text="username must contain atleast 4 characters(letters , digits or underscore)"
-                       />
-                <StackPanel>
-                <TextBox Header="email"
-                     Name="txtBoxEmail"
-                     InputScope="EmailSmtpAddress"
-                     IsSpellCheckEnabled="False"
-                     Text="{Binding Email , Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}"
-                     TextChanged="txtBoxEmail_TextChanged"
-                         Style="{StaticResource txtBoxStyle}"
-                     PlaceholderText="someone@something.com"
-                     />
-                    <ProgressBar IsIndeterminate="True"
                                  IsEnabled="True"
-                                 Visibility="Collapsed"
+                                 IsIndeterminate="True"
+                                 Visibility="Collapsed" />
+                </StackPanel>
+                <TextBlock Name="txtBlockUsernameStatus"
+                           Style="{StaticResource txtBlockError}"
+                           Text="username must contain atleast 4 characters(letters , digits or underscore)"
+                           Visibility="{Binding IsUsernameValid,
+                                                Mode=TwoWay,
+                                                Converter={StaticResource converter}}" />
+                <StackPanel>
+                    <TextBox Name="txtBoxEmail"
+                             Header="email"
+                             InputScope="EmailSmtpAddress"
+                             IsSpellCheckEnabled="False"
+                             PlaceholderText="someone@something.com"
+                             Style="{StaticResource txtBoxStyle}"
+                             Text="{Binding Email,
+                                            Mode=TwoWay,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="txtBoxEmail_TextChanged" />
+                    <ProgressBar Name="PBCheckEmail"
                                  Margin="16,4"
-                                 Name="PBCheckEmail"
-                                 />
+                                 IsEnabled="True"
+                                 IsIndeterminate="True"
+                                 Visibility="Collapsed" />
                 </StackPanel>
                 <TextBlock Name="txtBlockEmailStatus"
-                       Style="{StaticResource txtBlockError}" 
-                        
-                       Visibility="{Binding Path=IsEmailValid , Mode=TwoWay , Converter={StaticResource converter}}"
-                       Text="Please enter a valid email address" 
-                       />
+                           Style="{StaticResource txtBlockError}"
+                           Text="Please enter a valid email address"
+                           Visibility="{Binding Path=IsEmailValid,
+                                                Mode=TwoWay,
+                                                Converter={StaticResource converter}}" />
                 <PasswordBox x:Name="passBox"
-                         Password="{Binding Password, Mode=TwoWay}"
-                         PlaceholderText="choose your password"
-                         Header="password"
-                         Style="{StaticResource passBoxStyle}"
-                         />
-                <TextBlock Style="{StaticResource txtBlockError}"
-                       Text="Length must > 8 (Letters ,digits and special character)"
-                       Name="txtBlockPassStatus"
-                        Visibility="{Binding IsPasswordValid, Mode=TwoWay , Converter= {StaticResource converter}}"
-                       
-                       />
+                             Header="password"
+                             Password="{Binding Password,
+                                                Mode=TwoWay}"
+                             PlaceholderText="choose your password"
+                             Style="{StaticResource passBoxStyle}" />
+                <TextBlock Name="txtBlockPassStatus"
+                           Style="{StaticResource txtBlockError}"
+                           Text="Length must &gt; 8 (Letters ,digits and special character)"
+                           Visibility="{Binding IsPasswordValid,
+                                                Mode=TwoWay,
+                                                Converter={StaticResource converter}}" />
 
                 <PasswordBox Name="passBoxRepeat"
-                         Background="Transparent"
-                         Password="{Binding PasswordConfirm , Mode=TwoWay}"
-                         Header="repeat password"
-                         Style="{StaticResource passBoxStyle}"
-                         PlaceholderText="confirm the password"
-                />
-                <TextBlock Text="password mismatch"
-                       Visibility="{Binding ArePasswordsMatching ,Mode=TwoWay , Converter={StaticResource converter}}"
-                       Name="txtBlockPassMatch"
-                         
-                       Style="{StaticResource txtBlockError}"/>
+                             Background="Transparent"
+                             Header="repeat password"
+                             Password="{Binding PasswordConfirm,
+                                                Mode=TwoWay}"
+                             PlaceholderText="confirm the password"
+                             Style="{StaticResource passBoxStyle}" />
+                <TextBlock Name="txtBlockPassMatch"
+                           Style="{StaticResource txtBlockError}"
+                           Text="password mismatch"
+                           Visibility="{Binding ArePasswordsMatching,
+                                                Mode=TwoWay,
+                                                Converter={StaticResource converter}}" />
 
-                <Button 
-                    Name="btnSignUp"
-                    CommandParameter="{Binding}" 
-                    Click="btnSignUp_Click" 
-                    HorizontalAlignment="Center"
-                    Content="Sign Up"
-                    IsEnabled="{Binding CanUserSignUp , Mode=TwoWay}"
-                    />
-                <TextBlock 
-                    Text="{Binding StatusMessage}"
-                    Style="{StaticResource txtBlockError}"
-                    Visibility="{Binding IsoverAllErrorsVisible , 
-                    Converter={StaticResource QuickConverter} 
-                    }" 
-                   
-                           />
-                <StackPanel Orientation="Horizontal"
-                         Visibility="{Binding ShowProgressRing 
-                    ,Converter={StaticResource QuickConverter}}"
-                            >
-                    <ProgressRing
-                        Margin="8"
-                        Height="40"
-                        Width="40"
-                        MinHeight="40"
-                        MinWidth="40"
-                        Background="{StaticResource pageBackground}"
-                        Foreground="{StaticResource BtnBackground}"
-                        IsActive="True"
-                        IsEnabled="True"
-                        />
-                    <TextBlock 
-                        TextLineBounds="Full"
-                           Style="{StaticResource txtBlockDisplay}"
-                           Text="Creating account . . ."
-                           HorizontalAlignment="Center"
-                           />
+
+                <TextBlock Style="{StaticResource txtBlockError}"
+                           Text="{Binding StatusMessage}"
+                           Visibility="{Binding IsoverAllErrorsVisible,
+                                                Converter={StaticResource QuickConverter}}" />
+                <StackPanel Height="49"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock Name="txtBlockHaveAccount"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               Style="{StaticResource txtBlockStatus}"
+                               Text="I already have an account ?" />
+                    <HyperlinkButton Name="hypBtnLogin"
+                                     Click="hypBtnLogin_Click"
+                                     Content="  Login"
+                                     Style="{StaticResource hlbtnStyle}" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Height="49">
-                    <TextBlock 
-                    Margin="48,0,0,0"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center"
-                    Foreground="{StaticResource mainForeground}"
-                    Text="I already have an account ?"
-                    Name="txtBlockHaveAccount"
-                    FontSize="16"
-                       />
-                    <HyperlinkButton Content="  Login" 
-                                     Click="hypBtnLogin_Click"  
-                                     Style="{StaticResource hlbtnStyle}"
-                                     Name="hypBtnLogin"
-                             />
+                <StackPanel Margin="12,8" Visibility="{Binding ShowProgressRing, Converter={StaticResource QuickConverter}}">
+                    <ProgressBar Margin="12,8" />
+                    <TextBlock HorizontalAlignment="Center"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Text="Creating account . . ."
+                               TextLineBounds="Full" />
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar DataContext="{StaticResource User}">
+            <AppBarButton Name="btnSignUp"
+                          Click="btnSignUp_Click"
+                          CommandParameter="{Binding}"
+                          Icon="Accept"
+                          IsEnabled="{Binding CanUserSignUp,
+                                              Mode=TwoWay}"
+                          Label="register" />
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

@@ -64,7 +64,6 @@ namespace Pepeza.Views.Notices
                 if (TextNoticeValidation.isTitleDescValid(txtBoxTitle.Text.Trim()))
                 {
                     StackPanelLoading.Visibility = Visibility.Visible;
-                    ContentGrid.Opacity = 0.4;
                     title = txtBoxTitle.Text.Trim();
                     int boardID = (comboBoards.SelectedItem as TBoard).id;
                     Dictionary<string, string> toPost = new Dictionary<string, string>()
@@ -114,7 +113,6 @@ namespace Pepeza.Views.Notices
                 showErrorToast("Invalid description!");
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
-            ContentGrid.Opacity = 1;
         }
         private void showErrorToast(string message)
         {

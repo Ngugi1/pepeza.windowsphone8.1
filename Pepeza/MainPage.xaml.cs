@@ -267,7 +267,5 @@ namespace Pepeza
         {
             this.Frame.Navigate(typeof(SettingsPage));
         }
-
-       
     }
 }

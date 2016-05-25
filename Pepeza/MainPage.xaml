@@ -6,7 +6,7 @@
       xmlns:local="using:Pepeza"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toaster="using:Toastinet"
-      Background="{StaticResource pageBackground}"
+      Background="{ThemeResource PhoneBackgroundBrush}"
       RequestedTheme="Light"
       mc:Ignorable="d">
     <Page.Resources>
@@ -40,8 +40,7 @@
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" 
-                               Text="orgs" />
+                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="orgs" />
                 </PivotItem.Header>
                 <Jumper:AlphaJumpList Name="AlphaListOrgs">
                     <ListView Name="ListViewOrgs"
@@ -55,7 +54,7 @@
 
                 </PivotItem.Header>
                 <!--  Alpha jumplist for Following Pivot  -->
-                <Jumper:AlphaJumpList Name="AlphaListFollowing" RequestedTheme="Light">
+                <Jumper:AlphaJumpList Name="AlphaListFollowing">
                     <ListView Name="ListViewFollowing"
                               ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
                               SelectionChanged="ListViewFollowing_SelectionChanged" />
@@ -67,36 +66,26 @@
                            Height="40"
                            Margin="12"
                            HorizontalContentAlignment="Center"
-                           Background="{ThemeResource PhoneAccentBrush}"
-                           BorderBrush="{ThemeResource PhoneAccentBrush}"
-                           FontSize="{ThemeResource TextStyleMediumFontSize}"
                            TextHAlignment="Center"
                            TextWrapping="Wrap" />
     </Grid>
     <Page.BottomAppBar>
 
-        <CommandBar x:Name="BottomCommandBar"
-                    Foreground="{StaticResource PhoneAccentBrush}"
-                    IsOpen="False">
+        <CommandBar x:Name="BottomCommandBar">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Click="AppBtnSettings_Click" Label="settings" />
 
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Name="AppBtnAdd"
-                              Background="BlueViolet"
                               Click="AppBtnAdd_Click"
                               Content="new item"
-                              Foreground="Black"
                               Icon="Add"
-                              IsCompact="True"
                               Label="add" />
                 <AppBarButton Name="AppBarBtnSearch"
                               Click="AppBarBtnSearch_Click"
                               Content="search"
-                              Foreground="Black"
                               Icon="Find"
-                              IsCompact="True"
                               Label="search" />
                 <AppBarButton Icon="SelectAll" Label="select all" />
             </CommandBar.PrimaryCommands>

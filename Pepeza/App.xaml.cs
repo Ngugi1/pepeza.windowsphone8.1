@@ -39,7 +39,7 @@ namespace Pepeza
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-            this.RequestedTheme = ApplicationTheme.Dark;
+            this.RequestedTheme = ApplicationTheme.Light;
             DbHelper.createDB();
         
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;

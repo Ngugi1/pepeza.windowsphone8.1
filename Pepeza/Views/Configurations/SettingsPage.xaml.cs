@@ -1,6 +1,7 @@
 ﻿using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Account;
+using Pepeza.Views.Profile;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,9 +27,18 @@ namespace Pepeza.Views.Configurations
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        List<Config> configurations;
         public SettingsPage()
         {
             this.InitializeComponent();
+            configurations = new List<Config>()
+            {
+                new Config(){name="Profile" , desc ="View or edit your profile" , page = typeof(Views.Profile.UserProfile)},
+                new Config(){name="Deactivate Account" , desc="Deactivating your account will suspend your account" , page=typeof(DeactivateAccount)},
+                new Config(){name="Logout" , desc="Logging out will have all application data to be cleared" , page=null}
+                
+            };
+            
         }
 
         /// <summary>
@@ -38,36 +48,40 @@ namespace Pepeza.Views.Configurations
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            ListViewSettings.ItemsSource = configurations;
         }
 
-        private async void Logout(object sender, TappedRoutedEventArgs e)
+        private async void ListViewSettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            StackPanelInProgress.Visibility = Visibility.Visible;
-            Dictionary<string, string> logout = await RequestUser.logout();
-            if (logout.ContainsKey(Constants.SUCCESS))
+            Config config = (sender as ListView).SelectedItem as Config;
+            if (config!=null)
             {
-                if (await LocalUserHelper.clearLocalSettingsForUser())
+                if(config.page == null)
                 {
-                    //Redirect to login page 
-
-                    this.Frame.Navigate(typeof(LoginPage));
+                     StackPanelInProgress.Visibility = Visibility.Visible;
+                Dictionary<string, string> logout = await RequestUser.logout();
+                if (logout.ContainsKey(Constants.SUCCESS))
+                {
+                    if (await LocalUserHelper.clearLocalSettingsForUser())
+                    {
+                        //Redirect to login page 
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                 }
+                else
+                {
+                    ToasterError.Message = logout[Constants.ERROR];
+                    Debug.WriteLine("Failed to logout!");
+                }
+                StackPanelInProgress.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.Frame.Navigate(config.page);
+                }
+               ListViewSettings.SelectedItem = null;
             }
-            else
-            {
-                Debug.WriteLine("Failed to logout!");
-            }
-            StackPanelInProgress.Visibility = Visibility.Collapsed;
-        }
-
-        private void DeactivateAccount(object sender, TappedRoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(DeactivateAccount));
-        }
-
-        private void Profile(object sender, TappedRoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(Views.Profile.UserProfile));
+            
         }
 
     }

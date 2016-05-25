@@ -50,7 +50,8 @@ namespace Pepeza.Views
         //Now make the request to the server
         private async void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-            User user = btnSignUp.CommandParameter as User;
+            
+            User user = rootGrid.DataContext as User;
             if (user.CanUserSignUp)
             {
                 //If so make a request to create user

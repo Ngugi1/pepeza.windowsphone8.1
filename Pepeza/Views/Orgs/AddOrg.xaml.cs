@@ -22,7 +22,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Pepeza.Views.Orgs
@@ -52,57 +51,68 @@ namespace Pepeza.Views.Orgs
         private async void btnCreateOrg_Click(object sender, RoutedEventArgs e)
         {
             AddOrgModel model = btnCreate.CommandParameter as AddOrgModel;
-            TxtBlockCreateOrgStatus.Visibility = Visibility.Collapsed;
-            model.IsProgressRingVisible = true;
-            if (OrgValidation.IsUsernameValid(txtBoxUsername.Text.Trim()) &&
-                OrgValidation.VaidateOrgName(txtBoxOrgName.Text.Trim()) &&
-                OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim()))
+            if (model != null)
             {
+                TxtBlockCreateOrgStatus.Visibility = Visibility.Collapsed;
+                model.IsProgressRingVisible = true;
+                if (OrgValidation.IsUsernameValid(txtBoxUsername.Text.Trim()) &&
+                    OrgValidation.VaidateOrgName(txtBoxOrgName.Text.Trim()) &&
+                    OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim()))
+                {
 
-                Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
+                    Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
                 {
                     {"username" , txtBoxUsername.Text.Trim()},
                     {"name", txtBoxOrgName.Text.Trim()},
                     {"description" , txtBoxOrgDesc.Text.Trim()}
                 });
-                if (result.ContainsKey(Constants.SUCCESS))
-                {
-                    try
-                    { //Board created successfully  , save and navigate away 
-                        JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
-                        int rows = await Db.DbHelpers.OrgHelper.add(new TOrgInfo()
-                        {
-
-                            id = (int)orgInfo["id"],
-                            username = model.Username,
-                            name = model.Name,
-                            userId = (int)Settings.getValue(Constants.USERID),
-                            description = model.Desc,
-                            dateCreated = (DateTime)orgInfo["dateCreated"]["date"],
-                            timezone_create = (string)orgInfo["dateCreated"]["timezone"],
-                            timezone_type_created = (int)orgInfo["dateCreated"]["timezone_type"],
-                            dateUpdated = (DateTime)orgInfo["dateUpdated"]["date"],
-                            timezone_updated = (string)orgInfo["dateUpdated"]["timezone"],
-                            timezone_type_updated = (int)orgInfo["dateUpdated"]["timezone_type"]
-
-                        });
-                        Debug.WriteLineIf(rows == 1, "Inserted");
-                        this.Frame.GoBack();
-                    }
-                    catch (SQLiteException ex)
+                    if (result.ContainsKey(Constants.SUCCESS))
                     {
-                        Debug.WriteLine("This is an exception message  :: =============>>>" + ex.Message);
+                        try
+                        { //Board created successfully  , save and navigate away 
+                            JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
+                            int rows = await Db.DbHelpers.OrgHelper.add(new TOrgInfo()
+                            { 
+
+                                id = (int)orgInfo["id"],
+                                username = model.Username,
+                                name = model.Name,
+                                userId = (int)Settings.getValue(Constants.USERID),
+                                description = model.Desc,
+                                dateCreated = (DateTime)orgInfo["dateCreated"]["date"],
+                                timezone_create = (string)orgInfo["dateCreated"]["timezone"],
+                                timezone_type_created = (int)orgInfo["dateCreated"]["timezone_type"],
+                                dateUpdated = (DateTime)orgInfo["dateUpdated"]["date"],
+                                timezone_updated = (string)orgInfo["dateUpdated"]["timezone"],
+                                timezone_type_updated = (int)orgInfo["dateUpdated"]["timezone_type"]
+
+                            });
+                            Debug.WriteLineIf(rows == 1, "Inserted");
+                            this.Frame.GoBack();
+                        }
+                        catch (SQLiteException ex)
+                        {
+                            Debug.WriteLine("This is an exception message  :: =============>>>" + ex.Message);
+                        }
                     }
+                    else
+                    {
+                        //There was an error , dispaly it.Stop all the animations and enable the button
+                        model.CanCreateOrg = true;
+                        model.IsProgressRingVisible = false;
+                        TxtBlockCreateOrgStatus.Text = result[Constants.ERROR];
+                        TxtBlockCreateOrgStatus.Visibility = Visibility.Visible;
+                    }
+
                 }
                 else
                 {
-                    //There was an error , dispaly it.Stop all the animations and enable the button
-                    model.CanCreateOrg = true;
-                    model.IsProgressRingVisible = false;
-                    TxtBlockCreateOrgStatus.Text = result[Constants.ERROR];
-                    TxtBlockCreateOrgStatus.Visibility = Visibility.Visible;
+                    TxtBlockCreateOrgStatus.Text = "Please fill in all the fields";
                 }
-
+            }
+            else
+            {
+                btnCreate.IsEnabled = false;
             }
         }
 
@@ -122,7 +132,7 @@ namespace Pepeza.Views.Orgs
                     {
                         //User doesn't exist 
                         model.Org.IsUsernameValid = true;
-                        model.Org.CanCreateOrg = true;
+                        //model.Org.CanCreateOrg = true;
                         
                     }
                     else
@@ -130,7 +140,7 @@ namespace Pepeza.Views.Orgs
                         //Username is already taken
                         txtBlockUsernameStatus.Text = CustomMessages.USERNAME_TAKEN;
                         model.Org.IsUsernameValid = false;
-                        model.Org.CanCreateOrg = false;
+                        //model.Org.CanCreateOrg = false;
                     }
                 }
                 else

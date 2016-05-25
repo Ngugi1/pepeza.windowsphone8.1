@@ -46,6 +46,7 @@ namespace Pepeza.Views.Profile
         {
             //get the data from the sqlilte database
             ProfileData data = await getUserProfile();
+            data.username = "@" + data.username;
             grid.DataContext = data;
             if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
             {
@@ -129,6 +130,7 @@ namespace Pepeza.Views.Profile
         {
             appBarBtnEditDetails.Label = "update";
             appBarBtnEditDetails.Icon = new SymbolIcon(Symbol.Accept);
+            txtBoxFirstName.Focus(Windows.UI.Xaml.FocusState.Keyboard);
         }
 
         private async Task<ProfileData> getUserProfile()

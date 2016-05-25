@@ -124,6 +124,7 @@ namespace Pepeza.Views.Orgs
             TOrgInfo localOrg = await OrgHelper.get(orgID);
             if (localOrg!=null)
             {
+                if (localOrg.username == null) localOrg.username = "my boards";
                 isOrgMine = true;
                 enabeDisableAppBtnEdit(true);
                 RootGrid.DataContext = localOrg;
@@ -152,6 +153,7 @@ namespace Pepeza.Views.Orgs
                         timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
                         timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
                     };
+                    if (info.username == null) info.username = "my boards";
                     RootGrid.DataContext = info;
                 }
                 else
@@ -291,13 +293,13 @@ namespace Pepeza.Views.Orgs
             if (isFetching)
             {
                 SCVOrgProfile.Opacity = 0.5;
-                PRGetOrgDetails.Visibility = Visibility.Visible;
+                StackPanelGetOrgDetails.Visibility = Visibility.Visible;
             }
             else
             {
                 SCVOrgProfile.Opacity = 1;
                 isProfileLoaded = true;
-                PRGetOrgDetails.Visibility = Visibility.Collapsed;
+                StackPanelGetOrgDetails.Visibility = Visibility.Collapsed;
             }
         }
         private void fetchingBoards(bool isFetching)

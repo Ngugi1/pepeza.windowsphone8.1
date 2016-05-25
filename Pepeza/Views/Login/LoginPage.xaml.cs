@@ -80,22 +80,20 @@ namespace Pepeza.Views
             if (!txtBoxPassword.Password.Equals("") && !textBoxUsername.Text.Equals(""))
             {
                 //Update UI 
-                PRLogin.Visibility = Visibility.Visible;
+                StackPanelLogging.Visibility = Visibility.Visible;
                 txtBlockLoginStaus.Visibility = Visibility.Collapsed;
-                btnLogin.Opacity = 0.5;
                 //Make the request 
                 Dictionary<string,string> results = await RequestUser.loginUser(getData());
                 if (results.ContainsKey(Constants.APITOKEN))
                 {
-                    //Save token
-                    ToastFieldsIncomplete.Message = (string)Settings.getValue((string)Constants.APITOKEN);
                     //Navigate to deactivate account
                     this.Frame.Navigate(typeof(SetUpPage) , results);
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {
                     //Notify the UI of the error
-                    ToastFieldsIncomplete.Message = results[Constants.ERROR];
+                    txtBlockLoginStaus.Text = results[Constants.ERROR];
+                    txtBlockLoginStaus.Visibility = Visibility.Visible;
                 }
                 else if (results.ContainsKey(Constants.LOG_FAILED))
                 {
@@ -104,8 +102,7 @@ namespace Pepeza.Views
 
                 }
                
-                PRLogin.Visibility = Visibility.Collapsed;
-                btnLogin.Opacity = 1;
+                StackPanelLogging.Visibility = Visibility.Collapsed;
             }
             
         }

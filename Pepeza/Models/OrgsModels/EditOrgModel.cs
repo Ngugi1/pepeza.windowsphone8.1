@@ -17,6 +17,7 @@ namespace Pepeza.Models.OrgsModels
             set 
             {
                 _name = value;
+                isNameModified = true;
                 onPropertyChanged("Name");
                 IsNameValid = OrgValidation.VaidateOrgName(Name);
             }
@@ -28,6 +29,7 @@ namespace Pepeza.Models.OrgsModels
             get { return _desc; }
             set 
             { _desc = value;
+            isDescModified = true;
             onPropertyChanged("Desc");
             IsDescValid = OrgValidation.ValidateDescription(Desc);
             }
@@ -43,7 +45,7 @@ namespace Pepeza.Models.OrgsModels
                 _isNameValid = value;
                 CanUpdateProfile = IsDescValid && IsNameValid;
                 onPropertyChanged("IsNameValid");
-                }
+            }
         }
         private bool _isDescValid = true;
 
@@ -52,20 +54,23 @@ namespace Pepeza.Models.OrgsModels
             get { return _isDescValid; }
             set 
             { _isDescValid = value;
-                CanUpdateProfile = IsDescValid && IsNameValid;
-               onPropertyChanged("IsDescValid");
+                CanUpdateProfile = IsDescValid && IsNameValid&&(isDescModified||isNameModified);
+                onPropertyChanged("IsDescValid");
             }
         }
         private bool _canUpdateProfile = false;
 
         public bool CanUpdateProfile
         {
-            get { return _canUpdateProfile; }
+            get { return IsDescValid && IsNameValid && (isDescModified || isNameModified);  }
             set
-            { _canUpdateProfile = value;
-            onPropertyChanged("CanUpdateProfile");
+            {
+                _canUpdateProfile = value;
+                onPropertyChanged("CanUpdateProfile");
             }
         }
+        public bool isNameModified { get; set; }
+        public bool isDescModified { get; set; }
         
     }
 }

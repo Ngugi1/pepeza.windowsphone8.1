@@ -1,87 +1,82 @@
-﻿<Page
-    x:Class="Pepeza.Views.Account.DeactivateAccount"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pepeza.Views.Account"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    RequestedTheme="Dark"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+﻿<Page x:Class="Pepeza.Views.Account.DeactivateAccount"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Pepeza.Views.Account"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      RequestedTheme="Light"
+      mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+                <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Background="{StaticResource pageBackground}">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock 
-            Margin="20"   
-            Style="{StaticResource TitleTextBlockStyle}"
-            VerticalAlignment="Bottom"
-            FontSize="{StaticResource TextStyleExtraExtraLargeFontSize}"
-            Foreground="{ThemeResource TextBoxButtonForegroundThemeBrush}"
-            Text="deactivate account"/>
+        <TextBlock Margin="20"
+                   VerticalAlignment="Bottom"
+                  Style="{StaticResource txtBlockPageHeader}"
+                   Text="deactivate account" />
         <StackPanel Grid.Row="1">
-            <TextBlock Text="When you deactivate your account :"
-            Margin="28"
+            <TextBlock Margin="28"
                        Style="{StaticResource txtBlockDisplay}"
-                       />
-            <RichTextBlock Style="{StaticResource RichTextBoxStyle}"
-                           >
-                <Paragraph TextIndent="40"
-                           FontSize="16"
-                           >
+                       Text="When you deactivate your account :" />
+            <RichTextBlock Style="{StaticResource RichTextBoxStyle}">
+                <Paragraph FontSize="16" TextIndent="40">
                     - You will
-                    <Bold Foreground="Black">NOT
-                    </Bold> appear in search results
+                    <Bold Foreground="Black">
+                        NOT
+                    </Bold>
+                    appear in search results
                 </Paragraph>
             </RichTextBlock>
-            <RichTextBlock 
-                
-                Style="{StaticResource RichTextBoxStyle}">
-                <Paragraph 
-                    FontSize="16"
-                    TextIndent="40">
+            <RichTextBlock Style="{StaticResource RichTextBoxStyle}">
+                <Paragraph FontSize="16" TextIndent="40">
                     -Your profile will
-                    <Bold Foreground="Black"> no longer be visible
+                    <Bold Foreground="Black">
+                        no longer be visible
                     </Bold>
                     in Pepeza
                 </Paragraph>
             </RichTextBlock>
-            <RichTextBlock 
-                Margin="28"
-                Style="{StaticResource RichTextBoxStyle}"
-                >
+            <RichTextBlock Margin="28" Style="{StaticResource RichTextBoxStyle}">
                 <Paragraph TextIndent="0">
                     You can
-                    <Underline><Bold Foreground="Black">re-activate</Bold></Underline>
+                    <Underline>
+                        <Bold Foreground="Black">re-activate</Bold>
+                    </Underline>
                     your account by using your
-                    <Bold Foreground="Black">old credentials</Bold> to login.
-                
+                    <Bold Foreground="Black">old credentials</Bold>
+                    to login.
                 </Paragraph>
             </RichTextBlock>
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        >    
-            <Button HorizontalAlignment="Center"
-                    Width="Auto"
-                    Name="btnDeactivateAccount"
-                    Click="btnDeactivateAccount_Click"
-                    Content="deactivate account"
-                      />
-                <ProgressRing Style="{StaticResource PRstyle}" 
-                             Visibility="Collapsed"
-                              Name="deactivateProgressRing"
-                              />
-            </StackPanel>
-            <TextBlock Name="txtBlockStatus"
-                       Style="{StaticResource txtBlockError}"/>
+
+            <TextBlock Name="txtBlockStatus" Style="{StaticResource txtBlockError}" />
+        </StackPanel>
+        <StackPanel Name="deactivateProgressRing"
+                    Grid.Row="2"
+                    Visibility="Collapsed">
+            <ProgressBar Grid.Row="1"
+                         Margin="12,24"
+                         VerticalAlignment="Bottom" />
+
+            <TextBlock HorizontalAlignment="Center"
+                       Style="{StaticResource txtBlockWait}"
+                       Text="deactivating your account ..." />
         </StackPanel>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Click="AppBarDeactivateClick"
+                          Icon="Accept"
+                          Label="deactivate" />
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
