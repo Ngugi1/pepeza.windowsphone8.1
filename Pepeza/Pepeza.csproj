@@ -132,7 +132,10 @@
     <Compile Include="Models\UserModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\Connectivity\Network.cs" />
+    <Compile Include="Server\Requests\Push\BackendService.cs" />
+    <Compile Include="Server\Requests\Push\BackgroundAgents.cs" />
     <Compile Include="Server\Requests\BoardService.cs" />
+    <Compile Include="Server\Requests\GetNewData.cs" />
     <Compile Include="Server\Requests\NoticeService.cs" />
     <Compile Include="Server\Requests\OrgsService.cs" />
     <Compile Include="Server\Requests\RequestUser.cs" />
@@ -142,6 +145,7 @@
     <Compile Include="Server\Utility\Addresses.cs" />
     <Compile Include="Server\Utility\BaseRequest.cs" />
     <Compile Include="Server\Utility\BoardAddresses.cs" />
+    <Compile Include="Server\Utility\GetNewdataAddresses.cs" />
     <Compile Include="Server\Utility\NoticeAddresses.cs" />
     <Compile Include="Server\Utility\OrgsAddresses.cs" />
     <Compile Include="Server\Utility\UserAddresses.cs" />
@@ -232,7 +236,7 @@
     <Content Include="Assets\StoreLogo.scale-240.png" />
     <Content Include="Assets\Images\txtnotice.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
-    <Content Include="ReadMe.Coding4Fun.Toolkit.txt" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -246,11 +250,6 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
     </Page>
     <Page Include="Styles\Styles.xaml">
       <SubType>Designer</SubType>
@@ -327,6 +326,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Afk.ZoneInfo">
+      <HintPath>..\packages\Afk.ZoneInfo.1.4.0.0\lib\net35\Afk.ZoneInfo.dll</HintPath>
+    </Reference>
     <Reference Include="Coding4Fun.Toolkit">
       <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.7\lib\wpa81\Coding4Fun.Toolkit.dll</HintPath>
     </Reference>
@@ -363,7 +365,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PepezaPushBackgroundTask\PepezaPushBackgroundTask.csproj">
+      <Project>{815c1de4-c75f-4abe-ba76-67ff441e9898}</Project>
+      <Name>PepezaPushBackgroundTask</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

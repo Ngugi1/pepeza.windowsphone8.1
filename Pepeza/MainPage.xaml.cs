@@ -15,6 +15,7 @@ using QKit.JumpList;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -40,9 +41,11 @@ namespace Pepeza
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        ObservableCollection<TBoard> boards;
-        ObservableCollection<TOrgInfo> orgs;
-        ObservableCollection<TFollowing> following;
+
+        public static ObservableCollection<TBoard> boards { get; set; }
+        public static ObservableCollection<TOrgInfo> orgs { get; set; }
+        public static ObservableCollection<TFollowing> following{ get; set; }
+
         Boolean isSelected = false;
         public MainPage()
         {
@@ -85,6 +88,7 @@ namespace Pepeza
             ListViewFollowing.SelectedItem = null;
             isSelected = true;
             this.Frame.BackStack.Clear();
+            
         }
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {

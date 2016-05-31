@@ -34,6 +34,7 @@
                 <Jumper:GenericJumpList Name="QJumpList">
                     <ListView Name="ListViewBoards"
                               ItemTemplate="{StaticResource ListViewBoardsDataTemplate}"
+                              ItemsSource="{Binding Boards}"
                               SelectionChanged="ListViewBoards_SelectionChanged" />
 
                 </Jumper:GenericJumpList>

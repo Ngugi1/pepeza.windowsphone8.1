@@ -8,17 +8,16 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Db.Models.Board
 {
-    class TFollowing : Bindable
+    public class TFollowing : Bindable
     {
-        private int _id;
-        [Unique]
-        public int Id
+        [PrimaryKey]
+        public int Id { get; set; }
+        private int userId;
+
+        public int UserId
         {
-            get { return _id; }
-            set
-            {
-                _id = value;
-                onPropertyChanged("Id");
+            get { return userId; }
+            set { userId = value; onPropertyChanged("UserId"); 
             }
         }
 

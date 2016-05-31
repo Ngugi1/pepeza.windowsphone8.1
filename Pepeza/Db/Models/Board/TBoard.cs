@@ -40,6 +40,7 @@ namespace Pepeza.Db.Models.Board
         public DateTime dateUpdated { get; set; }
         public string timezone_updated { get; set; }
         public int timezone_type_updated { get; set; }
+        public int following { get; set; }
 
     }
 }

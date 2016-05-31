@@ -9,7 +9,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush Color="{ThemeResource PhoneAccentBrush}" x:Key="AccentStatusBar"/>
             <!-- Button custom style-->
+          
             <Thickness x:Key="PhoneTouchTargetOverhang">0,9.5</Thickness>
             <SolidColorBrush x:Key="ButtonDisabledBackgroundThemeBrush" Color="Transparent" />
             <ControlTemplate x:Key="CustomButtonDisabledStyle" TargetType="Button">

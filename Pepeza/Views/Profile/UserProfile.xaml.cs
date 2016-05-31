@@ -136,8 +136,8 @@ namespace Pepeza.Views.Profile
         private async Task<ProfileData> getUserProfile()
         {
             var connection = DbHelper.DbConnectionAsync();
-            int userId = (int)Settings.getValue(Constants.USERID);
-            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>(userId);
+            //int userId = (int)Settings.getValue(Constants.USERID);
+            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>(1);
             TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
             Debug.WriteLine(emailInfo.email);
             return new ProfileData()

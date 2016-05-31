@@ -70,11 +70,13 @@
                                             Click="btnFollow_Click"
                                             Content="Follow board"
                                             IsEnabled="True" />
-                                    <Rectangle Margin="12"  Height="1" Fill="{ThemeResource PhoneAccentBrush}" />
+                                    <Rectangle Height="1"
+                                               Margin="12"
+                                               Fill="{ThemeResource PhoneAccentBrush}" />
 
                                 </StackPanel>
                             </Grid>
-                           
+
                             <ScrollViewer Grid.Row="1"
                                           VerticalContentAlignment="Top"
                                           VerticalScrollBarVisibility="Visible"

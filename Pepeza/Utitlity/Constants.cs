@@ -9,6 +9,7 @@ namespace Pepeza.Utitlity
     class Constants
     {
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
+        public static int OS_ID { get { return 3; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }
         public static string UNKNOWNERROR { get { return "Oops! Something went wrong. Try again later"; } }
         public static string NO_INTERNET_CONNECTION { get { return "Please check your internet connection!"; } }
@@ -25,5 +26,6 @@ namespace Pepeza.Utitlity
         public static string DELETED { get { return "Item deleted successfully"; } }
         public static string NOT_DELETED { get { return "Sorry , we couldn't delete the item."; } }
         public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
+        public static string LAST_UPDATED { get { return "LAST_UPDATED"; } }
     }
 }

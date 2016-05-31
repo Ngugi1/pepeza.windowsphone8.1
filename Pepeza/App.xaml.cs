@@ -1,7 +1,12 @@
 ﻿using Pepeza.Db.DbHelpers;
+using Pepeza.IsolatedSettings;
+using Pepeza.Server.Push;
+using Pepeza.Server.Requests;
+using Pepeza.Utitlity;
 using Pepeza.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -9,6 +14,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.PushNotifications;
 using Windows.Phone.UI.Input;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -41,9 +47,18 @@ namespace Pepeza
             this.Suspending += this.OnSuspending;
             this.RequestedTheme = ApplicationTheme.Light;
             DbHelper.createDB();
-        
+            if (Settings.getValue(Constants.LAST_UPDATED) == null)
+            {
+                Settings.add(Constants.LAST_UPDATED, "0000-00-00 00:00:00");
+            }
+            
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            
             this.Resuming += App_Resuming;
+        }
+
+        void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
+        {
             
         }
 
@@ -73,7 +88,7 @@ namespace Pepeza
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
@@ -81,7 +96,7 @@ namespace Pepeza
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-
+            #region Predefined Actions
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -126,17 +141,19 @@ namespace Pepeza
                     throw new Exception("Failed to create initial page");
                 }
             }
+            #endregion
 
            
-            // Ensure the current window is active
-            Window.Current.Activate();
+            //Register for push Notifications background Tasks
+            await BackgroundAgents.registerPush();
             //Deal with the statusbar
             updateStatusBar();
+            // Ensure the current window is active
+            Window.Current.Activate();
         }
         public async static void updateStatusBar()
         {
             var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-            
             Binding bh = new Binding();
             bh.Mode = BindingMode.TwoWay;
             Color color = (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color;

@@ -192,8 +192,8 @@ namespace Pepeza.Server.Requests
                     }
                     else
                     {
-                        var dbug = response.Content.ReadAsStringAsync();
-                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        string dbug = await response.Content.ReadAsStringAsync();
+                        results.Add(Constants.ERROR, dbug);
                     }
                 }
                 catch

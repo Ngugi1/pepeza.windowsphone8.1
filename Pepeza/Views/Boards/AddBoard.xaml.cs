@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Afk.ZoneInfo;
+using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
@@ -10,19 +11,9 @@ using Pepeza.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Pepeza.Views.Boards
@@ -106,17 +97,16 @@ namespace Pepeza.Views.Boards
                     toInsert.desc = (string)model.Desc;
                     toInsert.orgID = (int)org.id;
                     toInsert.dateUpdated = (DateTime)board["dateUpdated"]["date"];
-                    toInsert.dateCreated = (DateTime)board["dateCreated"]["date"];
+                     toInsert.dateCreated = (DateTime)board["dateCreated"]["date"];
                     toInsert.timezone_created = (string)board["dateCreated"]["timezone"];
                     toInsert.timezone_updated = (string)board["dateUpdated"]["timezone"];
                     toInsert.timezone_type_created = (int)board["dateCreated"]["timezone_type"];
                     toInsert.timezone_type_updated = (int)board["dateUpdated"]["timezone_type"];
                
-
                 int K = await BoardHelper.addBoard(toInsert);
-                Debug.WriteLine("Affeected Rows ================> " + K);
+                
             }
-            catch (SQLite.SQLiteException ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString() + " ==================================== ");
             }

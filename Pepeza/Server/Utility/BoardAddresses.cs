@@ -14,8 +14,8 @@ namespace Pepeza.Server.Utility
         public static string DELETE { get { return "boards/{0}";}}
         public static string UNFOLLOW_BOARD { get { return "follower/{0}/{1}/unfollow"; } }
         public static string SEARCH { get { return "boards/search?q={0}"; }}
-        public static string FOLLOW { get { return "/boards/{0}/follow"; } }
-        public static string LOAD_FOLLOWERS { get { return "/board/{0}/followers"; }}
+        public static string FOLLOW { get { return "boards/{0}/follow"; } }
+        public static string LOAD_FOLLOWERS { get { return "board/{0}/followers"; }}
         public static string LOAD_NOTICES { get { return "board/{0}/notices"; } }
     }
 }

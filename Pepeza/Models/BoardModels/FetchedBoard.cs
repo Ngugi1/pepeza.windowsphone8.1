@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Pepeza.Models.BoardModels
     public class FetchedBoard : Bindable
     {
         private int _id;
-
+        [PrimaryKey]
         public int id
         {
             get { return _id; }

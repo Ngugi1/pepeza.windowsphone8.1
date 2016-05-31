@@ -70,13 +70,13 @@
                        Text="this is an error message"
                        Visibility="Collapsed" />
             <StackPanel Name="StackPanelLoading"
-                    Grid.Row="4"
-                    VerticalAlignment="Center"
-                    Visibility="Collapsed">
-                <ProgressBar Margin="12"/>
+                        Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed">
+                <ProgressBar Margin="12" />
                 <TextBlock HorizontalAlignment="Center"
-                       Style="{StaticResource txtBlockWait}"
-                       Text="posting your notice" />
+                           Style="{StaticResource txtBlockWait}"
+                           Text="posting your notice" />
             </StackPanel>
         </Grid>
         <toast:Toastinet Name="toastError"
