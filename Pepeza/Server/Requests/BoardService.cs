@@ -249,6 +249,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
+                    response = await client.GetAsync(string.Format(BoardAddresses.LOAD_FOLLOWERS, boardId));
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

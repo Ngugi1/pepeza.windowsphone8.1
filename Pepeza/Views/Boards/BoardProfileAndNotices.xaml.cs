@@ -52,7 +52,6 @@ namespace Pepeza.Views.Boards
             {
                 boardId = (int)e.Parameter;
                 stackPanelLoading.Visibility = Visibility.Visible;
-                ContentRoot.Opacity = 0.7;
             }
             else
             {
@@ -70,6 +69,7 @@ namespace Pepeza.Views.Boards
                 isBoardMine((int)Settings.getValue(Constants.USERID));
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 rootGrid.DataContext = localBoard;
+               
             }
             else
             {
@@ -109,6 +109,7 @@ namespace Pepeza.Views.Boards
                 isFetchingDetails(false);
                 isBoardMine(boardFetched.ownerId);
             }
+            GridContentHide.Opacity = 1;
            
         }
         private void isBoardMine(int ownerId)
@@ -288,6 +289,11 @@ namespace Pepeza.Views.Boards
 
         
             this.Frame.Navigate(typeof(UpdateBoard), board);
+        }
+
+        private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BoardFollowers) , boardId);
         }
     }
 }

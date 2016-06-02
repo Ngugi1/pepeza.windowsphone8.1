@@ -540,6 +540,31 @@
                        Text="{Binding Description}" />
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="ListViewFollowersDataTemplate">
+        <Grid Style="{StaticResource GridListViewItemTemplate}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding userName}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding FullName}" />
+        </Grid>
+    </DataTemplate>
     <DataTemplate x:Key="ListViewBoardsDataTemplate">
         <Grid Width="{Binding ActualWidth,
                               ElementName=GridParent}"

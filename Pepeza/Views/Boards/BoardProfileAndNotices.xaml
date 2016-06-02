@@ -41,7 +41,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Grid>
+                                <Grid Name="GridContentHide" Opacity="0">
                                     <StackPanel>
                                         <Rectangle Style="{StaticResource RectProfPic}">
                                             <Rectangle.Fill>
@@ -54,20 +54,27 @@
                                                    Foreground="Black"
                                                    Style="{StaticResource txtBlockStyleProfileOwner}"
                                                    Text="{Binding name}" />
-                                        <StackPanel Margin="8"
-                                                    HorizontalAlignment="Center"
-                                                    Orientation="Horizontal">
-                                            <TextBlock Margin="0,8"
-                                                       Style="{StaticResource txtBlockDisplay}"
-                                                       Text="{Binding noOfFollowers}"
-                                                       Typography.NumeralStyle="Normal" />
-                                            <TextBlock Margin="12,8"
-                                                       FontSize="22"
-                                                       Style="{StaticResource txtBlockDisplay}"
-                                                       Text="{Binding singleFollowerOrMany}"
-                                                       Typography.Capitals="AllSmallCaps" />
-                                        </StackPanel>
-
+                                        <HyperlinkButton Name="btnViewFollowers"
+                                                         HorizontalAlignment="Center"
+                                                         Background="Transparent"
+                                                         Click="btnViewFollowers_Click"
+                                                         Foreground="{ThemeResource PhoneAccentBrush}">
+                                            <HyperlinkButton.Content>
+                                                <StackPanel Margin="0"
+                                                            HorizontalAlignment="Center"
+                                                            Orientation="Horizontal">
+                                                    <TextBlock Margin="0"
+                                                               Style="{StaticResource txtBlockDisplay}"
+                                                               Text="{Binding noOfFollowers}"
+                                                               Typography.NumeralStyle="Normal" />
+                                                    <TextBlock Margin="12,0"
+                                                               FontSize="22"
+                                                               Style="{StaticResource txtBlockDisplay}"
+                                                               Text="{Binding singleFollowerOrMany}"
+                                                               Typography.Capitals="AllSmallCaps" />
+                                                </StackPanel>
+                                            </HyperlinkButton.Content>
+                                        </HyperlinkButton>
                                         <Button Name="btnFollow"
                                                 Margin="16,0"
                                                 HorizontalAlignment="Center"
@@ -186,21 +193,15 @@
                         <StackPanel Name="StackPanelLoadingNotices"
                                     VerticalAlignment="Center"
                                     Visibility="Collapsed">
-                            <ProgressRing Width="100"
-                                          Height="100"
-                                          Background="Transparent"
-                                          Foreground="{StaticResource mainForeground}"
-                                          IsActive="True"
-                                          IsEnabled="True" />
+                            <ProgressBar Margin="12" />
                             <TextBlock HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockStatus}"
+                                       Style="{StaticResource txtBlockWait}"
                                        Text="fetching notices..." />
                         </StackPanel>
                     </Grid>
                 </PivotItem>
 
             </Pivot>
-
         </Grid>
     </Grid>
     <Page.BottomAppBar>

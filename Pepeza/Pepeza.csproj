@@ -125,6 +125,7 @@
     <Compile Include="Models\OrgsModels\EditOrgModel.cs" />
     <Compile Include="Models\Search Models\Board.cs" />
     <Compile Include="Models\Search Models\Organization.cs" />
+    <Compile Include="Models\UserModels\Follower.cs" />
     <Compile Include="Models\UserModels\GetUser.cs" />
     <Compile Include="Models\OrgsModels\AddOrgModel.cs" />
     <Compile Include="Models\UserModels\ProfileInfo.cs" />
@@ -176,6 +177,9 @@
     </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardFollowers.xaml.cs">
+      <DependentUpon>BoardFollowers.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Boards\BoardProfileAndNotices.xaml.cs">
       <DependentUpon>BoardProfileAndNotices.xaml</DependentUpon>
@@ -262,6 +266,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Boards\AddBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Boards\BoardFollowers.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
