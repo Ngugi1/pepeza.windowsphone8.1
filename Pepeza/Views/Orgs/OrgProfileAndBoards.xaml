@@ -46,7 +46,7 @@
 
                     <ScrollViewer Name="SCVOrgProfile"
                                   Grid.Row="1"
-                                  Opacity="0.5"
+                                  Opacity="0"
                                   VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid.RowDefinitions>
