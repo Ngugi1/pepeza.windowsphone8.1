@@ -80,7 +80,9 @@
                                        HorizontalAlignment="Center"
                                        Style="{StaticResource txtBlockDisplay}"
                                        Text="{Binding description}" />
-                            <StackPanel Name="StackPanelGetOrgDetails" Grid.Row="5">
+                            <StackPanel Name="StackPanelGetOrgDetails"
+                                        Grid.Row="5"
+                                        HorizontalAlignment="Center">
                                 <ProgressBar Grid.Row="4" Margin="12" />
                                 <TextBlock Style="{StaticResource txtBlockWait}" Text="Just a moment ..." />
                             </StackPanel>
