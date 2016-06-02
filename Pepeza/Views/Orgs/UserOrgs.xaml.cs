@@ -75,29 +75,7 @@ namespace Pepeza.Views.Orgs
 
         }
 
-        private void loadUserOrgsLocally()
-        {
-            isfetchingOrgs(true);
-            ObservableCollection<Organization> collection = new ObservableCollection<Organization>();
-            var savedState = JsonConvert.DeserializeObject(Settings.getValue(PageStateConstants.USER_ORGS).ToString());
-            JArray savedOrgs = JArray.Parse(savedState.ToString());
-            if (savedOrgs.Count > 0)
-            {
-                //TODO:: Get the collection 
-                foreach (var item in savedOrgs)
-                {
-                    UserOrganisations.Add(new Organization()
-                    {
-                         Id = (int)item["Id"],
-                         Name =(string)item["Name"],
-                         Description = (string)item["Description"],
-                         Username = (string)item["Username"]
-                    });
-                }
-                ListViewUserBoards.ItemsSource = UserOrganisations;
-                isfetchingOrgs(false);
-            }
-        }
+       
         public async  void loadUserBoards(int selected)
         {
             txtBlockStatus.Visibility = Visibility.Collapsed;

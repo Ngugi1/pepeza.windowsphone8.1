@@ -80,6 +80,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Folder Include="LocalDB\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\BackgroundConstants.cs" />

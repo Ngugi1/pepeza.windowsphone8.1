@@ -105,7 +105,7 @@ namespace Pepeza.Views
         }
 
 
-        private SignUp getData(User user)
+        public SignUp getData(User user)
         {
             return new SignUp() { username = user.Username, email = user.Email, password = user.Password , osId = Constants.OS_ID };
         }

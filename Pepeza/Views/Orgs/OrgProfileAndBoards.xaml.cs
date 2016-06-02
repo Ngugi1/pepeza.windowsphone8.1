@@ -74,49 +74,6 @@ namespace Pepeza.Views.Orgs
             
         }
 
-        private void loadPageState()
-        {
-            restoreBoards(OrgID);
-            restoreProfile();
-        }
-
-        private void restoreProfile()
-        {
-            fetchingProfile(true);
-            //Load saved datacontext 
-            JObject savedProfile = JObject.Parse((string)Settings.getValue(PageStateConstants.ORG_PROFILE));
-
-            RootGrid.DataContext = new TOrgInfo()
-            {
-                id = (int)savedProfile["id"],
-                userId = (int)savedProfile["userId"],
-                username = (string)savedProfile["username"],
-                description = (string)savedProfile["description"],
-                name = (string)savedProfile["name"] 
-            };
-            fetchingProfile(false);
-        }
-
-        private void restoreBoards(int orgId)
-        {
-            fetchingBoards(true);
-            var serialBoards = JsonConvert.DeserializeObject(Settings.getValue(PageStateConstants.ORG_BOARDS).ToString());
-            JArray savedState = JArray.Parse(serialBoards.ToString());
-            ObservableCollection<TBoard> collection = new ObservableCollection<TBoard>();
-            foreach (var item in savedState)
-            {
-                collection.Add(new TBoard()
-                {
-                     id = (int)item["id"],
-                     name = (string)item["name"],
-                     desc = (string)item["desc"],
-                     orgID = (int)item["orgID"],
-                     organisation = (string)item["organisation"]
-                });
-            }
-            ListViewOrgBoards.ItemsSource = collection;
-            fetchingBoards(false);
-        }
         private async Task getOrgDetails(int orgID)
         {
             //Prepare UI for loading
