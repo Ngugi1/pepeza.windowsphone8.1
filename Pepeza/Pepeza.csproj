@@ -174,9 +174,6 @@
     <Compile Include="Views\Account\SetUpPage.xaml.cs">
       <DependentUpon>SetUpPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Boards\BoardProfile.xaml.cs">
-      <DependentUpon>BoardProfile.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
     </Compile>
@@ -261,10 +258,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Account\SetUpPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Boards\BoardProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

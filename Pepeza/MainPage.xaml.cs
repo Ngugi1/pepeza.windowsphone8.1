@@ -124,11 +124,7 @@ namespace Pepeza
             TBoard board = (sender as ListView).SelectedItem as TBoard;
             if(board!=null&& isSelected==true)
             {
-                Dictionary<string, string> parameters = new Dictionary<string, string>()
-                {
-                   {"id",board.id.ToString()},{"name" , board.name}
-                };
-                this.Frame.Navigate(typeof(BoardProfileAndNotices) , parameters);
+                this.Frame.Navigate(typeof(BoardProfileAndNotices),board.id);
             }
         }
         private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -168,7 +164,7 @@ namespace Pepeza
             TFollowing selected = ((sender as ListView).SelectedItem as TFollowing);
             if (selected != null && isSelected == true)
             {
-                this.Frame.Navigate(typeof(BoardProfile), selected.Id);
+                this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.Id);
             }
         }
         private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)

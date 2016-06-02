@@ -152,7 +152,7 @@
            TargetType="TextBlock">
         <Setter Property="FontSize" Value="{StaticResource TextStyleExtraExtraLargeFontSize}" />
         <Setter Property="Foreground" Value="{ThemeResource TextBoxButtonForegroundThemeBrush}" />
-        <Setter Property="Typography.Capitals" Value="SmallCaps" />
+        <Setter Property="Typography.Capitals" Value="AllSmallCaps" />
     </Style>
     <!--  Password Box Style  -->
     <Style x:Name="passBoxStyle" TargetType="PasswordBox">
@@ -356,7 +356,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <ContentControl x:Name="TitleContentControl"
-                                        Height="40"
+                                        Height="0"
                                         VerticalAlignment="Top"
                                         Content="{TemplateBinding Title}"
                                         ContentTemplate="{TemplateBinding TitleTemplate}"

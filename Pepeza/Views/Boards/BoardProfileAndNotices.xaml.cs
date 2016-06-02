@@ -2,6 +2,7 @@
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
@@ -31,8 +32,8 @@ namespace Pepeza.Views.Boards
     /// </summary>
     public sealed partial class BoardProfileAndNotices : Page
     {
-        FetchedBoard boardFetched = null;
-        bool isProfileLoaded, areNoticesLoaded;
+        TBoard boardFetched = null;
+        bool isProfileLoaded, areNoticesLoaded ,isMyBoard;
         int boardId;
         string boardname;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
@@ -45,17 +46,13 @@ namespace Pepeza.Views.Boards
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
-                var parameters = (Dictionary<string,string>)(e.Parameter);
-                boardId = int.Parse(parameters["id"]);
-                txtBlockTopheader.Text= boardname = parameters["name"].ToLower();
+                boardId = (int)e.Parameter;
                 stackPanelLoading.Visibility = Visibility.Visible;
                 ContentRoot.Opacity = 0.7;
-                await getBoardDetailsAsync(boardId);
-
             }
             else
             {
@@ -68,30 +65,38 @@ namespace Pepeza.Views.Boards
             TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
-                rootGrid.DataContext = localBoard;
                 isFetchingDetails(false);
+                isMyBoard = true;
+                isBoardMine((int)Settings.getValue(Constants.USERID));
+                localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
+                rootGrid.DataContext = localBoard;
             }
             else
             {
+                isMyBoard = false;
                 Dictionary<string, string> results = await BoardService.getBoard(boardId);
                 if (results != null && results.ContainsKey(Constants.SUCCESS))
                 {
                     JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                    boardFetched = new FetchedBoard()
+                    boardFetched = new TBoard()
                     {
                         id = (int)objResults["id"],
-                        OrgID = (int)objResults["orgId"],
+                        orgID = (int)objResults["orgId"],
                         name = (string)objResults["name"],
+                        noOfFollowers =(int)objResults["noOfFollowers"],
+                        following =(int)objResults["follower"]["accepted"],
+                        ownerId = (int)objResults["ownerId"],
                         desc = (string)objResults["description"],
-                        DateCreated = (DateTime)objResults["dateCreated"]["date"],
-                        DateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                        Timezone_created = (string)objResults["dateCreated"]["timezone"],
-                        Timezone_Updated = (string)objResults["dateUpdated"]["timezone"],
-                        Timezone_Type_Created = (int)objResults["dateCreated"]["timezone_type"],
-                        Timezone_Type_Updated = (int)objResults["dateUpdated"]["timezone_type"]
+                        dateCreated = (DateTime)objResults["dateCreated"]["date"],
+                        dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
+                        timezone_created = (string)objResults["dateCreated"]["timezone"],
+                        timezone_updated = (string)objResults["dateUpdated"]["timezone"],
+                        timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
+                        timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
                     };
-                    await checkIfBoardIsFollowed(boardFetched.id);
+                    checkIfBoardIsFollowed(boardFetched.following);
                     boardname = (string)objResults["name"];
+                    boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
                     isProfileLoaded = true;
                 }
@@ -102,20 +107,23 @@ namespace Pepeza.Views.Boards
                     toasterror.Message = results[Constants.ERROR];
                 }
                 isFetchingDetails(false);
+                isBoardMine(boardFetched.ownerId);
             }
-            await isBoardMine(boardId);
+           
         }
-          private async Task  isBoardMine(int id)
-          {
-            if (await BoardHelper.getBoard(id) != null)
+        private void isBoardMine(int ownerId)
+        {
+            if (ownerId == (int)Settings.getValue(Constants.USERID))
             {
                 //You own this board
                 btnFollow.Visibility = Visibility.Collapsed;
-                
+                AppBtnEdit.IsEnabled = false;
+
             }
             else
             {
                 btnFollow.Visibility = Visibility.Visible;
+                btnFollow.IsEnabled = true;
             }
         }
         public async Task followBoard(int boardId)
@@ -131,15 +139,15 @@ namespace Pepeza.Views.Boards
                 await FollowingHelper.add(new TFollowing()
                 {
                     Id = boardFetched.id,
-                    OrgId = boardFetched.OrgID,
+                    OrgId = boardFetched.orgID,
                     Name = boardFetched.name,
                     Description = boardFetched.desc,
-                    DateCreated = boardFetched.DateCreated,
-                    DateUpdated = boardFetched.DateUpdated,
-                    Timezone_created = boardFetched.Timezone_created,
-                    Timezone_Updated = boardFetched.Timezone_Updated,
-                    Timezone_Type_Created = boardFetched.Timezone_Type_Created,
-                    Timezone_Type_Updated = boardFetched.Timezone_Type_Updated
+                    DateCreated = boardFetched.dateCreated,
+                    DateUpdated = boardFetched.dateUpdated,
+                    Timezone_created = boardFetched.timezone_created,
+                    Timezone_Updated = boardFetched.timezone_updated,
+                    Timezone_Type_Created = boardFetched.timezone_type_created,
+                    Timezone_Type_Updated = boardFetched.timezone_type_updated
                 });
             }
             else
@@ -148,28 +156,26 @@ namespace Pepeza.Views.Boards
                 toasterror.Message = (string)results[Constants.ERROR];
             }
         }
-        /// <summary>
-        /// Timer ticking
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private async void btnFollow_Click(object sender, RoutedEventArgs e)
         {
-            FetchedBoard board = ContentRoot.DataContext as FetchedBoard;
+            TBoard board = ContentRoot.DataContext as TBoard;
             await followBoard(board.id);
         }
-        private async Task checkIfBoardIsFollowed(int boardId)
+        private void checkIfBoardIsFollowed(int boardId)
         {
-            bool following = await FollowingHelper.getFollowingBoard(boardId);
-            if (following)
+            if (boardId == 1)
             {
                 //Board is already followed , disable button
                 btnFollow.IsEnabled = false;
-                btnFollow.Content = "board followed";
+                btnFollow.Content = "Unfollow";
             }
-            else
+            else if (boardId == 2)
             {
-                btnFollow.IsEnabled = true;
+                btnFollow.Content = "Requested";
+            }
+            else if (boardId == 0)
+            {
+                btnFollow.Content = "Follow";
             }
         }
         private void isFetchingDetails(bool isloading)
@@ -180,7 +186,6 @@ namespace Pepeza.Views.Boards
                 ContentRoot.Opacity = 1;
             }
         }
-
         private  async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch ((sender as Pivot).SelectedIndex)
@@ -192,9 +197,16 @@ namespace Pepeza.Views.Boards
                         stackPanelLoading.Visibility = Visibility.Visible;
                         ContentRoot.Opacity = 0.7;
                         await getBoardDetailsAsync(boardId);
+                       
                     }
-                    enableAppBarEdit(true);
-                   
+                    if (isMyBoard)
+                    {
+                        enableAppBarEdit(true);
+                    }
+                    else 
+                    {
+                        enableAppBarEdit(false);
+                    }
                     break;
                 case 1:
                     //Load notices if not loaded already
@@ -203,13 +215,19 @@ namespace Pepeza.Views.Boards
                         StackPanelLoadingNotices.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
                     }
-                    enableAppBarEdit(false);
+                    if (isMyBoard)
+                    {
+                        enableAppBarEdit(true);
+                    }
+                    else
+                    {
+                        enableAppBarEdit(false);
+                    }
                     break;
                 default :
                     break;
             }
         }
-
         private void enableAppBarEdit(bool enable)
         {
             if (enable)

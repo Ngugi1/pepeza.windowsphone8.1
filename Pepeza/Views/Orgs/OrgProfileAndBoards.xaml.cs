@@ -8,6 +8,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Boards;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -261,33 +262,14 @@ namespace Pepeza.Views.Orgs
         }
         private void ListViewOrgBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            savePageState();
-            
                 TBoard board = (sender as ListView).SelectedItem as TBoard;
                 if (board != null)
                 {
-                    Dictionary<string, string> parameters = new Dictionary<string, string>()
-                {
-                   {"id",board.id.ToString()},{"name" , board.name}
-                };
-                    if (isOrgMine)
-                    {
-                        this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices), parameters);
-                    }
-                    else
-                    {
-                        this.Frame.Navigate(typeof(BoardProfile), board.id);
-                    }
-                    
-                }
-        }
-        private  void savePageState()
-        {
-            //Save the boards 
-             Settings.add(PageStateConstants.ORG_BOARDS, JsonConvert.SerializeObject(ListViewOrgBoards.ItemsSource));
-            //Save the profile information
-             Settings.add(PageStateConstants.ORG_PROFILE, JsonConvert.SerializeObject(RootGrid.DataContext));
-        }
+                     this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices),board.id);
+                };     
+         }
+        
+      
         private void fetchingProfile(bool isFetching)
         {
             if (isFetching)
@@ -316,7 +298,6 @@ namespace Pepeza.Views.Orgs
                 areBoardsLoaded = true;
             }
         }
-
         private void EditProfilleClick(object sender, RoutedEventArgs e)
         {
             TOrgInfo org = RootGrid.DataContext as TOrgInfo;

@@ -21,92 +21,99 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
             <Pivot SelectionChanged="Pivot_SelectionChanged" Style="{StaticResource CustomPivot}">
-                <Pivot.Title>
-                    <StackPanel>
-                        <TextBlock Name="txtBlockTopheader"
-                                   Margin="0"
-                                   Style="{StaticResource txtBlockPageHeader}"
-                                   Text="organisation" />
-                    </StackPanel>
-
-                </Pivot.Title>
                 <PivotItem>
                     <PivotItem.Header>
                         <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="profile" />
                     </PivotItem.Header>
-                    <Grid Name="rootGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid x:Name="ContentRoot"
-                              Grid.Row="1"
-                              Margin="0"
-                              Opacity="0.6">
+                    <ScrollViewer>
+                        <Grid Name="rootGrid">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Grid>
-                                <StackPanel>
-                                    <Rectangle Style="{StaticResource RectProfPic}">
-                                        <Rectangle.Fill>
-                                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
-                                    <TextBlock Name="txtBlockName"
-                                               Grid.Row="2"
-                                               Margin="18,8"
-                                               Foreground="Black"
-                                               Style="{StaticResource txtBlockStyleProfileOwner}"
-                                               Text="{Binding name}" />
+                            <Grid x:Name="ContentRoot"
+                                  Grid.Row="1"
+                                  Margin="0"
+                                  Opacity="0.6">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <StackPanel>
+                                        <Rectangle Style="{StaticResource RectProfPic}">
+                                            <Rectangle.Fill>
+                                                <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <TextBlock Name="txtBlockName"
+                                                   Grid.Row="2"
+                                                   Margin="18,8"
+                                                   Foreground="Black"
+                                                   Style="{StaticResource txtBlockStyleProfileOwner}"
+                                                   Text="{Binding name}" />
+                                        <StackPanel Margin="8"
+                                                    HorizontalAlignment="Center"
+                                                    Orientation="Horizontal">
+                                            <TextBlock Margin="0,8"
+                                                       Style="{StaticResource txtBlockDisplay}"
+                                                       Text="{Binding noOfFollowers}"
+                                                       Typography.NumeralStyle="Normal" />
+                                            <TextBlock Margin="12,8"
+                                                       FontSize="22"
+                                                       Style="{StaticResource txtBlockDisplay}"
+                                                       Text="{Binding singleFollowerOrMany}"
+                                                       Typography.Capitals="AllSmallCaps" />
+                                        </StackPanel>
 
-                                    <Button Name="btnFollow"
-                                            Margin="16,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Bottom"
-                                            Click="btnFollow_Click"
-                                            Content="Follow board"
-                                            IsEnabled="True" />
-                                    <Rectangle Height="1"
-                                               Margin="12"
-                                               Fill="{ThemeResource PhoneAccentBrush}" />
+                                        <Button Name="btnFollow"
+                                                Margin="16,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom"
+                                                Click="btnFollow_Click"
+                                                Content="Follow"
+                                                IsEnabled="True" />
+                                        <Rectangle Height="1"
+                                                   Margin="12"
+                                                   Fill="{ThemeResource PhoneAccentBrush}" />
 
-                                </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+
+                                <ScrollViewer Grid.Row="1"
+                                              VerticalContentAlignment="Top"
+                                              VerticalScrollBarVisibility="Visible"
+                                              VerticalScrollMode="Enabled">
+                                    <Grid>
+                                        <StackPanel Name="stackPanelLoading"
+                                                    Grid.Row="1"
+                                                    VerticalAlignment="Center">
+                                            <ProgressBar Grid.Row="1" />
+                                            <TextBlock HorizontalAlignment="Center"
+                                                       Style="{StaticResource txtBlockWait}"
+                                                       Text="loading board details ..." />
+                                        </StackPanel>
+                                        <TextBlock Name="txtBlockDesc"
+                                                   Grid.Row="2"
+                                                   HorizontalAlignment="Center"
+                                                   ScrollViewer.VerticalScrollMode="Auto"
+                                                   Style="{StaticResource txtBlockDisplay}"
+                                                   Text="{Binding desc}"
+                                                   TextAlignment="Justify"
+                                                   TextWrapping="Wrap" />
+                                    </Grid>
+                                </ScrollViewer>
                             </Grid>
 
-                            <ScrollViewer Grid.Row="1"
-                                          VerticalContentAlignment="Top"
-                                          VerticalScrollBarVisibility="Visible"
-                                          VerticalScrollMode="Enabled">
-                                <Grid>
-                                    <StackPanel Name="stackPanelLoading"
-                                                Grid.Row="1"
-                                                VerticalAlignment="Center">
-                                        <ProgressBar Grid.Row="1" />
-                                        <TextBlock HorizontalAlignment="Center"
-                                                   Style="{StaticResource txtBlockWait}"
-                                                   Text="loading board details ..." />
-                                    </StackPanel>
-                                    <TextBlock Name="txtBlockDesc"
-                                               Grid.Row="2"
-                                               HorizontalAlignment="Center"
-                                               ScrollViewer.VerticalScrollMode="Auto"
-                                               Style="{StaticResource txtBlockDisplay}"
-                                               Text="{Binding desc}"
-                                               TextAlignment="Justify"
-                                               TextWrapping="Wrap" />
-                                </Grid>
-                            </ScrollViewer>
+                            <Toast:Toastinet Name="toasterror"
+                                             Grid.Row="1"
+                                             Style="{StaticResource ToastStyle}"
+                                             TextWrapping="WrapWholeWords"
+                                             Visibility="Collapsed" />
                         </Grid>
-
-                        <Toast:Toastinet Name="toasterror"
-                                         Grid.Row="1"
-                                         Style="{StaticResource ToastStyle}"
-                                         TextWrapping="WrapWholeWords" />
-                    </Grid>
+                    </ScrollViewer>
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>

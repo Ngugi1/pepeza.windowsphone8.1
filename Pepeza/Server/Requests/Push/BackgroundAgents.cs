@@ -62,14 +62,15 @@ namespace Pepeza.Server.Push
 
         static async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            int k = 10000000;
+            //TODO :: Fix here 
 
-            Debug.WriteLine("**************************I was hit here !!!************************************");
             Dictionary<string,string> newdata = await GetNewData.getNewData();
-            MainPage.boards.Add(new Db.Models.Board.TBoard() { name = "Added", desc = "This is a sample", id = 1 });
-             
+            //Data received - save it to local database
+
+            //Prevent background agentt from being invoked 
             args.Cancel = true;
-            
+
+
         }
 
         

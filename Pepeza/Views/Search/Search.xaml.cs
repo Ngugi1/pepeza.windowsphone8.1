@@ -368,7 +368,7 @@ namespace Pepeza.Views
             Pepeza.Models.Search_Models.Board board = (sender as ListView).SelectedItem as Pepeza.Models.Search_Models.Board;
             if (board != null)
             {
-                this.Frame.Navigate(typeof(BoardProfile), board.id);
+                this.Frame.Navigate(typeof(BoardProfileAndNotices), board.id);
             }
         }
     }

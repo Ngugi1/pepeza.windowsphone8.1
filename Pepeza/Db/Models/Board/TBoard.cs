@@ -14,7 +14,6 @@ namespace Pepeza.Db.Models.Board
         public int id { get; set; }
         public int orgID { get; set; }
         private string _name;
-
         public string name
         {
             get { return _name; }
@@ -23,15 +22,14 @@ namespace Pepeza.Db.Models.Board
             onPropertyChanged("name");
             }
         }
-
         private string _desc;
-
         public string desc
         {
             get { return _desc; }
             set { _desc = value; onPropertyChanged("desc"); }
         }
-
+        [Ignore]
+        public int ownerId { get; set; }
         [Ignore]
         public string organisation { get; set; }
         public DateTime dateCreated { get; set; }
@@ -41,6 +39,8 @@ namespace Pepeza.Db.Models.Board
         public string timezone_updated { get; set; }
         public int timezone_type_updated { get; set; }
         public int following { get; set; }
-
+        public int noOfFollowers { get; set; }
+        [Ignore]
+        public string singleFollowerOrMany { get; set; }
     }
 }
