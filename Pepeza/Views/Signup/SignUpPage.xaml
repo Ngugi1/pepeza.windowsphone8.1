@@ -11,6 +11,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:pageHeader="using:Pepeza.CustomControls"
       RequestedTheme="Light"
+      Background="{ThemeResource AppBarBackgroundThemeBrush}"
       mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
@@ -23,7 +24,6 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid Name="rootGrid"
-          Background="{StaticResource pageBackground}"
           DataContext="{StaticResource User}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

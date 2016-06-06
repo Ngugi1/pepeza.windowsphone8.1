@@ -112,7 +112,7 @@ namespace Pepeza.Views
         {
 
             return new Pepeza.Server.ServerModels.Login() { username = textBoxUsername.Text.Trim(), 
-                password = txtBoxPassword.Password.Trim() , osId = Constants.OS_ID};
+                password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID};
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

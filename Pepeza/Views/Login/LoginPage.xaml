@@ -24,7 +24,7 @@
         </ResourceDictionary>
 
     </Page.Resources>
-    <Grid Background="{StaticResource pageBackground}" DataContext="{StaticResource User}">
+    <Grid DataContext="{StaticResource User}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

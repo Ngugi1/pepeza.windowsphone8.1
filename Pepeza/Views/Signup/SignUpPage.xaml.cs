@@ -107,7 +107,7 @@ namespace Pepeza.Views
 
         public SignUp getData(User user)
         {
-            return new SignUp() { username = user.Username, email = user.Email, password = user.Password , osId = Constants.OS_ID };
+            return new SignUp() { username = user.Username, email = user.Email, password = user.Password , pushId = Constants.PUSH_ID };
         }
         //check username availability 
         private  async void txtBoxUsername_TextChanged(object sender, TextChangedEventArgs e)
