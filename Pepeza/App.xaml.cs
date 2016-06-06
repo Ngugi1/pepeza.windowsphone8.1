@@ -65,7 +65,7 @@ namespace Pepeza
 
         void App_Resuming(object sender, object e)
         {
-            throw new NotImplementedException();
+            updateStatusBar();    
         }
 
         void Current_Resuming(object sender, object e)

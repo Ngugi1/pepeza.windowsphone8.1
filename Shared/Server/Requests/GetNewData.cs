@@ -22,7 +22,7 @@ namespace Pepeza.Server.Requests
                 
                 try
                 {
-                    response = await client.GetAsync(string.Format(GetNewdataAddresses.GET_NEW_DATA, Settings.getValue(Constants.LAST_UPDATED)));
+                    response = await client.GetAsync(string.Format(GetNewdataAddresses.GET_NEW_DATA,"0000-00-00 00:00:00"));
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

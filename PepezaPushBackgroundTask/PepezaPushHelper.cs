@@ -10,14 +10,12 @@ namespace PepezaPushBackgroundTask
 {
     public sealed class PepezaPushHelper : IBackgroundTask
     {
-        public void Run(IBackgroundTaskInstance taskInstance)
+        public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            var deferal = taskInstance.GetDeferral();//Save on CPU seconds since we are doing async
             //Get the token and invoke get new data
-            bool x = SyncPushChanges.initUpdate(true).Result;
+            var deferal = taskInstance.GetDeferral();
+            await SyncPushChanges.initUpdate(true);
             deferal.Complete();
         }
-
-        
     }
 }

@@ -17,6 +17,14 @@ namespace Shared.Push
     {
         public async  static Task<bool> registerPush()
         {
+            //Check if access status and revoke , makes sure your app works well when there is an update
+            BackgroundExecutionManager.RemoveAccess();
+            //Unregister the Background Agent 
+            var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
+            if (entry.Value != null)
+            {
+                entry.Value.Unregister(true);
+            }
             //is registration complete?
             bool isRegistered = false;
             //Request Access 
@@ -26,6 +34,7 @@ namespace Shared.Push
                 new MessageDialog("You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
                 return isRegistered;
             }
+            
             //Granted 
             BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
             taskBuilder.Name = "PepezaPushBackgroundTask";
