@@ -9,7 +9,7 @@ namespace Pepeza.Utitlity
     public class Constants
     {
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
-        public static int OS_ID { get { return 3; } }
+        public static int PUSH_ID { get { return 2; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }
         public static string UNKNOWNERROR { get { return "Oops! Something went wrong. Try again later"; } }
         public static string NO_INTERNET_CONNECTION { get { return "Please check your internet connection!"; } }

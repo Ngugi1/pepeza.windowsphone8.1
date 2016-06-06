@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using Windows.ApplicationModel.Background;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Popups;
 
-namespace Pepeza.Server.Push
+namespace Shared.Push
 {
     public class BackgroundAgents
     {
@@ -22,7 +23,7 @@ namespace Pepeza.Server.Push
             var access = await BackgroundExecutionManager.RequestAccessAsync();
             if (access == BackgroundAccessStatus.Denied)
             {
-                new MessageDialog("Please allow this application to run in the background");
+                new MessageDialog("You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
                 return isRegistered;
             }
             //Granted 
@@ -30,12 +31,8 @@ namespace Pepeza.Server.Push
             taskBuilder.Name = "PepezaPushBackgroundTask";
             PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
             taskBuilder.SetTrigger(pushTrigger);
-
-            //Push Notification Received and we have internet connection then we can fetch data
-            taskBuilder.AddCondition(new SystemCondition(SystemConditionType.InternetAvailable));
-
             //Define Entry Point 
-            taskBuilder.TaskEntryPoint = typeof(PepezaPushBackgroundTask.PepezaPushHelper).FullName;
+            taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
             taskBuilder.Register();
             string uri = String.Empty;
             try
@@ -43,7 +40,6 @@ namespace Pepeza.Server.Push
                 //Get the channel 
                 var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
                 uri = channel.Uri;
-
 
                 //Register foreground APP to receive push when running
                 channel.PushNotificationReceived += channel_PushNotificationReceived;
@@ -62,15 +58,12 @@ namespace Pepeza.Server.Push
 
         static async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            //TODO :: Fix here 
-
-            Dictionary<string,string> newdata = await GetNewData.getNewData();
-            //Data received - save it to local database - slide it in list views and update the UI
-
-            //Prevent background agentt from being invoked 
             args.Cancel = true;
-
-
+           //Init update from the server
+           await SyncPushChanges.initUpdate();
+           //Prevent background agentt from being invoked 
+          
+            
         }
 
         

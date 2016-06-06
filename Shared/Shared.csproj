@@ -83,7 +83,7 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.WP81, Version=3.11.1">
+    <SDKReference Include="SQLite.WP81, Version=3.13.0">
       <Name>SQLite for Windows Phone 8.1</Name>
     </SDKReference>
   </ItemGroup>
@@ -94,12 +94,14 @@
     <Compile Include="Db\DbHelpers\DbHelper.cs" />
     <Compile Include="Db\DbHelpers\DBHelperBase.cs" />
     <Compile Include="Db\DbHelpers\Notice\NoticeHelper.cs" />
+    <Compile Include="Db\DbHelpers\Notice\NoticeItemHelper.cs" />
     <Compile Include="Db\DbHelpers\Orgs\OrgHelper.cs" />
     <Compile Include="Db\DbHelpers\User\EmailHelper.cs" />
     <Compile Include="Db\DbHelpers\User\UserHelper.cs" />
     <Compile Include="Db\Models\Board\TBoard.cs" />
     <Compile Include="Db\Models\Board\TFollowing.cs" />
     <Compile Include="Db\Models\Notices\TNotice.cs" />
+    <Compile Include="Db\Models\Notices\TNoticeItem.cs" />
     <Compile Include="Db\Models\Orgs\TOrgInfo.cs" />
     <Compile Include="Db\Models\Users\TEmail.cs" />
     <Compile Include="Db\Models\Users\TUserInfo.cs" />
@@ -118,13 +120,14 @@
     <Compile Include="Models\UserModels\ProfileInfo.cs" />
     <Compile Include="Models\UserModels\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Push\SyncPushChanges.cs" />
     <Compile Include="Server\Connectivity\Network.cs" />
     <Compile Include="Server\Requests\BoardService.cs" />
     <Compile Include="Server\Requests\GetNewData.cs" />
     <Compile Include="Server\Requests\NoticeService.cs" />
     <Compile Include="Server\Requests\OrgsService.cs" />
     <Compile Include="Server\Requests\Push\BackendService.cs" />
-    <Compile Include="Server\Requests\Push\BackgroundAgents.cs" />
+    <Compile Include="Push\BackgroundAgents.cs" />
     <Compile Include="Server\Requests\RequestUser.cs" />
     <Compile Include="Server\ServerModels\User\Login.cs" />
     <Compile Include="Server\ServerModels\User\SignUp.cs" />
@@ -169,12 +172,6 @@
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PepezaPushBackgroundTask\PepezaPushBackgroundTask.csproj">
-      <Project>{815c1de4-c75f-4abe-ba76-67ff441e9898}</Project>
-      <Name>PepezaPushBackgroundTask</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

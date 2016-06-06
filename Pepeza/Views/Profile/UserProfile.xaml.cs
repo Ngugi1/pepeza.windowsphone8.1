@@ -95,7 +95,7 @@ namespace Pepeza.Views.Profile
                     else if (results.ContainsKey(Constants.UPDATED))
                     {
                         //Get the object with given user ID
-                        TUserInfo info = await UserHelper.getUserInfo();
+                        TUserInfo info = await UserHelper.getUserInfo((int)(Settings.getValue(Constants.USERID)));
                         info.firstName = fname;
                         info.lastName = lname;
                         await UserHelper.update(info);
