@@ -7,6 +7,7 @@ using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
+using Shared.TilesAndActionCenter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Shared.Push
                    if (noticeItemContent.Count > 0)
                    {
                         await insertNewNotices(noticeItemContent);
-                        updateActioncenter(noticeItemContent);
+                        ActionCenterHelper.updateNoticesInActionCenter(noticeItemContent);
                    }
                     //Update user details
                     if(user!=null)
@@ -132,10 +133,6 @@ namespace Shared.Push
             //TODO :: Add badges here 
 
         }
-        public static void updateActioncenter(JArray items)
-        {
-            //Add Tags - Followed and Notices
-
-        }
+      
     }
 }
