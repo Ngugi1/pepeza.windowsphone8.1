@@ -21,10 +21,11 @@
         <Pivot Name="pivotMainPage"
                Margin="4"
                SelectionChanged="pivotMainPage_SelectionChanged">
-            <PivotItem>
+            <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                 </PivotItem.Header>
+                <ListView Margin="19.5,0,8,0" ItemTemplate="{StaticResource ListViewNoticesDataTemplate}" />
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
@@ -34,9 +35,7 @@
                 <Jumper:GenericJumpList Name="QJumpList">
                     <ListView Name="ListViewBoards"
                               ItemTemplate="{StaticResource ListViewBoardsDataTemplate}"
-                              ItemsSource="{Binding Boards}"
                               SelectionChanged="ListViewBoards_SelectionChanged" />
-
                 </Jumper:GenericJumpList>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">

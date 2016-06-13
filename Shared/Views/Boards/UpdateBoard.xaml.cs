@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using Pepeza.Common;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.IsolatedSettings;
@@ -35,13 +34,13 @@ namespace Pepeza.Views.Boards
     public sealed partial class UpdateBoard : Page
     {
         bool canUpdate = false, isNameValid = true, isDescvalid = true;
-        private NavigationHelper navigationHelper;
+       
         TBoard board = null;
         int boardID, orgID;
         public UpdateBoard()
         {
             this.InitializeComponent();
-            this.navigationHelper = new NavigationHelper(this);
+            
            
         }
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Pepeza.Common;
 using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
@@ -32,8 +31,7 @@ namespace Pepeza.Views.Orgs
     public sealed partial class UserOrgs : Page
     {
  //Page state 
-        private NavigationHelper navigationHelper;
-
+       
         public Person person { get; set; }
         private ObservableCollection<Organization> UserOrganisations = new ObservableCollection<Organization>();
         public UserOrgs()

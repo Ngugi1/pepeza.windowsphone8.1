@@ -1,5 +1,4 @@
-﻿
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using System;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Notifications;
-
 namespace Shared.TilesAndActionCenter
 {
     public class ActionCenterHelper

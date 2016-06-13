@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models;
 using Pepeza.Db.Models.Users;
@@ -36,7 +37,13 @@ namespace Shared.Push
                    //Update local database
                    if (noticeItemContent.Count > 0)
                    {
+                       
                         await insertNewNotices(noticeItemContent);
+                        if (!inbackground)
+                        {
+                            //Push these changes to the mainapage 
+                            MainPage.reloadNotices();
+                        }
                         ActionCenterHelper.updateNoticesInActionCenter(noticeItemContent);
                    }
                     //Update user details

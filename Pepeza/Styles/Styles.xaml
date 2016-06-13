@@ -23,9 +23,8 @@
 
     <!--  Rectangles  -->
     <Style x:Key="RectanglePicThumbnail" TargetType="Rectangle">
-        <Setter Property="Width" Value="70" />
-        <Setter Property="Height" Value="70" />
-        <Setter Property="Margin" Value="4,8,8,8" />
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Height" Value="50" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
     <!--  Profile pic  -->
@@ -127,8 +126,6 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="TextWrapping" Value="NoWrap" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Margin" Value="8" />
-
     </Style>
     <!--  TextBlock style - Desc TextBlock  -->
     <Style x:Key="txtBlockListViewDesc"
@@ -478,6 +475,62 @@
         </Setter>
     </Style>
     <!--  Data Templates Styles  -->
+    <!--  ListViewNotices Datatemplate  -->
+    <DataTemplate x:Key="ListViewNoticesDataTemplate">
+        <Grid Height="75">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+
+            </Grid.ColumnDefinitions>
+            <Rectangle Grid.Row="1"
+                       Grid.RowSpan="2"
+                       Width="50"
+                       Height="50"
+                       VerticalAlignment="Center">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="10,4,7.667,8.5"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="SCC is a very nic plabdsd  s bs  bsbfdbfdb"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+            <TextBlock Grid.Row="1"
+                       Grid.RowSpan="2"
+                       Grid.Column="1"
+                       Margin="10,0,7.667,6.167"
+                       VerticalAlignment="Bottom"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="Exam reelts were releaased today 12/34/56 "
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
+            <RichTextBlock Grid.Row="1"
+                           Grid.Column="1"
+                           Margin="0,0,-0.333,22.333"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           FontSize="14"
+                           Foreground="{StaticResource PhoneAccentBrush}">
+                <Paragraph>
+                    <Bold>
+                        <Underline>
+                            <Run Text="{Binding count}" />
+                        </Underline>
+                    </Bold>
+                </Paragraph>
+            </RichTextBlock>
+        </Grid>
+    </DataTemplate>
     <DataTemplate x:Key="ListViewOrgDataTemplate">
         <Grid Name="OrgGrid"
               Holding="OrgGrid_Holding"
@@ -500,17 +553,21 @@
                                     Text="delete" />
                 </MenuFlyout>
             </FlyoutBase.AttachedFlyout>
-            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+            <Rectangle Grid.RowSpan="2"
+                       Margin="0,8,0,0"
+                       Style="{StaticResource RectanglePicThumbnail}">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
+                       Margin="14,0,0,0"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        Text="{Binding name}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="1"
+                       Margin="14,4,0,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding description}" />
         </Grid>
@@ -525,17 +582,21 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+            <Rectangle Grid.RowSpan="2"
+                       Margin="0,4,0,8"
+                       Style="{StaticResource RectanglePicThumbnail}">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
+                       Margin="14,0,0,0"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        Text="{Binding Name}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
+                       Margin="14,4,0,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding Description}" />
         </Grid>
@@ -568,6 +629,7 @@
     <DataTemplate x:Key="ListViewBoardsDataTemplate">
         <Grid Width="{Binding ActualWidth,
                               ElementName=GridParent}"
+              Height="70"
               Holding="Grid_Holding"
               Style="{StaticResource GridListViewItemTemplate}">
             <Grid.RowDefinitions>
@@ -590,41 +652,25 @@
                                     Text="delete" />
                 </MenuFlyout>
             </FlyoutBase.AttachedFlyout>
-            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+            <Rectangle Grid.RowSpan="2"
+                       Margin="8,12,0,28"
+                       Style="{StaticResource RectanglePicThumbnail}">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
+                       Margin="8,10,8,6"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        Text="{Binding name}" />
             <TextBlock Grid.Row="1"
-                       Grid.Column="2"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding desc}" />
-        </Grid>
-    </DataTemplate>
-    <DataTemplate x:Key="ListSettings">
-        <Grid Width="{Binding ActualWidth,
-                              ElementName=GridParent}"
-              Holding="Grid_Holding"
-              Style="{StaticResource GridListViewItemTemplate}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding name}" />
-            <TextBlock Grid.Row="1"
-                       Grid.Column="2"
+                       Margin="8,0,14,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding desc}" />
         </Grid>
     </DataTemplate>
-
     <DataTemplate x:Key="ListViewSearchUserTemplate">
         <Grid>
             <Grid.RowDefinitions>
@@ -657,8 +703,6 @@
                        TextWrapping="NoWrap" />
         </Grid>
     </DataTemplate>
-
-
     <DataTemplate x:Key="ListViewSearchBoards">
         <Grid>
             <Grid.RowDefinitions>

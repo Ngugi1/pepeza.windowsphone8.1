@@ -55,14 +55,14 @@ namespace Pepeza
             
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             
-            this.Resuming += App_Resuming;
+            this.Resuming += App_Resuming;  
         }
 
-        void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
+        protected override void OnActivated(IActivatedEventArgs args)
         {
-            
+            base.OnActivated(args);
+            updateStatusBar();
         }
-
         void App_Resuming(object sender, object e)
         {
             updateStatusBar();    
@@ -70,7 +70,7 @@ namespace Pepeza
 
         void Current_Resuming(object sender, object e)
         {
-            //throw new NotImplementedException();
+            updateStatusBar();    
         }
 
         void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
@@ -195,10 +195,10 @@ namespace Pepeza
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-
             // TODO: Save application state and stop any background activity
-            deferral.Complete();
             updateStatusBar();
+            deferral.Complete();
+           
         }
     }
 }

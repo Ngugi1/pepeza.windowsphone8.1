@@ -38,7 +38,7 @@ namespace Pepeza.Views.Login
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            App.updateStatusBar();
+          
         }
 
         private async void AppBtnReset_Click(object sender, RoutedEventArgs e)
@@ -55,9 +55,6 @@ namespace Pepeza.Views.Login
             }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            App.updateStatusBar();
-        }
+       
     }
 }

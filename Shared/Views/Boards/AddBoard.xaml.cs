@@ -1,5 +1,4 @@
-﻿using Afk.ZoneInfo;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;

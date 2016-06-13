@@ -96,62 +96,7 @@
     <Compile Include="CustomControls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
-      <DependentUpon>DeactivateAccount.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Account\SetUpPage.xaml.cs">
-      <DependentUpon>SetUpPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Boards\AddBoard.xaml.cs">
-      <DependentUpon>AddBoard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Boards\BoardFollowers.xaml.cs">
-      <DependentUpon>BoardFollowers.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Boards\BoardProfileAndNotices.xaml.cs">
-      <DependentUpon>BoardProfileAndNotices.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Boards\UpdateBoard.xaml.cs">
-      <DependentUpon>UpdateBoard.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Configurations\Config.cs" />
-    <Compile Include="Views\Configurations\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Login\ResetPasswordPage.xaml.cs">
-      <DependentUpon>ResetPasswordPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Notices\AddNoticePage.xaml.cs">
-      <DependentUpon>AddNoticePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Orgs\AddOrg.xaml.cs">
-      <DependentUpon>AddOrg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Login\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Orgs\EditOrg.xaml.cs">
-      <DependentUpon>EditOrg.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Orgs\OrgProfileAndBoards.xaml.cs">
-      <DependentUpon>OrgProfileAndBoards.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
-      <DependentUpon>UserOrgs.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Profile\UserProfile.xaml.cs">
-      <DependentUpon>UserProfile.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Search\Search.xaml.cs">
-      <DependentUpon>Search.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Signup\SignUpPage.xaml.cs" />
-    <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
-    <Compile Include="Views\ViewHelpers\OrgViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -179,100 +124,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Styles\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="Views\Account\DeactivateAccount.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Account\SetUpPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Boards\AddBoard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Boards\BoardFollowers.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Boards\BoardProfileAndNotices.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Boards\UpdateBoard.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Configurations\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Login\ResetPasswordPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Notices\AddNoticePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Orgs\AddOrg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Login\LoginPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Orgs\EditOrg.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Orgs\OrgProfileAndBoards.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Orgs\UserOrgs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Profile\UserProfile.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Search\Search.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Signup\SignUpPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Afk.ZoneInfo">
-      <HintPath>..\packages\Afk.ZoneInfo.1.4.0.0\lib\net35\Afk.ZoneInfo.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Toolkit">
-      <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.7\lib\wpa81\Coding4Fun.Toolkit.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Toolkit.Audio">
-      <HintPath>..\packages\Coding4Fun.Toolkit.Audio.2.0.8\lib\wpa81\Coding4Fun.Toolkit.Audio.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Toolkit.Controls">
-      <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.7\lib\wpa81\Coding4Fun.Toolkit.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Coding4Fun.Toolkit.Storage">
-      <HintPath>..\packages\Coding4Fun.Toolkit.Storage.2.0.8\lib\wpa81\Coding4Fun.Toolkit.Storage.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -283,15 +141,6 @@
     <Reference Include="QKit, Version=0.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\QKit.0.4.1\lib\wpa81\QKit.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\portable-wp8+netcore45+net45+wp81+wpa81\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="Toastinet">
       <HintPath>..\packages\Toastinet.2.8\lib\wpa81\Toastinet.dll</HintPath>

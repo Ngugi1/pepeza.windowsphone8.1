@@ -88,6 +88,7 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\NoticesModels\NoticeCollection.cs" />
     <Compile Include="TilesAndActionCenter\ActionCenterHelper.cs" />
     <Compile Include="Db\DbHelpers\Board\BoardHelper.cs" />
     <Compile Include="Db\DbHelpers\Board\FollowingHelper.cs" />
@@ -159,6 +160,63 @@
     <Compile Include="ViewModels\ViewModelCreateOrg.cs" />
     <Compile Include="ViewModels\ViewModelLogin.cs" />
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
+    <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
+      <DependentUpon>DeactivateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\SetUpPage.xaml.cs">
+      <DependentUpon>SetUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\AddBoard.xaml.cs">
+      <DependentUpon>AddBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardFollowers.xaml.cs">
+      <DependentUpon>BoardFollowers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardProfileAndNotices.xaml.cs">
+      <DependentUpon>BoardProfileAndNotices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\UpdateBoard.xaml.cs">
+      <DependentUpon>UpdateBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Configurations\Config.cs" />
+    <Compile Include="Views\Configurations\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\ResetPasswordPage.xaml.cs">
+      <DependentUpon>ResetPasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Notices\AddNoticePage.xaml.cs">
+      <DependentUpon>AddNoticePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\AddOrg.xaml.cs">
+      <DependentUpon>AddOrg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\EditOrg.xaml.cs">
+      <DependentUpon>EditOrg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\OrgProfileAndBoards.xaml.cs">
+      <DependentUpon>OrgProfileAndBoards.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
+      <DependentUpon>UserOrgs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\UserProfile.xaml.cs">
+      <DependentUpon>UserProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Search\Search.xaml.cs">
+      <DependentUpon>Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Signup\SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
+    <Compile Include="Views\ViewHelpers\OrgViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -167,6 +225,9 @@
     <Reference Include="NotificationsExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c936aba0ac6438e9, processorArchitecture=MSIL">
       <HintPath>..\packages\NotificationsExtensions.Portable.1.0.7\lib\portable-net45+wpa8+win8+xamarin.ios+monoandroid+monotouch\NotificationsExtensions.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="QKit">
+      <HintPath>..\packages\QKit.0.4.1\lib\wpa81\QKit.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>
@@ -177,10 +238,87 @@
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Toastinet">
+      <HintPath>..\packages\Toastinet.2.8\lib\wpa81\Toastinet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Account\DeactivateAccount.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Account\SetUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\AddBoard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\BoardFollowers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\BoardProfileAndNotices.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\UpdateBoard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Configurations\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Login\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Login\ResetPasswordPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Notices\AddNoticePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\AddOrg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\EditOrg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\OrgProfileAndBoards.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\UserOrgs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Profile\UserProfile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Search\Search.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Signup\SignUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

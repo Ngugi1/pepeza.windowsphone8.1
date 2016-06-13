@@ -4,8 +4,6 @@ using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
-using Pepeza.Views;
-using Pepeza.Views.Account;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
@@ -15,21 +13,11 @@ using QKit.JumpList;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
@@ -41,17 +29,17 @@ namespace Pepeza
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
+        public static MainPage current;
         public static ObservableCollection<TBoard> boards { get; set; }
         public static ObservableCollection<TOrgInfo> orgs { get; set; }
         public static ObservableCollection<TFollowing> following{ get; set; }
-
+        public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
         Boolean isSelected = false;
         public MainPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            
+            current = this;
         }
 
         /// <summary>
@@ -65,34 +53,53 @@ namespace Pepeza
             this.Frame.BackStack.Clear();
             //Load data 
             isSelected = false;
-            boards  = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
-            var groupedBoards = JumpListHelper.ToGroups(boards,t=>t.name,t=>t.organisation);
-            QJumpList.ReleaseItemsSource();
-            ListViewBoards.ItemsSource = groupedBoards;
-            QJumpList.ApplyItemsSource();
-            ListViewBoards.SelectedItem = null;
-            
+            await loadBoards();
             //Orgs alpha groups
+            await loadOrgs();
+            //Set up followers
+            await loadFollowing();
+            isSelected = true;
+            this.Frame.BackStack.Clear();
+            
+        }
+        private async Task<bool> loadOrgs()
+        {
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
             var orgAlphaGroup = JumpListHelper.ToAlphaGroups(orgs, t => t.name);
             AlphaListOrgs.ReleaseItemsSource();
             ListViewOrgs.ItemsSource = orgAlphaGroup;
             AlphaListOrgs.ApplyItemsSource();
             ListViewOrgs.SelectedItem = null;
-            //Set up followers
+            return true;
+        }
+        private async Task<bool> loadBoards()
+        {
+            boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
+            var groupedBoards = JumpListHelper.ToGroups(boards, t => t.name, t => t.organisation);
+            QJumpList.ReleaseItemsSource();
+            ListViewBoards.ItemsSource = groupedBoards;
+            QJumpList.ApplyItemsSource();
+            ListViewBoards.SelectedItem = null;
+            return true;
+        }
+        private async Task<bool> loadFollowing()
+        {
             following = new ObservableCollection<TFollowing>(await FollowingHelper.getAll());
             var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.Name);
             AlphaListFollowing.ReleaseItemsSource();
             ListViewFollowing.ItemsSource = alphaGroups;
             AlphaListFollowing.ApplyItemsSource();
             ListViewFollowing.SelectedItem = null;
-            isSelected = true;
-            this.Frame.BackStack.Clear();
-            
+            return true;
         }
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
+        }
+        //TODO :: Reload the notices
+        public async static void reloadNotices()
+        {
+            await Task.Delay(2);
         }
        
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
@@ -214,7 +221,6 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(UpdateBoard), datacontext);
             }
         }
-
         private void MenuFlyoutEditOrg_Click(object sender, RoutedEventArgs e)
         {
             var datacontext = getFrameworkElement(e).DataContext as TOrgInfo;
@@ -227,7 +233,6 @@ namespace Pepeza
                 ToastSuccessFailure.Message = Constants.PERMISSION_DENIED;
             }
         }
-
         private async void MenuFlyoutDeleteOrg_Click(object sender, RoutedEventArgs e)
         {
             var org = getFrameworkElement(e).DataContext as TOrgInfo;
@@ -257,7 +262,6 @@ namespace Pepeza
         {
             return (e.OriginalSource as FrameworkElement);
         }
-
         private void OrgGrid_Holding(object sender, HoldingRoutedEventArgs e)
         {
             showFlyOutMenu(sender, e);
