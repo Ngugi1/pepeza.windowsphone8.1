@@ -35,6 +35,7 @@
                 <StackPanel Name="relativePanelProfPic" Height="Auto">
                     <Rectangle Name="rectangleProfilePic"
                                Style="{StaticResource RectProfPic}"
+                               Tapped="rectangleProfilePic_Tapped"
                                >
                         <Rectangle.Fill>
                             <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
