@@ -15,6 +15,7 @@ namespace Shared.TilesAndActionCenter
     {
         public  static void updateNoticesInActionCenter(JArray notices)
         {
+            //TODO :: Polish here
             foreach (var notice in notices)
             {
                 //TFollowing board = await FollowingHelper.get((int)notice["id"]);

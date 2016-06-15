@@ -109,7 +109,6 @@ namespace Pepeza.Views.Account
                 timezone_type_updated = (int)dedefaultOrg["dateUpdated"]["timezone_type"]
             };
 
-
             //get all the user organisations 
 
 
