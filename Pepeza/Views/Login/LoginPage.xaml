@@ -30,12 +30,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Margin="0,8" Orientation="Horizontal">
-            <TextBlock Margin="20,20,24,0"
+            <TextBlock Margin="20,0,24,0"
                        VerticalAlignment="Top"
                        Style="{StaticResource txtBlockPageHeader}"
                        Text="Login" />
         </StackPanel>
-        <StackPanel x:Name="relPanelParent" Grid.Row="1">
+        <ScrollViewer Grid.Row="1" Height="Auto">
+        <StackPanel x:Name="relPanelParent" >
             <!--  Controls Section  -->
             <TextBox Name="textBoxUsername"
                      Header="username/email"
@@ -81,6 +82,10 @@
                                  Content="Sign Up"
                                  Style="{StaticResource hlbtnStyle}" />
             </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="12">
+                <Button Content="Login with Google" HorizontalAlignment="Center" BorderBrush="{ThemeResource TextBoxBorderThemeBrush}"  BorderThickness="2"/>
+                <Button Content="Login with Facebook"  HorizontalAlignment="Center"  BorderBrush="{ThemeResource TextBoxBorderThemeBrush}" BorderThickness="2"/>
+            </StackPanel>
             <StackPanel Name="StackPanelLogging"
                         Margin="12"
                         Visibility="Collapsed">
@@ -90,8 +95,10 @@
                            Text="loging in, just a moment" />
             </StackPanel>
         </StackPanel>
+        </ScrollViewer>
         <Toast:Toastinet x:Name="ToastFieldsIncomplete"
                          Grid.Row="1"
+                         Visibility="Collapsed"
                          Style="{StaticResource ToastStyle}" />
     </Grid>
     <Page.BottomAppBar>
