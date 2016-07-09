@@ -31,7 +31,9 @@
                 Text="edit profile" />
 
         </StackPanel>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" 
+                      Height="Auto"
+                      VerticalScrollBarVisibility="Auto">
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

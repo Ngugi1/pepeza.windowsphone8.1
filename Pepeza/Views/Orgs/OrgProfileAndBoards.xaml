@@ -26,12 +26,14 @@
                        Style="{StaticResource txtBlockPageHeader}"
                        Text="This " />
         </StackPanel>
+       
         <Pivot Name="OrgPivot"
                Grid.RowSpan="2"
                Margin="0,40,0,0"
                SelectedIndex="0"
                SelectionChanged="OrgPivot_SelectionChanged"
                Style="{StaticResource CustomPivot}">
+
 
             <PivotItem>
                 <PivotItem.Header>

@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    RequestedTheme="Dark"
+    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid 
-        Background="{StaticResource pageBackground}"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
         x:Name="LayoutRoot">
 
         <Grid.ChildrenTransitions>
@@ -28,9 +28,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel 
-                Style="{StaticResource HeaderStackPanel}">
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+        <StackPanel>
+            <TextBlock Style="{StaticResource txtBlockPageHeader}"
                        Text="edit board"
                        />
         </StackPanel>
@@ -44,25 +43,22 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal">
-            <Ellipse Width="120"
-                     Height="120"
-                     HorizontalAlignment="Left">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
-                </Ellipse.Fill>
-            </Ellipse>
-                <AppBarButton Icon="Edit"
-                              IsCompact="True"
-                              Foreground="Black"
-                              VerticalAlignment="Bottom"
-                              />
-          </StackPanel>
+            <StackPanel>
+                <Rectangle Width="250"
+                     Height="250"
+                           Margin="12,0,12,12"
+                     HorizontalAlignment="Center"
+                     >
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </StackPanel>
+            
             <TextBox Style="{StaticResource txtBoxStyle}"
                      TextChanged="txtBoxName_TextChanged"
                      Name="txtBoxName"
                      Grid.Row="1"
-                     MaxLength="100"
                      PlaceholderText="{Binding name}"
                      Text="{Binding name}"
                      Header="name"
@@ -76,7 +72,6 @@
                      Grid.Row="3"
                      Name="txtBoxDesc"
                      TextChanged="txtBoxDesc_TextChanged"
-                     MaxLength="250"
                      Text="{Binding desc}"
                      PlaceholderText="{Binding desc}"
                      Style="{StaticResource txtBoxStyle}"
@@ -91,20 +86,14 @@
                        Name="txtBlockStatus"
                        Visibility="Collapsed"
                        Style="{StaticResource txtBlockError}"/>
-            <ProgressRing Height="100"
-                          Width="100"
-                          Visibility="Collapsed"
+            <ProgressBar  Visibility="Collapsed"
                           Name="PRUpdateBoard"
-                          Background="Transparent"
-                          Foreground="{StaticResource mainForeground}"
-                          IsActive="True"
-                          IsEnabled="True"
                           Grid.Row="6"
                           />
         </Grid>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar Background="{StaticResource mainForeground}">
+        <CommandBar>
             <AppBarButton Icon="Accept" 
                           IsEnabled="True"
                           Label="update"

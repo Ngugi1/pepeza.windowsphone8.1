@@ -37,12 +37,13 @@
         </StackPanel>
         <ScrollViewer Grid.Row="1"
                       Margin="0,1.833,0,-2"
+                      Height="Auto"
                       HorizontalScrollMode="Auto"
                       VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="0">
                 <StackPanel>
                     <TextBox Name="txtBoxUsername"
-                             Header="Username"
+                             Header="username"
                              IsSpellCheckEnabled="False"
                              PlaceholderText="choose a username"
                              Style="{StaticResource txtBoxStyle}"
