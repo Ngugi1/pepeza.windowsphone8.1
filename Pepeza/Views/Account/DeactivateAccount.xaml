@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Margin="20"
+        <TextBlock Margin="20,0,20,0"
                    VerticalAlignment="Bottom"
                   Style="{StaticResource txtBlockPageHeader}"
                    Text="deactivate account" />

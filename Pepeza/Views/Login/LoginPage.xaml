@@ -30,7 +30,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Margin="0,8" Orientation="Horizontal">
-            <TextBlock Margin="20,0,24,0"
+            <TextBlock Margin="20,0,20,0"
                        VerticalAlignment="Top"
                        Style="{StaticResource txtBlockPageHeader}"
                        Text="Login" />
