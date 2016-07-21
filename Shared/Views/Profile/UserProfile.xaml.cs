@@ -1,4 +1,5 @@
-﻿using Pepeza.Db.DbHelpers;
+﻿using Newtonsoft.Json;
+using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models;
 using Pepeza.Db.Models.Users;
@@ -6,6 +7,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,14 +15,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -32,6 +40,7 @@ namespace Pepeza.Views.Profile
     /// </summary>
     public sealed partial class UserProfile : Page
     {
+        CoreApplicationView view = CoreApplication.GetCurrentView();
         public UserProfile()
         {
             this.InitializeComponent();
@@ -137,7 +146,7 @@ namespace Pepeza.Views.Profile
         {
             var connection = DbHelper.DbConnectionAsync();
             //int userId = (int)Settings.getValue(Constants.USERID);
-            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>(1);
+            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>((int)(Settings.getValue(Constants.USERID)));
             TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
             Debug.WriteLine(emailInfo.email);
             return new ProfileData()
@@ -158,6 +167,36 @@ namespace Pepeza.Views.Profile
             public string username { get; set; }
             public string profilePicPath { get; set; }
             public string fullname { get { return fname + " " + lname; } }
+        }
+
+        private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FilePickerHelper.pickImage();
+             view.Activated += view_Activated;
+        }
+
+        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
+        {
+            //Get the photo and navigate to the photo editing page
+            FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
+            if (args != null)
+            {
+                if (filesArgs.Files.Count == 0) return;
+               
+                StorageFile choosenFile = filesArgs.Files[0];// Get the first file 
+                //Get the bitmap to determine whether to continue or not 
+                if (choosenFile != null)
+                {
+                    var bitmap =await FilePickerHelper.getBitMap(choosenFile);
+                    if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
+                    {
+                        this.Frame.Navigate(typeof(AvatarCroppingPage), choosenFile);
+                        view.Activated -= view_Activated;// Unsubscribe from this event 
+                    }
+                  
+                }
+            }
+
         }
     }
 }
