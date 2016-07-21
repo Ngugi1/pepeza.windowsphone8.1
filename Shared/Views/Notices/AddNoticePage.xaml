@@ -22,8 +22,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock Style="{StaticResource txtBlockPageHeader}" Text="create notice" />
+            <TextBlock 
+                Margin="24,0,20,0"
+                Style="{StaticResource txtBlockPageHeader}" Text="create notice" />
         </StackPanel>
+        <ScrollViewer Height="Auto">
         <Grid Name="ContentGrid"
               Grid.Row="1"
               Margin="8">
@@ -41,10 +44,11 @@
                      Style="{StaticResource txtBoxStyle}" />
             <ComboBox Name="comboBoards"
                       Grid.Row="1"
-                      Margin="16">
+                      BorderBrush="{StaticResource TextBoxBorderThemeBrush}"
+                      Margin="16,4">
                 <ComboBox.Header>
                     <TextBlock FontSize="22"
-                               Foreground="Black"
+                               Foreground="{ThemeResource PhoneForegroundBrush}"
                                Style="{StaticResource txtBlockDisplay}"
                                Text="select board" />
                 </ComboBox.Header>
@@ -63,14 +67,49 @@
                      Header="description"
                      PlaceholderText="provide a short description of the notice"
                      Style="{StaticResource txtBoxStyle}"
-                     TextWrapping="Wrap" />
+                     TextWrapping="Wrap"/>
+
             <TextBlock Name="txtBlockErrorEmptyDesc"
                        Grid.Row="3"
                        Style="{StaticResource txtBlockError}"
                        Text="this is an error message"
                        Visibility="Collapsed" />
+            <StackPanel Orientation="Vertical" 
+                        Margin="0"
+                        Grid.Row="4">
+                <TextBlock 
+            		FontFamily="Segoe UI Light"
+            		FontSize="22"
+            		Foreground="{StaticResource PhoneForegroundBrush}"
+            		Style="{StaticResource BaseTextBlockStyle}"
+                    VerticalAlignment="Center"
+            		Text="add an attachment (optional)" 
+                    Margin="24,8,0,0"/>
+                <StackPanel Orientation="Horizontal"
+                            Margin="8">
+                <AppBarButton Icon="Pictures" 
+                              Click="Attachment_Clicked" 
+                              IsCompact="False"
+                              Label="photo"
+                              AllowDrop="True"/>
+                <AppBarButton Icon="Document" Label="document" 
+                              Click="Attachment_Clicked" 
+                              IsCompact="False"/>
+                <AppBarButton Icon="Audio" Label="audio" 
+                               Click="Attachment_Clicked" 
+                             
+                              IsCompact="False"/>
+                <AppBarButton
+                     Click="Attachment_Clicked" 
+                    Icon="Video" IsCompact="False"
+                              Label="video"/>
+
+                </StackPanel>
+                
+
+            </StackPanel>
             <StackPanel Name="StackPanelLoading"
-                        Grid.Row="4"
+                        Grid.Row="5"
                         VerticalAlignment="Center"
                         Visibility="Collapsed">
                 <ProgressBar Margin="12" />
@@ -79,6 +118,7 @@
                            Text="posting your notice" />
             </StackPanel>
         </Grid>
+        </ScrollViewer>
         <toast:Toastinet Name="toastError"
                          Grid.Row="1"
                          Height="Auto"

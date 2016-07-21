@@ -1,0 +1,26 @@
+﻿<Page x:Class="Pepeza.Views.Profile.AvatarCroppingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:Pepeza.Views.Profile"
+      xmlns:imageEditor="using:Telerik.UI.Xaml.Controls.Input.ImageEditor"
+      xmlns:input="using:Telerik.UI.Xaml.Controls.Input"
+      xmlns:tools="using:Telerik.UI.Xaml.Controls.Input.ImageEditor.Tools"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      
+      mc:Ignorable="d"
+      Name="Page"
+      RequestedTheme="Light"
+      >
+    <input:RadImageEditor>
+        <tools:ImageEditorBasicGroup />
+        <tools:ImageEditorEffectsGroup />
+        <tools:ImageEditorTransformGroup />
+    </input:RadImageEditor>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept"  Click="AppBarButton_Click" Label="upload"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

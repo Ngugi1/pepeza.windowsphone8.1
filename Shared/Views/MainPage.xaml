@@ -70,24 +70,23 @@
                            TextWrapping="Wrap" />
     </Grid>
     <Page.BottomAppBar>
-
         <CommandBar x:Name="BottomCommandBar">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Click="AppBtnSettings_Click" Label="settings" />
-
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton Name="AppBtnAdd"
                               Click="AppBtnAdd_Click"
                               Content="new item"
                               Icon="Add"
-                              Label="add" />
+                              Label="add"/>
                 <AppBarButton Name="AppBarBtnSearch"
                               Click="AppBarBtnSearch_Click"
                               Content="search"
                               Icon="Find"
                               Label="search" />
-                <AppBarButton Icon="SelectAll" Label="select all" />
+                <AppBarButton Icon="SelectAll" 
+                              Label="select all" />
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

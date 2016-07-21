@@ -9,14 +9,19 @@ using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
 using Pepeza.Views.Account;
 using Pepeza.Views.Login;
+using Shared.Server.Auth;
+using Shared.Server.OAuth.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Security.Authentication.Web;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -127,6 +132,18 @@ namespace Pepeza.Views
         private void hylResetPassword_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ResetPasswordPage));
+        }
+
+        private void LoginWithGoogle(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                GoogleService.Login();
+            }
+            catch(Exception ex)
+            {
+                new MessageDialog("Something went wrong"+ex.Message);
+            }
         }
     }
 }

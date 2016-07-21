@@ -38,5 +38,9 @@
   <Capabilities>
     <Capability Name="internetClientServer" />
     <Capability Name="picturesLibrary" />
+    <Capability Name="videosLibrary" />
+    <Capability Name="removableStorage" />
+    <Capability Name="musicLibrary" />
+    <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>

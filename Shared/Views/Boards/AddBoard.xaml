@@ -28,7 +28,8 @@
         <StackPanel Margin="12">
             <TextBlock Style="{StaticResource txtBlockPageHeader}" Text="create board" />
         </StackPanel>
-        <Grid Grid.Row="1">
+        <ScrollViewer Grid.Row="1" Height="Auto">
+        <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -113,8 +114,9 @@
                            Text="creating board..." />
             </StackPanel>
         </Grid>
+        </ScrollViewer>
         <toast:Toastinet Name="toastInvalidData" Grid.Row="1" />
-
+        
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
