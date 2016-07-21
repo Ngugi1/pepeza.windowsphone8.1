@@ -83,7 +83,9 @@
                                  Style="{StaticResource hlbtnStyle}" />
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="12">
-                <Button Content="Login with Google" HorizontalAlignment="Center" BorderBrush="{ThemeResource TextBoxBorderThemeBrush}"  BorderThickness="2"/>
+                <Button Content="Login with Google" 
+                        Click="LoginWithGoogle"
+                        HorizontalAlignment="Center" BorderBrush="{ThemeResource TextBoxBorderThemeBrush}"  BorderThickness="2"/>
                 <Button Content="Login with Facebook"  HorizontalAlignment="Center"  BorderBrush="{ThemeResource TextBoxBorderThemeBrush}" BorderThickness="2"/>
             </StackPanel>
             <StackPanel Name="StackPanelLogging"

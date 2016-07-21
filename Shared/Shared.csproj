@@ -88,6 +88,11 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Db\DbHelpers\Notice\FileNoticeHelper.cs" />
+    <Compile Include="Db\Models\Notices\TAttachment.cs" />
+    <Compile Include="Server\OAuth\AuthConstants.cs" />
+    <Compile Include="Server\OAuth\Services\GoogleService.cs" />
+    <Compile Include="Server\ServerModels\Notices\FileNoticeModel.cs" />
     <Compile Include="TilesAndActionCenter\ActionCenterHelper.cs" />
     <Compile Include="Db\DbHelpers\Board\BoardHelper.cs" />
     <Compile Include="Db\DbHelpers\Board\FollowingHelper.cs" />
@@ -183,6 +188,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
