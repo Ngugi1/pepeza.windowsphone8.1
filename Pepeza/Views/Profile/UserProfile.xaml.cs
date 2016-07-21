@@ -1,34 +1,22 @@
-﻿using Newtonsoft.Json;
-using Pepeza.Db.DbHelpers;
+﻿using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models;
 using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
-using Pepeza.Server.ServerModels;
 using Pepeza.Utitlity;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
-using Windows.Storage.Pickers;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -171,7 +159,7 @@ namespace Pepeza.Views.Profile
 
         private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FilePickerHelper.pickImage();
+            FilePickerHelper.pickFile(FilePickerHelper.PHOTOS , Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
              view.Activated += view_Activated;
         }
 
