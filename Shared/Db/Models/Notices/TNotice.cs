@@ -22,5 +22,7 @@ namespace Pepeza.Db.Models.Notices
         public int Timezone_Type_Updated { get; set; }
         public string Timezone_Updated { get; set; }
         public string Timezone_Created { get; set; }
+        public int attachmentId { get; set; }
+
     }
 }

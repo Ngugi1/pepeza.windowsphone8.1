@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Server.Utility
 {
-    class NoticeAddresses
+    public class NoticeAddresses
     {
-        public static string POST_NEW_NOTICE { get { return "notices/new"; } }
+        public static string TEXT_NOTICE { get { return "notices/new"; } }
+        public static string FILE_NOTICE { get; set; } = "notices/filenotice";
     }
 }

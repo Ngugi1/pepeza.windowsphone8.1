@@ -8,6 +8,7 @@ namespace Pepeza.Server.Utility
 {
     public class UserAddresses : Addresses
     {
+        public static string SOCIAL_LOGIN { get; set; } = "/sociallogin";
         public static string NEW_USER { get { return "users/new"; } }
         public static string LOGIN_USER { get { return "login"; } }
         public static string USER_EXISTS { get { return "users/username/exists"; } }
