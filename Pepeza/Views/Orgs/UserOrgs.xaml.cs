@@ -32,7 +32,7 @@ namespace Pepeza.Views.Orgs
     public sealed partial class UserOrgs : Page
     {
  //Page state 
-        private NavigationHelper navigationHelper;
+       
 
         public Person person { get; set; }
         private ObservableCollection<Organization> UserOrganisations = new ObservableCollection<Organization>();

@@ -116,7 +116,7 @@
         </Grid>
         </ScrollViewer>
         <toast:Toastinet Name="toastInvalidData" Grid.Row="1" />
-
+        
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
