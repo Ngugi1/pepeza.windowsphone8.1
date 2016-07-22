@@ -10,16 +10,6 @@ namespace Pepeza.Db.DbHelpers.Board
 {
     public class FollowingHelper : DBHelperBase
     {
-        public async static Task<TFollowing> get(int boardId)
-        {
-            var connection = DbHelpers.DbHelper.DbConnectionAsync();
-            if (connection != null)
-            {
-                TFollowing following = await connection.GetAsync<TFollowing>(boardId);
-                return following;
-            }
-            return null;
-        }
         public static async  Task<bool> getFollowingBoard(int boardId)
         {
             bool following = false;

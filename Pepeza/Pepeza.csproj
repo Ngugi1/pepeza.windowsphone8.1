@@ -134,10 +134,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NotificationsExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c936aba0ac6438e9, processorArchitecture=MSIL">
-      <HintPath>..\packages\NotificationsExtensions.Portable.1.0.7\lib\portable-net45+wpa8+win8+xamarin.ios+monoandroid+monotouch\NotificationsExtensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="QKit, Version=0.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\QKit.0.4.1\lib\wpa81\QKit.dll</HintPath>
