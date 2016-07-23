@@ -358,17 +358,18 @@
     <Language Code="zu-za" InMinimumRequirementSet="true" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>7111Samthegreat.Pepeza</MainPackageIdentityName>
+    <MainPackageIdentityName>7111Samthegreat.Pepezabeta</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>Pepeza</ReservedName>
+      <ReservedName>Pepeza(beta)</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
-    <MainPackageIdentityName>7111Samthegreat.CocoNuts</MainPackageIdentityName>
-    <MainPackageIdentityName>7111Samthegreat.hehehe</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.OneStage</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.SuperSports</MainPackageIdentityName>
+    <MainPackageIdentityName>7111Samthegreat.CocoNuts</MainPackageIdentityName>
+    <MainPackageIdentityName>7111Samthegreat.hehehe</MainPackageIdentityName>
+    <MainPackageIdentityName>7111Samthegreat.Pepeza</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.yooo</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH5FRR4" />
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH4SQDX" />
 </StoreAssociation>
