@@ -18,10 +18,11 @@ namespace Shared.Server.Auth
         public static string GoogleEndUri = "https://accounts.google.com/o/oauth2/approval?";
         #endregion
 
-    
+
         //Facebook Constans region 
         #region Facebook Constants
-        
+        public static string FacebookAppId { get; set; } = "<TODO>";
+
         #endregion
     }
 }
