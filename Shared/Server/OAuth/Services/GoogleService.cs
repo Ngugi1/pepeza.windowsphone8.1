@@ -35,7 +35,7 @@ namespace Shared.Server.OAuth.Services
         /// </summary>
         /// <param name="webAuthResultResponseData"></param>
         /// <returns></returns>
-        private string Getcode(string webAuthResultResponseData)
+        private static string Getcode(string webAuthResultResponseData)
         {
            
             if (webAuthResultResponseData != null)
@@ -49,7 +49,7 @@ namespace Shared.Server.OAuth.Services
             }
             
         }
-        private async Task<string> GetAccessToken(WebAuthenticationResult result)
+        public static async Task<string> GetAccessToken(WebAuthenticationResult result)
         {
             if(result.ResponseStatus == WebAuthenticationStatus.Success)
             {
@@ -68,7 +68,7 @@ namespace Shared.Server.OAuth.Services
                 return null;
             }
         }
-        private async Task<string> RequestToken(string code)
+        private static async Task<string> RequestToken(string code)
         {
             //Access URL
            const string TokenUrl = "https://accounts.google.com/o/oauth2/token";
