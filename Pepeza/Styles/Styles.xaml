@@ -763,4 +763,25 @@
 
         </Grid>
     </DataTemplate>
+
+    <DataTemplate x:Key="ListSettings">
+        <Grid Width="{Binding ActualWidth,
+                              ElementName=GridParent}"
+              Holding="Grid_Holding"
+              Style="{StaticResource GridListViewItemTemplate}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="12,2"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding name}" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding desc}" />
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

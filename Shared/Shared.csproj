@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Db\DbHelpers\Notice\FileNoticeHelper.cs" />
     <Compile Include="Db\Models\Notices\TAttachment.cs" />
+    <Compile Include="Models\NoticesModels\NoticeCollection.cs" />
     <Compile Include="Server\OAuth\AuthConstants.cs" />
     <Compile Include="Server\OAuth\Services\FacebookService.cs" />
     <Compile Include="Server\OAuth\Services\GoogleService.cs" />
@@ -167,23 +168,91 @@
     <Compile Include="ViewModels\ViewModelCreateOrg.cs" />
     <Compile Include="ViewModels\ViewModelLogin.cs" />
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
+    <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
+      <DependentUpon>DeactivateAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Account\SetUpPage.xaml.cs">
+      <DependentUpon>SetUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\AddBoard.xaml.cs">
+      <DependentUpon>AddBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardFollowers.xaml.cs">
+      <DependentUpon>BoardFollowers.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\BoardProfileAndNotices.xaml.cs">
+      <DependentUpon>BoardProfileAndNotices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Boards\UpdateBoard.xaml.cs">
+      <DependentUpon>UpdateBoard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Configurations\Config.cs" />
+    <Compile Include="Views\Configurations\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Login\ResetPasswordPage.xaml.cs">
+      <DependentUpon>ResetPasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Notices\AddNoticePage.xaml.cs">
+      <DependentUpon>AddNoticePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\AddOrg.xaml.cs">
+      <DependentUpon>AddOrg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\EditOrg.xaml.cs">
+      <DependentUpon>EditOrg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\OrgProfileAndBoards.xaml.cs">
+      <DependentUpon>OrgProfileAndBoards.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
+      <DependentUpon>UserOrgs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\AvatarCroppingPage.xaml.cs">
+      <DependentUpon>AvatarCroppingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\UserProfile.xaml.cs">
+      <DependentUpon>UserProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Search\Search.xaml.cs">
+      <DependentUpon>Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Signup\SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
+    <Compile Include="Views\ViewHelpers\OrgViewHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NotificationsExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c936aba0ac6438e9, processorArchitecture=MSIL">
-      <HintPath>..\packages\NotificationsExtensions.Portable.1.0.7\lib\portable-net45+wpa8+win8+xamarin.ios+monoandroid+monotouch\NotificationsExtensions.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Extensions">
+    <Reference Include="QKit, Version=0.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QKit.0.4.1\lib\wpa81\QKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting">
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\portable-wp8+netcore45+net45+wp81+wpa81\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.Primitives">
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.22.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.22\lib\wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Toastinet, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Toastinet.2.8\lib\wpa81\Toastinet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +262,84 @@
   <ItemGroup>
     <Folder Include="Server\OAuth\Interfaces\" />
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Account\DeactivateAccount.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Account\SetUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\AddBoard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\BoardFollowers.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\BoardProfileAndNotices.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\UpdateBoard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Configurations\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Login\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Login\ResetPasswordPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Notices\AddNoticePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\AddOrg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\EditOrg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\OrgProfileAndBoards.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\UserOrgs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Profile\AvatarCroppingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Profile\UserProfile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Search\Search.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Signup\SignUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -200,6 +347,11 @@
     <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
