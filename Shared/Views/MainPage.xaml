@@ -34,8 +34,55 @@
                 </PivotItem.Header>
                 <Jumper:GenericJumpList Name="QJumpList">
                     <ListView Name="ListViewBoards"
-                              ItemTemplate="{StaticResource ListViewBoardsDataTemplate}"
-                              SelectionChanged="ListViewBoards_SelectionChanged" />
+                              SelectionChanged="ListViewBoards_SelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding ActualWidth,
+                              ElementName=GridParent}"
+              Height="70"
+              Holding="Grid_Holding"
+              Style="{StaticResource GridListViewItemTemplate}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout Placement="Right">
+                                            <MenuFlyoutItem Name="MenuFlyOutEdit"
+                                    Click="MenuFlyOutEditBoard_Tapped"
+                                               
+                                    Text="edit" />
+                                            <MenuFlyoutItem 
+                                                Name="MenuFlyoutDelete"
+                                    Click="MenuFlyoutItemBoard_Delete"
+                                    Text="delete" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                    <Rectangle Grid.RowSpan="2"
+                       Margin="8,12,0,28"
+                       Style="{StaticResource RectanglePicThumbnail}">
+                                        <Rectangle.Fill>
+                                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="8,10,8,6"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding name}" />
+                                    <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="8,0,14,0"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding desc}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Jumper:GenericJumpList>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -44,8 +91,53 @@
                 </PivotItem.Header>
                 <Jumper:AlphaJumpList Name="AlphaListOrgs">
                     <ListView Name="ListViewOrgs"
-                              ItemTemplate="{StaticResource ListViewOrgDataTemplate}"
-                              SelectionChanged="ListViewOrgs_SelectionChanged" />
+                              SelectionChanged="ListViewOrgs_SelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Name="OrgGrid"
+              Holding="OrgGrid_Holding"
+              Style="{StaticResource GridListViewItemTemplate}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem 
+                                                 Name="MenuFlyoutEdit"
+                                    Click="MenuFlyoutEditOrg_Click"
+                                    Text="edit" />
+                                            <MenuFlyoutItem 
+                                                 Name="MenuFlyoutDelete"
+                                    Click="MenuFlyoutDeleteOrg_Click"
+                                    Text="delete" />
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                    <Rectangle Grid.RowSpan="2"
+                       Margin="0,8,0,0"
+                       Style="{StaticResource RectanglePicThumbnail}">
+                                        <Rectangle.Fill>
+                                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="14,0,0,0"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding name}" />
+                                    <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="14,4,0,0"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding description}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Jumper:AlphaJumpList>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
