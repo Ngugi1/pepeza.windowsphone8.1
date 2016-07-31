@@ -1,4 +1,5 @@
-﻿using Pepeza.Db.DbHelpers;
+﻿using Pepeza.Common;
+using Pepeza.Db.DbHelpers;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
@@ -11,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -38,6 +40,7 @@ namespace Pepeza
     {
         private TransitionCollection transitions;
         public static bool IsDataLoaded { get; set; }
+        private ContinuationManager _continuationManager;
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -58,11 +61,68 @@ namespace Pepeza
             this.Resuming += App_Resuming;  
         }
 
-        protected override void OnActivated(IActivatedEventArgs args)
+        protected async  override void OnActivated(IActivatedEventArgs e)
         {
-            base.OnActivated(args);
+            base.OnActivated(e);
             updateStatusBar();
+            Window.Current.Activate();
         }
+
+
+
+
+
+        /// <summary>
+        /// 
+        /// Create root frame 
+        /// </summary>
+        /// <returns></returns>
+        private Frame CreateRootFrame()
+        {
+            var rootFrame = Window.Current.Content as Frame;
+
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (rootFrame == null)
+            {
+                // Create a Frame to act as the navigation context and navigate to the first page
+                rootFrame = new Frame();
+
+                // Set the default language
+                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
+
+                // Place the frame in the current Window
+                Window.Current.Content = rootFrame;
+            }
+
+            return rootFrame;
+        }
+
+
+        /// <summary>
+        /// Restore status async 
+        /// </summary>
+        /// <param name="previousExecutionState"></param>
+        /// <returns></returns>
+        private async Task RestoreStatusAsync(ApplicationExecutionState previousExecutionState)
+        {
+            // Do not repeat app initialization when the Window already has content,
+            // just ensure that the window is active
+            if (previousExecutionState == ApplicationExecutionState.Terminated)
+            {
+                // Restore the saved session state only when appropriate
+                try
+                {
+                    await SuspensionManager.RestoreAsync();
+                }
+                catch (SuspensionManagerException)
+                {
+                    // Something went wrong restoring state.
+                    // Assume there is no state and continue
+                }
+            }
+        }
+
         void App_Resuming(object sender, object e)
         {
             updateStatusBar();    
@@ -144,7 +204,11 @@ namespace Pepeza
             }
             #endregion
 
-           
+            Frame frame = CreateRootFrame();
+            await RestoreStatusAsync(e.PreviousExecutionState);
+
+            frame.Navigate(typeof(LoginPage), e.Arguments);
+
             //Register for push Notifications background Tasks
             await BackgroundAgents.registerPush();
             //Deal with the statusbar
