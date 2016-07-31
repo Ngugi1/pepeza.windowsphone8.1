@@ -29,6 +29,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.ApplicationModel.Activation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -144,6 +145,16 @@ namespace Pepeza.Views
             {
                 new MessageDialog("Something went wrong"+ex.Message);
             }
+        }
+
+        public void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LoginWithFacebook(object sender, RoutedEventArgs e)
+        {
+            FacebookService.LoginWithacebook();
         }
     }
 }

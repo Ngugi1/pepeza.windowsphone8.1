@@ -118,25 +118,25 @@ namespace Pepeza.Views.Boards
             {
                 //You own this board
                 btnFollow.Visibility = Visibility.Collapsed;
-                AppBtnEdit.IsEnabled = false;
+                AppBtnEdit.Visibility = Visibility.Collapsed;
 
             }
             else
             {
                 btnFollow.Visibility = Visibility.Visible;
-                btnFollow.IsEnabled = true;
+                btnFollow.Visibility = Visibility.Visible;
             }
         }
         public async Task followBoard(int boardId)
         {
-            btnFollow.Content = "Following";
+            btnFollow.IsEnabled = false;
             Dictionary<string, string> results = await BoardService.followBoard(boardId);
             if (results.ContainsKey(Constants.SUCCESS))
             {
                 //We have followed the board
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 toasterror.Message = (string)objResults["message"];
-                btnFollow.IsEnabled = false;
+              
                 await FollowingHelper.add(new TFollowing()
                 {
                     Id = boardFetched.id,
@@ -150,6 +150,8 @@ namespace Pepeza.Views.Boards
                     Timezone_Type_Created = boardFetched.timezone_type_created,
                     Timezone_Type_Updated = boardFetched.timezone_type_updated
                 });
+                btnFollow.IsEnabled = true;
+                btnFollow.Content = "Unfollow";
             }
             else
             {

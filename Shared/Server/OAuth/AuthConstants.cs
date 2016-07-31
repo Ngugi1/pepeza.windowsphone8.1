@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Authentication.Web;
 
 namespace Shared.Server.Auth
 {
@@ -12,8 +13,8 @@ namespace Shared.Server.Auth
         /// google constants region 
         /// </summary>
         #region Google constants
-        public static string GoogleAppId = "841121467675-g8ta8jgc25rmfanua4g8k67fn1ldaemp.apps.googleusercontent.com";
-        public static string GoogleAppSecret = " J6pW6cahU8OpUhh4Vbb87Z19 ";
+        public static string GoogleAppId = "348357318227-fuluaf8j963ret4ii022na16sdnv8m58.apps.googleusercontent.com";
+        public static string GoogleAppSecret = "-IqIYASoSTkXIGAbR41ER3kj";
         public static string GoogleCallBackUrl { get; set; } = "urn:ietf:wg:oauth:2.0:oob";
         public static string GoogleEndUri = "https://accounts.google.com/o/oauth2/approval?";
         #endregion
@@ -21,8 +22,9 @@ namespace Shared.Server.Auth
 
         //Facebook Constans region 
         #region Facebook Constants
-        public static string FacebookAppId { get; set; } = "<TODO>";
-
+        public static string FacebookAppId { get; set; } = "569507843221106";
+        public static Uri FacebookCallBackUrl { get; set; } = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
+        public static string FacebookPermissions = "email,public_profile";
         #endregion
     }
 }
