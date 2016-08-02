@@ -65,6 +65,23 @@ namespace Pepeza
         {
             base.OnActivated(e);
             updateStatusBar();
+            _continuationManager = new ContinuationManager();
+
+            Frame rootFrame = CreateRootFrame();
+            await RestoreStatusAsync(e.PreviousExecutionState);
+
+            if (rootFrame.Content == null)
+            {
+                rootFrame.Navigate(typeof(LoginPage));
+            }
+
+            var continuationEventArgs = e as IContinuationActivatedEventArgs;
+            if (continuationEventArgs != null)
+            {
+                // Call ContinuationManager to handle continuation activation
+                _continuationManager.Continue(continuationEventArgs, rootFrame);
+            }
+
             Window.Current.Activate();
         }
 
@@ -72,11 +89,6 @@ namespace Pepeza
 
 
 
-        /// <summary>
-        /// 
-        /// Create root frame 
-        /// </summary>
-        /// <returns></returns>
         private Frame CreateRootFrame()
         {
             var rootFrame = Window.Current.Content as Frame;
@@ -98,12 +110,6 @@ namespace Pepeza
             return rootFrame;
         }
 
-
-        /// <summary>
-        /// Restore status async 
-        /// </summary>
-        /// <param name="previousExecutionState"></param>
-        /// <returns></returns>
         private async Task RestoreStatusAsync(ApplicationExecutionState previousExecutionState)
         {
             // Do not repeat app initialization when the Window already has content,
@@ -122,7 +128,6 @@ namespace Pepeza
                 }
             }
         }
-
         void App_Resuming(object sender, object e)
         {
             updateStatusBar();    

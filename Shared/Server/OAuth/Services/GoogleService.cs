@@ -26,9 +26,9 @@ namespace Shared.Server.OAuth.Services
             googleUrl.Append("&state=foobar");
             googleUrl.Append("&response_type=code");
             //Init the URL for a call
-            var googleStartUrl = new Uri(googleUrl.ToString());
+            var googleStartUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(AuthConstants.GoogleAppId) + "&redirect_uri=" + Uri.EscapeDataString(AuthConstants.GoogleCallBackUrl) + "&response_type=code&scope=openid%20email%20profile");
             //Now Authenticate 
-            WebAuthenticationBroker.AuthenticateAndContinue(googleStartUrl, new Uri(AuthConstants.GoogleCallBackUrl), null, WebAuthenticationOptions.None);
+            WebAuthenticationBroker.AuthenticateAndContinue(googleStartUrl, new Uri(AuthConstants.GoogleEndUri), null, WebAuthenticationOptions.UseTitle);
         }
         /// <summary>
         /// Gets the authorization code that can be used to get an access token
