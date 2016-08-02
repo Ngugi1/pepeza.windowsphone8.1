@@ -42,7 +42,7 @@ namespace Shared.Push
                         if (!inbackground)
                         {
                             //Push these changes to the mainapage 
-                            MainPage.reloadNotices();
+                            //MainPage.reloadNotices();
                         }
                         ActionCenterHelper.updateNoticesInActionCenter(noticeItemContent);
                    }
