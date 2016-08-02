@@ -30,6 +30,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Activation;
+using Pepeza.Common;
+
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -38,7 +40,7 @@ namespace Pepeza.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LoginPage : Page
+    public sealed partial class LoginPage : Page , IWebAuthenticationContinuable
     {
         
         public LoginPage()
@@ -149,7 +151,7 @@ namespace Pepeza.Views
 
         public void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
         {
-            throw new NotImplementedException();
+            //TODO continue here 
         }
 
         private void LoginWithFacebook(object sender, RoutedEventArgs e)
