@@ -20,6 +20,7 @@ using Windows.Foundation.Collections;
 using Windows.Networking.PushNotifications;
 using Windows.Phone.UI.Input;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -85,7 +86,10 @@ namespace Pepeza
             Window.Current.Activate();
         }
 
-
+        public  async static void displayMessageDialog(string message)
+        {
+            await new MessageDialog(message).ShowAsync();
+        }
 
 
 
