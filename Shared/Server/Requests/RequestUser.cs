@@ -397,6 +397,38 @@ namespace Pepeza.Server.Requests
 
             return responseContent;
         }
+
+        public static async Task<Dictionary<string,string>> sendOAuthToken(Dictionary<string,string> tokenInfo)
+        {
+            HttpClient client = getHttpClient(false);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.PostAsJsonAsync(UserAddresses.SOCIAL_LOGIN, tokenInfo);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string data = await response.Content.ReadAsStringAsync();
+                        results.Add(Constants.SUCCESS, data);
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 
 }
