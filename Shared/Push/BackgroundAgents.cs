@@ -53,7 +53,7 @@ namespace Shared.Push
                 //Register foreground APP to receive push when running
                 channel.PushNotificationReceived += channel_PushNotificationReceived;
 
-                //TODO :: Upload the URI to Pepeza Backend 
+                // Upload the URI to Pepeza Backend 
                 bool isUriSent = await BackendService.submitPushUri(uri);
                 isRegistered = (isUriSent == true) ? true : false;
 
