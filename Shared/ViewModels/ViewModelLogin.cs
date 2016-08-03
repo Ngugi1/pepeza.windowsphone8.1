@@ -16,11 +16,6 @@ namespace Pepeza.ViewModels
         {
             LoginCommand = new CommandLogin(this);
         }
-        //TODO :: Create a method to login a user
-        public async Task<JObject> loginUser(Dictionary<string, string> pairs)
-        {
-
-            return null;
-        }
+       
     }
 }

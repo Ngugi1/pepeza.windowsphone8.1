@@ -16,11 +16,11 @@ namespace Shared.Server.OAuth.Services
         /// <summary>
         /// Facebook provider 
         /// </summary>
-        const string provider = "facebook";
+        public const string provider = "facebook";
         /// <summary>
         /// The initial method invoked to start the OAuth Process
         /// </summary>
-        public static void LoginWithacebook()
+        public static void LoginWithFacebook()
         {
             FacebookClient client = new FacebookClient();
             Uri facebookCallBackUrl = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
@@ -38,7 +38,7 @@ namespace Shared.Server.OAuth.Services
             WebAuthenticationBroker.AuthenticateAndContinue(facebookUrl);
         }
         //Retrieve the access token 
-        public string RetrieveAccessToken(string webAuthResult)
+        private static string RetrieveAccessToken(string webAuthResult)
         {
             string accessToken = "";
             string responseData = webAuthResult.Substring(webAuthResult.IndexOf("access_token", StringComparison.Ordinal));
@@ -58,7 +58,7 @@ namespace Shared.Server.OAuth.Services
             return accessToken;
         }
         //Access webAuthresults 
-        public async Task<string> GetAccessTokenFromWebResults(WebAuthenticationResult result)
+        public static async Task<string> GetAccessTokenFromWebResults(WebAuthenticationResult result)
         {
             if (result != null)
             {

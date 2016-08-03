@@ -142,6 +142,7 @@ namespace Pepeza.Views
             try
             {
                 GoogleService.Login();
+
             }
             catch(Exception ex)
             {
@@ -149,14 +150,62 @@ namespace Pepeza.Views
             }
         }
 
-        public void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
+        public async void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
         {
             //TODO continue here 
+            if (args.WebAuthenticationResult != null)
+            {
+                string token="", providerName="", pushId = Constants.PUSH_ID.ToString();
+                //TODO Enable the loading bar and disable all other buttons 
+                //Get the access token and save it 
+                if (args.ContinuationData.ContainsKey("google"))
+                {
+                    token = await GoogleService.GetAccessToken(args.WebAuthenticationResult);
+                    providerName = GoogleService.Provider;
+                } else if (args.ContinuationData == null)
+                {
+                   providerName = FacebookService.provider;
+                   token =  await FacebookService.GetAccessTokenFromWebResults(args.WebAuthenticationResult);
+                }
+                //Now post the token to the server
+                Dictionary<string, string> results = new Dictionary<string, string>();
+                try
+                {
+                    if (token != null)
+                    {
+                        results = await RequestUser.sendOAuthToken(new Dictionary<string, string>()
+                        {
+                            {"providerName", providerName }, {"accessToken", token} , {"pushId", pushId}
+                        });
+                            if (results.ContainsKey(Constants.SUCCESS))
+                            {
+                                //We posted successfully 
+                                this.Frame.Navigate(typeof(SetUpPage), results[Constants.SUCCESS]);
+                            }
+                            else
+                            {
+                                App.displayMessageDialog(results[Constants.ERROR]);
+                                return;
+                            }
+
+
+                    }else
+                    {
+                        App.displayMessageDialog(Constants.UNKNOWNERROR);
+                    }
+
+                }
+                catch
+                {
+                    App.displayMessageDialog(results[Constants.ERROR]);
+                }
+
+            }
         }
 
         private void LoginWithFacebook(object sender, RoutedEventArgs e)
         {
-            FacebookService.LoginWithacebook();
+            FacebookService.LoginWithFacebook();
         }
     }
 }
