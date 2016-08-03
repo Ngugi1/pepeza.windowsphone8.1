@@ -19,28 +19,21 @@ namespace Shared.Server.OAuth.Services
         public static string Provider { get; set; } = "google";
         public static void Login()
         {
-            //Build the google URL 
-            var googleUrl = new StringBuilder();
-            googleUrl.Append("https://accounts.google.com/o/oauth2/auth?client_id=");
-            googleUrl.Append(Uri.EscapeDataString(AuthConstants.GoogleAppId));
-            googleUrl.Append("&scope=openid%20email%20profile");
-            googleUrl.Append("&redirect_uri=");
-            googleUrl.Append(Uri.EscapeDataString(AuthConstants.GoogleCallBackUrl));
-            googleUrl.Append("&state=foobar");
-            googleUrl.Append("&response_type=code");
-            //Init the URL for a call
-            var googleStartUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(AuthConstants.GoogleAppId) + "&redirect_uri=" + Uri.EscapeDataString(AuthConstants.GoogleCallBackUrl) + "&response_type=code&scope=openid%20email%20profile");
-            //Now Authenticate 
-            ValueSet s = new ValueSet();
-            s.Add("google", "google");
-            WebAuthenticationBroker.AuthenticateAndContinue(googleStartUrl, new Uri(AuthConstants.GoogleEndUri), s, WebAuthenticationOptions.UseTitle);
-        }
-        /// <summary>
-        /// Gets the authorization code that can be used to get an access token
-        /// </summary>
-        /// <param name="webAuthResultResponseData"></param>
-        /// <returns></returns>
-        private static string Getcode(string webAuthResultResponseData)
+            var googleUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(AuthConstants.GoogleAppId) + "&redirect_uri=" + Uri.EscapeDataString("urn:ietf:wg:oauth:2.0:oob") + "&response_type=code&scope=" + Uri.EscapeDataString("profile https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me email"));
+            ValueSet data = new ValueSet();
+            KeyValuePair<string, string> kv = new KeyValuePair<string, string>("google", "google");
+
+
+            data.Add("google", "google");
+            WebAuthenticationBroker.AuthenticateAndContinue(googleUrl, new Uri(AuthConstants.GoogleEndUri), data, WebAuthenticationOptions.UseTitle);
+
+    }
+    /// <summary>
+    /// Gets the authorization code that can be used to get an access token
+    /// </summary>
+    /// <param name="webAuthResultResponseData"></param>
+    /// <returns></returns>
+    private static string Getcode(string webAuthResultResponseData)
         {
            
             if (webAuthResultResponseData != null)

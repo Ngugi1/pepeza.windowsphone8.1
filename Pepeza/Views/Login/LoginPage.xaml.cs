@@ -158,7 +158,7 @@ namespace Pepeza.Views
                 string token="", providerName="", pushId = Constants.PUSH_ID.ToString();
                 //TODO Enable the loading bar and disable all other buttons 
                 //Get the access token and save it 
-                if (args.ContinuationData.ContainsKey("google"))
+                if (args.ContinuationData!=null && args.ContinuationData.ContainsKey("google"))
                 {
                     token = await GoogleService.GetAccessToken(args.WebAuthenticationResult);
                     providerName = GoogleService.Provider;
@@ -179,8 +179,9 @@ namespace Pepeza.Views
                         });
                             if (results.ContainsKey(Constants.SUCCESS))
                             {
-                                //We posted successfully 
-                                this.Frame.Navigate(typeof(SetUpPage), results[Constants.SUCCESS]);
+                            //We posted successfully 
+                            App.displayMessageDialog(results[Constants.SUCCESS]);
+                               // this.Frame.Navigate(typeof(SetUpPage), results[Constants.SUCCESS]);
                             }
                             else
                             {
