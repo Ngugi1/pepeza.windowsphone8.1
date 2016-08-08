@@ -58,8 +58,9 @@ namespace Shared.Push
                 isRegistered = (isUriSent == true) ? true : false;
 
             }
-            catch
+            catch(Exception ex)
             {
+                string s = ex.Message;
                 isRegistered = false;
             }
             return isRegistered;

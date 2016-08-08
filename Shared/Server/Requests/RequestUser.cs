@@ -26,7 +26,6 @@ namespace Pepeza.Server.Requests
     /// </summary>
     public class RequestUser : BaseRequest
     {
-
         private static  HttpClient client { get; set; }
         /// <summary>
         /// This method creates a new user in the system
@@ -190,13 +189,11 @@ namespace Pepeza.Server.Requests
             }
             return resConent;
         }
-
         /// <summary>
         /// Reset user password
         /// </summary>
         /// <param name="toUpdate"></param>
         /// <returns></returns>
-
         public async static Task<Dictionary<string, string>> resetPassword(string username)
         {
             HttpClient client = getHttpClient(false);
@@ -268,7 +265,6 @@ namespace Pepeza.Server.Requests
             }
             return resContent;
         }
-
         public static async Task<Dictionary<string, string>> logout()
         { 
             //Get API-TOKEN 
@@ -334,7 +330,6 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
-
         public static async Task<Dictionary<string, string>> getUser()
         {
             //get API Token
@@ -397,7 +392,6 @@ namespace Pepeza.Server.Requests
 
             return responseContent;
         }
-
         public static async Task<Dictionary<string,string>> sendOAuthToken(Dictionary<string,string> tokenInfo)
         {
             HttpClient client = getHttpClient(false);
