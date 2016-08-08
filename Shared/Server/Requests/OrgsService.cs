@@ -249,5 +249,37 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
+        public async static Task<Dictionary<string,string>> addCollaborator(Dictionary<string,string> toPost)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage responseMessage = null;
+            Dictionary<string, string> results = new Dictionary<string, string>(); 
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_COLLABORATOR,toPost["orgId"]), toPost);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        //we added collaborators successfully
+                        results.Add(Constants.SUCCESS, await responseMessage.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        //We hit a dead end 
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    string exMessage = ex.Message;
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 }

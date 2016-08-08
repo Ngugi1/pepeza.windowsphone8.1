@@ -1,0 +1,125 @@
+﻿<Page xmlns:my="using:Telerik.UI.Xaml.Controls.Primitives" 
+    x:Class="Pepeza.Views.Orgs.AddCollaboratorPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views.Orgs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    
+    RequestedTheme="Light"
+    xmlns:C4Fun="using:Coding4Fun.Toolkit.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <ScrollViewer>
+        <Grid Name="RootGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <TextBlock Margin="20,0" Style="{StaticResource txtBlockPageHeader}"
+                   Text="Roles"/>
+                <GridView  IsSwipeEnabled="True"
+                   Margin="8"
+                   Name="GridViewAddedUsers"
+                   >
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Background="WhiteSmoke"
+                         Orientation="Horizontal"
+                         Margin="8"
+                         >
+                                <TextBlock Text="{Binding username}"
+                           Foreground="Black" 
+                           VerticalAlignment="Center"
+                           Style="{StaticResource txtBlockListViewItemHeader}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBox  PlaceholderText="Search for users"
+                     Margin="12,8,12,8"
+                     HorizontalAlignment="Stretch"
+                     Background="Transparent"
+                     Padding="8" 
+                      Name="txtBoxSearchCollaborator"
+                     TextChanged="TextBox_TextChanged"
+                    >
+
+                </TextBox>
+                <ProgressBar Name="PBAddCollaborator"  Visibility="Collapsed"/>
+                <ListView ItemTemplate="{StaticResource ListViewSearchUserTemplate}"
+                      Margin="20,8,12,8"
+                      SelectionChanged="ListViewSearchCollaborator_SelectionChanged"    
+                      Name="ListViewSearchCollaborator">
+
+                </ListView>
+
+            </StackPanel>
+            <TextBlock Name="txtBlockWhat"
+                       Grid.Row="1"
+                       Margin="8"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="28"
+                       FontWeight="ExtraLight"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{ThemeResource ListViewItemTextBlockStyle}"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"/>
+            <Popup
+            Name="popUpAddCollaborator"
+            Grid.Row="1"
+            IsOpen="False"
+            IsLightDismissEnabled="False"
+            VerticalAlignment="Top">
+                <StackPanel Background="{ThemeResource PhoneAccentBrush}" 
+                        Width="{Binding ActualWidth, ElementName=RootGrid}"
+                       >
+                    <TextBlock Text="Select role" 
+                               HorizontalAlignment="Center"
+                               Margin="12"
+                               Style="{StaticResource ListViewEmptyStaticTextBlockStyle}" 
+                               Foreground="White"/>
+                    <TextBlock FontWeight="Bold" 
+                           Name="txtBlockUsername"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource SubheaderTextBlockStyle}"
+                           Foreground="White">Ngugi Ndung'u</TextBlock>
+                    <ComboBox BorderBrush="{StaticResource PhoneAccentBrush}" 
+                          HorizontalAlignment="Center" 
+                          Name="ComboBox_SelectRole"    
+                          Margin="16">
+                        <ComboBox.Header>
+                            <TextBlock FontSize="22"
+                               Foreground="{StaticResource PhoneForegroundBrush}"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Text="select role" />
+                        </ComboBox.Header>
+                        <ComboBoxItem Content="admin" Width="200" Margin="4"/>
+                        <ComboBoxItem Content="editor" Width="200" Margin="4"/>
+                        <ComboBoxItem Content="owner"  Width="200" Margin="4"/>
+                    </ComboBox>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <AppBarButton Foreground="White" Click="CancelRoleBtnClick" Icon="Cancel"  BorderBrush="White" Label="cancel" IsCompact="False" Margin="12"/>
+                        <AppBarButton Foreground="White"  Click="AcceptRoleBtnClick" BorderBrush="White" Icon="Accept" Label="add role" IsCompact="False" Margin="12"/>
+                    </StackPanel>
+                </StackPanel>
+            </Popup>
+        </Grid>
+    </ScrollViewer>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" Label="done" Click="AppBtnAddCollaborator_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

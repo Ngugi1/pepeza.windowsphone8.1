@@ -7,6 +7,9 @@ namespace Pepeza.Utitlity
 {
     public class Constants
     {
+        public static string NO_RESULTS { get; set; } = "No results matched your query";
+        public static string PUBLIC_BOARD { get; set; } = "public";
+        public static string REQUEST_BOARD { get; set; } = "request";
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
         public static int PUSH_ID { get { return 2; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }

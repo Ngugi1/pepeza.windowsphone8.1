@@ -280,5 +280,10 @@ namespace Pepeza.Views.Orgs
                 AppBtnEdit.IsEnabled = false;
             }
         }
+
+        private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddCollaboratorPage) , OrgID);
+        }
     }
 }

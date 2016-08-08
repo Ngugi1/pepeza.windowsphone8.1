@@ -71,22 +71,19 @@ namespace Pepeza.Views.Orgs
                         try
                         { //Board created successfully  , save and navigate away 
                             JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
-                            int rows = await Db.DbHelpers.OrgHelper.add(new TOrgInfo()
-                            { 
-
-                                id = (int)orgInfo["id"],
-                                username = model.Username,
-                                name = model.Name,
-                                userId = (int)Settings.getValue(Constants.USERID),
-                                description = model.Desc,
-                                dateCreated = (DateTime)orgInfo["dateCreated"]["date"],
-                                timezone_create = (string)orgInfo["dateCreated"]["timezone"],
-                                timezone_type_created = (int)orgInfo["dateCreated"]["timezone_type"],
-                                dateUpdated = (DateTime)orgInfo["dateUpdated"]["date"],
-                                timezone_updated = (string)orgInfo["dateUpdated"]["timezone"],
-                                timezone_type_updated = (int)orgInfo["dateUpdated"]["timezone_type"]
-
-                            });
+                            TOrgInfo toInsert = new TOrgInfo();
+                            toInsert.id = (int)orgInfo["organization"]["id"];
+                            toInsert.username = model.Username;
+                            toInsert.name = model.Name;
+                            toInsert.userId = (int)Settings.getValue(Constants.USERID);
+                            toInsert.description = model.Desc;
+                            toInsert.dateCreated = (DateTime)orgInfo["organization"]["dateCreated"]["date"];
+                            toInsert.timezone_create = (string)orgInfo["organization"]["dateCreated"]["timezone"];
+                            toInsert.timezone_type_created = (int)orgInfo["organization"]["dateCreated"]["timezone_type"];
+                            toInsert.dateUpdated = (DateTime)orgInfo["organization"]["dateUpdated"]["date"];
+                            toInsert.timezone_updated = (string)orgInfo["organization"]["dateUpdated"]["timezone"];
+                            toInsert.timezone_type_updated = (int)orgInfo["organization"]["dateUpdated"]["timezone_type"];
+                            int rows = await Db.DbHelpers.OrgHelper.add(toInsert);
                             Debug.WriteLineIf(rows == 1, "Inserted");
                             this.Frame.GoBack();
                         }

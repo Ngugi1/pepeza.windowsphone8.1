@@ -170,7 +170,7 @@ namespace Pepeza.Views
         }
         public void NoResults()
         {
-            txtBlockWhat.Text = "No results matched your query";
+            txtBlockWhat.Text = Constants.NO_RESULTS;
             txtBlockWhat.Visibility = Visibility.Visible;
         }
         /// <summary>
