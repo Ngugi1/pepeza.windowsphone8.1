@@ -597,20 +597,26 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
+            <Rectangle 
+                Margin="0,8,0,0"
+                VerticalAlignment="Bottom"
+                Grid.RowSpan="2"
+                       Style="{StaticResource RectanglePicThumbnail}">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Margin="8"
+                       Margin="12,4,12,0"
                        Foreground="Black"
+                       FontSize="24"
+                       VerticalAlignment="Top"
                        Style="{StaticResource ListViewItemTextBlockStyle}"
                        Text="{Binding username}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
-                       Margin="12,4"
+                       Margin="12,0,4,4"
                        VerticalAlignment="Top"
                        Foreground="Black"
                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
@@ -653,8 +659,10 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="2"
-                       VerticalAlignment="Center"
+            <Rectangle 
+                Margin="0,8,0,0"
+                VerticalAlignment="Bottom"
+                Grid.RowSpan="2"
                        Style="{StaticResource RectanglePicThumbnail}">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
@@ -662,24 +670,69 @@
             </Rectangle>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Margin="8"
+                       Margin="12,4,12,0"
                        Foreground="Black"
+                       FontSize="24"
+                       VerticalAlignment="Top"
                        Style="{StaticResource ListViewItemTextBlockStyle}"
                        Text="{Binding Username}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
-                       Margin="12,4"
+                       Margin="12,0,4,4"
                        VerticalAlignment="Top"
-                       FontWeight="Medium"
                        Foreground="Black"
                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
                        Text="{Binding Name}"
                        TextTrimming="WordEllipsis"
                        TextWrapping="NoWrap" />
-
         </Grid>
     </DataTemplate>
+    <DataTemplate x:Key="DataTemplateRoles">
+        <StackPanel>
+            <StackPanel Grid.Row="1">
+                <StackPanel Margin="8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Owner"
+                           Foreground="Black"
+                           FontWeight="Medium"
+                            Style="{StaticResource TitleTextBlockStyle}"/>
+                    </StackPanel>
 
+                    <TextBlock 
+                    Text="Has full priviledges in the organisation" 
+                    Style="{StaticResource txtBlockListViewDesc}"
+                    TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Margin="8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Administrator"
+                           Foreground="Black"
+                           FontWeight="Medium"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+                    </StackPanel>
+
+                    <TextBlock 
+                    Text="Can create,edit,delete boards and notices, manage organisation editors" 
+                    Style="{StaticResource txtBlockListViewDesc}"
+                    TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Margin="8">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Editor"
+                           FontWeight="Medium"
+                           Foreground="Black"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+                    </StackPanel>
+
+                    <TextBlock 
+                    Text="Can create,edit,delete notices and see all organiastion collaborators" 
+                    Style="{StaticResource txtBlockListViewDesc}"
+                    TextWrapping="Wrap"/>
+                </StackPanel>
+            </StackPanel>
+
+        </StackPanel>
+    </DataTemplate>
     <DataTemplate x:Key="ListSettings">
         <Grid Width="{Binding ActualWidth,
                               ElementName=GridParent}"

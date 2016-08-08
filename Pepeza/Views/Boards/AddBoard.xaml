@@ -58,55 +58,71 @@
                            Style="{StaticResource ListViewItemContentTextBlockStyle}"
                            Text="add icon" />
             </Border>
-            <ComboBox Name="comboOrgs"
+                <ComboBox Name="comboOrgs"
                       Grid.Row="1"
                       Margin="16,8"
                       BorderBrush="{StaticResource TextBoxBackgroundThemeBrush}"
                       Foreground="{StaticResource PhoneForegroundBrush}">
-                <ComboBox.Header>
-                    <TextBlock FontSize="22"
+                    <ComboBox.Header>
+                        <TextBlock FontSize="22"
                                Foreground="{StaticResource PhoneForegroundBrush}"
                                Style="{StaticResource txtBlockDisplay}"
                                Text="select organisation" />
-                </ComboBox.Header>
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Foreground="Black"
+                    </ComboBox.Header>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="Black"
                                    Opacity="1"
                                    Style="{ThemeResource ComboBoxPlaceholderTextBlockStyle}"
                                    Text="{Binding username}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <TextBox Grid.Row="2"
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ComboBox  
+                    Grid.Row="2"
+                    Name="comboBoardType"
+                    Margin="16,8"
+                    SelectedIndex="0"
+                      BorderBrush="{StaticResource TextBoxBackgroundThemeBrush}"
+                      Foreground="{StaticResource PhoneForegroundBrush}">
+                    <ComboBox.Header>
+                        <TextBlock FontSize="22"
+                               Foreground="{StaticResource PhoneForegroundBrush}"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Text="select board type" />
+                    </ComboBox.Header>
+                    <ComboBoxItem Content="public board" />
+                    <ComboBoxItem Content="invite board"/>
+                </ComboBox>
+            <TextBox Grid.Row="3"
                      Header="name"
                      PlaceholderText="give the board a name"
                      Style="{StaticResource txtBoxStyle}"
                      Text="{Binding Name,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="3"
+            <TextBlock Grid.Row="4"
                        Style="{StaticResource txtBlockError}"
                        Text="please enter a valid name"
                        Visibility="{Binding IsNameValid,
                                             Converter={StaticResource converter}}" />
-            <TextBox Grid.Row="4"
+            <TextBox Grid.Row="5"
                      Header="description"
                      PlaceholderText="what is this board about?"
                      Style="{StaticResource txtBoxStyle}"
                      Text="{Binding Desc,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="5"
+            <TextBlock Grid.Row="6"
                        Style="{StaticResource txtBlockError}"
                        Text="please enter a valid description"
                        Visibility="{Binding IsDescValid,
                                             Converter={StaticResource converter}}" />
             <TextBlock Name="txtBlockStatus"
-                       Grid.Row="6"
+                       Grid.Row="7"
                        Style="{StaticResource txtBlockError}" />
             <StackPanel Name="progressRingAddBoard"
-                        Grid.Row="7"
+                        Grid.Row="8"
                         Visibility="Collapsed">
                 <ProgressBar Margin="12,8" />
                 <TextBlock HorizontalAlignment="Center"

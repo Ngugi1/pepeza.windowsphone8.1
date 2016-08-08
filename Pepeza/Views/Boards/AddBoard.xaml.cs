@@ -56,13 +56,14 @@ namespace Pepeza.Views.Boards
             txtBlockStatus.Visibility = Visibility.Collapsed;
             var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
             TOrgInfo info = comboOrgs.SelectedItem as TOrgInfo;
+            string followRestriction = comboBoardType.SelectedIndex == 0 ? Constants.PUBLIC_BOARD : Constants.REQUEST_BOARD;
             if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
             {
                 //Go ahead and create the account
 
                 Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
                 {
-                    {"orgId" ,info.id.ToString()} ,{"name" , board.Name} , {"description" , board.Desc} 
+                    {"orgId" ,info.id.ToString()} ,{"name" , board.Name} , {"description" , board.Desc} , { "followRestriction" , followRestriction}
                 });
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
