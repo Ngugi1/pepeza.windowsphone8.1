@@ -6,6 +6,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -87,12 +88,9 @@ namespace Pepeza.Views.Boards
                         following =(int)objResults["follower"]["accepted"],
                         ownerId = (int)objResults["ownerId"],
                         desc = (string)objResults["description"],
-                        dateCreated = (DateTime)objResults["dateCreated"]["date"],
-                        dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                        timezone_created = (string)objResults["dateCreated"]["timezone"],
-                        timezone_updated = (string)objResults["dateUpdated"]["timezone"],
-                        timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
-                        timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
+                        dateCreated = DateTimeFormatter.format((DateTime)objResults["dateCreated"]["date"], (string)objResults["dateCreated"]["timezone"]),
+                        dateUpdated = DateTimeFormatter.format((DateTime)objResults["dateUpdated"]["date"], (string)objResults["dateUpdated"]["timezone"]),
+                       
                     };
                     checkIfBoardIsFollowed(boardFetched.following);
                     boardname = (string)objResults["name"];
@@ -145,10 +143,6 @@ namespace Pepeza.Views.Boards
                     Description = boardFetched.desc,
                     DateCreated = boardFetched.dateCreated,
                     DateUpdated = boardFetched.dateUpdated,
-                    Timezone_created = boardFetched.timezone_created,
-                    Timezone_Updated = boardFetched.timezone_updated,
-                    Timezone_Type_Created = boardFetched.timezone_type_created,
-                    Timezone_Type_Updated = boardFetched.timezone_type_updated
                 });
                 btnFollow.IsEnabled = true;
                 btnFollow.Content = "Unfollow";
@@ -258,14 +252,10 @@ namespace Pepeza.Views.Boards
                         {
                             noticeId = (int) obj["id"], 
                             title = (string)obj["title"],
-                            dateCreated = (DateTime)obj["dateCreated"]["date"],
-                            dateUpdated =(DateTime)obj["dateUpdated"]["date"],
+                            dateCreated = DateTimeFormatter.format((DateTime)obj["dateCreated"]["date"], (string)obj["dateCreated"]["timezone"]),
+                            dateUpdated = DateTimeFormatter.format((DateTime)obj["dateUpdated"]["date"], (string)obj["dateUpdated"]["timezone"]),
                             boardId = boardId,
-                            Timezone_Created = (string)obj["dateCreated"]["timezone"],
-                            Timezone_Type_Updated = (int)obj["dateUpdated"]["timezone_type"],
-                            Timezone_Updated = (string)obj["dateUpdated"]["timezone"],
-                            Timezone_Type_Created =(int)obj["dateCreated"]["timezone_type"],
-                            board = boardname,
+                           board = boardname,
                             content ="This is a smaple content fo all of you guys to fucking read"
                         });
                     }

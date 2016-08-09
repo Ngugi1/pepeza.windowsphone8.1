@@ -9,6 +9,7 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Boards;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -104,12 +105,8 @@ namespace Pepeza.Views.Orgs
                         username = (string)objResults["username"],
                         description = (string)objResults["description"],
                         name = (string)objResults["name"],
-                        dateCreated = (DateTime)objResults["dateCreated"]["date"],
-                        dateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                        timezone_create = (string)objResults["dateCreated"]["timezone"],
-                        timezone_updated = (string)objResults["dateUpdated"]["timezone"],
-                        timezone_type_created = (int)objResults["dateCreated"]["timezone_type"],
-                        timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"]
+                        dateCreated = DateTimeFormatter.format((DateTime)objResults["dateCreated"]["date"], (string)objResults["dateCreated"]["timezone"]),
+                        dateUpdated = DateTimeFormatter.format((DateTime)objResults["dateUpdated"]["date"], (string)objResults["dateUpdated"]["timezone"]),
                     };
                     if (info.username == null) info.username = "my boards";
                     RootGrid.DataContext = info;
@@ -283,7 +280,7 @@ namespace Pepeza.Views.Orgs
 
         private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddCollaboratorPage) , OrgID);
+            this.Frame.Navigate(typeof(ViewCollaboratorsPage) , OrgID);
         }
     }
 }

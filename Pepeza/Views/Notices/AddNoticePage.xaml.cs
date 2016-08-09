@@ -94,12 +94,9 @@ namespace Pepeza.Views.Notices
                                     boardId = boardID,
                                     title = title,
                                     content = desc,
-                                    dateCreated = (DateTime)obj["dateCreated"]["date"],
-                                    dateUpdated = (DateTime)obj["dateUpdated"]["date"],
-                                    Timezone_Created = (string)obj["dateCreated"]["timezone"],
-                                    Timezone_Type_Created = (int)obj["dateCreated"]["timezone_type"],
-                                    Timezone_Type_Updated = (int)obj["dateUpdated"]["timezone_type"],
-                                    Timezone_Updated = (string)obj["dateUpdated"]["timezone"]
+                                    dateCreated = DateTimeFormatter.format((DateTime)obj["dateCreated"]["date"], (string)obj["dateCreated"]["timezone"]),
+                                    dateUpdated = DateTimeFormatter.format((DateTime)obj["dateUpdated"]["date"], (string)obj["dateUpdated"]["timezone"]),
+                                   
                                 });
                                 this.Frame.GoBack();
                             }

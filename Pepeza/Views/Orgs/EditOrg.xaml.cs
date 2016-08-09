@@ -5,6 +5,7 @@ using Pepeza.Models.OrgsModels;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -79,9 +80,7 @@ namespace Pepeza.Views.Orgs
                 JObject obj = JObject.Parse(results[Constants.SUCCESS]);
                 if (obj != null)
                 {
-                    info.timezone_type_updated = (int)obj["dateUpdated"]["timezone_type"];
-                    info.dateUpdated = (DateTime)obj["dateUpdated"]["date"];
-                    info.timezone_updated = (string)obj["dateUpdated"]["timezone"];
+                    info.dateUpdated = DateTimeFormatter.format((DateTime)obj["dateUpdated"]["date"], (string)obj["dateUpdated"]["timezone"]);
                 }
                int k =  await OrgHelper.update(info);
                

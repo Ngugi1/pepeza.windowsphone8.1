@@ -22,11 +22,7 @@ namespace Pepeza.Db.Models
         [MaxLength(20)]
         public string lastName { get; set; }
         public DateTime dateUpdated { get; set; }
-        public string time_zone_updated { get; set; }
-        public int time_zone_type_updated { get; set; }
         public DateTime dateCreated { get; set; }
-        public int time_zone_type_created { get; set; }
-        public string time_zone_created { get; set; }
-        
+       
     }
 }

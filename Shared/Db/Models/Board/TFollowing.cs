@@ -67,42 +67,7 @@ namespace Pepeza.Db.Models.Board
                 onPropertyChanged("Timezone_Type_Created");
             }
         }
-        private int _Timezone_Type_Created;
-
-        public int Timezone_Type_Created
-        {
-            get { return _Timezone_Type_Created; }
-            set
-            {
-                _Timezone_Type_Created = value;
-                onPropertyChanged("Timezone_Type_Created");
-            }
-        }
-
-
-        private string _timezone_created;
-
-        public string Timezone_created
-        {
-            get { return _timezone_created; }
-            set
-            {
-                _timezone_created = value;
-                onPropertyChanged("Timezone_created");
-            }
-        }
-
-        private string _timezone_updated;
-
-        public string Timezone_Updated
-        {
-            get { return _timezone_updated; }
-            set
-            {
-                _timezone_updated = value;
-                onPropertyChanged("Timezone_Updated");
-            }
-        }
+       
 
         private DateTime _dateUpdated;
 

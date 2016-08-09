@@ -19,10 +19,6 @@ namespace Pepeza.Db.Models.Orgs
         [MaxLength(250)]
         public string description { get; set; }
         public DateTime dateCreated { get; set; }
-        public string timezone_create { get; set; }
-        public int timezone_type_created { get; set; }
         public DateTime dateUpdated { get; set; }
-        public int timezone_type_updated { get; set; }
-        public string timezone_updated { get; set; }
-    }
+         }
 }

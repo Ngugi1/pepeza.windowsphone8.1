@@ -7,6 +7,7 @@ using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,13 +97,9 @@ namespace Pepeza.Views.Boards
                     toInsert.name = (string)model.Name;
                     toInsert.desc = (string)model.Desc;
                     toInsert.orgID = (int)org.id;
-                    toInsert.dateUpdated = (DateTime)board["dateUpdated"]["date"];
-                     toInsert.dateCreated = (DateTime)board["dateCreated"]["date"];
-                    toInsert.timezone_created = (string)board["dateCreated"]["timezone"];
-                    toInsert.timezone_updated = (string)board["dateUpdated"]["timezone"];
-                    toInsert.timezone_type_created = (int)board["dateCreated"]["timezone_type"];
-                    toInsert.timezone_type_updated = (int)board["dateUpdated"]["timezone_type"];
-               
+                    toInsert.dateUpdated = DateTimeFormatter.format((DateTime)board["dateUpdated"]["date"], (string)board["dateUpdated"]["timezone"]);
+                     toInsert.dateCreated = DateTimeFormatter.format((DateTime)board["dateCreated"]["date"] , (string)board["dateCreated"]["timezone"]);
+                    
                 int K = await BoardHelper.addBoard(toInsert);
                 
             }

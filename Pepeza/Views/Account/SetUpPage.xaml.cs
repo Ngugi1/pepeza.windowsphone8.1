@@ -7,6 +7,7 @@ using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,6 +37,7 @@ namespace Pepeza.Views.Account
         public SetUpPage()
         {
             this.InitializeComponent();
+         
         }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -70,28 +72,18 @@ namespace Pepeza.Views.Account
                 lastName = (string)profileInfo["lastName"],
                 organizationId = (int)profileInfo["organization"]["id"],
                 username = (string)profileInfo["username"],
-                dateUpdated = Convert.ToDateTime((string)profileInfo["dateUpdated"]["date"]),
-                time_zone_updated = (string)profileInfo["dateUpdated"]["timezone"],
-                time_zone_type_updated = (int)profileInfo["dateUpdated"]["timezone_type"],
-                dateCreated = Convert.ToDateTime((string)profileInfo["dateCreated"]["date"]),
-                time_zone_created = (string)profileInfo["dateCreated"]["timezone"],
-                time_zone_type_created = (int)profileInfo["dateCreated"]["timezone_type"]
+                dateUpdated = DateTimeFormatter.format((DateTime)profileInfo["dateUpdated"]["date"], (string)profileInfo["dateUpdated"]["timezone"]),       
+                dateCreated = DateTimeFormatter.format((DateTime)profileInfo["dateCreated"]["date"], (string)profileInfo["dateCreated"]["timezone"]),
             };
+            
             //Get email iformation 
-            TEmail emailInfo = new TEmail()
-            {
-                emailID = (int)profileInfo["email"]["id"],
-                email = (string)profileInfo["email"]["email"],
-                verified = (string)profileInfo["email"]["verified"],
-                dateVerified = (string)profileInfo["email"]["dateVerified"],
-                dateCreated = Convert.ToDateTime(profileInfo["email"]["dateCreated"]["date"]),
-                dateUpdated = Convert.ToDateTime(profileInfo["email"]["dateUpdated"]["date"]),
-                timezone_created = (string)profileInfo["email"]["dateCreated"]["timezone"],
-                timezone_updated = (string)profileInfo["email"]["dateUpdated"]["timezone"],
-                timezone_type_created = (int)profileInfo["email"]["dateCreated"]["timezone_type"],
-                timezone_type_updated = (int)profileInfo["email"]["dateUpdated"]["timezone_type"],
-            };
-
+            TEmail emailInfo = new TEmail();
+            emailInfo.emailID = (int)profileInfo["email"]["id"];
+            emailInfo.email = (string)profileInfo["email"]["email"];
+            emailInfo.verified = (string)profileInfo["email"]["verified"];
+            emailInfo.dateVerified = (string)profileInfo["email"]["dateVerified"];
+            emailInfo.dateCreated = DateTimeFormatter.format((DateTime)(profileInfo["email"]["dateCreated"]["date"]) , (string)profileInfo["email"]["dateCreated"]["timezone"]);
+            emailInfo.dateUpdated = DateTimeFormatter.format((DateTime)(profileInfo["email"]["dateUpdated"]["date"]), (string)profileInfo["email"]["dateUpdated"]["timezone"]);
             //Get user orgs
             JObject dedefaultOrg = JObject.Parse(details["user"]["organization"].ToString());
             TOrgInfo defaultOrgInfo = new TOrgInfo()
@@ -101,12 +93,8 @@ namespace Pepeza.Views.Account
                 username = (string)dedefaultOrg["username"],
                 name = (string)dedefaultOrg["name"],
                 description = (string)dedefaultOrg["description"],
-                dateCreated = (DateTime)dedefaultOrg["dateCreated"]["date"],
-                dateUpdated = (DateTime)dedefaultOrg["dateUpdated"]["date"],
-                timezone_create = (string)dedefaultOrg["dateCreated"]["timezone"],
-                timezone_updated = (string)dedefaultOrg["dateUpdated"]["timezone"],
-                timezone_type_created = (int)dedefaultOrg["dateCreated"]["timezone_type"],
-                timezone_type_updated = (int)dedefaultOrg["dateUpdated"]["timezone_type"]
+                dateCreated = DateTimeFormatter.format((DateTime)dedefaultOrg["dateCreated"]["date"] , (string)dedefaultOrg["dateCreated"]["timezone"]),
+                dateUpdated = DateTimeFormatter.format((DateTime)dedefaultOrg["dateUpdated"]["date"],   (string)dedefaultOrg["dateUpdated"]["timezone"]),
             };
 
             //get all the user organisations 
@@ -114,14 +102,14 @@ namespace Pepeza.Views.Account
 
             //Now insert all to a local database
             try
-            {
+            {   
                 await UserHelper.add(userInfo);
                 await OrgHelper.add(defaultOrgInfo);
                 await EmailHelper.add(emailInfo);
             }
             catch (Exception ex)
             {
-                var x = ex.ToString() + " ```````````````````````" + ex.Message;
+                var u = ex.ToString() + " ```````````````````````" + ex.Message;
             }
         }
 

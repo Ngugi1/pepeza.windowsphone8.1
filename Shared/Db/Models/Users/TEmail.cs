@@ -16,10 +16,7 @@ namespace Pepeza.Db.Models.Users
         public string dateVerified { get; set; }
         public string verified { get; set; }
         public DateTime dateCreated { get; set; }
-        public int  timezone_type_created { get; set; }
-        public string timezone_created { get; set; }
         public DateTime dateUpdated { get; set; }
-        public int timezone_type_updated { get; set; }
-        public string timezone_updated{ get; set; }
+        
     }
 }

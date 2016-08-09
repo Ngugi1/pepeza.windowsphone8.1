@@ -33,11 +33,7 @@ namespace Pepeza.Db.Models.Board
         [Ignore]
         public string organisation { get; set; }
         public DateTime dateCreated { get; set; }
-        public string timezone_created { get; set; }
-        public int timezone_type_created { get; set; }
         public DateTime dateUpdated { get; set; }
-        public string timezone_updated { get; set; }
-        public int timezone_type_updated { get; set; }
         public int following { get; set; }
         public int noOfFollowers { get; set; }
         [Ignore]

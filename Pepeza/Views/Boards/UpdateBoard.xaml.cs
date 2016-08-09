@@ -6,6 +6,7 @@ using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -137,9 +138,7 @@ namespace Pepeza.Views.Boards
         {
             //Get board with given Id , then update it
             TBoard toUpdate = await BoardHelper.getBoard(board.id);
-            toUpdate.dateUpdated = (DateTime)objResults["dateUpdated"]["date"];
-            toUpdate.timezone_updated = (string)objResults["dateUpdated"]["timezone"];
-            toUpdate.timezone_type_updated = (int)objResults["dateUpdated"]["timezone_type"];
+            toUpdate.dateUpdated = DateTimeFormatter.format((DateTime)objResults["dateUpdated"]["date"], (string)objResults["dateUpdated"]["timezone"]);
             toUpdate.desc = desc;
             toUpdate.name = name;
             if (toUpdate != null)

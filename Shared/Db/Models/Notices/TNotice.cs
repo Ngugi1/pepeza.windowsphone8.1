@@ -18,10 +18,6 @@ namespace Pepeza.Db.Models.Notices
         public string board { get; set; }
         public DateTime dateUpdated { get; set; }
         public DateTime dateCreated { get; set; }
-        public int Timezone_Type_Created { get; set; }
-        public int Timezone_Type_Updated { get; set; }
-        public string Timezone_Updated { get; set; }
-        public string Timezone_Created { get; set; }
         public int attachmentId { get; set; }
 
     }
