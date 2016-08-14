@@ -258,7 +258,7 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_COLLABORATOR,toPost["orgId"]), toPost);
+                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS,toPost["orgId"]), toPost);
                     if (responseMessage.IsSuccessStatusCode)
                     {
                         //we added collaborators successfully
@@ -275,6 +275,69 @@ namespace Pepeza.Server.Requests
                     string exMessage = ex.Message;
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
+            }else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
+        public async static Task<Dictionary<string,string>> requestCollaborators(int orgId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                try
+                {
+                   response = await client.GetAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS, orgId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }catch(Exception ex)
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
+        public async static Task<Dictionary<string,string>> activateDeactivateCollaborator(int orgId , bool activate , int collaboratorId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            string route = activate == true ? "activate" : "deactivate";
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ACTIVATEDEACTIVATE_COLLABORATOR, orgId, collaboratorId , route), new object());
+                    if (response.IsSuccessStatusCode)
+                    {
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        string s =await response.Content.ReadAsStringAsync();
+                        results.Add(Constants.ERROR, Constants.PERMISSION_DENIED);
+                    }else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+
             }else
             {
                 results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);

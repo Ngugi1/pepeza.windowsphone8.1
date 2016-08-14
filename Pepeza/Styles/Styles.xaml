@@ -558,7 +558,7 @@
                        Grid.Column="2"
                        Margin="14,4,0,0"
                        Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding Description}" />
+                       Text="{Binding Description}"/>
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="ListViewFollowersDataTemplate">

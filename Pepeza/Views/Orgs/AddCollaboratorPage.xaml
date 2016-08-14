@@ -1,14 +1,11 @@
-﻿<Page xmlns:my="using:Telerik.UI.Xaml.Controls.Primitives" 
-    x:Class="Pepeza.Views.Orgs.AddCollaboratorPage"
+﻿<Page x:Class="Pepeza.Views.Orgs.AddCollaboratorPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Pepeza.Views.Orgs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    
     RequestedTheme="Light"
-    xmlns:C4Fun="using:Coding4Fun.Toolkit.Controls"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -76,6 +73,17 @@
                        Style="{ThemeResource ListViewItemTextBlockStyle}"
                        TextAlignment="Center"
                        TextWrapping="Wrap"/>
+            <StackPanel Grid.Row="1"
+                        Visibility="Collapsed"
+                        Name="StackPanelAddingCollaborator"
+                        VerticalAlignment="Center"
+                        >
+                <ProgressBar />
+                <TextBlock  Style="{StaticResource txtBlockWait}"
+                            HorizontalAlignment="Center"
+                            Text="Adding collaborator. . ."/>
+            </StackPanel>
+           
             <Popup
             Name="popUpAddCollaborator"
             Grid.Row="1"

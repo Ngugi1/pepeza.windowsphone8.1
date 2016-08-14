@@ -148,7 +148,8 @@ namespace Pepeza.Views.Orgs
         {
             //Take the selected Item
              if(selectedPerson!=null&&!string.IsNullOrEmpty(role))
-            {
+               {
+                StackPanelAddingCollaborator.Visibility = Visibility.Visible;
                 Dictionary<string, string> newRole = new Dictionary<string, string>()
                 {
                     {"newCollaboratorUserId", userId.ToString()}, {"role", role }, { "orgId" , orgId.ToString()}
@@ -158,11 +159,13 @@ namespace Pepeza.Views.Orgs
                 if (results != null)
                 {
                     processCollaborators(results);
-                }else
+                }
+                else
                 {
                     App.displayMessageDialog(Constants.UNKNOWNERROR);
                 }
             }
+            StackPanelAddingCollaborator.Visibility = Visibility.Collapsed;
         }
         //Process collaborator results 
         private async void processCollaborators(Dictionary<string,string> results)
@@ -182,7 +185,8 @@ namespace Pepeza.Views.Orgs
                     dateUpdated = (DateTime)jsonResults["dateUpdated"]["date"]
                 });
 
-            }else
+            }
+            else
             {
                 //We have errors to display 
                 if (results.ContainsKey(Constants.ERROR))
