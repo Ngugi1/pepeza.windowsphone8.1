@@ -105,8 +105,8 @@ namespace Pepeza.Views.Orgs
                         username = (string)objResults["username"],
                         description = (string)objResults["description"],
                         name = (string)objResults["name"],
-                        dateCreated = DateTimeFormatter.format((DateTime)objResults["dateCreated"]["date"], (string)objResults["dateCreated"]["timezone"]),
-                        dateUpdated = DateTimeFormatter.format((DateTime)objResults["dateUpdated"]["date"], (string)objResults["dateUpdated"]["timezone"]),
+                        dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]["date"]),
+                        dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]["date"]),
                     };
                     if (info.username == null) info.username = "my boards";
                     RootGrid.DataContext = info;

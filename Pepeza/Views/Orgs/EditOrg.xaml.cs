@@ -80,7 +80,7 @@ namespace Pepeza.Views.Orgs
                 JObject obj = JObject.Parse(results[Constants.SUCCESS]);
                 if (obj != null)
                 {
-                    info.dateUpdated = DateTimeFormatter.format((DateTime)obj["dateUpdated"]["date"], (string)obj["dateUpdated"]["timezone"]);
+                    info.dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]["date"]);
                 }
                int k =  await OrgHelper.update(info);
                

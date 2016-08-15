@@ -138,7 +138,7 @@ namespace Pepeza.Views.Boards
         {
             //Get board with given Id , then update it
             TBoard toUpdate = await BoardHelper.getBoard(board.id);
-            toUpdate.dateUpdated = DateTimeFormatter.format((DateTime)objResults["dateUpdated"]["date"], (string)objResults["dateUpdated"]["timezone"]);
+            toUpdate.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]["date"]);
             toUpdate.desc = desc;
             toUpdate.name = name;
             if (toUpdate != null)

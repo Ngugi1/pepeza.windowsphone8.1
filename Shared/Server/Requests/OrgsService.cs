@@ -319,7 +319,8 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ACTIVATEDEACTIVATE_COLLABORATOR, orgId, collaboratorId , route), new object());
+                    StringContent content = new StringContent("");
+                    response = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ACTIVATEDEACTIVATE_COLLABORATOR, orgId, collaboratorId , route) , content);
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

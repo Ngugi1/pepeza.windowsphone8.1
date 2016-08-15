@@ -70,8 +70,8 @@ namespace Pepeza.Views.Account
                 lastName = (string)profileInfo["lastName"],
                 organizationId = (int)profileInfo["organization"]["id"],
                 username = (string)profileInfo["username"],
-                dateUpdated = DateTimeFormatter.format((DateTime)profileInfo["dateUpdated"]["date"], (string)profileInfo["dateUpdated"]["timezone"]),       
-                dateCreated = DateTimeFormatter.format((DateTime)profileInfo["dateCreated"]["date"], (string)profileInfo["dateCreated"]["timezone"]),
+                dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]["date"]),       
+                dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]["date"]),
             };
             
             //Get email iformation 
@@ -80,8 +80,8 @@ namespace Pepeza.Views.Account
             emailInfo.email = (string)profileInfo["email"]["email"];
             emailInfo.verified = (string)profileInfo["email"]["verified"];
             emailInfo.dateVerified = (string)profileInfo["email"]["dateVerified"];
-            emailInfo.dateCreated = DateTimeFormatter.format((DateTime)(profileInfo["email"]["dateCreated"]["date"]) , (string)profileInfo["email"]["dateCreated"]["timezone"]);
-            emailInfo.dateUpdated = DateTimeFormatter.format((DateTime)(profileInfo["email"]["dateUpdated"]["date"]), (string)profileInfo["email"]["dateUpdated"]["timezone"]);
+            emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]["date"]));
+            emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]["date"]));
             //Get user orgs
             JObject dedefaultOrg = JObject.Parse(details["user"]["organization"].ToString());
             TOrgInfo defaultOrgInfo = new TOrgInfo()
@@ -91,8 +91,8 @@ namespace Pepeza.Views.Account
                 username = (string)dedefaultOrg["username"],
                 name = (string)dedefaultOrg["name"],
                 description = (string)dedefaultOrg["description"],
-                dateCreated = DateTimeFormatter.format((DateTime)dedefaultOrg["dateCreated"]["date"] , (string)dedefaultOrg["dateCreated"]["timezone"]),
-                dateUpdated = DateTimeFormatter.format((DateTime)dedefaultOrg["dateUpdated"]["date"],   (string)dedefaultOrg["dateUpdated"]["timezone"]),
+                dateCreated = DateTimeFormatter.format((long)dedefaultOrg["dateCreated"]["date"]),
+                dateUpdated = DateTimeFormatter.format((long)dedefaultOrg["dateUpdated"]["date"]),
             };
 
             //get all the user organisations 

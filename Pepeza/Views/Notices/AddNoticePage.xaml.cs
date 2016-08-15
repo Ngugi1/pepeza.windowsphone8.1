@@ -94,8 +94,8 @@ namespace Pepeza.Views.Notices
                                     boardId = boardID,
                                     title = title,
                                     content = desc,
-                                    dateCreated = DateTimeFormatter.format((DateTime)obj["dateCreated"]["date"], (string)obj["dateCreated"]["timezone"]),
-                                    dateUpdated = DateTimeFormatter.format((DateTime)obj["dateUpdated"]["date"], (string)obj["dateUpdated"]["timezone"]),
+                                    dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]["date"]),
+                                    dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]["date"]),
                                    
                                 });
                                 this.Frame.GoBack();

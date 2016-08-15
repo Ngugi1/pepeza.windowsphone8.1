@@ -180,9 +180,9 @@ namespace Pepeza.Views.Orgs
                     id = (int)jsonResults["id"],
                     orgId = (int)jsonResults["orgId"],
                     userId =(int)jsonResults["userId"],
-                    active = (bool)jsonResults["active"],
-                    dateCreated = (DateTime)jsonResults["dateCreated"]["date"],
-                    dateUpdated = (DateTime)jsonResults["dateUpdated"]["date"]
+                    active = (bool)jsonResults["active"]
+                   // dateCreated = (DateTime)jsonResults["dateCreated"]["date"],
+                    //dateUpdated = (DateTime)jsonResults["dateUpdated"]["date"]
                 });
 
             }
