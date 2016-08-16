@@ -82,7 +82,19 @@ namespace Pepeza.Views.Account
             emailInfo.dateVerified = (string)profileInfo["email"]["dateVerified"];
             emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]["date"]));
             emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]["date"]));
-           
+            //Get user orgs
+            JObject dedefaultOrg = JObject.Parse(details["user"]["organization"].ToString());
+            TOrgInfo defaultOrgInfo = new TOrgInfo()
+            {
+                id = (int)dedefaultOrg["id"],
+                userId = (int)dedefaultOrg["userId"],
+                username = (string)dedefaultOrg["username"],
+                name = (string)dedefaultOrg["name"],
+                description = (string)dedefaultOrg["description"],
+                dateCreated = DateTimeFormatter.format((long)dedefaultOrg["dateCreated"]["date"]),
+                dateUpdated = DateTimeFormatter.format((long)dedefaultOrg["dateUpdated"]["date"]),
+            };
+
             //get all the user organisations 
 
 
@@ -90,6 +102,7 @@ namespace Pepeza.Views.Account
             try
             {   
                 await UserHelper.add(userInfo);
+                await OrgHelper.add(defaultOrgInfo);
                 await EmailHelper.add(emailInfo);
             }
             catch (Exception ex)
