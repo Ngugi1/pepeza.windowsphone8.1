@@ -97,8 +97,8 @@ namespace Pepeza.Views.Boards
                     toInsert.name = (string)model.Name;
                     toInsert.desc = (string)model.Desc;
                     toInsert.orgID = (int)org.id;
-                    toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]["date"]);
-                     toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]["date"]);
+                    toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
+                     toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
                     
                 int K = await BoardHelper.addBoard(toInsert);
                 

@@ -3,6 +3,7 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Shared.Db.Models.Orgs;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -180,9 +181,9 @@ namespace Pepeza.Views.Orgs
                     id = (int)jsonResults["id"],
                     orgId = (int)jsonResults["orgId"],
                     userId =(int)jsonResults["userId"],
-                    active = (bool)jsonResults["active"]
-                   // dateCreated = (DateTime)jsonResults["dateCreated"]["date"],
-                    //dateUpdated = (DateTime)jsonResults["dateUpdated"]["date"]
+                    active = (bool)jsonResults["active"],
+                    dateCreated = DateTimeFormatter.format((long)jsonResults["dateCreated"]),
+                    dateUpdated = DateTimeFormatter.format((long)jsonResults["dateUpdated"])
                 });
 
             }

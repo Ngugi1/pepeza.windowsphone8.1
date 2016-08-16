@@ -62,17 +62,15 @@ namespace Pepeza.Views.Account
             //Save User ID
             Settings.add(Constants.USERID, (int)profileInfo["id"]);
             //Get profile info 
-            TUserInfo userInfo = new TUserInfo()
-            {
-                id = (int)profileInfo["id"],
-                emailId = (int)profileInfo["email"]["id"],
-                firstName = (string)profileInfo["firstName"],
-                lastName = (string)profileInfo["lastName"],
-                organizationId = (int)profileInfo["organization"]["id"],
-                username = (string)profileInfo["username"],
-                dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]["date"]),       
-                dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]["date"]),
-            };
+            TUserInfo userInfo = new TUserInfo();
+            userInfo.id = (int)profileInfo["id"];
+            userInfo.emailId = (int)profileInfo["email"]["id"];
+            userInfo.firstName = (string)profileInfo["firstName"];
+            userInfo.lastName = (string)profileInfo["lastName"];
+            userInfo.username = (string)profileInfo["username"];
+            userInfo.dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]);
+            userInfo.dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]);
+            
             
             //Get email iformation 
             TEmail emailInfo = new TEmail();
@@ -80,21 +78,9 @@ namespace Pepeza.Views.Account
             emailInfo.email = (string)profileInfo["email"]["email"];
             emailInfo.verified = (string)profileInfo["email"]["verified"];
             emailInfo.dateVerified = (string)profileInfo["email"]["dateVerified"];
-            emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]["date"]));
-            emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]["date"]));
-            //Get user orgs
-            JObject dedefaultOrg = JObject.Parse(details["user"]["organization"].ToString());
-            TOrgInfo defaultOrgInfo = new TOrgInfo()
-            {
-                id = (int)dedefaultOrg["id"],
-                userId = (int)dedefaultOrg["userId"],
-                username = (string)dedefaultOrg["username"],
-                name = (string)dedefaultOrg["name"],
-                description = (string)dedefaultOrg["description"],
-                dateCreated = DateTimeFormatter.format((long)dedefaultOrg["dateCreated"]["date"]),
-                dateUpdated = DateTimeFormatter.format((long)dedefaultOrg["dateUpdated"]["date"]),
-            };
-
+            emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]));
+            emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]));
+           
             //get all the user organisations 
 
 
@@ -102,7 +88,6 @@ namespace Pepeza.Views.Account
             try
             {   
                 await UserHelper.add(userInfo);
-                await OrgHelper.add(defaultOrgInfo);
                 await EmailHelper.add(emailInfo);
             }
             catch (Exception ex)

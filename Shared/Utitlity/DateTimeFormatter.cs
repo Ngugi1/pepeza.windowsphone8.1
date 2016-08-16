@@ -10,9 +10,10 @@ namespace Shared.Utitlity
     {
         public static DateTime format(double timestamp)
         {
-            var originTimeOffset = new DateTime(1970,1,1,0,0,0);
-            originTimeOffset.AddSeconds(timestamp);
-            return originTimeOffset;
+            var originTimeOffset = new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc);
+            DateTime actualTimeDate = originTimeOffset.AddSeconds(timestamp);
+            var localDateTime = actualTimeDate.ToLocalTime();
+            return localDateTime;
         }
     }
 }

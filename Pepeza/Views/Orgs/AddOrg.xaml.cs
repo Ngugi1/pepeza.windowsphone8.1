@@ -78,8 +78,8 @@ namespace Pepeza.Views.Orgs
                             toInsert.name = model.Name;
                             toInsert.userId = (int)Settings.getValue(Constants.USERID);
                             toInsert.description = model.Desc;
-                            toInsert.dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["dateCreated"]["date"]);
-                            toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]["date"]);
+                            toInsert.dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["dateCreated"]);
+                            toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]);
                             int rows = await Db.DbHelpers.OrgHelper.add(toInsert);
                             Debug.WriteLineIf(rows == 1, "Inserted");
                             this.Frame.GoBack();

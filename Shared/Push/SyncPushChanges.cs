@@ -9,6 +9,7 @@ using Pepeza.Utitlity;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.TilesAndActionCenter;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Shared.Push
                 {
                     //Get the notices  Data 
                    JObject content = JObject.Parse(newData[Constants.SUCCESS]);
-                   DateTime lastUpdated = (DateTime)content["lastUpdated"];
+                   long lastUpdated = (long)content["lastUpdated"];
                    JArray noticeItemContent = (JArray)content["noticeItems"];
                    JObject user = (JObject)content["user"];
                    JObject email = (JObject)content["email"];
@@ -55,8 +56,7 @@ namespace Shared.Push
                     {
                          await updateEmail(email);
                     }
-                    Settings.add(Constants.LAST_UPDATED, lastUpdated.Year+"-"+lastUpdated.Month+"-"+lastUpdated.Day+" "+
-                        lastUpdated.Hour+":"+lastUpdated.Minute+":"+lastUpdated.Second);
+                    Settings.add(Constants.LAST_UPDATED, lastUpdated);
                 }
                 return true;
             }
@@ -77,8 +77,8 @@ namespace Shared.Push
                         noticeId = (int)notice["noticeId"],
                         userId = (int)notice["userId"],
                         title = (string)notice["string"],
-                        dateCreated = (DateTime)notice["dateCreated"]["date"],
-                        dateUpdated = (DateTime)notice["dateUpdated"]["date"]
+                        dateCreated = DateTimeFormatter.format((long)notice["dateCreated"]),
+                        dateUpdated = DateTimeFormatter.format((long)notice["dateUpdated"])
                     };
                     await NoticeItemHelper.add(item);
                 }
@@ -101,8 +101,8 @@ namespace Shared.Push
                     info.username = (string)user["username"];
                     info.lastName = (string)user["lastName"];
                     info.firstName = (string)user["firstName"];
-                    info.dateCreated = (DateTime)user["dateCreated"]["date"];
-                    info.dateUpdated = (DateTime)user["dateUpdated"]["date"];
+                    info.dateCreated = DateTimeFormatter.format((long)user["dateCreated"]);
+                    info.dateUpdated = DateTimeFormatter.format((long)user["dateUpdated"]);
                     await UserHelper.update(info);
                 }
                 return true;
@@ -124,8 +124,8 @@ namespace Shared.Push
                     TEmail currentEmail = await EmailHelper.getEmail((int)email["id"]);
                     currentEmail.email = (string)email["email"];
                     currentEmail.verified = (string)email["verified"];
-                    currentEmail.dateCreated = (DateTime)email["dateCreated"]["date"];
-                    currentEmail.dateUpdated = (DateTime)email["dateUpdated"]["date"];
+                    currentEmail.dateCreated = DateTimeFormatter.format((long)email["dateCreated"]);
+                    currentEmail.dateUpdated = DateTimeFormatter.format((long)email["dateUpdated"]);
                     await EmailHelper.update(currentEmail);
                 }
                 return true;

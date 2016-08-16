@@ -4,6 +4,7 @@ using Pepeza.Models;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,12 +44,9 @@ namespace Pepeza.ViewModels
                    OrgID = (int)objResults["orgId"],
                    name = (string)objResults["name"],
                    desc = (string)objResults["description"],
-                   DateCreated = (DateTime)objResults["dateCreated"]["date"],
-                   DateUpdated = (DateTime)objResults["dateUpdated"]["date"],
-                   Timezone_created = (string)objResults["dateCreated"]["timezone"],
-                   Timezone_Updated = (string)objResults["dateUpdated"]["timezone"],
-                   Timezone_Type_Created = (int)objResults["dateCreated"]["timezone_type"],
-                   Timezone_Type_Updated = (int)objResults["dateUpdated"]["timezone_type"]
+                   DateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
+                   DateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]),
+                  
                };
             }
             else

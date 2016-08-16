@@ -88,7 +88,7 @@ namespace Pepeza.Views.Boards
                         following =(int)objResults["follower"]["accepted"],
                         ownerId = (int)objResults["ownerId"],
                         desc = (string)objResults["description"],
-                        dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]["date"]),
+                        dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
                         dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]["date"]),
                        
                     };
@@ -252,8 +252,8 @@ namespace Pepeza.Views.Boards
                         {
                             noticeId = (int) obj["id"], 
                             title = (string)obj["title"],
-                            dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]["date"]),
-                            dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]["date"]),
+                            dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
+                            dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
                             boardId = boardId,
                            board = boardname,
                             content ="This is a smaple content fo all of you guys to fucking read"

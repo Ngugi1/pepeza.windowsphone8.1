@@ -13,8 +13,6 @@ namespace Pepeza.Db.Models
         public int id { get; set; }
         [Unique]
         public int emailId { get; set; }
-        [Unique]
-        public int  organizationId { get; set; }
         [MaxLength(20)]
         public string username { get; set; }
         [MaxLength(20)]

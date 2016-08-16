@@ -71,8 +71,8 @@ namespace Pepeza.Views.Orgs
                     colabo.id = (int)collaborator["org_collaborator"]["id"];
                         colabo.role = (string)collaborator["org_collaborator"]["role"];
                         colabo.active = (bool)collaborator["org_collaborator"]["active"];
-                        colabo.dateCreated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateCreated"]["date"]);
-                        colabo.dateUpdated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateUpdated"]["date"]);
+                        colabo.dateCreated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateCreated"]);
+                        colabo.dateUpdated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateUpdated"]);
                         colabo.orgId = (int)collaborator["orgId"];
                         colabo.userId = (int)collaborator["userId"];
                         colabo.username = (string)collaborator["username"];
