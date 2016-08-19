@@ -17,5 +17,6 @@ namespace Shared.Db.Models.Notices
         public DateTime dateUpdated { get; set; }
         public DateTime dateRead { get; set; }
         public bool isRead { get; set; }
+        public int avatarId { get; set; }
     }
 }

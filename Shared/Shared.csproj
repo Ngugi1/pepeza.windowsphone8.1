@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Db\DbHelpers\Notice\FileNoticeHelper.cs" />
+    <Compile Include="Db\Models\Avatars\TAvatar.cs" />
     <Compile Include="Db\Models\Notices\TAttachment.cs" />
     <Compile Include="Db\Models\Orgs\TCollaborator.cs" />
     <Compile Include="Models\NoticesModels\NoticeCollection.cs" />

@@ -38,5 +38,6 @@ namespace Pepeza.Db.Models.Board
         public int noOfFollowers { get; set; }
         [Ignore]
         public string singleFollowerOrMany { get; set; }
+        public int avatarId { get; set; }
     }
 }

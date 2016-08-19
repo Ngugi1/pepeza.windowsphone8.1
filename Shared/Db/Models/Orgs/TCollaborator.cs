@@ -14,5 +14,6 @@ namespace Shared.Db.Models.Orgs
         public bool active { get; set; }
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
+        public int avatarId { get; set; }
     }
 }

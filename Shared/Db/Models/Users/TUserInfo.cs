@@ -21,6 +21,7 @@ namespace Pepeza.Db.Models
         public string lastName { get; set; }
         public DateTime dateUpdated { get; set; }
         public DateTime dateCreated { get; set; }
-       
+        public int avatarId { get; set; }
+
     }
 }

@@ -48,11 +48,11 @@ namespace Pepeza.Views.Account
             if(e.Parameter!=null)
             {
                 Dictionary<string,string> userdetails = e.Parameter as Dictionary<string,string>;
-                await getUserDetailsAndBoards(userdetails);
+                await getUserDetails(userdetails);
                 this.Frame.Navigate(typeof(MainPage));
             }
         }
-        private async Task getUserDetailsAndBoards(Dictionary<string, string> results)
+        private async Task getUserDetails(Dictionary<string, string> results)
         {
             JObject details = JObject.Parse(results[Constants.APITOKEN]);
             //Save api token 
@@ -95,6 +95,9 @@ namespace Pepeza.Views.Account
                 var u = ex.ToString() + " ```````````````````````" + ex.Message;
             }
         }
+
+        // Get users data 
+       
 
     }
 }

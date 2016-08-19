@@ -93,6 +93,8 @@ namespace Pepeza.Db.Models.Board
                 onPropertyChanged("DateCreated");
             }
         }
+
+        public int avatarId { get; set; }
         public int following { get; set; }
     }
 }
