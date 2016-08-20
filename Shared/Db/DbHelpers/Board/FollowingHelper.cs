@@ -53,5 +53,24 @@ namespace Pepeza.Db.DbHelpers.Board
             return following;
            
         }
+        public async static Task<TFollowing> get(int id)
+        {
+            try
+            {
+                TFollowing info = null;
+                SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    info = await connection.GetAsync<TFollowing>(id);
+                }
+                return info;
+            }
+            catch
+            {
+                return null;
+
+            }
+
+        }
     }
 }

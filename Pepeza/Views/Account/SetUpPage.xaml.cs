@@ -99,7 +99,11 @@ namespace Pepeza.Views.Account
             userAvatar.linkNormal = (string)avatar["linkNormal"];
             userAvatar.dateCreated = DateTimeFormatter.format((long)avatar["dateCreated"]);
             userAvatar.dateUpdated = DateTimeFormatter.format((long)avatar["dateUpdated"]);
+                if (await AvatarHelper.get(userAvatar.id) != null)
+                {
 
+                }
+            
             // Now get all user orgs, boards , notices and following 
             long initialLastUpdated = 0;
             Settings.add(Constants.LAST_UPDATED, initialLastUpdated);
@@ -107,10 +111,30 @@ namespace Pepeza.Views.Account
             //Save User ID
             Settings.add(Constants.USERID, (int)profileInfo["id"]);
 
-            //Insert to local database 
-                await UserHelper.add(userInfo);
-                await EmailHelper.add(emailInfo);
-                getData();
+            //Now get all user data 
+            Dictionary<string, string> userdata = await GetNewData.getNewData();
+
+              if (userdata.ContainsKey(Constants.SUCCESS))
+                {
+
+                    if (await GetNewData.disectUserDetails(userdata, false))
+                    {
+                        this.Frame.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        //TODO :: Show a retry button
+                        ProgressRingReady.Visibility = Visibility.Collapsed;
+                        commandBarReload.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    //TODO :: Show a retry button
+                    ProgressRingReady.Visibility = Visibility.Collapsed;
+                    commandBarReload.Visibility = Visibility.Visible;
+                    txtBlockStatus.Text = userdata[Constants.ERROR];
+                }
             }
             catch
             {
@@ -120,13 +144,36 @@ namespace Pepeza.Views.Account
                 
         }
 
-        private void AppBtnReloadClicked(object sender, RoutedEventArgs e)
+        private async void AppBtnReloadClicked(object sender, RoutedEventArgs e)
         {
             ProgressRingReady.Visibility = Visibility.Visible;
             txtBlockStatus.Text = defaultMessage;
             commandBarReload.Visibility = Visibility.Collapsed;
-             getData();
-            
+            //Now get all user data 
+            Dictionary<string, string> userdata = await GetNewData.getNewData();
+
+            if (userdata.ContainsKey(Constants.SUCCESS))
+            {
+
+                if (await GetNewData.disectUserDetails(userdata, false))
+                {
+                    this.Frame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+                    //TODO :: Show a retry button
+                    ProgressRingReady.Visibility = Visibility.Collapsed;
+                    commandBarReload.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                //TODO :: Show a retry button
+                ProgressRingReady.Visibility = Visibility.Collapsed;
+                commandBarReload.Visibility = Visibility.Visible;
+                txtBlockStatus.Text = userdata[Constants.ERROR];
+            }
+
         }
         private async void getData()
         {

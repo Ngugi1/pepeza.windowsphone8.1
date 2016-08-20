@@ -12,21 +12,21 @@ namespace Shared.Db.DbHelpers.Orgs
     {
         public  async static Task<TCollaborator> get(int id)
         {
-            TCollaborator collaborator = null;
+           
             try
             {
+                TCollaborator collaborator = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
                     collaborator = await connection.GetAsync<TCollaborator>(id);
                 }
+                return collaborator;
             }
             catch
             {
-                collaborator = null;
+                return  null;
             }
-
-            return collaborator;
         }
     }
 }

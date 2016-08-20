@@ -31,8 +31,6 @@ namespace Pepeza.Db.DbHelpers
              var connection = DbHelper.DbConnectionAsync();
             //Create if it does not exist 
             connection.CreateTableAsync<TOrgInfo>();
-            connection.CreateTableAsync<TUserInfo>();
-            connection.CreateTableAsync<TEmail>();
             connection.CreateTableAsync<TBoard>();
             connection.CreateTableAsync<TFollowing>();
             connection.CreateTableAsync<TNotice>();
@@ -42,6 +40,8 @@ namespace Pepeza.Db.DbHelpers
             connection.CreateTableAsync<TNotification>();
             connection.CreateTableAsync<TAvatar>();
             connection.CreateTableAsync<TFile>();
+            connection.CreateTableAsync<TUserInfo>();
+            connection.CreateTableAsync<TEmail>();
             Settings.add(DbConstants.DB_CREATED, true);
         }
         public async static Task<bool> dropDatabase()

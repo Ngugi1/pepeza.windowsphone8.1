@@ -11,21 +11,22 @@ namespace Pepeza.Db.DbHelpers.Notice
     {
         public static  async Task<TNotice> get(int id)
         {
-            TNotice info = null;
-            var connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
+
+            try
             {
-                try
+                TNotice info = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
                 {
                     info = await connection.GetAsync<TNotice>(id);
                 }
-                catch (Exception ex)
-                {
-                    var x = ex.ToString();
-                    info = null;
-                }
+                return info;
             }
-            return info;
+            catch
+            {
+                return null;
+            }
+           
         }
 
     }

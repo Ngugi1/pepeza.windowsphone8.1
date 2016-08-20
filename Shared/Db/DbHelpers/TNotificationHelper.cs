@@ -12,22 +12,21 @@ namespace Shared.Db.DbHelpers
     {
         public async static Task<TNotification> get(int id)
         {
-            TNotification notification = null;
+
             try
             {
+                TNotification notification = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
                     notification = await connection.GetAsync<TNotification>(id);
                 }
+                return notification;
             }
-            catch
+            catch(InvalidOperationException ex)
             {
-                notification = null;
+                return null;
             }
-            return
-                 notification;
-           
         }
     }
 }

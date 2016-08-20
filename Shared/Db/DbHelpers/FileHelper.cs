@@ -12,21 +12,22 @@ namespace Shared.Db.DbHelpers
     {
         public async static Task<TFile> get(int id)
         {
-            TFile file = null;
+           
             try
             {
+                TFile file = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
                     file  =await connection.GetAsync<TFile>(id);
                 }
+                return file;
             }
             catch
             {
-                file = null;
+                return null;
             }
-
-            return file;
+            
         }
 
     }

@@ -84,6 +84,34 @@ namespace Pepeza.Server.Requests
                 JArray org_collaborators = JArray.Parse(content["org_collaborators"].ToString());
                 JArray boards = JArray.Parse(content["boards"].ToString());
 
+
+                #region Org Collaborators
+                foreach (var item in org_collaborators)
+                {
+                    if (org_collaborators.Count > 0)
+                    {
+                        TCollaborator orgCollaborator = new TCollaborator();
+                        orgCollaborator.id = (int)item["id"];
+                        orgCollaborator.userId = (int)item["userId"];
+                        orgCollaborator.orgId = (int)item["organizationId"];
+                        orgCollaborator.active = (int)item["active"];
+                        orgCollaborator.role = (string)item["role"];
+                        orgCollaborator.dateCreated = DateTimeFormatter.format((long)item["dateCreated"]);
+
+                        if (item["dateUpdated"].Type != JTokenType.Null) orgCollaborator.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
+                        if (await CollaboratorHelper.get(orgCollaborator.id) != null)
+                        {
+                            await CollaboratorHelper.update(orgCollaborator);
+                        }
+                        else
+                        {
+                            await CollaboratorHelper.add(orgCollaborator);
+                        }
+                    }
+                }
+
+                #endregion
+
                 #endregion
                 #region Users
                 //Users
@@ -158,7 +186,7 @@ namespace Pepeza.Server.Requests
                         if (item["dateDeclined"].Type != JTokenType.Null) followeitem.dateDeclined = DateTimeFormatter.format((long)item["dateDeclined"]);
                         if (item["dateUpdated"].Type != JTokenType.Null) followeitem.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (item["dateAccepted"].Type != JTokenType.Null) followeitem.dateAccepted = DateTimeFormatter.format((long)item["dateAccepted"]);
-                        if (FollowingHelper.getFollowingBoard(followeitem.id) != null)
+                        if (await FollowingHelper.getFollowingBoard(followeitem.id))
                         {
                             await FollowingHelper.update(followeitem);
                         }
@@ -170,32 +198,7 @@ namespace Pepeza.Server.Requests
                 }
 
                 #endregion
-                #region Org Collaborators
-                foreach (var item in org_collaborators)
-                {
-                    if (org_collaborators.Count > 0)
-                    {
-                        TCollaborator orgCollaborator = new TCollaborator();
-                        orgCollaborator.id = (int)item["id"];
-                        orgCollaborator.userId = (int)item["userId"];
-                        orgCollaborator.orgId = (int)item["organizationId"];
-                        orgCollaborator.active = (int)item["active"];
-                        orgCollaborator.role = (string)item["role"];
-                        orgCollaborator.dateCreated = DateTimeFormatter.format((long)item["dateCreated"]);
-                       
-                        if (item["dateUpdated"].Type != JTokenType.Null) orgCollaborator.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (CollaboratorHelper.get(orgCollaborator.id) != null)
-                        {
-                            await CollaboratorHelper.update(orgCollaborator);
-                        }
-                        else
-                        {
-                            await CollaboratorHelper.add(orgCollaborator);
-                        }
-                    }
-                }
-
-                #endregion
+             
                 #region Boards
                 // Boards
                 foreach (var item in boards)
@@ -213,7 +216,7 @@ namespace Pepeza.Server.Requests
 
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) board.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (BoardHelper.getBoard(board.id) != null)
+                        if (await BoardHelper.getBoard(board.id) != null)
                         {
                             await BoardHelper.update(board);
                         }
@@ -242,7 +245,7 @@ namespace Pepeza.Server.Requests
 
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (OrgHelper.get(org.id) != null)
+                        if (await OrgHelper.get(org.id) != null)
                         {
                             await OrgHelper.update(org);
                         }
@@ -266,7 +269,7 @@ namespace Pepeza.Server.Requests
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) fetchedAvatar.dateUpdated = DateTimeFormatter.format((double)item["dateUpdated"]);
-                        if (AvatarHelper.get(fetchedAvatar.id) != null)
+                        if (await AvatarHelper.get(fetchedAvatar.id) != null)
                         {
                             await AvatarHelper.update(fetchedAvatar);
                         }
@@ -296,7 +299,7 @@ namespace Pepeza.Server.Requests
                         if (item["dateRead"].Type != JTokenType.Null) noticeItem.dateRead = DateTimeFormatter.format((long)item["dateRead"]);
                         if (item["dateUpdateRead"].Type != JTokenType.Null) noticeItem.dateUpdateRead = DateTimeFormatter.format((long)item["dateUpdateRead"]);
                         if (item["dateUpdated"].Type != JTokenType.Null) noticeItem.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (NoticeItemHelper.get(noticeItem.id) != null)
+                        if (await NoticeItemHelper.get(noticeItem.id) != null)
                         {
                             await NoticeItemHelper.update(noticeItem);
                         }
@@ -322,7 +325,7 @@ namespace Pepeza.Server.Requests
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) notice.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (NoticeHelper.get(notice.noticeId) != null)
+                        if (await NoticeHelper.get(notice.noticeId) != null)
                         {
                             await NoticeHelper.update(notice);
                         }
@@ -349,7 +352,7 @@ namespace Pepeza.Server.Requests
 
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) attachment.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (AttachmentHelper.get(attachment.id) != null)
+                        if (await AttachmentHelper.get(attachment.id) != null)
                         {
                             await AttachmentHelper.update(attachment);
                         }
@@ -377,7 +380,7 @@ namespace Pepeza.Server.Requests
 
                         };
                         if (item["dateUpdate"].Type != JTokenType.Null) file.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
-                        if (FileHelper.get(file.id) != null)
+                        if (await FileHelper.get(file.id) != null)
                         {
                             await FileHelper.update(file);
                         }
@@ -411,7 +414,7 @@ namespace Pepeza.Server.Requests
                         if (item["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (item["dateRead"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateRead"]);
 
-                        if (TNotificationHelper.get(notification.id) != null)
+                        if (await TNotificationHelper.get(notification.id) != null)
                         {
                             await TNotificationHelper.update(notification);
                         }

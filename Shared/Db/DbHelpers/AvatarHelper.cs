@@ -10,24 +10,24 @@ namespace Shared.Db.DbHelpers
 {
     public class AvatarHelper : DBHelperBase
     {
-        public async static Task<TAvatar> get(int id)
+        public async static Task<TAvatar> get(int emailId)
         {
-            TAvatar avatar = null;
-
+            
             try
             {
+                TAvatar email = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    avatar = await connection.GetAsync<TAvatar>(id);
+                    email = await connection.GetAsync<TAvatar>(emailId);
                 }
+                return email;
             }
             catch
             {
-                avatar = null;
+                return null;
             }
 
-            return avatar;
         }
     }
 }

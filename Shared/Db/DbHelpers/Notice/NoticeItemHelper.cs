@@ -12,21 +12,21 @@ namespace Shared.Db.DbHelpers.Notice
     {
         public static async Task<TNoticeItem> get(int id)
         {
-            TNoticeItem info = null;
-            var connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
-            {
+            
+            
                 try
                 {
-                    info = await connection.GetAsync<TNoticeItem>(id);
+                    TNoticeItem info = null;
+                    var connection = DbHelper.DbConnectionAsync();
+                    if (connection != null)
+                        info = await connection.GetAsync<TNoticeItem>(id);
+                    return info;
                 }
                 catch (Exception ex)
                 {
-                    var x = ex.ToString();
-                    info = null;
+                return null;
                 }
             }
-            return info;
         }
     }
-}
+

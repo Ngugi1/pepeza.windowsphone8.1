@@ -12,21 +12,22 @@ namespace Shared.Db.DbHelpers.Notice
     {
         public static async Task<TAttachment> get(int id)
         {
-            TAttachment attachment = null;
+           
 
             try
             {
+                TAttachment attachment = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
                     attachment = await connection.GetAsync<TAttachment>(id);
                 }
+                return attachment;
             }
             catch
             {
-                attachment = null;
+                return null;
             }
-            return attachment;
             
         }
     }

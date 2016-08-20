@@ -12,22 +12,23 @@ namespace Pepeza.Db.DbHelpers
     {
         public  async static Task<TOrgInfo> get(int id)
         {
-            TOrgInfo info = null;
-            var connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
-            {
+            
+            
                 try
                 {
-                    info = await connection.GetAsync<TOrgInfo>(id);
+                    TOrgInfo info = null;
+                    var connection = DbHelper.DbConnectionAsync();
+                    if (connection != null)
+                    {
+                        info = await connection.GetAsync<TOrgInfo>(id);
+                    }
+                return info;
                 }
-                catch(Exception ex)
+                catch
                 {
-                    var x = ex.ToString();
-                    info = null;
+                return null;
                 }
 
-            }
-            return info;
         }
         public async static Task<List<TOrgInfo>> getAllOrgs()
         {
