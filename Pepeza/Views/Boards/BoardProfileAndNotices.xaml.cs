@@ -135,15 +135,17 @@ namespace Pepeza.Views.Boards
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 toasterror.Message = (string)objResults["message"];
               
-                await FollowingHelper.add(new TFollowing()
-                {
-                    Id = boardFetched.id,
-                    OrgId = boardFetched.orgID,
-                    Name = boardFetched.name,
-                    Description = boardFetched.desc,
-                    DateCreated = boardFetched.dateCreated,
-                    DateUpdated = boardFetched.dateUpdated,
-                });
+                //await FollowingHelper.add(new TFollowing()
+                //{
+                //    id = boardFetched.id,
+                //    boardId = boardFetched.id,
+                //    userId = boardFetched.
+                //    OrgId = boardFetched.orgID,
+                //    Name = boardFetched.name,
+                //    Description = boardFetched.desc,
+                //    DateCreated = boardFetched.dateCreated,
+                //    DateUpdated = boardFetched.dateUpdated,
+                //});
                 btnFollow.IsEnabled = true;
                 btnFollow.Content = "Unfollow";
             }

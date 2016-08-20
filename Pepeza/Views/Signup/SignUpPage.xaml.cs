@@ -196,12 +196,16 @@ namespace Pepeza.Views
                 Dictionary<string, string> results = await RequestUser.checkEmailAvailability(txtBoxEmail.Text.Trim());
                 if (results.ContainsKey(Constants.EMAIL_EXISTS))
                 {
-                    if (results[Constants.EMAIL_EXISTS] == "1")
+                    if (results[Constants.EMAIL_EXISTS].Equals("1"))
                     {
                         //Email already exists
                         txtBlockEmailStatus.Text = CustomMessages.EMAIL_NOT_AVAILABLE;
                         txtBlockEmailStatus.Visibility = Visibility.Visible;
                         user.IsEmailValid = false;
+                    }else
+                    {
+                        txtBlockEmailStatus.Visibility = Visibility.Collapsed;
+                        user.IsEmailValid = true;
                     }
                 }
                 else

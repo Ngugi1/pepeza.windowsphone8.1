@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    RequestedTheme="Dark"
+    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -15,40 +15,55 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Background="{StaticResource mainForeground}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel 
-            Orientation="Horizontal"
+            Orientation="Vertical"
             Height="Auto"
-            Style="{StaticResource HeaderStackPanel}">
-            <Image Source="/Assets/Images/icon.png"
-                   Width="60"
-                   Margin="8"
-                   Height="60"/>
+            >
+           
             <TextBlock Text="Pepeza"
+                       Typography.Capitals="AllSmallCaps"
                        Margin="12"
+                       HorizontalAlignment="Center"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        />
+            <TextBlock 
+                HorizontalAlignment="Center"
+                Style="{StaticResource txtBlockDisplay}" Text="Better way to send and receive notices"/>
         </StackPanel>
         <StackPanel VerticalAlignment="Center"
                     Grid.Row="1"
                     >
-        <TextBlock Text="Getting things ready for you"
+            <TextBlock Text="Getting things ready for you"
                    HorizontalAlignment="Center"
-VerticalAlignment="Center"
-                   Style="{ThemeResource ListViewItemTextBlockStyle}"
+                   Name="txtBlockStatus"
+                       TextAlignment="Center"
+                   TextWrapping="WrapWholeWords"
+                   VerticalAlignment="Center"
+                   Style="{ThemeResource TitleTextBlockStyle}"
                    />
             <ProgressRing Height="100"
+                          Name="ProgressRingReady"
                           Width="100"
                           Background="Transparent"
                           IsActive="True"
                           IsEnabled="True"
-                          Foreground="White"
                           />
         </StackPanel>
-
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar
+            Name="commandBarReload"
+            
+            IsOpen="True" Visibility="Collapsed">
+            <AppBarButton Icon="RepeatAll" 
+                          Click="AppBtnReloadClicked"
+                          Label="Retry"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

@@ -4,7 +4,9 @@ using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
+using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
+using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
 using Shared.Models.NoticeModels;
 using SQLite;
@@ -37,6 +39,9 @@ namespace Pepeza.Db.DbHelpers
             connection.CreateTableAsync<TNoticeItem>();
             connection.CreateTableAsync<TAttachment>();
             connection.CreateTableAsync<TCollaborator>();
+            connection.CreateTableAsync<TNotification>();
+            connection.CreateTableAsync<TAvatar>();
+            connection.CreateTableAsync<TFile>();
             Settings.add(DbConstants.DB_CREATED, true);
         }
         public async static Task<bool> dropDatabase()

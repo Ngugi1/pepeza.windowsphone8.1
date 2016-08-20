@@ -106,6 +106,12 @@
     <Compile Include="Views\Account\SetUpPage.xaml.cs">
       <DependentUpon>SetUpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Analytics\BoardAnalytics.xaml.cs">
+      <DependentUpon>BoardAnalytics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Analytics\NoticeAnalytics.xaml.cs">
+      <DependentUpon>NoticeAnalytics.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
     </Compile>
@@ -205,6 +211,14 @@
     <Page Include="Views\Account\SetUpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Analytics\BoardAnalytics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Analytics\NoticeAnalytics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Boards\AddBoard.xaml">
       <Generator>MSBuild:Compile</Generator>

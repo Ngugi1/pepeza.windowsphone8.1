@@ -13,9 +13,9 @@ namespace Pepeza.Db.Models.Users
         [PrimaryKey]
         public int emailID { get; set; }
         public string email { get; set; }
-        public string dateVerified { get; set; }
-        public string verified { get; set; }
+        public DateTime  dateVerified { get; set; }
+        public int verified { get; set; }
         public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public DateTime  dateUpdated { get; set; }
     }
 }

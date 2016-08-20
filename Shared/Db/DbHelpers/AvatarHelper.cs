@@ -1,30 +1,33 @@
-﻿using Pepeza.Db.Models.Users;
+﻿using Pepeza.Db.DbHelpers;
+using Shared.Db.Models.Avatars;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pepeza.Db.DbHelpers.User
+namespace Shared.Db.DbHelpers
 {
-    public class EmailHelper : DBHelperBase
+    public class AvatarHelper : DBHelperBase
     {
-        public async static Task<TEmail> getEmail(int emailId)
+        public async static Task<TAvatar> get(int id)
         {
-            TEmail email = null;
+            TAvatar avatar = null;
+
             try
             {
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    email = await connection.GetAsync<TEmail>(emailId);
+                    avatar = await connection.GetAsync<TAvatar>(id);
                 }
             }
             catch
             {
-                email = null;
+                avatar = null;
             }
-            return email;
+
+            return avatar;
         }
     }
 }

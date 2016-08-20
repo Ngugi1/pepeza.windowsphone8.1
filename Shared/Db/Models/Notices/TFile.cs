@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Db.Models.Orgs
+namespace Shared.Db.Models.Notices
 {
-    public class TCollaborator
+    public class TFile
     {
         [PrimaryKey]
         public int id { get; set; }
-        public string role { get; set; }
-        public int orgId { get; set; }
-        public int userId { get; set; }
-        public int active { get; set; }
+        public long size { get; set; }
+        public string link { get; set; }
+        public string fileName { get; set; }
+        public string mimeType { get; set; }
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
-     
+        public int attachmentId { get; set; }
     }
 }

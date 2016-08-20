@@ -7,6 +7,7 @@ using Pepeza.Db.Models.Notices;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Validation;
+using Shared.Db.Models.Notices;
 using Shared.Models.NoticeModels;
 using Shared.Server.ServerModels.Notices;
 using Shared.Utitlity;
@@ -144,28 +145,47 @@ namespace Pepeza.Views.Notices
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                     JObject jobject = JObject.Parse(results[Constants.SUCCESS]);
-                    //Get the FileNorice details
+                    //Get the FileNotice details
                     TNotice fileNotice = new TNotice()
                     {
                          boardId = toPost.boardId,
                          title = toPost.title,
                          content = toPost.content,
                          noticeId  = (int)jobject["id"],
-                         attachmentId = (int)jobject["attachment"]["id"],
                          dateCreated = DateTimeFormatter.format((long)jobject["dateCreated"]),
-                         dateUpdated = DateTimeFormatter.format((long)jobject["dateUpdated"])
-                    };
-                    //We have results , get attachment details  
+                       };
+                    if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = DateTimeFormatter.format((long)jobject["dateUpdated"]);                    //We have results , get attachment details  
+
+                    //Get the attachment 
                     TAttachment attachment = new TAttachment()
                     {
                         id = (int)jobject["attachment"]["id"],
-                        type = (int)jobject["attachment"]["type"],
-                        filesize = (long)jobject["attachment"]["fileSize"],
-                        link = (string)jobject["attachment"]["link"],
+                        type = (string)jobject["attachment"]["type"],
                         noticeId = (int)jobject["id"],
                         dateCreated = DateTimeFormatter.format((long)jobject["attachment"]["dateCreated"]),
-                        dateUpdated = DateTimeFormatter.format((long)jobject["attachment"]["dateUpdated"])
                     };
+
+                    if (jobject["attachment"]["dateUpdated"] != null) attachment.dateUpdated = DateTimeFormatter.format((long)jobject["attachment"]["dateUpdated"]);
+
+
+
+                    //Getting the file Item 
+
+                    TFile file = new TFile()
+                    {
+                        id = (int)jobject["file"]["id"],
+                        attachmentId = (int)jobject["file"]["attachmentId"],
+                        size = (long)jobject["file"]["fileSize"],
+                        fileName = (string)jobject["file"]["fileName"],
+                        link = (string)jobject["file"]["link"],
+                        mimeType = (string)jobject["file"]["mime_type"],
+                        dateCreated = DateTimeFormatter.format((long)jobject["file"]["dateCreated"]),
+                    };
+                    if (jobject["file"]["dateUpdated"] != null)
+                    {
+                        file.dateUpdated = DateTimeFormatter.format((long)jobject["file"]["dateUpdated"]);
+                    }
+                    await DBHelperBase.add(file);
                     await DBHelperBase.add(attachment);
                     await DBHelperBase.add(fileNotice);
                 }

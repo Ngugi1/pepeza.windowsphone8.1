@@ -26,20 +26,26 @@ namespace Pepeza.Db.DbHelpers
                     info = null;
                 }
 
-                if (info != null && info.username == null)
-                    info.username = info.name.ToLower();
             }
             return info;
         }
         public async static Task<List<TOrgInfo>> getAllOrgs()
         {
-             List<TOrgInfo> orgs = null;
-            var connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
+            try
             {
-                orgs = await connection.Table<TOrgInfo>().ToListAsync();
+                List<TOrgInfo> orgs = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    orgs = await connection.Table<TOrgInfo>().ToListAsync();
+                }
+                return orgs;
             }
-            return orgs;
+            catch
+            {
+                return null;
+            }
+             
         }
     }
 }

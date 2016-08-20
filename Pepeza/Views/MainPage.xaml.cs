@@ -85,7 +85,7 @@ namespace Pepeza
         private async Task<bool> loadFollowing()
         {
             following = new ObservableCollection<TFollowing>(await FollowingHelper.getAll());
-            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.Name);
+            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.id.ToString());
             AlphaListFollowing.ReleaseItemsSource();
             ListViewFollowing.ItemsSource = alphaGroups;
             AlphaListFollowing.ApplyItemsSource();
@@ -171,7 +171,7 @@ namespace Pepeza
             TFollowing selected = ((sender as ListView).SelectedItem as TFollowing);
             if (selected != null && isSelected == true)
             {
-                this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.Id);
+                this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.id);
             }
         }
         private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -94,11 +94,12 @@ namespace Pepeza.Views.Boards
                 JObject board = JObject.Parse(results[Constants.SUCCESS]);
                 TBoard toInsert = new TBoard();
                 toInsert.id = (int)board["id"];
-                    toInsert.name = (string)model.Name;
-                    toInsert.desc = (string)model.Desc;
-                    toInsert.orgID = (int)org.id;
-                    toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
-                     toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
+                toInsert.name = (string)model.Name;
+                toInsert.desc = (string)model.Desc;
+                toInsert.orgID = (int)org.id;
+                toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
+                toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
+             
                     
                 int K = await BoardHelper.addBoard(toInsert);
                 

@@ -1,12 +1,24 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
+using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models;
+using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers;
+using Shared.Db.DbHelpers.Notice;
+using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Avatars;
+using Shared.Db.Models.Notices;
+using Shared.Db.Models.Notification;
+using Shared.Db.Models.Orgs;
+using Shared.Models.NoticeModels;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -37,6 +49,7 @@ namespace Pepeza.Views.Account
             this.InitializeComponent();
          
         }
+        string defaultMessage = "Getting things ready for you";
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -49,18 +62,16 @@ namespace Pepeza.Views.Account
             {
                 Dictionary<string,string> userdetails = e.Parameter as Dictionary<string,string>;
                 await getUserDetails(userdetails);
-                this.Frame.Navigate(typeof(MainPage));
+               
             }
         }
         private async Task getUserDetails(Dictionary<string, string> results)
         {
+           try
+           {
             JObject details = JObject.Parse(results[Constants.APITOKEN]);
-            //Save api token 
-            Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
-
             JObject profileInfo = JObject.Parse(details["user"].ToString());
-            //Save User ID
-            Settings.add(Constants.USERID, (int)profileInfo["id"]);
+            JObject avatar = JObject.Parse(profileInfo["avatar"].ToString());
             //Get profile info 
             TUserInfo userInfo = new TUserInfo();
             userInfo.id = (int)profileInfo["id"];
@@ -68,36 +79,81 @@ namespace Pepeza.Views.Account
             userInfo.firstName = (string)profileInfo["firstName"];
             userInfo.lastName = (string)profileInfo["lastName"];
             userInfo.username = (string)profileInfo["username"];
-            userInfo.dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]);
+            userInfo.avatarId = (int)avatar["id"];
+            if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]);
             userInfo.dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]);
-            
             
             //Get email iformation 
             TEmail emailInfo = new TEmail();
             emailInfo.emailID = (int)profileInfo["email"]["id"];
             emailInfo.email = (string)profileInfo["email"]["email"];
-            emailInfo.verified = (string)profileInfo["email"]["verified"];
-            emailInfo.dateVerified = (string)profileInfo["email"]["dateVerified"];
+            emailInfo.verified = (int)profileInfo["email"]["verified"];
+            if(profileInfo["dateVerified"]!=null) DateTimeFormatter.format((long)(profileInfo["email"]["dateVerified"]));
             emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]));
-            emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]));
-           
-            //get all the user organisations 
+            if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]));
 
+            //get avatars 
+            TAvatar userAvatar = new TAvatar();
+            userAvatar.id = (int)avatar["id"];
+            userAvatar.linkSmall = (string)avatar["linkSmall"];
+            userAvatar.linkNormal = (string)avatar["linkNormal"];
+            userAvatar.dateCreated = DateTimeFormatter.format((long)avatar["dateCreated"]);
+            userAvatar.dateUpdated = DateTimeFormatter.format((long)avatar["dateUpdated"]);
 
-            //Now insert all to a local database
-            try
-            {   
+            // Now get all user orgs, boards , notices and following 
+            long initialLastUpdated = 0;
+            Settings.add(Constants.LAST_UPDATED, initialLastUpdated);
+            Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
+            //Save User ID
+            Settings.add(Constants.USERID, (int)profileInfo["id"]);
+
+            //Insert to local database 
                 await UserHelper.add(userInfo);
                 await EmailHelper.add(emailInfo);
+                getData();
             }
-            catch (Exception ex)
+            catch
             {
-                var u = ex.ToString() + " ```````````````````````" + ex.Message;
+                txtBlockStatus.Text = Constants.UNKNOWNERROR;
+                ProgressRingReady.Visibility = Visibility.Collapsed;
             }
+                
         }
 
-        // Get users data 
-       
+        private void AppBtnReloadClicked(object sender, RoutedEventArgs e)
+        {
+            ProgressRingReady.Visibility = Visibility.Visible;
+            txtBlockStatus.Text = defaultMessage;
+            commandBarReload.Visibility = Visibility.Collapsed;
+             getData();
+            
+        }
+        private async void getData()
+        {
+            //Now get all user data 
+            Dictionary<string, string> userdata = await GetNewData.getNewData();
 
+            if (userdata.ContainsKey(Constants.SUCCESS))
+            {
+
+                if (await GetNewData.disectUserDetails(userdata, false))
+                {
+                    this.Frame.Navigate(typeof(MainPage));
+                }
+                else
+                {
+                    //TODO :: Show a retry button
+                    ProgressRingReady.Visibility = Visibility.Collapsed;
+                    commandBarReload.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                //TODO :: Show a retry button
+                ProgressRingReady.Visibility = Visibility.Collapsed;
+                commandBarReload.Visibility = Visibility.Visible;
+                txtBlockStatus.Text = userdata[Constants.ERROR];
+            }
+        }
     }
 }

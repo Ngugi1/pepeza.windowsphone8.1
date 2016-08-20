@@ -13,7 +13,7 @@ namespace Pepeza.Utitlity
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
         public static int PUSH_ID { get { return 2; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }
-        public static string UNKNOWNERROR { get { return "Oops! Something went wrong. Try again later"; } }
+        public static string UNKNOWNERROR { get { return "Oops! Something went wrong.\n Try again later"; } }
         public static string NO_INTERNET_CONNECTION { get { return "Please check your internet connection!"; } }
         public static string ERROR { get { return "ERROR"; }  }
         public static string EMAIL_EXISTS { get { return "Email is already in use, please enter a different email"; } }
@@ -29,5 +29,6 @@ namespace Pepeza.Utitlity
         public static string NOT_DELETED { get { return "Sorry , we couldn't delete the item."; } }
         public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
         public static string LAST_UPDATED { get { return "LAST_UPDATED"; } }
+        public static string DATA_PUSHED { get; set; }
     }
 }

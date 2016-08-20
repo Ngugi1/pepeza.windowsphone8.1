@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +9,13 @@ namespace Shared.Models.NoticeModels
 {
     public class TAttachment
     {
+
         public int noticeId { get; set; }
+        [PrimaryKey]
         public int id { get; set; }
-        public int type { get; set; }
-        public long filesize { get; set; }
+        public string type { get; set; }
         public string link { get; set; }
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
-        public int avatarId { get; set; }
     }
 }

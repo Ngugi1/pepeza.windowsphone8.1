@@ -36,12 +36,22 @@ namespace Pepeza.Db.DbHelpers.Board
         public static async Task<List<TFollowing>> getAll()
         {
             List<TFollowing> following = new List<TFollowing>();
-            SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
+            try
             {
-                following = await connection.Table<TFollowing>().ToListAsync();
+               
+                SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    following = await connection.Table<TFollowing>().ToListAsync();
+                   
+                }
+            }
+            catch
+            {
+               following = new List<TFollowing>();
             }
             return following;
+           
         }
     }
 }

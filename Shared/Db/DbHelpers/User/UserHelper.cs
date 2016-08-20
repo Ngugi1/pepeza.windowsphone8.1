@@ -16,13 +16,22 @@ namespace Pepeza.Db.DbHelpers.User
     {
         public async static Task<TUserInfo> getUserInfo(int userId)
         {
-            TUserInfo info = null;
-            SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
-            if (connection != null)
+            try
             {
-                info = await connection.GetAsync<TUserInfo>(userId);
+                TUserInfo info = null;
+                SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    info = await connection.GetAsync<TUserInfo>(userId);
+                }
+                return info;
             }
-            return info;
+            catch
+            {
+                return null;
+
+            }
+           
         } 
        
     }

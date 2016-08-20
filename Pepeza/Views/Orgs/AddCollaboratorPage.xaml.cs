@@ -176,16 +176,16 @@ namespace Pepeza.Views.Orgs
             {
                 JObject jsonResults = JObject.Parse(results[Constants.SUCCESS]);
                 //Process these results 
-                await Db.DbHelpers.DBHelperBase.add(new TCollaborator()
+                TCollaborator collaborator = new TCollaborator()
                 {
                     id = (int)jsonResults["id"],
                     orgId = (int)jsonResults["orgId"],
-                    userId =(int)jsonResults["userId"],
-                    active = (bool)jsonResults["active"],
+                    userId = (int)jsonResults["userId"],
+                    active = (int)jsonResults["active"],
                     dateCreated = DateTimeFormatter.format((long)jsonResults["dateCreated"]),
-                    dateUpdated = DateTimeFormatter.format((long)jsonResults["dateUpdated"])
-                });
-
+                };
+                if (jsonResults["dateUpdated"] != null) collaborator.dateUpdated = DateTimeFormatter.format((long)jsonResults["dateUpdated"]);
+                await Db.DbHelpers.DBHelperBase.add(collaborator);
             }
             else
             {
