@@ -1,0 +1,93 @@
+﻿<Page
+    x:Class="Pepeza.Views.Orgs.ManageCollaborator"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views.Orgs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toast="using:Toastinet"
+    xmlns:converters="using:Pepeza.Views.Orgs"
+    mc:Ignorable="d"
+    RequestedTheme="Light"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries >
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:RoleToVisibility x:Key="RoleToVisibility"/>
+            <converters:BoolToStatusConverter x:Key="BoolToRole" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid Name="RootGrid">
+        <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Collaborator Details" 
+                           Style="{StaticResource txtBlockPageHeader}"/>
+                <StackPanel Grid.Row="1">
+                    <TextBlock
+                       Margin="12,0"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="username"
+                       />
+                    <TextBlock
+                       Margin="12,4"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Text="{Binding username , Mode=TwoWay}" />
+
+                    <TextBlock 
+                       Margin="12,0"
+                               
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="name" />
+                    <TextBlock 
+                       Margin="12,4"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Text="{Binding name , Mode=TwoWay}" />
+
+            <TextBlock Margin="12,0"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="role" />
+            <TextBlock 
+                       Grid.Column="2"
+                       Margin="12,4"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Text="{Binding onDeviceRole , Mode=TwoWay}" />
+
+
+            <TextBlock Margin="12,0"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="status" />
+            <TextBlock 
+                       Grid.Column="2"
+                       Margin="12,4"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Text="{Binding active , Mode=TwoWay , Converter={StaticResource BoolToRole}}" />
+
+
+        </StackPanel>
+        <toast:Toastinet Name="toastMessages" 
+                         Style="{StaticResource ToastStyle}" 
+                         VerticalAlignment="Center" Grid.Row="1" 
+                         Duration="4"
+                         Height="Auto"
+                         FontSize="20"
+                         AnimationType="RightToRight"/>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar IsOpen="True" 
+                    Visibility="{Binding  onDeviceRole , Mode=TwoWay , Converter={StaticResource RoleToVisibility}}"
+                    Name="CommandBarActions">
+            <AppBarButton Icon="{Binding Icon , Mode=TwoWay}" 
+                          Click="AppBarButton_Click" 
+                          Name="appBtnButtonActivateDeactivate"
+                          Label="{Binding ActivateDeactivate , Mode=TwoWay}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

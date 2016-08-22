@@ -276,7 +276,6 @@ namespace Pepeza.Views.Boards
 
             StackPanelLoadingNotices.Visibility = Visibility.Collapsed;
         }
-
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
             var board = rootGrid.DataContext;
@@ -284,7 +283,6 @@ namespace Pepeza.Views.Boards
         
             this.Frame.Navigate(typeof(UpdateBoard), board);
         }
-
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardFollowers) , boardId);

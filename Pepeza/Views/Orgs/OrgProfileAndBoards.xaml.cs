@@ -9,6 +9,8 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Boards;
+using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -38,11 +40,11 @@ namespace Pepeza.Views.Orgs
     
     public sealed partial class OrgProfileAndBoards : Page
     {
-        bool isOrgMine = false;
         ObservableCollection<TBoard> boards = new ObservableCollection<TBoard>();
         public bool areBoardsLoaded { get; set; }
         public bool isProfileLoaded { get; set; }
         public int OrgID { get; set; }
+        public string role { get; set; }
         public OrgProfileAndBoards()
         {
             this.InitializeComponent();
@@ -74,26 +76,50 @@ namespace Pepeza.Views.Orgs
            
             
         }
+        private async Task getUserRole()
+        {
+            //Get the current user Id 
+            int userId = (int)Settings.getValue(Constants.USERID);
+            TCollaborator collaborator = await CollaboratorHelper.getRole(userId, OrgID);
+            if (collaborator != null)
+            {
+                role = collaborator.role;
+                //Get the role
+                if (collaborator.role.Equals(Constants.OWNER))
+                {
+                    //Full priviledges
+                    //Hide nothing  
+                }else if (collaborator.role.Equals(Constants.ADMIN))
+                {
+                    //Admin previledges
+                }else if (collaborator.role.Equals(Constants.EDITOR))
+                {
+                    //Give editing roles
+                    AppBtnCollaborators.Visibility = Visibility.Visible;
+                    AppBtnEdit.Visibility = Visibility.Collapsed;
+                }
+            }else
+            {
+                //Do not show any edit menus
+                hideCommandBar();
+            }
+           
 
+        }
         private async Task getOrgDetails(int orgID)
         {
             //Prepare UI for loading
             fetchingProfile(true);
+            await getUserRole();
             //Determine whethe to get them locally or online , check that the org ID exists locally or not 
             TOrgInfo localOrg = await OrgHelper.get(orgID);
             if (localOrg!=null)
             {
-                if (localOrg.username == null) localOrg.username = "my boards";
-                isOrgMine = true;
-                enabeDisableAppBtnEdit(true);
                 RootGrid.DataContext = localOrg;
-                //await loadProfileLocally();
             }
             else
             {
                 //This board doesnt belong to this user and he or she cannot edit it
-                enabeDisableAppBtnEdit(false);
-                isOrgMine = false;
                 Dictionary<string, string> results = await OrgsService.getOrg(orgID);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
@@ -121,7 +147,6 @@ namespace Pepeza.Views.Orgs
             }
             fetchingProfile(false);
         }
-
         private async Task loadProfileLocally()
         {
             RootGrid.DataContext = await OrgHelper.get(OrgID);
@@ -138,38 +163,40 @@ namespace Pepeza.Views.Orgs
             {
                 case  0:
                     //load profile
+                    await getUserRole();
+                    hideCommandBar(false);
                     if (!isProfileLoaded)
                     {
-                        if(isOrgMine)
-                        {
-                            enabeDisableAppBtnEdit(true);
-                        }
-                        else
-                        {
-                            enabeDisableAppBtnEdit(false);
-                        }
                         await getOrgDetails(OrgID);
                     }
                     break;
                 case 1:
                     //load boards
+                    await getUserRole();
+                    hideCommandBar();
                     if (!areBoardsLoaded)
                     {
-                        enabeDisableAppBtnEdit(false);
+                       
                         areBoardsLoaded= await fetchOrgBoards(OrgID);
                     }
-                    enabeDisableAppBtnEdit(false);
                     break;
-                default
-                :
+                default:
                     break;
+                   
             }
         }
-       /// <summary>
-       /// Fetches all the boards for a given org
-       /// </summary>
-       /// <param name="orgId"></param>
-       /// <returns>bool value indicating whether the load was successfull</returns>
+        private void hideCommandBar(bool hide=true)
+        {
+            if (hide)
+            {
+                CommandBarActions.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CommandBarActions.Visibility = Visibility.Visible;
+            }
+            
+        }
         private async Task<bool> fetchOrgBoards(int orgId)
         {
             //start the progress bar
@@ -222,8 +249,6 @@ namespace Pepeza.Views.Orgs
                      this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices),board.id);
                 };     
          }
-        
-      
         private void fetchingProfile(bool isFetching)
         {
             if (isFetching)
@@ -277,10 +302,9 @@ namespace Pepeza.Views.Orgs
                 AppBtnEdit.IsEnabled = false;
             }
         }
-
         private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ViewCollaboratorsPage) , OrgID);
+            this.Frame.Navigate(typeof(ViewCollaboratorsPage) , new Dictionary<string, string>() { { "orgId" , OrgID.ToString()} , { "role" , role} });
         }
     }
 }

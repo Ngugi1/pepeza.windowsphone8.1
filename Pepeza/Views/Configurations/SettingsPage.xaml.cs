@@ -1,4 +1,5 @@
-﻿using Pepeza.Server.Requests;
+﻿using Pepeza.Db.DbHelpers;
+using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Account;
 using Pepeza.Views.Profile;
@@ -64,9 +65,13 @@ namespace Pepeza.Views.Configurations
                 {
                     if (await LocalUserHelper.clearLocalSettingsForUser())
                     {
-                        //Redirect to login page 
+                            //Redirect to login page 
+                        await DbHelper.dropDatabase();
                         this.Frame.Navigate(typeof(LoginPage));
-                    }
+                        }else
+                        {
+                            ToasterError.Message = "Logout failed , you must force logout because your data is now corrupt";        
+                        }
                 }
                 else
                 {

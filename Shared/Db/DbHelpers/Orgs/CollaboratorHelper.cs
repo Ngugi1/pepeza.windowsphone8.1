@@ -28,5 +28,23 @@ namespace Shared.Db.DbHelpers.Orgs
                 return  null;
             }
         }
+        public async static Task<TCollaborator> getRole(int id , int orgId)
+        {
+
+            try
+            {
+               List<TCollaborator> collaborator = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    collaborator = await connection.QueryAsync<TCollaborator>("SELECT * FROM TCollaborator WHERE userId =? AND orgId=?", id, orgId);
+                }
+                return collaborator.FirstOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

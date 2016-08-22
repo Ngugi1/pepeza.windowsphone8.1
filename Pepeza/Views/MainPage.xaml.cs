@@ -75,7 +75,7 @@ namespace Pepeza
         private async Task<bool> loadBoards()
         {
             boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
-            var groupedBoards = JumpListHelper.ToGroups(boards, t => t.name, t => t.organisation);
+            var groupedBoards = JumpListHelper.ToAlphaGroups(boards, t => t.name);
             QJumpList.ReleaseItemsSource();
             ListViewBoards.ItemsSource = groupedBoards;
             QJumpList.ApplyItemsSource();

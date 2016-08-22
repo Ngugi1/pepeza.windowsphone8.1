@@ -149,6 +149,9 @@
     <Compile Include="Views\Orgs\EditOrg.xaml.cs">
       <DependentUpon>EditOrg.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Orgs\ManageCollaborator.xaml.cs">
+      <DependentUpon>ManageCollaborator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Orgs\OrgProfileAndBoards.xaml.cs">
       <DependentUpon>OrgProfileAndBoards.xaml</DependentUpon>
     </Compile>
@@ -267,6 +270,10 @@
     <Page Include="Views\Orgs\EditOrg.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Orgs\ManageCollaborator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Orgs\OrgProfileAndBoards.xaml">
       <Generator>MSBuild:Compile</Generator>

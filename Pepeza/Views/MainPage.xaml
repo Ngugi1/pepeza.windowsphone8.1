@@ -32,7 +32,7 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
 
                 </PivotItem.Header>
-                <Jumper:GenericJumpList Name="QJumpList">
+                <Jumper:AlphaJumpList Name="QJumpList">
                     <ListView Name="ListViewBoards"
                               SelectionChanged="ListViewBoards_SelectionChanged">
                         <ListView.ItemTemplate>
@@ -83,7 +83,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                </Jumper:GenericJumpList>
+                </Jumper:AlphaJumpList>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>

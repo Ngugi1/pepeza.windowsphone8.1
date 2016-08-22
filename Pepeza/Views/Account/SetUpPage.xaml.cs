@@ -99,22 +99,45 @@ namespace Pepeza.Views.Account
             userAvatar.linkNormal = (string)avatar["linkNormal"];
             userAvatar.dateCreated = DateTimeFormatter.format((long)avatar["dateCreated"]);
             userAvatar.dateUpdated = DateTimeFormatter.format((long)avatar["dateUpdated"]);
-                if (await AvatarHelper.get(userAvatar.id) != null)
-                {
-
-                }
-            
             // Now get all user orgs, boards , notices and following 
             long initialLastUpdated = 0;
+            string token =  (string)details[Constants.APITOKEN];
             Settings.add(Constants.LAST_UPDATED, initialLastUpdated);
             Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
             //Save User ID
             Settings.add(Constants.USERID, (int)profileInfo["id"]);
+            // insert details 
+                await EmailHelper.add(emailInfo);
+                await AvatarHelper.add(userAvatar);
+                await UserHelper.add(userInfo);
+                //Now get all user data 
+                getData();
+            }
+            catch
+            {
+                if (Settings.getValue(Constants.APITOKEN) != null)
+                {
+                    txtBlockStatus.Text = Constants.UNKNOWNERROR;
+                    ProgressRingReady.Visibility = Visibility.Collapsed;
+                }else
+                {
+                    this.Frame.GoBack();
+                }
+            }
+                
+        }
 
-            //Now get all user data 
-            Dictionary<string, string> userdata = await GetNewData.getNewData();
+        private async void AppBtnReloadClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ProgressRingReady.Visibility = Visibility.Visible;
+                txtBlockStatus.Text = defaultMessage;
+                commandBarReload.Visibility = Visibility.Collapsed;
+                //Now get all user data 
+                Dictionary<string, string> userdata = await GetNewData.getNewData();
 
-              if (userdata.ContainsKey(Constants.SUCCESS))
+                if (userdata.ContainsKey(Constants.SUCCESS))
                 {
 
                     if (await GetNewData.disectUserDetails(userdata, false))
@@ -138,41 +161,17 @@ namespace Pepeza.Views.Account
             }
             catch
             {
-                txtBlockStatus.Text = Constants.UNKNOWNERROR;
-                ProgressRingReady.Visibility = Visibility.Collapsed;
-            }
-                
-        }
-
-        private async void AppBtnReloadClicked(object sender, RoutedEventArgs e)
-        {
-            ProgressRingReady.Visibility = Visibility.Visible;
-            txtBlockStatus.Text = defaultMessage;
-            commandBarReload.Visibility = Visibility.Collapsed;
-            //Now get all user data 
-            Dictionary<string, string> userdata = await GetNewData.getNewData();
-
-            if (userdata.ContainsKey(Constants.SUCCESS))
-            {
-
-                if (await GetNewData.disectUserDetails(userdata, false))
+                if (Settings.getValue(Constants.APITOKEN) != null)
                 {
-                    this.Frame.Navigate(typeof(MainPage));
-                }
-                else
-                {
-                    //TODO :: Show a retry button
                     ProgressRingReady.Visibility = Visibility.Collapsed;
                     commandBarReload.Visibility = Visibility.Visible;
+                    txtBlockStatus.Text = Constants.UNKNOWNERROR;
+                }else
+                {
+                    this.Frame.GoBack();
                 }
             }
-            else
-            {
-                //TODO :: Show a retry button
-                ProgressRingReady.Visibility = Visibility.Collapsed;
-                commandBarReload.Visibility = Visibility.Visible;
-                txtBlockStatus.Text = userdata[Constants.ERROR];
-            }
+           
 
         }
         private async void getData()

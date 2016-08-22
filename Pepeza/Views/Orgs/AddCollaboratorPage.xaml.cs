@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
@@ -32,6 +34,7 @@ namespace Pepeza.Views.Orgs
         Person selectedPerson = null;
         string role;
         int userId, orgId;
+        string onDeviceRole;
         ObservableCollection<Person> listAdmins = new ObservableCollection<Person>();
         public AddCollaboratorPage()
         {
@@ -42,9 +45,29 @@ namespace Pepeza.Views.Orgs
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null) orgId = (int)e.Parameter;
+            TCollaborator roleCollaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), orgId);
+            if (roleCollaborator != null)
+            {
+                onDeviceRole = roleCollaborator.role;
+                List<string> comboItems = new List<string>();
+            //Determine menus to load 
+            if (onDeviceRole.Equals(Constants.ADMIN))
+            {
+               
+                comboItems.Add("admin");
+                comboItems.Add("editor");
+                
+            }else if (onDeviceRole.Equals(Constants.OWNER))
+            {
+                    comboItems.Add("owner");
+                comboItems.Add("admin");
+                comboItems.Add("editor");
+            }
+            ComboBox_SelectRole.ItemsSource = comboItems;
+            }
         }
         private async void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -94,6 +117,7 @@ namespace Pepeza.Views.Orgs
         }
         private void ListViewSearchCollaborator_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+         //TODO :: Make sure permissions are observed , dont allow selection of a collaborator with higher permissions that the current user 
           RootGrid.Opacity = 0.5;
           popUpAddCollaborator.IsOpen = true;
            
@@ -117,15 +141,15 @@ namespace Pepeza.Views.Orgs
             closePopUp(false);
             userId = selectedPerson.id;
             //Get the selected item
-            switch (ComboBox_SelectRole.SelectedIndex)
+            switch ((string)ComboBox_SelectRole.SelectedItem)
             {
-                case 0:
+                case "admin":
                     role = "admin";
                     break;
-                case 1:
+                case "editor":
                     role = "editor";
                     break;
-                case 2:
+                case "owner":
                     role = "owner";
                     break;
                 default:
@@ -148,7 +172,7 @@ namespace Pepeza.Views.Orgs
         private async void AppBtnAddCollaborator_Click(object sender, RoutedEventArgs e)
         {
             //Take the selected Item
-             if(selectedPerson!=null&&!string.IsNullOrEmpty(role))
+            if (selectedPerson!=null&&!string.IsNullOrEmpty(role))
                {
                 StackPanelAddingCollaborator.Visibility = Visibility.Visible;
                 Dictionary<string, string> newRole = new Dictionary<string, string>()
@@ -180,12 +204,19 @@ namespace Pepeza.Views.Orgs
                 {
                     id = (int)jsonResults["id"],
                     orgId = (int)jsonResults["orgId"],
+                    role = (string)jsonResults["role"],
                     userId = (int)jsonResults["userId"],
                     active = (int)jsonResults["active"],
                     dateCreated = DateTimeFormatter.format((long)jsonResults["dateCreated"]),
                 };
                 if (jsonResults["dateUpdated"] != null) collaborator.dateUpdated = DateTimeFormatter.format((long)jsonResults["dateUpdated"]);
-                await Db.DbHelpers.DBHelperBase.add(collaborator);
+                if(await CollaboratorHelper.get(collaborator.id) != null)
+                {
+                    await Db.DbHelpers.DBHelperBase.update(collaborator);
+                }else
+                {
+                    await CollaboratorHelper.add(collaborator);
+                }
             }
             else
             {

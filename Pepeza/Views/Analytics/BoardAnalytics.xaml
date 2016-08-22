@@ -6,9 +6,57 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
 
+        <Grid
+                       
+                        Grid.Row="1"
+                        Width="{Binding ActualWidth, ElementName=RootGrid}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+           
+            <TextBlock Grid.Row="0"
+                       Margin="16,4"
+                       TextLineBounds="Tight"
+                       Grid.Column="0"
+                       VerticalAlignment="Bottom"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Text="{Binding username , Mode=TwoWay}"
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       Margin="16,4"
+                       VerticalAlignment="Bottom"
+                       TextLineBounds="Tight"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       Text="{Binding name, Mode=TwoWay}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+            <TextBlock 
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               Grid.Row="0"
+                               Margin="0,0,8,0"
+                               Typography.Capitals="AllSmallCaps"
+                               Grid.Column="1"
+                               Grid.RowSpan="1"
+                               Style="{StaticResource txtBlockDisplay}"
+                               HorizontalAlignment="Left"
+                               Text="{Binding role , Mode=TwoWay}"
+                               VerticalAlignment="Bottom"
+                               />
+
+        </Grid>
     </Grid>
 </Page>

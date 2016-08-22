@@ -113,10 +113,7 @@
                                Style="{StaticResource txtBlockDisplay}"
                                Text="select role" />
                         </ComboBox.Header>
-                        <ComboBoxItem Content="admin" Width="200" Margin="4"/>
-                        <ComboBoxItem Content="editor" Width="200" Margin="4"/>
-                        <ComboBoxItem Content="owner"  Width="200" Margin="4"/>
-                    </ComboBox>
+                       </ComboBox>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <AppBarButton Foreground="White" Click="CancelRoleBtnClick" Icon="Cancel"  BorderBrush="White" Label="cancel" IsCompact="False" Margin="12"/>
                         <AppBarButton Foreground="White"  Click="AcceptRoleBtnClick" BorderBrush="White" Icon="Accept" Label="add role" IsCompact="False" Margin="12"/>

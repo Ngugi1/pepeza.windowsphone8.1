@@ -30,5 +30,9 @@ namespace Pepeza.Utitlity
         public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
         public static string LAST_UPDATED { get { return "LAST_UPDATED"; } }
         public static string DATA_PUSHED { get; set; }
+        public static string ADMIN { get; } = "admin";
+        public static string EDITOR { get; } = "editor";
+        public  static string OWNER { get; } = "owner";
+
     }
 }

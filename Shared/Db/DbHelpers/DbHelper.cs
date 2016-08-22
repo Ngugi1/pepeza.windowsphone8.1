@@ -25,23 +25,23 @@ namespace Pepeza.Db.DbHelpers
         /// <summary>
         /// Create the database if it does not already exist
         /// </summary>
-        public static void createDB()
+        public async static Task createDB()
         {
             //Open/Create a db if it does not exist 
              var connection = DbHelper.DbConnectionAsync();
             //Create if it does not exist 
-            connection.CreateTableAsync<TOrgInfo>();
-            connection.CreateTableAsync<TBoard>();
-            connection.CreateTableAsync<TFollowing>();
-            connection.CreateTableAsync<TNotice>();
-            connection.CreateTableAsync<TNoticeItem>();
-            connection.CreateTableAsync<TAttachment>();
-            connection.CreateTableAsync<TCollaborator>();
-            connection.CreateTableAsync<TNotification>();
-            connection.CreateTableAsync<TAvatar>();
-            connection.CreateTableAsync<TFile>();
-            connection.CreateTableAsync<TUserInfo>();
-            connection.CreateTableAsync<TEmail>();
+            await connection.CreateTableAsync<TOrgInfo>();
+            await connection.CreateTableAsync<TBoard>();
+            await connection.CreateTableAsync<TFollowing>();
+            await connection.CreateTableAsync<TNotice>();
+            await connection.CreateTableAsync<TNoticeItem>();
+            await connection.CreateTableAsync<TAttachment>();
+            await connection.CreateTableAsync<TCollaborator>();
+            await connection.CreateTableAsync<TNotification>();
+            await connection.CreateTableAsync<TAvatar>();
+            await connection.CreateTableAsync<TFile>();
+            await connection.CreateTableAsync<TUserInfo>();
+            await connection.CreateTableAsync<TEmail>();
             Settings.add(DbConstants.DB_CREATED, true);
         }
         public async static Task<bool> dropDatabase()
@@ -50,12 +50,18 @@ namespace Pepeza.Db.DbHelpers
             try
             {
                 var conn = DbConnectionAsync();
-                await conn.DropTableAsync<TOrgInfo>();
-                await conn.DropTableAsync<TUserInfo>();
-                await conn.DropTableAsync<TEmail>();
                 await conn.DropTableAsync<TBoard>();
                 await conn.DropTableAsync<TFollowing>();
                 await conn.DropTableAsync<TNotice>();
+                await conn.DropTableAsync<TNoticeItem>();
+                await conn.DropTableAsync<TAttachment>();
+                await conn.DropTableAsync<TCollaborator>();
+                await conn.DropTableAsync<TNotification>();
+                await conn.DropTableAsync<TAvatar>();
+                await conn.DropTableAsync<TFile>();
+                await conn.DropTableAsync<TUserInfo>();
+                await conn.DropTableAsync<TEmail>();
+                await conn.DropTableAsync<TOrgInfo>();
                 var file = await checkDBExistsAsync(DbConstants.DB_PATH);
                 isDeleted = true;
             }

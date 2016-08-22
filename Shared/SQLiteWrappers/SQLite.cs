@@ -753,7 +753,7 @@ namespace SQLite
 
 		/// <summary>
 		/// Attempts to retrieve an object with the given primary key from the table
-		/// associated with the specified type. Use of this method requires that
+		/// associated with the specified type. Use of this methoad requires that
 		/// the given type have a designated PrimaryKey (using the PrimaryKeyAttribute).
 		/// </summary>
 		/// <param name="pk">

@@ -208,6 +208,7 @@ namespace Pepeza.Server.Requests
                         TBoard board = new TBoard()
                         {
                             id = (int)item["id"],
+                            name = (string)item["name"],
                             avatarId = (int)item["avatarId"],
                             desc = (string)item["description"],
                             orgID = (int)item["organizationId"],

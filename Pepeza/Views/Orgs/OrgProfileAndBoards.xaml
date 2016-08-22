@@ -123,7 +123,7 @@
         </Pivot>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar Name="CommandBarActions">
             <AppBarButton Name="AppBtnEdit"
                           Click="EditProfilleClick"
                           Icon="Edit"

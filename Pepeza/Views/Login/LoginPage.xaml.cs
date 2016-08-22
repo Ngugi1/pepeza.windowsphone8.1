@@ -54,13 +54,8 @@ namespace Pepeza.Views
         /// This parameter is typically used to configure the page.</param>
         protected override  void OnNavigatedTo(NavigationEventArgs e)
         {
-            //this.Frame.Navigate(typeof(SignUpPage));
-            //Dictionary<string,string> results = await RequestUser.logout();
-            //await RequestUser.deactivateUser();
-            //await RequestUser.getUser();
-           //await RequestUser.searchUser(new Dictionary<string, string> (){{"key","ngug"}});
-            //await RequestUser.checkUsernameAvalability("ngugi");
-            //await RequestUser.checkEmailAvailability("ngugi@gmail.com");
+
+            this.Frame.BackStack.Clear();
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (settings.Values.ContainsKey(Constants.APITOKEN))
             {

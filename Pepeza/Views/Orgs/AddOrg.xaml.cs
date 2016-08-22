@@ -6,6 +6,9 @@ using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
 using Pepeza.Validation;
+using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Avatars;
+using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using SQLite;
 using System;
@@ -23,6 +26,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Threading.Tasks;
+using Shared.Db.DbHelpers;
+using Windows.UI.Popups;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Pepeza.Views.Orgs
@@ -38,6 +44,8 @@ namespace Pepeza.Views.Orgs
         {
             this.InitializeComponent();
         }
+
+        public Task AvatarrHelper { get; private set; }
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -72,6 +80,8 @@ namespace Pepeza.Views.Orgs
                         try
                         { //Board created successfully  , save and navigate away 
                             JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
+
+                            //Organisation details
                             TOrgInfo toInsert = new TOrgInfo();
                             toInsert.id = (int)orgInfo["organization"]["id"];
                             toInsert.username = model.Username;
@@ -79,14 +89,42 @@ namespace Pepeza.Views.Orgs
                             toInsert.userId = (int)Settings.getValue(Constants.USERID);
                             toInsert.description = model.Desc;
                             toInsert.dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["dateCreated"]);
-                            toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]);
-                            int rows = await Db.DbHelpers.OrgHelper.add(toInsert);
-                            Debug.WriteLineIf(rows == 1, "Inserted");
+                            if(orgInfo["organization"]["dateUpdated"].Type != JTokenType.Null)toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]);
+                            toInsert.avatarId = (int)orgInfo["organization"]["id"];
+
+
+                            //Org avatars 
+                            TAvatar orgAvatar = new TAvatar()
+                            {
+                                id = (int)orgInfo["organization"]["avatar"]["id"],
+                                linkSmall = (string)orgInfo["organization"]["avatar"]["linkSmall"],
+                                linkNormal = (string)orgInfo["organization"]["avatar"]["linkNormal"],
+                                dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["avatar"]["dateCreated"])
+                            };
+                            if(orgInfo["organization"]["avatar"]["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)orgInfo["organization"]["avatar"]["dateUpdated"]);
+
+                            // Get the org collaborators 
+                            TCollaborator orgCollaborator = new TCollaborator()
+                            {
+                                id = (int)orgInfo["org_collaborator"]["id"],
+                                orgId = (int)orgInfo["org_collaborator"]["orgId"],
+                                active = (int)orgInfo["org_collaborator"]["active"],
+                                userId = (int)orgInfo["org_collaborator"]["userId"],
+                                role = (string)orgInfo["org_collaborator"]["role"],
+                                dateCreated = DateTimeFormatter.format((long)orgInfo["org_collaborator"]["dateCreated"])
+                            };
+                            if (orgInfo["org_collaborator"]["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)orgInfo["org_collaborator"]["dateUpdated"]);
+
+                            await Db.DbHelpers.OrgHelper.add(toInsert);
+                            await CollaboratorHelper.add(orgCollaborator);
+                            await AvatarHelper.add(orgAvatar);
                             this.Frame.GoBack();
                         }
                         catch (SQLiteException ex)
                         {
-                            Debug.WriteLine("This is an exception message  :: =============>>>" + ex.Message);
+                            model.IsProgressRingVisible = false;
+                            TxtBlockCreateOrgStatus.Text = ex.Message;
+                            TxtBlockCreateOrgStatus.Visibility = Visibility.Visible;
                         }
                     }
                     else

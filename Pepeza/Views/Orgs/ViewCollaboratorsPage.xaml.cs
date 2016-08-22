@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -10,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -31,9 +35,26 @@ namespace Pepeza.Views.Orgs
     {
         ObservableCollection<Collaborator> OCCollaborators = new ObservableCollection<Collaborator>();
         int orgID;
+        string role;
+        Dictionary<string, string> parameters = new Dictionary<string, string>();
         public ViewCollaboratorsPage()
         {
             this.InitializeComponent();
+
+        }
+        private async Task getUserRole()
+        {
+            //Get the current user Id 
+            int userId = (int)Settings.getValue(Constants.USERID);
+            TCollaborator collaborator = await CollaboratorHelper.getRole(userId, orgID);
+            if (collaborator != null)
+            {
+                role = collaborator.role;
+            }
+            else
+            {
+                role = null;
+            }
         }
 
         /// <summary>
@@ -41,13 +62,16 @@ namespace Pepeza.Views.Orgs
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected async  override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 //Get the organisation ID 
-                orgID = (int)e.Parameter;
-                Dictionary<string,string> results = await OrgsService.requestCollaborators(orgID);
+                parameters = e.Parameter as Dictionary<string, string>;
+                orgID = int.Parse(parameters["orgId"]);
+                role = (string)parameters["role"];
+                if (role.Equals(Constants.EDITOR)) CommandBarActions.Visibility = Visibility.Collapsed;
+                Dictionary<string, string> results = await OrgsService.requestCollaborators(orgID);
                 processResults(results);
 
             }
@@ -57,8 +81,7 @@ namespace Pepeza.Views.Orgs
                 App.displayMessageDialog(Constants.UNKNOWNERROR);
             }
         }
-
-        private void processResults(Dictionary<string,string> toProcess)
+        private async void processResults(Dictionary<string, string> toProcess)
         {
             if (toProcess != null && toProcess.ContainsKey(Constants.SUCCESS))
             {
@@ -67,20 +90,40 @@ namespace Pepeza.Views.Orgs
                 foreach (var collaborator in collaborators)
                 {
                     Collaborator colabo = new Collaborator();
-
                     colabo.id = (int)collaborator["org_collaborator"]["id"];
-                        colabo.role = (string)collaborator["org_collaborator"]["role"];
-                        colabo.active = (bool)collaborator["org_collaborator"]["active"];
-                        colabo.dateCreated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateCreated"]);
-                        colabo.dateUpdated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateUpdated"]);
-                        colabo.orgId = (int)collaborator["orgId"];
-                        colabo.userId = (int)collaborator["userId"];
-                        colabo.username = (string)collaborator["username"];
-                        colabo.name = (string)collaborator["firstName"] +" "+ (string)collaborator["lastName"];
-                        colabo.ActivateDeactivate = colabo.active==true ? "Block" : "Activate";
-                        colabo.Icon = colabo.active==true ? colabo.Icon = new SymbolIcon(Symbol.BlockContact) : colabo.Icon = new SymbolIcon(Symbol.AddFriend);
+                    colabo.role = (string)collaborator["org_collaborator"]["role"];
+                    colabo.active = (bool)collaborator["org_collaborator"]["active"];
+                    colabo.dateCreated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateCreated"]);
+                    colabo.dateUpdated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateUpdated"]);
+                    colabo.orgId = (int)collaborator["orgId"];
+                    colabo.userId = (int)collaborator["userId"];
+                    colabo.onDeviceRole = role;
+                    colabo.username = (string)collaborator["username"];
+                    colabo.name = (string)collaborator["firstName"] + " " + (string)collaborator["lastName"];
+                    colabo.ActivateDeactivate = colabo.active == true ? "Block" : "Activate";
+                    colabo.Icon = colabo.active == true ? colabo.Icon = new SymbolIcon(Symbol.BlockContact) : colabo.Icon = new SymbolIcon(Symbol.AddFriend);
 
                     OCCollaborators.Add(colabo);
+
+                    //For local database 
+                    var toSave = new TCollaborator()
+                    {
+                        id = colabo.id,
+                        active = (int)collaborator["org_collaborator"]["active"],
+                        orgId = colabo.orgId,
+                        role = colabo.role,
+                        userId = colabo.userId,
+                        dateCreated = colabo.dateCreated,
+                        dateUpdated = colabo.dateUpdated
+                    };
+                    if (await CollaboratorHelper.get(colabo.id) != null)
+                    {
+                        await CollaboratorHelper.update(toSave);
+                    }
+                    else
+                    {
+                        await CollaboratorHelper.add(toSave);
+                    }
                 }
                 ListViewCollaborators.ItemsSource = OCCollaborators;
             }
@@ -91,51 +134,21 @@ namespace Pepeza.Views.Orgs
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
-
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void AppBtnBarAddCollaborator_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AddCollaboratorPage), orgID);
         }
-
-        private async void AddBlockCollaborator_Click(object sender, RoutedEventArgs e)
+        private void ListViewCollaborators_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Get the datacontext 
-            AppBarButton appBtn = (sender) as AppBarButton;
-            Collaborator collabo = appBtn.DataContext as Collaborator;
-            //Now activate or deactivate the collaborator
-            if (collabo != null)
+            Collaborator parameter = (sender as ListView).SelectedItem as Collaborator;
+            if (parameter != null)
             {
-                Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(orgID, !collabo.active, collabo.id);
-                if (!results.ContainsKey(Constants.SUCCESS))
-                {
-                    //Switch the messages and AppButtonIcons
-                    if (collabo.active)
-                    {
-                        //Means we were deactivating , show unblock
-                        collabo.Icon = new SymbolIcon(Symbol.AddFriend);
-                        collabo.active = false;
-                        collabo.ActivateDeactivate = "Activate";
-                    }
-                    else
-                    {
-                        //Means we activated , show block
-                        collabo.Icon = new SymbolIcon(Symbol.BlockContact);
-                        collabo.active = true;
-                        collabo.ActivateDeactivate = "Block";
-                    }
-                }else
-                {
-                    //TODO :: Throw a toast 
-                }
+                this.Frame.Navigate(typeof(ManageCollaborator), parameter);
             }
+           
         }
     }
-    class Collaborator : Bindable
+    public class Collaborator : Bindable
     {
         private int _id;
 
@@ -144,7 +157,7 @@ namespace Pepeza.Views.Orgs
             get { return _id; }
             set
             {
-                
+
                 _id = value;
                 onPropertyChanged("id");
             }
@@ -152,8 +165,22 @@ namespace Pepeza.Views.Orgs
 
         public int orgId { get; set; }
         public int userId { get; set; }
-        public string username { get; set; }
-        public string name { get; set; }
+        private string _username;
+
+        public string username
+        {
+            get { return _username; }
+            set { _username = value; onPropertyChanged("username"); }
+        }
+
+        private string _name;
+
+        public string name
+        {
+            get { return _name; }
+            set { _name = value; onPropertyChanged("name"); }
+        }
+
         private string _role;
 
         public string role
@@ -198,6 +225,41 @@ namespace Pepeza.Views.Orgs
                 _Icon = value; onPropertyChanged("Icon");
             }
         }
+        public string onDeviceRole { get; set; } 
+    }
+    public class RoleToVisibility : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value != null)
+            {
+                if (((string)value).Equals(Constants.EDITOR))
+                {
+                    return Visibility.Collapsed;
+                }
+                else
+                {
+                    return Visibility.Visible;
+                }
 
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if((Visibility)value == Visibility.Visible)
+            {
+                return true;
+            }else
+            {
+                return false;
+
+            }
+        }
     }
 }
