@@ -7,13 +7,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
+      xmlns:connvert="using:Pepeza.Views.Boards"
       mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <connvert:BoolToTextConverter x:Key="Converter"/>
         </ResourceDictionary>
+       
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -80,7 +83,6 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Bottom"
                                                 Click="btnFollow_Click"
-                                                Content="Follow"
                                                 IsEnabled="True" />
                                         <Rectangle Height="1"
                                                    Margin="12"
@@ -205,7 +207,7 @@
         </Grid>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar Name="CommandBarOperations">
             <AppBarButton Name="AppBtnEdit"
                           Click="AppBarButton_Click"
                           Icon="Edit"

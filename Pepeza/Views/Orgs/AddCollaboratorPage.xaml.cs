@@ -56,13 +56,11 @@ namespace Pepeza.Views.Orgs
             //Determine menus to load 
             if (onDeviceRole.Equals(Constants.ADMIN))
             {
-               
-                comboItems.Add("admin");
                 comboItems.Add("editor");
                 
             }else if (onDeviceRole.Equals(Constants.OWNER))
             {
-                    comboItems.Add("owner");
+                comboItems.Add("owner");
                 comboItems.Add("admin");
                 comboItems.Add("editor");
             }

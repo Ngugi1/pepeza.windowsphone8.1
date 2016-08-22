@@ -177,7 +177,7 @@ namespace Pepeza.Server.Requests
                         TFollowing followeitem = new TFollowing()
                         {
                             id = (int)item["id"],
-                            accepted = (int)item["acceptedd"],
+                            accepted = (int)item["accepted"],
                             userId = (int)item["userId"],
                             boardId = (int)item["boardId"],
                             declined = (int)item["declined"],

@@ -6,6 +6,8 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -34,7 +36,7 @@ namespace Pepeza.Views.Boards
     public sealed partial class BoardProfileAndNotices : Page
     {
         TBoard boardFetched = null;
-        bool isProfileLoaded, areNoticesLoaded ,isMyBoard;
+        bool isProfileLoaded, areNoticesLoaded;
         int boardId;
         string boardname;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
@@ -47,12 +49,35 @@ namespace Pepeza.Views.Boards
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 boardId = (int)e.Parameter;
-                stackPanelLoading.Visibility = Visibility.Visible;
+                TBoard board = await BoardHelper.getBoard(boardId);
+                if (board != null)
+                {
+                    TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), board.orgID);
+                    if(collaborator.role != Constants.EDITOR)
+                    {
+                        CommandBarOperations.Visibility = Visibility.Visible;
+                    }
+                    else if(collaborator.role == Constants.OWNER)
+                    {
+                        //Hide follow button
+                        btnFollow.Visibility = Visibility.Collapsed;
+
+                    }
+                    else if(collaborator.role == Constants.EDITOR)
+                    {
+                        CommandBarOperations.Visibility = Visibility.Collapsed;
+                    }
+                    if(collaborator.role != Constants.OWNER)
+                    {
+                        //Show follow button
+                        btnFollow.Visibility = Visibility.Visible;
+                    }
+                }
             }
             else
             {
@@ -66,15 +91,13 @@ namespace Pepeza.Views.Boards
             if (localBoard != null)
             {
                 isFetchingDetails(false);
-                isMyBoard = true;
-                isBoardMine((int)Settings.getValue(Constants.USERID));
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
+                TFollowing following = await FollowingHelper.get(localBoard.id);
                 rootGrid.DataContext = localBoard;
                
             }
             else
             {
-                isMyBoard = false;
                 Dictionary<string, string> results = await BoardService.getBoard(boardId);
                 if (results != null && results.ContainsKey(Constants.SUCCESS))
                 {
@@ -105,25 +128,10 @@ namespace Pepeza.Views.Boards
                     toasterror.Message = results[Constants.ERROR];
                 }
                 isFetchingDetails(false);
-                isBoardMine(boardFetched.ownerId);
             }
+            stackPanelLoading.Visibility = Visibility.Collapsed;
             GridContentHide.Opacity = 1;
            
-        }
-        private void isBoardMine(int ownerId)
-        {
-            if (ownerId == (int)Settings.getValue(Constants.USERID))
-            {
-                //You own this board
-                btnFollow.Visibility = Visibility.Collapsed;
-                AppBtnEdit.Visibility = Visibility.Collapsed;
-
-            }
-            else
-            {
-                btnFollow.Visibility = Visibility.Visible;
-                btnFollow.Visibility = Visibility.Visible;
-            }
         }
         public async Task followBoard(int boardId)
         {
@@ -198,14 +206,7 @@ namespace Pepeza.Views.Boards
                         await getBoardDetailsAsync(boardId);
                        
                     }
-                    if (isMyBoard)
-                    {
-                        enableAppBarEdit(true);
-                    }
-                    else 
-                    {
-                        enableAppBarEdit(false);
-                    }
+                    
                     break;
                 case 1:
                     //Load notices if not loaded already
@@ -213,14 +214,6 @@ namespace Pepeza.Views.Boards
                     {
                         StackPanelLoadingNotices.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
-                    }
-                    if (isMyBoard)
-                    {
-                        enableAppBarEdit(true);
-                    }
-                    else
-                    {
-                        enableAppBarEdit(false);
                     }
                     break;
                 default :
@@ -286,6 +279,31 @@ namespace Pepeza.Views.Boards
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardFollowers) , boardId);
+        }
+    }
+    public class BoolToTextConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((bool)value)
+            {
+                return "Unfollow";
+            }else
+            {
+                return "Follow";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value.Equals("Follow"))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

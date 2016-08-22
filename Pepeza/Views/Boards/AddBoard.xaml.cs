@@ -3,6 +3,7 @@ using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
@@ -36,16 +37,9 @@ namespace Pepeza.Views.Boards
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Load all the organisatios
-            List<TOrgInfo> orgs = await OrgHelper.getAllOrgs();
+            List<TOrgInfo> orgs = await OrgHelper.getAuthorizedOrgs((int)Settings.getValue(Constants.USERID));
             if (orgs.Count > 0)
             {
-                foreach (var item in orgs)
-                {
-                    if (item.username == null)
-                    {
-                        item.username = "my boards";
-                    }
-                }
                 comboOrgs.ItemsSource = orgs;
                 comboOrgs.SelectedIndex = 0;
             }
