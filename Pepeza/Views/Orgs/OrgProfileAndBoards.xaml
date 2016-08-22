@@ -21,20 +21,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel VerticalAlignment="Top">
-            <TextBlock Margin="19.5,0"
-                       Style="{StaticResource txtBlockPageHeader}"
-                       Text="This " />
-        </StackPanel>
-       
+
+
         <Pivot Name="OrgPivot"
                Grid.RowSpan="2"
-               Margin="0,40,0,0"
+               Margin="0"
                SelectedIndex="0"
                SelectionChanged="OrgPivot_SelectionChanged"
                Style="{StaticResource CustomPivot}">
-
-
             <PivotItem>
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="profile" />
@@ -128,10 +122,11 @@
                           Click="EditProfilleClick"
                           Icon="Edit"
                           Label="edit" />
-            <AppBarButton Icon="Admin" 
+            <AppBarButton Icon="Permissions" 
                           Name="AppBtnCollaborators"
                           Click="AppBtnCollaborators_Click" 
-                          Label="add collaborators"/>
+                          Label="collaborators"/>
+            <AppBarButton Icon="ViewAll" Label="Statistics"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>
