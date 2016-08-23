@@ -11,7 +11,6 @@ namespace Shared.Server.ServerModels.Notices
     {
         public int boardId { get; set; }
         public string title { get; set; }
-        public int type { get; set; }
         public string content { get; set; }
         public StorageFile  file { get; set; }
     }

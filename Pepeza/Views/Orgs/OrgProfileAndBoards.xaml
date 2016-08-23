@@ -126,7 +126,7 @@
                           Name="AppBtnCollaborators"
                           Click="AppBtnCollaborators_Click" 
                           Label="collaborators"/>
-            <AppBarButton Icon="ViewAll" Label="Statistics"/>
+            <AppBarButton Icon="FourBars" Label="Analytics"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

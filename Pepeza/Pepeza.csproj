@@ -182,6 +182,9 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Images\file.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Images\icon.png" />
     <Content Include="Assets\Images\profile.jpg" />
     <Content Include="Assets\Logo.scale-240.png" />
@@ -305,6 +308,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ByteSizeLib, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ByteSize.1.2.1\lib\portable-net45+win8+wpa81+wp8\ByteSizeLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Facebook, Version=6.0.10.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
       <HintPath>..\packages\Facebook.7.0.6\lib\portable-win81+wpa81\Facebook.dll</HintPath>
       <Private>True</Private>

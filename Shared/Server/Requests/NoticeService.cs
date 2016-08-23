@@ -63,7 +63,6 @@ namespace Pepeza.Server.Requests
                     {
                         HttpMultipartFormDataContent content = new HttpMultipartFormDataContent();
                         content.Add(new HttpStringContent(item.boardId.ToString()), "boardId");
-                        content.Add(new HttpStringContent(item.type.ToString()), "type");
                         content.Add(new HttpStringContent(item.title), "title");
                         content.Add(new HttpStringContent(item.content), "content");
                         content.Add(new HttpStreamContent(await file.OpenReadAsync()), "file" , file.Name);

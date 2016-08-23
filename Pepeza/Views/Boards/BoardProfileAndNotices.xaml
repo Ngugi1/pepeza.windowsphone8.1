@@ -212,7 +212,7 @@
                           Click="AppBarButton_Click"
                           Icon="Edit"
                           Label="edit" />
-            <AppBarButton Icon="ViewAll" Label="Statistics"/>
+            <AppBarButton Icon="FourBars" Label="Statistics"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

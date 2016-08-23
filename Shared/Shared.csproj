@@ -181,6 +181,10 @@
     <Compile Include="ViewModels\VMUpdateProfile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ByteSizeLib, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ByteSize.1.2.1\lib\portable-net45+win8+wpa81+wp8\ByteSizeLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Facebook">
       <HintPath>..\packages\Facebook.7.0.6\lib\portable-win81+wpa81\Facebook.dll</HintPath>
     </Reference>

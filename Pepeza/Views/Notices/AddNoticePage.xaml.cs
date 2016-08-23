@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ByteSizeLib;
+using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -32,7 +34,7 @@ namespace Pepeza.Views.Notices
     public sealed partial class AddNoticePage : Page
     {
         CoreApplicationView view = CoreApplication.GetCurrentView();
-        int noticeType, boardID;
+        int  boardID;
         StorageFile file = null;
         public AddNoticePage()
         {
@@ -135,7 +137,6 @@ namespace Pepeza.Views.Notices
                  title = content["title"],
                  content = content["content"],
                  file = file,
-                 type = noticeType,
                  boardId = boardID
             };
             Dictionary<string, string> results = null;
@@ -209,34 +210,8 @@ namespace Pepeza.Views.Notices
         {
             toastError.Message = message;
         }
-        private void Attachment_Clicked(object sender, RoutedEventArgs e)
-        {
-            AppBarButton btn = sender as AppBarButton;
-            string label = btn.Label;
-
-            view.Activated += View_Activated;
-            switch (label)
-            {
-                case "photo":
-                    FilePickerHelper.pickFile(FilePickerHelper.PHOTOS , Windows.Storage.Pickers.PickerLocationId.MusicLibrary);
-                    
-                    break;
-                case "audio":
-                    FilePickerHelper.pickFile(FilePickerHelper.AUDIO , Windows.Storage.Pickers.PickerLocationId.MusicLibrary);
-                    break;
-                case "video":
-                    FilePickerHelper.pickFile(FilePickerHelper.VIDEO , Windows.Storage.Pickers.PickerLocationId.VideosLibrary);
-                    break;
-                case "document":
-                    FilePickerHelper.pickFile(FilePickerHelper.DOCUMENTS , Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary);
-                    break;
-                default:
-                    break;
-            }
-
-          
-        }
-        private void View_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
+       
+        private async void View_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
             if (args != null)
             {
@@ -245,34 +220,54 @@ namespace Pepeza.Views.Notices
                 {
                     if (fileArgs.Files.Count == 0) return;
                     file = fileArgs.Files[0];
-                    if (file != null)
+                    var fileProperties = await file.GetBasicPropertiesAsync();
+                    var filesize = ByteSize.FromBytes(fileProperties.Size);
+                   
+                    if(filesize.MegaBytes <= 5)
                     {
-                        noticeType = getNoticeType(file);
+                        if (fileProperties.Size > (1024 * 1024) || (fileProperties.Size == (1024 * 1024)))
+                        {
+                            filesize.ToString("MB");
+                        }
+                        else if ((fileProperties.Size == 1024 || fileProperties.Size > 1024) && fileProperties.Size < 1024 * 1024)
+                        {
+                            filesize.ToString("KB");
+                        }
+                        else if (fileProperties.Size < 1024)
+                        {
+                            filesize.ToString("B");
+                        }
+
+                        txtBlockFileSize.Text = file.DisplayType+ " , "+  filesize.ToString();
+                        txtBlockFileName.Text = file.Name;
+                        GridAttachment.Visibility = Visibility.Visible;
+                    }else
+                    {
+                        toastError.Message = "File is too large, select a file less than 5MB in size";
                     }
+                   
+                  
                 }
             }
         }
-        private int getNoticeType(StorageFile file)
+     
+        private void ApBtnAttachment_Click(object sender, RoutedEventArgs e)
         {
-            if (file != null)
-            {
-                string mime_type = file.ContentType;
-                if(mime_type.Contains("image"))
-                {
-                    return 1;
-                }else if (mime_type.Contains("video"))
-                {
-                    return 3;
-                }else if (mime_type.Contains("audio"))
-                {
-                    return 2;
-                }
-                else if(mime_type.Contains("plain")|| mime_type.Contains("application"))
-                {
-                    return 4;
-                }
-            }
-            return 0;
+            view.Activated += View_Activated;
+            FileOpenPicker filePicker = new FileOpenPicker();
+            filePicker.FileTypeFilter.Clear();
+            filePicker.FileTypeFilter.Add("*");
+            filePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
+            filePicker.ViewMode = PickerViewMode.Thumbnail;
+            filePicker.PickSingleFileAndContinue();
+            
+         
+        }
+
+        private void AppBtnBarDeleteClick(object sender, RoutedEventArgs e)
+        {
+            file = null;
+            GridAttachment.Visibility = Visibility.Collapsed;
         }
     }
 }

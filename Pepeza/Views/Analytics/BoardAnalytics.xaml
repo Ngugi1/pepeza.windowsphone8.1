@@ -25,7 +25,9 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-           
+            <AppBarButton 
+                Foreground="Black"
+                Icon="Document" RequestedTheme="Light" BorderBrush="#FF0A1138" BorderThickness="10,0"/>
             <TextBlock Grid.Row="0"
                        Margin="16,4"
                        TextLineBounds="Tight"
