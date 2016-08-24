@@ -46,6 +46,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid Name="GridContentHide" Opacity="0">
                                     <StackPanel>
+                                        
                                         <Rectangle Style="{StaticResource RectProfPic}">
                                             <Rectangle.Fill>
                                                 <ImageBrush ImageSource="/Assets/Images/profile.jpg" />

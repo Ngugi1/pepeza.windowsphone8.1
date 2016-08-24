@@ -72,5 +72,29 @@ namespace Pepeza.Db.DbHelpers.Board
             }
 
         }
+
+        public async static Task<TFollowing> getFollowerByBoardId(int boardId)
+        {
+            try
+            {
+                List<TFollowing> info = null;
+                SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    info = await connection.QueryAsync<TFollowing>("SELECT * FROM TFollowing WHERE boardId = ?" , boardId);
+                    if (info != null && info.Count > 0)
+                    {
+                        return info.FirstOrDefault();
+                    }
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+
+            }
+        }
     }
 }

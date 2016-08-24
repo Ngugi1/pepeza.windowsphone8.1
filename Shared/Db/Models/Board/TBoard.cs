@@ -30,13 +30,21 @@ namespace Pepeza.Db.Models.Board
         }
         [Ignore]
         public int ownerId { get; set; }
+        public int amFollowing { get; set; } = 0;
         [Ignore]
         public string organisation { get; set; }
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
         public int following { get; set; }
+       
+        private int _noOfFollowers;
         [Ignore]
-        public int noOfFollowers { get; set; }
+        public int noOfFollowers
+        {
+            get { return _noOfFollowers; }
+            set { _noOfFollowers = value;  onPropertyChanged("noOfFollowers"); }
+        }
+
         [Ignore]
         public string singleFollowerOrMany { get; set; }
         public int avatarId { get; set; }

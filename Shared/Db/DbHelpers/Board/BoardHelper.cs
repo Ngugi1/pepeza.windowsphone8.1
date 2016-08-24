@@ -94,5 +94,26 @@ namespace Pepeza.Db.DbHelpers.Board
                 }
                
             }
+
+        public async static Task<List<TBoard>> getFollowing(int following=1)
+        {
+            try
+            {
+                List<TBoard> result = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    result = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE amFollowing = ?", 1);
+                }
+                return result;
+
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
     }
+    
 }

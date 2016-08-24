@@ -91,6 +91,7 @@ namespace Pepeza.Views.Orgs
                 //Get the role
                 if (collaborator.role.Equals(Constants.OWNER))
                 {
+
                     //Full priviledges
                     //Hide nothing  
                 }else if (collaborator.role.Equals(Constants.ADMIN))

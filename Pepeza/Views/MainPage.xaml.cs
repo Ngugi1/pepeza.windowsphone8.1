@@ -32,7 +32,7 @@ namespace Pepeza
         public static MainPage current;
         public static ObservableCollection<TBoard> boards { get; set; }
         public static ObservableCollection<TOrgInfo> orgs { get; set; }
-        public static ObservableCollection<TFollowing> following{ get; set; }
+        public static ObservableCollection<TBoard> following{ get; set; }
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
         Boolean isSelected = false;
         public MainPage()
@@ -84,8 +84,8 @@ namespace Pepeza
         }
         private async Task<bool> loadFollowing()
         {
-            following = new ObservableCollection<TFollowing>(await FollowingHelper.getAll());
-            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.id.ToString());
+            following = new ObservableCollection<TBoard>(await BoardHelper.getFollowing());
+            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.name);
             AlphaListFollowing.ReleaseItemsSource();
             ListViewFollowing.ItemsSource = alphaGroups;
             AlphaListFollowing.ApplyItemsSource();
@@ -168,7 +168,7 @@ namespace Pepeza
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   
             //Following is just a board , push the user to board profile
-            TFollowing selected = ((sender as ListView).SelectedItem as TFollowing);
+            TBoard selected = ((sender as ListView).SelectedItem as TBoard);
             if (selected != null && isSelected == true)
             {
                 this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.id);
