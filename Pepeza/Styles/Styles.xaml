@@ -477,58 +477,33 @@
     <!--  Data Templates Styles  -->
     <!--  ListViewNotices Datatemplate  -->
     <DataTemplate x:Key="ListViewNoticesDataTemplate">
-        <Grid Height="75">
+        <Grid Margin="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
 
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.Row="1"
-                       Grid.RowSpan="2"
-                       Width="50"
-                       Height="50"
-                       VerticalAlignment="Center">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
-            <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="10,4,7.667,8.5"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="SCC is a very nic plabdsd  s bs  bsbfdbfdb"
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="NoWrap" />
-            <TextBlock Grid.Row="1"
-                       Grid.RowSpan="2"
-                       Grid.Column="1"
-                       Margin="10,0,7.667,6.167"
+            <TextBlock Text="Exam results are out " 
+                       Foreground="Black"
+                       Margin="0"
                        VerticalAlignment="Bottom"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="Exam reelts were releaased today 12/34/56 "
-                       TextTrimming="WordEllipsis"
-                       TextWrapping="NoWrap" />
-            <RichTextBlock Grid.Row="1"
-                           Grid.Column="1"
-                           Margin="0,0,-0.333,22.333"
-                           HorizontalAlignment="Right"
+                       Style="{StaticResource GroupHeaderTextBlockStyle}"/>
+            <TextBlock Grid.Row="1"
+                       Margin="0"
+                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                       Foreground="{StaticResource txtBoxBorderBrush}" 
+                           Text="This isisajdsd s fdbvrvrbv rbv"/>
+            <TextBlock Text="12/06/2013"
+                           HorizontalAlignment="Left" 
                            VerticalAlignment="Bottom"
-                           FontSize="14"
-                           Foreground="{StaticResource PhoneAccentBrush}">
-                <Paragraph>
-                    <Bold>
-                        <Underline>
-                            <Run Text="{Binding count}" />
-                        </Underline>
-                    </Bold>
-                </Paragraph>
-            </RichTextBlock>
+                       Grid.Column="1" />
+
+            <SymbolIcon Symbol="Attach" Grid.Row="1" Grid.Column="1"/>
         </Grid>
     </DataTemplate>
  

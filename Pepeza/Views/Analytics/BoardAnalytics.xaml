@@ -10,55 +10,71 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <ListView>
+            <ListViewItem 
+                Margin="12,0"
+                Name="ListViewItem">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
 
-        <Grid
-                       
-                        Grid.Row="1"
-                        Width="{Binding ActualWidth, ElementName=RootGrid}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <AppBarButton 
-                Foreground="Black"
-                Icon="Document" RequestedTheme="Light" BorderBrush="#FF0A1138" BorderThickness="10,0"/>
-            <TextBlock Grid.Row="0"
-                       Margin="16,4"
-                       TextLineBounds="Tight"
-                       Grid.Column="0"
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Exam results are out " 
+                       Foreground="Black"
+                       Margin="0"
                        VerticalAlignment="Bottom"
-                       Style="{StaticResource BodyTextBlockStyle}"
-                       Text="{Binding username , Mode=TwoWay}"
-                       TextTrimming="WordEllipsis"
-                       TextWrapping="NoWrap" />
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"
-                       Margin="16,4"
-                       VerticalAlignment="Bottom"
-                       TextLineBounds="Tight"
-                       Style="{StaticResource BaseTextBlockStyle}"
-                       Text="{Binding name, Mode=TwoWay}"
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="NoWrap" />
-            <TextBlock 
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               Grid.Row="0"
-                               Margin="0,0,8,0"
-                               Typography.Capitals="AllSmallCaps"
-                               Grid.Column="1"
-                               Grid.RowSpan="1"
-                               Style="{StaticResource txtBlockDisplay}"
-                               HorizontalAlignment="Left"
-                               Text="{Binding role , Mode=TwoWay}"
-                               VerticalAlignment="Bottom"
-                               />
+                       Style="{StaticResource GroupHeaderTextBlockStyle}"/>
+                    <TextBlock Grid.Row="1"
+                       Margin="0"
+                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                       Foreground="{StaticResource txtBoxBorderBrush}" 
+                           Text="This isisajdsd s fdbvrvrbv rbv"/>
+                    <TextBlock Text="12/06/2013"
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Bottom"
+                       Grid.Column="1" />
 
-        </Grid>
+                    <SymbolIcon Symbol="Attach" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+            </ListViewItem>
+            <ListViewItem Margin="12,4">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="1*"/>
+
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Exam results are out " 
+                       Foreground="Black"
+                       Margin="0"
+                       VerticalAlignment="Bottom"
+                       Style="{StaticResource GroupHeaderTextBlockStyle}"/>
+                    <TextBlock Grid.Row="1"
+                       Margin="0"
+                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                       Foreground="{StaticResource txtBoxBorderBrush}" 
+                           Text="This isisajdsd s fdbvrvrbv rbv"/>
+                    <TextBlock Text="12/06/2013"
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Bottom"
+                       Grid.Column="1" />
+
+                    <SymbolIcon Symbol="Attach" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+            </ListViewItem>
+        </ListView>
+     
+        
     </Grid>
 </Page>

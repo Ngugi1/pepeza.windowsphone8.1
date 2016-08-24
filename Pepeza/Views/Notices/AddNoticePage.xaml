@@ -1,7 +1,6 @@
 ﻿<Page x:Class="Pepeza.Views.Notices.AddNoticePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:C4fun="using:Coding4Fun.Toolkit.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Pepeza.Views.Notices"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -116,6 +115,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                        <SymbolIcon Grid.RowSpan="2" 
+                                    Symbol="Page"/>
                         <TextBlock Grid.Row="0" 
                                    Margin="8,0"
                                    TextWrapping="NoWrap"
@@ -136,9 +137,9 @@
                                    Grid.Column="1" FontSize="14"
                                    
                                    />
-                        <AppBarButton Icon="Delete"
+                        <SymbolIcon Symbol="Delete"
+                                    Tapped="SymbolIcon_Tapped"  
                                       VerticalAlignment="Center"
-                                      Click="AppBtnBarDeleteClick"
                                       Foreground="Black"
                                       Grid.RowSpan="2"
                                       Grid.Column="2"/>
@@ -155,22 +156,26 @@
                          VerticalAlignment="Center"
                          Style="{StaticResource ToastStyle}"
                          TextWrapping="WrapWholeWords" />
-        <StackPanel Name="StackPanelNoBoards"
-                    Grid.Row="1"
+        <Popup Name="StackPanelNoBoards"    
+               Grid.Row="1"
                     Width="368"
                     Height="444"
-                    Margin="16,10.167,16,80"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Background="{StaticResource mainForeground}"
-                    Visibility="Collapsed">
-
-            <TextBlock Margin="16"
+                    Visibility="Visible">
+            <StackPanel Orientation="Vertical"
+                        Background="{StaticResource CommandBarBackgroundThemeBrush}"
+                        >
+                <TextBlock Margin="16"
                        Foreground="White"
                        Style="{StaticResource txtBlockDisplay}"
-                       Text="You have not created any boards yet.Each notice must be associated with a board" />
-            <Button HorizontalAlignment="Center" Content="create board" />
-        </StackPanel>
+                           TextWrapping="WrapWholeWords"
+                       Text="You have not created
+                           any boards yet.Each notice must be associated with a board" />
+                <Button  Click="Button_Click" Content="OK"/>
+
+            </StackPanel>
+            </Popup>
 
     </Grid>
     <Page.BottomAppBar>

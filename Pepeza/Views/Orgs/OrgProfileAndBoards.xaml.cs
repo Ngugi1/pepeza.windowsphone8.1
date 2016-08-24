@@ -60,6 +60,9 @@ namespace Pepeza.Views.Orgs
             {
                 Organization org = e.Parameter as Organization;
                 OrgID = org.Id;
+            }else
+            {
+                CommandBarActions.Visibility = Visibility.Collapsed;
             }
                   
             if (e.NavigationMode == NavigationMode.New)
@@ -83,6 +86,7 @@ namespace Pepeza.Views.Orgs
             TCollaborator collaborator = await CollaboratorHelper.getRole(userId, OrgID);
             if (collaborator != null)
             {
+                hideCommandBar(false);
                 role = collaborator.role;
                 //Get the role
                 if (collaborator.role.Equals(Constants.OWNER))
@@ -101,7 +105,7 @@ namespace Pepeza.Views.Orgs
             }else
             {
                 //Do not show any edit menus
-                hideCommandBar();
+                hideCommandBar(true);
             }
            
 
@@ -164,7 +168,6 @@ namespace Pepeza.Views.Orgs
                 case  0:
                     //load profile
                     await getUserRole();
-                    hideCommandBar(false);
                     if (!isProfileLoaded)
                     {
                         await getOrgDetails(OrgID);

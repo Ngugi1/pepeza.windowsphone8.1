@@ -263,8 +263,12 @@ namespace Pepeza.Views.Notices
             
          
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
 
-        private void AppBtnBarDeleteClick(object sender, RoutedEventArgs e)
+        private void SymbolIcon_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             file = null;
             GridAttachment.Visibility = Visibility.Collapsed;

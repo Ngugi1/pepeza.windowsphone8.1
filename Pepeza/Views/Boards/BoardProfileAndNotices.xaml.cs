@@ -6,7 +6,9 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
@@ -38,7 +40,7 @@ namespace Pepeza.Views.Boards
         TBoard boardFetched = null;
         bool isProfileLoaded, areNoticesLoaded;
         int boardId;
-        string boardname;
+        TAvatar boardAvatar = null;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
         public BoardProfileAndNotices()
         {
@@ -54,30 +56,7 @@ namespace Pepeza.Views.Boards
             if (e.Parameter != null)
             {
                 boardId = (int)e.Parameter;
-                TBoard board = await BoardHelper.getBoard(boardId);
-                if (board != null)
-                {
-                    TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), board.orgID);
-                    if(collaborator.role != Constants.EDITOR)
-                    {
-                        CommandBarOperations.Visibility = Visibility.Visible;
-                    }
-                    else if(collaborator.role == Constants.OWNER)
-                    {
-                        //Hide follow button
-                        btnFollow.Visibility = Visibility.Collapsed;
-
-                    }
-                    else if(collaborator.role == Constants.EDITOR)
-                    {
-                        CommandBarOperations.Visibility = Visibility.Collapsed;
-                    }
-                    if(collaborator.role != Constants.OWNER)
-                    {
-                        //Show follow button
-                        btnFollow.Visibility = Visibility.Visible;
-                    }
-                }
+                await assignRoles(await BoardHelper.getBoard(boardId));
             }
             else
             {
@@ -93,8 +72,23 @@ namespace Pepeza.Views.Boards
                 isFetchingDetails(false);
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.get(localBoard.id);
+                boardAvatar = await AvatarHelper.get(localBoard.id);
+                if (following != null)
+                {
+                    if(following.accepted == 1)
+                    {
+                        btnFollow.Content = "Unfollow";
+                    }else
+                    {
+                        btnFollow.Content = "Requested";
+                        btnFollow.IsEnabled = false;
+                    }
+
+                }else
+                {
+                    btnFollow.Content = "Follow";
+                }
                 rootGrid.DataContext = localBoard;
-               
             }
             else
             {
@@ -102,21 +96,55 @@ namespace Pepeza.Views.Boards
                 if (results != null && results.ContainsKey(Constants.SUCCESS))
                 {
                     JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                    boardFetched = new TBoard()
-                    {
-                        id = (int)objResults["id"],
-                        orgID = (int)objResults["orgId"],
-                        name = (string)objResults["name"],
-                        noOfFollowers =(int)objResults["noOfFollowers"],
-                        following =(int)objResults["follower"]["accepted"],
-                        ownerId = (int)objResults["ownerId"],
-                        desc = (string)objResults["description"],
-                        dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
-                        dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]["date"]),
+                    boardFetched = new TBoard();
+
+                        boardFetched.id = (int)objResults["id"];
+                        boardFetched.orgID = (int)objResults["orgId"];
+                        boardFetched.name = (string)objResults["name"];
+                        boardFetched.noOfFollowers = (int)objResults["noOfFollowers"]; 
                        
-                    };
-                    checkIfBoardIsFollowed(boardFetched.following);
-                    boardname = (string)objResults["name"];
+                        boardFetched.ownerId = (int)objResults["ownerId"];
+                        boardFetched.followRestriction = (string)objResults["followRestriction"];
+                        boardFetched.desc = (string)objResults["description"];
+                        boardFetched.dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]);
+                        boardFetched.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]);
+                       
+                   
+                    if (objResults["avatar"].Type!= JTokenType.Null)
+                    {
+                       
+                        boardAvatar = new TAvatar()
+                        {
+                            id = (int)objResults["avatar"]["id"],
+                            linkNormal = (string)objResults["avatar"]["linkNormal"],
+                            linkSmall = (string)objResults["avatar"]["linkSmall"]
+                        };
+                    }
+                    if (objResults["follower_item"].Type != JTokenType.Null)
+                    {
+                        boardFetched.following = (int)objResults["follower_item"]["accepted"];
+                        TFollowing followerItem = new TFollowing()
+                        {
+                            id = (int)objResults["follower_item"]["id"],
+                            userId = (int)objResults["follower_item"]["userId"],
+                            boardId = (int)objResults["follower_item"]["boardId"],
+                            accepted = (int)objResults["follower_item"]["accepted"],
+                           
+                        };
+                        if(followerItem.accepted == 1)
+                        {
+                            btnFollow.Content = "Unfollow";
+                            followerItem.dateAccepted = DateTimeFormatter.format((long)objResults["follower_item"]["dateAccepted"]);
+                        }else
+                        {
+                            btnFollow.Content = "Requested";
+                            btnFollow.IsEnabled = false;
+                        }
+
+                    }else
+                    {
+                        btnFollow.Content = "Follow";
+                    }
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
                     isProfileLoaded = true;
@@ -127,6 +155,7 @@ namespace Pepeza.Views.Boards
                     stackPanelLoading.Visibility = Visibility.Collapsed;
                     toasterror.Message = results[Constants.ERROR];
                 }
+                await assignRoles(boardFetched);
                 isFetchingDetails(false);
             }
             stackPanelLoading.Visibility = Visibility.Collapsed;
@@ -142,18 +171,6 @@ namespace Pepeza.Views.Boards
                 //We have followed the board
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 toasterror.Message = (string)objResults["message"];
-              
-                //await FollowingHelper.add(new TFollowing()
-                //{
-                //    id = boardFetched.id,
-                //    boardId = boardFetched.id,
-                //    userId = boardFetched.
-                //    OrgId = boardFetched.orgID,
-                //    Name = boardFetched.name,
-                //    Description = boardFetched.desc,
-                //    DateCreated = boardFetched.dateCreated,
-                //    DateUpdated = boardFetched.dateUpdated,
-                //});
                 btnFollow.IsEnabled = true;
                 btnFollow.Content = "Unfollow";
             }
@@ -167,23 +184,6 @@ namespace Pepeza.Views.Boards
         {
             TBoard board = ContentRoot.DataContext as TBoard;
             await followBoard(board.id);
-        }
-        private void checkIfBoardIsFollowed(int boardId)
-        {
-            if (boardId == 1)
-            {
-                //Board is already followed , disable button
-                btnFollow.IsEnabled = false;
-                btnFollow.Content = "Unfollow";
-            }
-            else if (boardId == 2)
-            {
-                btnFollow.Content = "Requested";
-            }
-            else if (boardId == 0)
-            {
-                btnFollow.Content = "Follow";
-            }
         }
         private void isFetchingDetails(bool isloading)
         {
@@ -250,8 +250,7 @@ namespace Pepeza.Views.Boards
                             dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
                             dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
                             boardId = boardId,
-                           board = boardname,
-                            content ="This is a smaple content fo all of you guys to fucking read"
+                            content =(string)obj["content"]
                         });
                     }
                     ListViewNotices.ItemsSource = noticeDataSource;
@@ -275,6 +274,39 @@ namespace Pepeza.Views.Boards
 
         
             this.Frame.Navigate(typeof(UpdateBoard), board);
+        }
+        private async Task assignRoles(TBoard board)
+        {
+            if (board != null)
+            {
+                TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), board.orgID);
+                if (collaborator != null)
+                {
+                    if (collaborator.role != Constants.EDITOR)
+                    {
+                        CommandBarOperations.Visibility = Visibility.Visible;
+                    }
+                    else if (collaborator.role == Constants.OWNER)
+                    {
+                        //Hide follow button
+                        btnFollow.Visibility = Visibility.Collapsed;
+
+                    }
+                    else if (collaborator.role == Constants.EDITOR)
+                    {
+                        CommandBarOperations.Visibility = Visibility.Collapsed;
+                    }
+                    if (collaborator.role != Constants.OWNER)
+                    {
+                        //Show follow button
+                        btnFollow.Visibility = Visibility.Visible;
+                    }
+                }
+                else
+                {
+                    CommandBarOperations.Visibility = Visibility.Collapsed;
+                }
+            }
         }
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {

@@ -296,6 +296,10 @@ namespace Pepeza.Server.Requests
                             userId = (int)item["userId"],
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
                         };
+                        if (inBackground)
+                        {
+                            //TODO :: Create toasts 
+                        }
                         if (item["dateReceived"].Type != JTokenType.Null) noticeItem.dateReceived = DateTimeFormatter.format((long)item["dateReceived"]);
                         if (item["dateRead"].Type != JTokenType.Null) noticeItem.dateRead = DateTimeFormatter.format((long)item["dateRead"]);
                         if (item["dateUpdateRead"].Type != JTokenType.Null) noticeItem.dateUpdateRead = DateTimeFormatter.format((long)item["dateUpdateRead"]);
@@ -423,6 +427,8 @@ namespace Pepeza.Server.Requests
                         {
                             await TNotificationHelper.add(notification);
                         }
+                        //TODO:: Add to notifications or action center
+
                     }
                 }
                 #endregion
