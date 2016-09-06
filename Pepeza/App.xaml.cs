@@ -5,6 +5,7 @@ using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views;
+using Pepeza.Views.Analytics;
 using Shared.Push;
 using System;
 using System.Collections.Generic;

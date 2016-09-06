@@ -26,49 +26,17 @@ namespace Pepeza.Db.DbHelpers.Board
             if (connection != null)
             {
                  boards= await connection.Table<TBoard>().ToListAsync();
-                 if (boards != null)
-                 {
-                     foreach (TBoard board in boards)
-                     {
-                         Db.Models.Orgs.TOrgInfo orgInfo = await connection.GetAsync<Db.Models.Orgs.TOrgInfo>(board.orgID);
-                         if (orgInfo.name.Equals("My Boards"))
-                         {
-                             board.organisation = "#my boards";
-                         }
-                         else
-                         {
-                             board.organisation = orgInfo.name;
-                         }
-                         
-                     }
-                 }
             }
 
             return boards;
         }
-        public async static Task<List<TBoard>> fetchAllBoards(int orgId)
+        public async static Task<List<TBoard>> fetchAllOrgBoards(int orgId)
         {
             List<TBoard> boards = null;
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
                 boards = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE orgID=?",orgId);
-                if (boards != null)
-                {
-                    foreach (TBoard board in boards)
-                    {
-                        Db.Models.Orgs.TOrgInfo orgInfo = await connection.GetAsync<Db.Models.Orgs.TOrgInfo>(board.orgID);
-                        if (orgInfo.name.Equals("My Boards"))
-                        {
-                            board.organisation = "#my boards";
-                        }
-                        else
-                        {
-                            board.organisation = orgInfo.name;
-                        }
-
-                    }
-                }
             }
 
             return boards;
@@ -95,17 +63,27 @@ namespace Pepeza.Db.DbHelpers.Board
                
             }
 
-        public async static Task<List<TBoard>> getFollowing(int following=1)
+        public async static Task<List<TBoard>> getFollowing()
         {
             try
             {
-                List<TBoard> result = null;
+                List<TFollowing> result = new List<TFollowing>();
+                List<TBoard> followingBoards = new List<TBoard>();
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    result = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE amFollowing = ?", 1);
+                    result = await connection.Table<TFollowing>().ToListAsync();
+                    if(result.Count > 0)
+                    {
+                        foreach (var item in result)
+                        {
+                            TBoard board = await BoardHelper.getBoard(item.boardId);
+                            if (board != null) followingBoards.Add(board);
+                            //TODO:: report error
+                        }
+                    }
                 }
-                return result;
+                return followingBoards;
 
             }
             catch

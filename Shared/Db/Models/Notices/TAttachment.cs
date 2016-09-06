@@ -9,7 +9,6 @@ namespace Shared.Models.NoticeModels
 {
     public class TAttachment
     {
-
         public int noticeId { get; set; }
         [PrimaryKey]
         public int id { get; set; }

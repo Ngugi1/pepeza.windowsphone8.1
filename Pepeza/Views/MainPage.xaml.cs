@@ -1,5 +1,7 @@
 ﻿using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
@@ -10,6 +12,7 @@ using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
 using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
+using Shared.Push;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +20,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
@@ -41,7 +45,6 @@ namespace Pepeza
             this.NavigationCacheMode = NavigationCacheMode.Required;
             current = this;
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -53,6 +56,9 @@ namespace Pepeza
             this.Frame.BackStack.Clear();
             //Load data 
             isSelected = false;
+            //Load notices 
+            loadNotices();
+            //Load boards
             await loadBoards();
             //Orgs alpha groups
             await loadOrgs();
@@ -61,6 +67,19 @@ namespace Pepeza
             isSelected = true;
             this.Frame.BackStack.Clear();
             
+        }
+        private async void loadNotices()
+        {
+            try
+            {
+                ListContainer container = new ListContainer();
+                container.noticesList =  new ObservableCollection<Db.Models.Notices.TNotice>(await NoticeHelper.getAll());
+                ListViewNotices.ItemsSource = container.noticesList;
+            }
+            catch 
+            {
+
+            }
         }
         private async Task<bool> loadOrgs()
         {
@@ -270,6 +289,39 @@ namespace Pepeza
         private void AppBtnSettings_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SettingsPage));
+        }
+
+        private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TNotice notice = (sender as ListView).SelectedItem as TNotice;
+            if ((sender as ListView).SelectedItem != null)
+            {
+                this.Frame.Navigate(typeof(NoticeDetails), notice);
+            }
+        }
+    }
+    public class IntToAttachment : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((bool)value == true)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((Visibility)value == Visibility.Visible)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

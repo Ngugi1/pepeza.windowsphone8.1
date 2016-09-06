@@ -202,7 +202,6 @@ namespace Pepeza.Views.Boards
                 following.boardId = (int)objResults["boardId"];
                 following.accepted = (int)objResults["accepted"];
                 if (objResults["dateAccepted"].Type != JTokenType.Null) DateTimeFormatter.format((double)objResults["dateAccepted"]);
-                boardParam.amFollowing = 1;
                 if (await FollowingHelper.get(following.id) != null)
                 {
                     await FollowingHelper.update(following);

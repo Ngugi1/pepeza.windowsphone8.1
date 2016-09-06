@@ -30,7 +30,7 @@ namespace Pepeza.Db.Models.Board
         }
         [Ignore]
         public int ownerId { get; set; }
-        public int amFollowing { get; set; } = 0;
+        
         [Ignore]
         public string organisation { get; set; }
         public DateTime dateCreated { get; set; }

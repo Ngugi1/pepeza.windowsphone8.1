@@ -9,6 +9,6 @@ namespace Pepeza.Server.Utility
     public class NoticeAddresses
     {
         public static string TEXT_NOTICE { get { return "notices/new"; } }
-        public static string FILE_NOTICE { get; set; } = "notices/filenotice";
+        public static string FILE_NOTICE { get { return "notices/filenotice"; } }
     }
 }

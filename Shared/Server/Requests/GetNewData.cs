@@ -281,7 +281,8 @@ namespace Pepeza.Server.Requests
                     }
                 }
                 #endregion
-                #region  notice_items
+
+                #region notice_items
                 foreach (var item in notice_items)
                 {
                     if (notice_items.Count > 0)
@@ -384,7 +385,7 @@ namespace Pepeza.Server.Requests
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
 
                         };
-                        if (item["dateUpdate"].Type != JTokenType.Null) file.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
+                        if (item["dateUpdated"].Type != JTokenType.Null) file.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (await FileHelper.get(file.id) != null)
                         {
                             await FileHelper.update(file);

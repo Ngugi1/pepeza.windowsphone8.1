@@ -85,7 +85,7 @@
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
     </SDKReference>
-    <SDKReference Include="SQLite.WP81, Version=3.13.0">
+    <SDKReference Include="SQLite.WP81, Version=3.14.1">
       <Name>SQLite for Windows Phone 8.1</Name>
     </SDKReference>
   </ItemGroup>
@@ -101,6 +101,7 @@
     <Compile Include="Db\Models\Notification\TNotification.cs" />
     <Compile Include="Db\Models\Orgs\TCollaborator.cs" />
     <Compile Include="Models\NoticesModels\NoticeCollection.cs" />
+    <Compile Include="Push\ListContainer.cs" />
     <Compile Include="Server\OAuth\AuthConstants.cs" />
     <Compile Include="Server\OAuth\Services\FacebookService.cs" />
     <Compile Include="Server\OAuth\Services\GoogleService.cs" />

@@ -7,9 +7,9 @@ namespace Pepeza.Utitlity
 {
     public class Constants
     {
-        public static string NO_RESULTS { get; set; } = "No results matched your query";
-        public static string PUBLIC_BOARD { get; set; } = "public";
-        public static string REQUEST_BOARD { get; set; } = "request";
+        public static string NO_RESULTS { get{return "No results matched your query";}}
+        public static string PUBLIC_BOARD { get{ return "public";} } 
+        public static string REQUEST_BOARD { get { return "request";}}
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
         public static int PUSH_ID { get { return 2; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }
@@ -30,9 +30,9 @@ namespace Pepeza.Utitlity
         public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
         public static string LAST_UPDATED { get { return "LAST_UPDATED"; } }
         public static string DATA_PUSHED { get; set; }
-        public static string ADMIN { get; } = "admin";
-        public static string EDITOR { get; } = "editor";
-        public  static string OWNER { get; } = "owner";
+        public static string ADMIN { get{ return  "admin";}}
+        public static string EDITOR { get{ return "editor";} }
+        public static string OWNER { get { return "owner"; } }
 
     }
 }

@@ -13,13 +13,13 @@ namespace Shared.Utitlity
 {
     public class FilePickerHelper
     {
-        public static IEnumerable<string> DOCUMENTS { get; set; } =
-            new List<string>() {".doc",".dot",".docx",".dotx",".pdf",".potx",".ppsx",
-                ".ppt",".pot",".pps",".ppa",".txt",".xls",".xlt",".xla", ".xlsx"};
-        public static IEnumerable<string> PHOTOS { get; set; } = new List<string>() {".png",".jpeg",".gif" };
-        public static IEnumerable<string> AUDIO { get; set; } = new List<string>() { ".aac", ".mp4", ".mpeg", ".ogg", ".wav", ".webm"};
-        public static IEnumerable<string> VIDEO { get; set; } = new List<string>() { ".m4a",".m4p",".m4a",".m4r",".m4v",".mp4",".ogg",".ogv",".ogx",".ogm",".spx",".opus",".webm",".divx"};
-        //While picking Image we need to redirect to a new page for cropping
+        //public static IEnumerable<string> DOCUMENTS { get; set; } =
+        //    new List<string>() {".doc",".dot",".docx",".dotx",".pdf",".potx",".ppsx",
+        //        ".ppt",".pot",".pps",".ppa",".txt",".xls",".xlt",".xla", ".xlsx"};
+        //public static IEnumerable<string> PHOTOS { get; set; } = new List<string>() {".png",".jpeg",".gif" };
+        //public static IEnumerable<string> AUDIO { get; set; } = new List<string>() { ".aac", ".mp4", ".mpeg", ".ogg", ".wav", ".webm"};
+        //public static IEnumerable<string> VIDEO { get; set; } = new List<string>() { ".m4a",".m4p",".m4a",".m4r",".m4v",".mp4",".ogg",".ogv",".ogx",".ogm",".spx",".opus",".webm",".divx"};
+        ////While picking Image we need to redirect to a new page for cropping
         private static readonly int HEIGHT = 250, WIDTH = 250;
         /// <summary>
         /// Method picks a desired file from the phone storage
@@ -65,7 +65,7 @@ namespace Shared.Utitlity
                 if (bitmap.PixelHeight < HEIGHT || bitmap.PixelWidth < WIDTH)
                 {
                     await new MessageDialog("Image is too small , pick another image").ShowAsync();
-                    pickFile(PHOTOS, PickerLocationId.PicturesLibrary);
+                   // pickFile(PHOTOS, PickerLocationId.PicturesLibrary);
                     return false;
                 }
                 var properties = await file.GetBasicPropertiesAsync(); 

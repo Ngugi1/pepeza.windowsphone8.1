@@ -16,7 +16,7 @@ namespace Shared.Server.OAuth.Services
 {
     public class GoogleService
     {
-        public static string Provider { get; set; } = "google";
+        public static string Provider { get { return "google"; } }
         public static void Login()
         {
             var googleUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(AuthConstants.GoogleAppId) + "&redirect_uri=" + Uri.EscapeDataString("urn:ietf:wg:oauth:2.0:oob") + "&response_type=code&scope=" + Uri.EscapeDataString("profile https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me email"));

@@ -11,6 +11,8 @@ namespace Shared.Db.Models.Notices
     {
         [PrimaryKey]
         public int id { get; set; }
+        [Ignore]
+        public string fileTypeAndSize { get; set; }
         public long size { get; set; }
         public string link { get; set; }
         public string fileName { get; set; }

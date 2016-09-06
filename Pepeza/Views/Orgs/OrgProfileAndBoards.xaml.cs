@@ -158,7 +158,7 @@ namespace Pepeza.Views.Orgs
         }
         private async Task loadBoardsLocally()
         {    
-            boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllBoards(OrgID));
+            boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllOrgBoards(OrgID));
             ListViewOrgBoards.ItemsSource = boards;
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)

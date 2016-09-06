@@ -159,7 +159,7 @@ namespace Pepeza.Views.Profile
 
         private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FilePickerHelper.pickFile(FilePickerHelper.PHOTOS , Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+            //FilePickerHelper.pickFile(FilePickerHelper.PHOTOS , Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
              view.Activated += view_Activated;
         }
 

@@ -81,7 +81,7 @@ namespace Pepeza.Views.Orgs
                 App.displayMessageDialog(Constants.UNKNOWNERROR);
             }
         }
-        private async void processResults(Dictionary<string, string> toProcess)
+        private  void processResults(Dictionary<string, string> toProcess)
         {
             if (toProcess != null && toProcess.ContainsKey(Constants.SUCCESS))
             {
@@ -90,12 +90,10 @@ namespace Pepeza.Views.Orgs
                 foreach (var collaborator in collaborators)
                 {
                     Collaborator colabo = new Collaborator();
-                    colabo.id = (int)collaborator["org_collaborator"]["id"];
-                    colabo.role = (string)collaborator["org_collaborator"]["role"];
-                    colabo.active = (bool)collaborator["org_collaborator"]["active"];
-                    colabo.dateCreated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateCreated"]);
-                    colabo.dateUpdated = DateTimeFormatter.format((long)collaborator["org_collaborator"]["dateUpdated"]);
-                    colabo.orgId = (int)collaborator["orgId"];
+                    colabo.id = (int)collaborator["id"];
+                    colabo.role = (string)collaborator["role"];
+                    colabo.active = (int)collaborator["active"] == 1? true : false;
+                    colabo.orgId = (int)collaborator["organizationId"];
                     colabo.userId = (int)collaborator["userId"];
                     colabo.onDeviceRole = role;
                     colabo.username = (string)collaborator["username"];
@@ -104,26 +102,6 @@ namespace Pepeza.Views.Orgs
                     colabo.Icon = colabo.active == true ? colabo.Icon = new SymbolIcon(Symbol.BlockContact) : colabo.Icon = new SymbolIcon(Symbol.AddFriend);
 
                     OCCollaborators.Add(colabo);
-
-                    //For local database 
-                    var toSave = new TCollaborator()
-                    {
-                        id = colabo.id,
-                        active = (int)collaborator["org_collaborator"]["active"],
-                        orgId = colabo.orgId,
-                        role = colabo.role,
-                        userId = colabo.userId,
-                        dateCreated = colabo.dateCreated,
-                        dateUpdated = colabo.dateUpdated
-                    };
-                    if (await CollaboratorHelper.get(colabo.id) != null)
-                    {
-                        await CollaboratorHelper.update(toSave);
-                    }
-                    else
-                    {
-                        await CollaboratorHelper.add(toSave);
-                    }
                 }
                 ListViewCollaborators.ItemsSource = OCCollaborators;
             }
@@ -201,8 +179,6 @@ namespace Pepeza.Views.Orgs
             }
         }
 
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
         private string _ActivateDeactivate;
 
         public string ActivateDeactivate
@@ -225,7 +201,10 @@ namespace Pepeza.Views.Orgs
                 _Icon = value; onPropertyChanged("Icon");
             }
         }
-        public string onDeviceRole { get; set; } 
+        public string onDeviceRole { get; set; }
+
+        public string linkSmall { get; set; }
+        public string linkNormal { get; set; }
     }
     public class RoleToVisibility : IValueConverter
     {

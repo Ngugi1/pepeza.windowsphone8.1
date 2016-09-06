@@ -34,7 +34,7 @@ namespace Pepeza.Views.Analytics
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-          
+            //this.chart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 }; 
         }
     }
 }

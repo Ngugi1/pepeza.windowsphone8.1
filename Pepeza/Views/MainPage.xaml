@@ -8,13 +8,14 @@
       xmlns:toaster="using:Toastinet"
       Background="{ThemeResource PhoneBackgroundBrush}"
       RequestedTheme="Light"
+      xmlns:converter="using:Pepeza"
       mc:Ignorable="d">
     <Page.Resources>
-
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converter:IntToAttachment x:Key="Converter"/>
         </ResourceDictionary>
     </Page.Resources>
     <Grid Name="GridParent" Margin="0,12,0,0">
@@ -26,129 +27,48 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                 </PivotItem.Header>
                 <ListView Margin="19.5,0,8,0"
-                          Name="ListViewNotices"
-                          ItemTemplate="{StaticResource ListViewNoticesDataTemplate}">
-                    <ListViewItem>
-                        
-                        <Grid Margin="0,4" Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                          SelectionChanged="ListViewNotices_SelectionChanged"
+                          Name="ListViewNotices">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4" Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
 
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Exam results are out " 
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding title , Mode=TwoWay}" 
                                         Foreground="Black"
                                         Margin="0"
                                         VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockPivotHeader}"/>
-                            <TextBlock  Foreground="{ThemeResource PhoneAccentBrush}" 
+                                        Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                <TextBlock  
                                         Grid.Row="1"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Text="This is the preview"/>
-                            <TextBlock Grid.Row="2"
+                                        Text="{Binding board , Mode=TwoWay}"/>
+                                <TextBlock Grid.Row="2"
                        Margin="0"
                        Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
                        Foreground="{StaticResource txtBoxBorderBrush}" 
                                        FontSize="{StaticResource TextStyleMediumFontSize}"
-                           Text="This isisajdsd s fdbvrvrbv rbv"/>
-                            <TextBlock Text="12/06/2013"
+                                       Text="{Binding content , Mode=TwoWay}"/>
+                                <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Bottom"
                        Grid.Column="1" />
-
-                            <SymbolIcon Symbol="Attach" 
+                                <SymbolIcon Symbol="Attach" 
                                         HorizontalAlignment="Right"
                                         Grid.RowSpan="2"
+                                        Visibility="{Binding hasAttachment , Converter={StaticResource Converter}}"
                                         Grid.Row="1" Grid.Column="1"/>
-                        </Grid>
-                   
-                    </ListViewItem>
-                    <ListViewItem>
-
-                        <Grid Margin="0,4" Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Exam results are out " 
-                                        Foreground="Black"
-                                        Margin="0"
-                                        VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockPivotHeader}"/>
-                            <TextBlock  Foreground="{ThemeResource PhoneAccentBrush}" 
-                                        Grid.Row="1"
-                                        FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Text="This is the preview"/>
-                            <TextBlock Grid.Row="2"
-                       Margin="0"
-                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{StaticResource txtBoxBorderBrush}" 
-                                       FontSize="{StaticResource TextStyleMediumFontSize}"
-                           Text="This isisajdsd s fdbvrvrbv rbv"/>
-                            <TextBlock Text="12/06/2013"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Bottom"
-                       Grid.Column="1" />
-
-                            <SymbolIcon Symbol="Attach" 
-                                        HorizontalAlignment="Right"
-                                        Grid.RowSpan="2"
-                                        Grid.Row="1" Grid.Column="1"/>
-                        </Grid>
-
-                    </ListViewItem>
-                    <ListViewItem>
-
-                        <Grid Margin="0,4" Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Exam results are out " 
-                                        Foreground="Black"
-                                        Margin="0"
-                                        VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockPivotHeader}"/>
-                            <TextBlock  Foreground="{ThemeResource PhoneAccentBrush}" 
-                                        Grid.Row="1"
-                                        FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Text="This is the preview"/>
-                            <TextBlock Grid.Row="2"
-                       Margin="0"
-                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{StaticResource txtBoxBorderBrush}" 
-                                       FontSize="{StaticResource TextStyleMediumFontSize}"
-                           Text="This isisajdsd s fdbvrvrbv rbv"/>
-                            <TextBlock Text="12/06/2013"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Bottom"
-                       Grid.Column="1" />
-
-                            <SymbolIcon Symbol="Attach" 
-                                        HorizontalAlignment="Right"
-                                        Grid.RowSpan="2"
-                                        Grid.Row="1" Grid.Column="1"/>
-                        </Grid>
-
-                    </ListViewItem>
-
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -161,14 +81,13 @@
                               SelectionChanged="ListViewBoards_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="{Binding ActualWidth,
-                              ElementName=GridParent}"
+                                <Grid 
               Height="70"
               Holding="Grid_Holding"
               Style="{StaticResource GridListViewItemTemplate}">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
