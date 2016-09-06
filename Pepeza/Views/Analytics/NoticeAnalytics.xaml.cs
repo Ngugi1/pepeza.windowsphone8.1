@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Pepeza.Views.Analytics
@@ -34,7 +33,26 @@ namespace Pepeza.Views.Analytics
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //this.chart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 }; 
+            //this.chart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 };
+            LoadChartContents();
+        }
+        public class FinancialStuff
+        {
+            public string Name { get; set; }
+            public int Amount { get; set; }
+        }
+
+        private void LoadChartContents()
+        {
+            Random rand = new Random();
+            List<FinancialStuff> financialStuffList = new List<FinancialStuff>();
+            financialStuffList.Add(new FinancialStuff() { Name = "READ", Amount = rand.Next(0, 200) });
+            financialStuffList.Add(new FinancialStuff() { Name = "RECEIVED", Amount = rand.Next(0, 200) });
+            //(PieChart.Series[0] as PieSeries).ItemsSource = financialStuffList;
+            //(ColumnChart.Series[0] as ColumnSeries).ItemsSource = financialStuffList;
+            //(LineChart.Series[0] as LineSeries).ItemsSource = financialStuffList;
+            //(BarchartPeopleReadNotices.Series[0] as BarSeries).ItemsSource = financialStuffList;
+            //(BubbleChart.Series[0] as BubbleSeries).ItemsSource = financialStuffList;
         }
     }
 }

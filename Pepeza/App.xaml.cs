@@ -74,7 +74,7 @@ namespace Pepeza
 
             if (rootFrame.Content == null)
             {
-                rootFrame.Navigate(typeof(LoginPage));
+                rootFrame.Navigate(typeof(NoticeAnalytics));
             }
 
             var continuationEventArgs = e as IContinuationActivatedEventArgs;
@@ -207,7 +207,7 @@ namespace Pepeza
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(Views.LoginPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(NoticeAnalytics), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -217,7 +217,7 @@ namespace Pepeza
             Frame frame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
 
-            frame.Navigate(typeof(LoginPage), e.Arguments);
+            frame.Navigate(typeof(NoticeAnalytics), e.Arguments);
 
             //Register for push Notifications background Tasks
             await BackgroundAgents.registerPush();
