@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="Pepeza.Views.Analytics.NoticeAnalytics"
+    xmlns:charts="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
     mc:Ignorable="d"
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -48,11 +49,12 @@
                     <ComboBoxItem Content="Last 7 Days" IsSelected="True"/>
                     <ComboBoxItem Content="Last 30 Days"/>
                 </ComboBox>
-                <ScrollViewer>
-                    <Grid Height="50">
-                       
-                    </Grid>
-                </ScrollViewer>
+                <charts:Chart>
+                <charts:BarSeries Title="Hello" IndependentValueBinding="{Binding Name}"
+                                  DependentValueBinding="{Binding Amount}">
+                    
+                </charts:BarSeries>
+                </charts:Chart>
             </StackPanel>
         </Grid>
     </ScrollViewer>

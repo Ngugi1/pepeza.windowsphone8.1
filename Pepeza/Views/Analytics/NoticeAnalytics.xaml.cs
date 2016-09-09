@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
 namespace Pepeza.Views.Analytics
@@ -51,7 +52,7 @@ namespace Pepeza.Views.Analytics
             //(PieChart.Series[0] as PieSeries).ItemsSource = financialStuffList;
             //(ColumnChart.Series[0] as ColumnSeries).ItemsSource = financialStuffList;
             //(LineChart.Series[0] as LineSeries).ItemsSource = financialStuffList;
-            //(BarchartPeopleReadNotices.Series[0] as BarSeries).ItemsSource = financialStuffList;
+            //this.BarchartPeopleReadNotices.ItemsSource = financialStuffList;
             //(BubbleChart.Series[0] as BubbleSeries).ItemsSource = financialStuffList;
         }
     }

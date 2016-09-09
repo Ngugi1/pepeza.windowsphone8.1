@@ -89,5 +89,38 @@ namespace Pepeza.Server.Requests
             return results;
 
         }
+        public async static Task<Dictionary<string, string>> getNoticeAnalytics(int period , int noticeId)
+        {
+            System.Net.Http.HttpClient client = getHttpClient(true);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            System.Net.Http.HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(string.Format(NoticeAddresses.NOTICE_ANALYTICS , noticeId , period));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // We got a 200 OK
+                        results.Add(Constants.SUCCESS , await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        // Error code 
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
+        
     }
 }

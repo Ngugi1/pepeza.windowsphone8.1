@@ -155,8 +155,6 @@ namespace Pepeza.Views.Notices
 
 
             #endregion
-
-
         }
 
         /// <summary>

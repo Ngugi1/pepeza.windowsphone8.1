@@ -345,5 +345,30 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+        public async static Task<Dictionary<string, string>> getOrgAnalytics(int orgId, int period)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                response = await client.GetAsync(string.Format(OrgsAddresses.ORG_ANALYTICS, orgId, period));
+                if (response.IsSuccessStatusCode)
+                {
+                    //200 OK
+                    results.Add(Constants.SUCCESS , await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    //Error
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 }

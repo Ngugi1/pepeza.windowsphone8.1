@@ -16,6 +16,6 @@ namespace Pepeza.Server.Utility
          public static string GET_ORG_BOARDS { get { return "organizations/{0}/boards"; } }
         public static string ADD_GET_COLLABORATORS { get {return "organizations/{0}/collaborators";}}
         public static string ACTIVATEDEACTIVATE_COLLABORATOR { get { return "organizations/{0}/collaborators/{1}/{2}"; } }
-
+        public static string ORG_ANALYTICS { get { return "analytics/organization/{0}?period={1}"; } }
     }
 }
