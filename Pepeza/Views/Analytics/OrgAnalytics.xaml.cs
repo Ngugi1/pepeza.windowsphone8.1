@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -27,6 +28,28 @@ namespace Pepeza.Views.Analytics
             this.InitializeComponent();
         }
 
+        public class Data
+        {
+            public string Label { get; set; }
+            public long Count { get; set; }
+            public string Percentage { get; set; }
+        }
+
+        public ObservableCollection<Data> CreateData()
+        {
+            ObservableCollection<Data> data = new ObservableCollection<Data>();
+            data.Add(new Data() { Label = "Received", Count = 300, Percentage = " + 20 %" });
+            data.Add(new Data() { Label = "Read", Count = 120, Percentage = "+ 1 %" });
+            return data;
+        }
+
+        public class FinancialStuff
+        {
+            public int Read { get; set; }
+            public string Hour { get; set; }
+        }
+
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -34,6 +57,18 @@ namespace Pepeza.Views.Analytics
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            RadReadReceived.DataContext = CreateData();
+            ObservableCollection<FinancialStuff> collection = new ObservableCollection<FinancialStuff>();
+            //this.chart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 };
+            var items = Enumerable.Range(00, 24).Select(i => i.ToString("D2"));
+            Random rand = new Random();
+            foreach (var item in items)
+            {
+                collection.Add(new FinancialStuff() { Hour = item, Read = rand.Next(0, 200) });
+            }
+            ReadNoticesChart.DataContext = collection;
+            ReadPercentage.Text = "+ 20 %";
+            ReceivedPercentage.Text = "+ 1 %";
         }
     }
 }

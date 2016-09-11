@@ -6,75 +6,385 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:Charts="using:Telerik.UI.Xaml.Controls.Chart"
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <ScrollViewer>
+        <Grid>
 
-    <Grid>
-        <ListView>
-            <ListViewItem 
-                Margin="12,0"
-                Name="ListViewItem">
-                <Grid Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+            <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <!--Highlights -->
+            <TextBlock Text="Board Analytics" Grid.ColumnSpan="3"
+                       Style="{StaticResource txtBlockPageHeader}"
+                       FontSize="28"
+                       Margin="12,0,8,8"
+                       />
+            <ComboBox 
+                Grid.Row="1"
+                BorderThickness="0,0,0,2"
+                Foreground="{ThemeResource PhoneAccentBrush}"
+                BorderBrush="{ThemeResource PhoneAccentBrush}"
+                Margin="12,0,4,0">
+                <ComboBoxItem Content="Today"/>
+                <ComboBoxItem Content="Yesterday"/>
+                <ComboBoxItem Content="Last 7 Days" IsSelected="True"/>
+                <ComboBoxItem Content="Last 30 Days"/>
+            </ComboBox>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Bottom">
+                    <TextBlock Text="followers"
+                               FontWeight="ExtraLight"
+                               Style="{StaticResource txtBlockPageHeader}"
+                               FontSize="{StaticResource TextStyleLargeFontSize}"
+                               HorizontalAlignment="Center"
+                               Margin="0"/>
+                    <TextBlock Text="20K" 
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               HorizontalAlignment="Center"
+                               FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                               />
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1"
+                            VerticalAlignment="Bottom"
+                            >
+                    <TextBlock Text="New Followers"
+                               Margin="0"
+                               Foreground="Black"
+                               FontWeight="ExtraLight"
+                               Style="{StaticResource txtBlockPageHeader}"
+                               FontSize="{StaticResource TextStyleLargeFontSize}"
+                               HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="30" FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               />
+                        <TextBlock Text="+20 %" 
+                                   Foreground="Green"
+                                   FontSize="16"
+                                   VerticalAlignment="Bottom"
+                                   Margin="4"/>
+                    </StackPanel>
 
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Exam results are out " 
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2"
+                            VerticalAlignment="Bottom"
+                            >
+                    <TextBlock Text="New Notices"
+                               Margin="0"
+                               Foreground="Black"
+                               FontWeight="ExtraLight"
+                               Style="{StaticResource txtBlockPageHeader}"
+                               FontSize="{StaticResource TextStyleLargeFontSize}"
+                               HorizontalAlignment="Center"/>
+                    <StackPanel 
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                    <TextBlock Text="30" FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                               HorizontalAlignment="Center"
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               />
+                    <TextBlock Text="+20 %" 
+                                   Foreground="Green"
+                                   FontSize="16"
+                                   VerticalAlignment="Bottom"
+                                   Margin="4"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="3">
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notices of this board"
+                       FontWeight="SemiBold"
+                       Margin="12,8"
                        Foreground="Black"
-                       Margin="0"
-                       VerticalAlignment="Bottom"
-                       Style="{StaticResource GroupHeaderTextBlockStyle}"/>
-                    <TextBlock Grid.Row="1"
-                       Margin="0"
-                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{StaticResource txtBoxBorderBrush}" 
-                           Text="This isisajdsd s fdbvrvrbv rbv"/>
-                    <TextBlock Text="12/06/2013"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Bottom"
-                       Grid.Column="1" />
+                       />
+                <RichTextBlock Grid.Row="0"
+                               Name="AltLabels"
+                               FontSize="16"
+                               DataContext="{Binding}"
+                               Margin="12,8"
+                               HorizontalAlignment="Left">
+                    <Paragraph>
+                        <Bold>Read</Bold>
+                        <Run  x:Name="ReadPercentage" Text="{Binding Percentage}" 
+                              Foreground="{ThemeResource PhoneAccentBrush}"/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Bold>Received</Bold>
+                        <Run x:Name="ReceivedPercentage" Text="{Binding Percentage}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                    </Paragraph>
+                </RichTextBlock>
+                <Charts:RadCartesianChart Name="RadReadReceived"
+                                          Margin="12"
+                                           Grid.Row="3"
+                                          Background="Transparent"
+                                          ClipToBounds="False"
+                                          >
+                <Charts:RadCartesianChart.VerticalAxis>
+                    <Charts:CategoricalAxis 
+                            FontWeight="Bold"
+                            Title="Parameters" />
+                </Charts:RadCartesianChart.VerticalAxis>
+                <Charts:RadCartesianChart.HorizontalAxis>
+                    <Charts:LinearAxis  
+                            FontWeight="Bold"
+                            Title="Number of people"/>
+                </Charts:RadCartesianChart.HorizontalAxis>
+                <Charts:BarSeries
+                        ShowLabels="True"
+                        Foreground="{ThemeResource PhoneAccentBrush}"
+                        ItemsSource="{Binding}">
+                    <Charts:BarSeries.ValueBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Count"/>
+                    </Charts:BarSeries.ValueBinding>
+                    <Charts:BarSeries.CategoryBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Label"/>
+                    </Charts:BarSeries.CategoryBinding>
 
-                    <SymbolIcon Symbol="Attach" Grid.Row="1" Grid.Column="1"/>
-                </Grid>
-            </ListViewItem>
-            <ListViewItem Margin="12,4">
-                <Grid Margin="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition Width="1*"/>
+                </Charts:BarSeries>
 
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Exam results are out " 
-                       Foreground="Black"
-                       Margin="0"
-                       VerticalAlignment="Bottom"
-                       Style="{StaticResource GroupHeaderTextBlockStyle}"/>
-                    <TextBlock Grid.Row="1"
-                       Margin="0"
-                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{StaticResource txtBoxBorderBrush}" 
-                           Text="This isisajdsd s fdbvrvrbv rbv"/>
-                    <TextBlock Text="12/06/2013"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Bottom"
-                       Grid.Column="1" />
+            </Charts:RadCartesianChart>
+            </StackPanel>
+            <TextBlock Text="Hours when people read your notices" Grid.Row="4" 
+                        FontWeight="SemiBold"
+                       Margin="12,8"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       />
+            <!--The cartesian grid -->
+            <Charts:RadCartesianChart 
+            Margin="12"
+            Grid.Row="5"
+            MinHeight="300"
+            IsTextScaleFactorEnabled="True"
+            Padding="8"
+            Name="ReadNoticesChart" >
+                <Charts:RadCartesianChart.Behaviors>
+                    <Charts:ChartPanAndZoomBehavior 
+                    />
+                </Charts:RadCartesianChart.Behaviors>
+                <Charts:RadCartesianChart.HorizontalAxis>
+                    <Charts:CategoricalAxis
+                    AutoGroup="True"
+                    LabelFitMode="MultiLine"
+                    Title="Hours of the day"
+                    ShowLabels="True"
+                     FontWeight="Bold"
+                    >
+                    </Charts:CategoricalAxis>
+                </Charts:RadCartesianChart.HorizontalAxis>
+                <Charts:RadCartesianChart.VerticalAxis>
+                    <Charts:LinearAxis Title="Number of people"
+                                    FontWeight="Bold"
+                                  />
+                </Charts:RadCartesianChart.VerticalAxis>
+                <Charts:LineSeries 
+                AllowSelect="True"
+                LegendTitle="Hours when people read these notices "
+                ShowLabels="True"
+                DisplayName="Hours When People read your notices"
+                CombineMode="Stack"
+                IsTextScaleFactorEnabled="True"
+                StrokeLineJoin="Round"
+                FontSize="16" 
+                Stroke="{ThemeResource PhoneAccentBrush}"
+                ItemsSource="{Binding}"
+                IsVisibleInLegend="True"
+                IsHitTestVisible="True"
+                                >
+                    <Charts:LineSeries.CategoryBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Hour"/>
+                    </Charts:LineSeries.CategoryBinding>
+                    <Charts:LineSeries.ValueBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Read"/>
+                    </Charts:LineSeries.ValueBinding>
+                </Charts:LineSeries>
+            </Charts:RadCartesianChart>
+            <Grid Grid.Row="6">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource txtBlockPageHeader}" 
+                   FontWeight="ExtraLight"
+                   FontFamily="Segoe WP SemiLight"
+                   Text="Top Notices" FontSize="28"/>
+                    <ListView>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
 
-                    <SymbolIcon Symbol="Attach" Grid.Row="1" Grid.Column="1"/>
-                </Grid>
-            </ListViewItem>
-        </ListView>
-     
-        
-    </Grid>
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
+
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
+
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
+
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
+
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                        <ListViewItem>
+                            <StackPanel Margin="12,4">
+                                <TextBlock Text="Exams results are out fo all the finalists"
+                               TextWrapping="NoWrap"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       FontWeight="ExtraLight"
+                       Margin="12,8,4,0"
+                       />
+                                <RichTextBlock
+                        Margin="12,0"
+                        Foreground="{StaticResource PhoneAccentBrush}"
+                        FontSize="{StaticResource TextStyleLargeFontSize}">
+                                    <Paragraph>
+                                        <Span>
+                                            <Underline>
+                                                <Run Text="0"/>
+                                            </Underline>
+                                        </Span>
+                                        Reads
+
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </ListViewItem>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+    </ScrollViewer>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Refresh" Label="Refresh"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

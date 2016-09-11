@@ -4,9 +4,10 @@
     xmlns:local="using:Pepeza.Views.Analytics"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Charts="using:Telerik.UI.Xaml.Controls.Chart"
     x:Class="Pepeza.Views.Analytics.NoticeAnalytics"
-    xmlns:charts="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
     mc:Ignorable="d"
+    
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -16,46 +17,164 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Refresh" Label="Refresh"/>
-        </CommandBar>
-    </Page.BottomAppBar>
-    <ScrollViewer>
-        <Grid>
-            <StackPanel>
-                <TextBlock Typography.Capitals="SmallCaps"
-                       Text="analytics"
-                       Foreground="{ThemeResource PhoneAccentBrush}"
-                       Style="{StaticResource BaseTextBlockStyle}"
-                       Margin="12,4"
-                           TextLineBounds="Tight"
-                       />
-                <TextBlock 
-                  Text="Exam results are out Exam results are out"
-                   TextWrapping="NoWrap"
-                    TextLineBounds="Tight"
-                    TextTrimming="CharacterEllipsis"
-                Margin="12,2"
-                FontWeight="ExtraLight"
-                   Grid.ColumnSpan="2"
-                   Style="{StaticResource MessageDialogTitleStyle}"/>
+    <ScrollViewer VerticalScrollMode="Enabled">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        <!--Title-->
+            
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Notice Analytics"
+                       Margin="12,0,8,8"
+                       Style="{StaticResource txtBlockPageHeader}" 
+                       FontSize="28"/>
+                
+        </StackPanel>
+            
+            <StackPanel Grid.Row="1">
                 <ComboBox BorderThickness="0,0,0,2"
-                      Margin="12"
-                      BorderBrush="{ThemeResource PhoneAccentBrush}"
-                     >
+                          Foreground="{ThemeResource PhoneAccentBrush}"
+                          BorderBrush="{ThemeResource PhoneAccentBrush}"
+                          Margin="12,0,4,0">
                     <ComboBoxItem Content="Today"/>
                     <ComboBoxItem Content="Yesterday"/>
                     <ComboBoxItem Content="Last 7 Days" IsSelected="True"/>
                     <ComboBoxItem Content="Last 30 Days"/>
                 </ComboBox>
-                <charts:Chart>
-                <charts:BarSeries Title="Hello" IndependentValueBinding="{Binding Name}"
-                                  DependentValueBinding="{Binding Amount}">
-                    
-                </charts:BarSeries>
-                </charts:Chart>
-            </StackPanel>
+                <TextBlock Text="Exam results are out"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap"
+                       FontWeight="Bold"
+                       Margin="12,8"
+                       />
+              
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notice"
+                       FontWeight="SemiBold"
+                       Margin="12,8"
+                       Foreground="Black"
+                       />
+            <!--Chart for read and received-->
+            
+        </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Charts:RadCartesianChart Name="RadReadReceived"
+                                          Margin="12"
+                                       Grid.Row="1"
+                                          Background="Transparent"
+                                          ClipToBounds="False"
+                                          >
+                    <Charts:RadCartesianChart.VerticalAxis>
+                        <Charts:CategoricalAxis 
+                            FontWeight="Bold"
+                            Title="Parameters" />
+                    </Charts:RadCartesianChart.VerticalAxis>
+                    <Charts:RadCartesianChart.HorizontalAxis>
+                        <Charts:LinearAxis  
+                            FontWeight="Bold"
+                            Title="Number of people"/>
+                    </Charts:RadCartesianChart.HorizontalAxis>
+                    <Charts:BarSeries
+                        ShowLabels="True"
+                        Foreground="{ThemeResource PhoneAccentBrush}"
+                        ItemsSource="{Binding}">
+                        <Charts:BarSeries.ValueBinding>
+                            <Charts:PropertyNameDataPointBinding PropertyName="Count"/>
+                        </Charts:BarSeries.ValueBinding>
+                        <Charts:BarSeries.CategoryBinding>
+                            <Charts:PropertyNameDataPointBinding PropertyName="Label"/>
+                        </Charts:BarSeries.CategoryBinding>  
+                       
+                    </Charts:BarSeries>
+                   
+                </Charts:RadCartesianChart>
+                <RichTextBlock Grid.Row="0"
+                               Name="AltLabels"
+                               FontSize="16"
+                               DataContext="{Binding}"
+                               Margin="12,8"
+                               HorizontalAlignment="Left">
+                    <Paragraph>
+                        <Bold>Read</Bold>
+                        <Run  x:Name="ReadPercentage" Text="{Binding Percentage}" 
+                              Foreground="{ThemeResource PhoneAccentBrush}"/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Bold>Received</Bold>
+                        <Run x:Name="ReceivedPercentage" Text="{Binding Percentage}" Foreground="{ThemeResource PhoneAccentBrush}" />
+                    </Paragraph>
+                </RichTextBlock>
+            </Grid>
+            <TextBlock Text="Hours when people read your notices" Grid.Row="3" 
+                        FontWeight="SemiBold"
+                       Margin="12,8"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       />
+            <!--The cartesian grid -->
+            <Charts:RadCartesianChart 
+            Margin="12"
+            Grid.Row="4"
+            MinHeight="300"
+            IsTextScaleFactorEnabled="True"
+            Padding="8"
+            Name="ReadNoticesChart" >
+                <Charts:RadCartesianChart.Behaviors>
+                    <Charts:ChartPanAndZoomBehavior 
+                    ZoomMode="Horizontal"
+                    PanMode="Both"
+                    />
+                </Charts:RadCartesianChart.Behaviors>
+                <Charts:RadCartesianChart.HorizontalAxis>
+                    <Charts:CategoricalAxis
+                    AutoGroup="True"
+                    LabelFitMode="MultiLine"
+                    Title="Hours of the day"
+                    ShowLabels="True"
+                     FontWeight="Bold"
+                    >
+                    </Charts:CategoricalAxis>
+                </Charts:RadCartesianChart.HorizontalAxis>
+                <Charts:RadCartesianChart.VerticalAxis>
+                    <Charts:LinearAxis Title="Number of people"
+                                    FontWeight="Bold"
+                                  />
+                </Charts:RadCartesianChart.VerticalAxis>
+                <Charts:LineSeries 
+                AllowSelect="True"
+                LegendTitle="Hours when people read these notices "
+                ShowLabels="True"
+                DisplayName="Hours When People read your notices"
+                CombineMode="Stack"
+                IsTextScaleFactorEnabled="True"
+                StrokeLineJoin="Round"
+                FontSize="16" 
+                Stroke="{ThemeResource PhoneAccentBrush}"
+                ItemsSource="{Binding}"
+                IsVisibleInLegend="True"
+                IsHitTestVisible="True"
+                                >
+                    <Charts:LineSeries.CategoryBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Hour"/>
+                    </Charts:LineSeries.CategoryBinding>
+                    <Charts:LineSeries.ValueBinding>
+                        <Charts:PropertyNameDataPointBinding PropertyName="Read"/>
+                    </Charts:LineSeries.ValueBinding>
+                </Charts:LineSeries>
+            </Charts:RadCartesianChart>
         </Grid>
     </ScrollViewer>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Refresh" Label="Refresh"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
