@@ -6,6 +6,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
+      xmlns:Toast="using:Toastinet"
       mc:Ignorable="d">
 
     <Page.Resources>
@@ -34,14 +35,34 @@
         <ScrollViewer Grid.Row="1" Height="Auto">
             <StackPanel x:Name="relativePanel" Grid.Row="1">
                 <StackPanel Name="relativePanelProfPic" Height="Auto">
-                    <Rectangle Name="rectangleProfilePic"
-                               Style="{StaticResource RectProfPic}"
-                               Tapped="rectangleProfilePic_Tapped"
-                               >
-                        <Rectangle.Fill>
-                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                        </Rectangle.Fill>
-                    </Rectangle>
+                    <Grid>
+                    <Image Height="250" Width="250" Tapped="rectangleProfilePic_Tapped" >
+                        <Image.Source>
+                            <BitmapImage
+                                x:Name="profPic"
+                                ImageOpened="BitmapImage_ImageOpened"
+                                ImageFailed="BitmapImage_ImageFailed"
+                                UriSource="{Binding profilePicPath , Mode=TwoWay}" 
+                                CreateOptions="None"/>
+                        </Image.Source>
+                    </Image>
+                        <Image Width="250" Height="250"
+                               Name="ImageMask"
+                               Source="/Assets/Images/placeholder_avatar.jpg"/>
+                        <Toast:Toastinet 
+                            AnimationType="LeftToLeft" 
+                            HorizontalAlignment="Center"
+                            Width="250"
+                            TextWrapping="WrapWholeWords"
+                            Name="ToastStatus"
+                            VerticalAlignment="Bottom"
+                         Style="{StaticResource ToastStyle}"
+                         />
+                    </Grid>
+
+                    <ProgressBar IsIndeterminate="True" 
+                                 Width="250" 
+                                 Name="PBProfilePicUpdating"/>
                     <TextBlock Style="{StaticResource txtBlockStyleProfileOwner}"
                                Text="{Binding fullname}"
                                Name="txtBlockFullName"
@@ -127,6 +148,7 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
+       
 
     </Grid>
     <Page.BottomAppBar>

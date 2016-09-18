@@ -4,16 +4,35 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Pepeza.Views.Profile"
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-      
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"   
       mc:Ignorable="d"
       Name="Page"
       RequestedTheme="Light"
       >
-    
+
+    <Grid x:Name="LayoutRoot" 
+          Background="Transparent">
+      
+        <Image 
+              Width="400" 
+              Height="500"
+              Margin="0" 
+              Name="image1" 
+              Stretch="Uniform" 
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center" />
+        <Rectangle Name="rect"
+                   ManipulationDelta="rect_ManipulationDelta_1"
+                   ManipulationMode="All"
+                   />
+        <Image Name="Image2" VerticalAlignment="Bottom"
+              Stretch="None"
+               />
+    </Grid>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Accept"  Click="AppBarButton_Click" Label="upload"/>
+            <AppBarButton Icon="Cancel" Name="AppBtnCancel" Label="Cancel" Click="AppBtnCancel_click"/>
+            <AppBarButton Icon="Crop" Label="Crop"  Name="AppBtnCrop" Click="AppBtnCrop_Click"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

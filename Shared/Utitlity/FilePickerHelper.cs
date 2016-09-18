@@ -79,7 +79,6 @@ namespace Shared.Utitlity
             }
             return false;
         }
-       
         /// <summary>
         /// Convert Storage file to a byte array
         /// </summary>

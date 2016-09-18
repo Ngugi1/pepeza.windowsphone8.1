@@ -172,7 +172,7 @@ namespace Pepeza.Views.Notices
 
                     //Getting the file Item 
 
-                    TFile file = new TFile()
+                    TFile tfile = new TFile()
                     {
                         id = (int)jobject["file"]["id"],
                         attachmentId = (int)jobject["file"]["attachmentId"],
@@ -184,9 +184,9 @@ namespace Pepeza.Views.Notices
                     };
                     if (jobject["file"]["dateUpdated"] != null)
                     {
-                        file.dateUpdated = DateTimeFormatter.format((long)jobject["file"]["dateUpdated"]);
+                        tfile.dateUpdated = DateTimeFormatter.format((long)jobject["file"]["dateUpdated"]);
                     }
-                    await DBHelperBase.add(file);
+                    await DBHelperBase.add(tfile);
                     await DBHelperBase.add(attachment);
                     await DBHelperBase.add(fileNotice);
                 }
