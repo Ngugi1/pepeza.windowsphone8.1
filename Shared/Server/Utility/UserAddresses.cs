@@ -14,7 +14,7 @@ namespace Pepeza.Server.Utility
         public static string USER_EXISTS { get { return "users/username/exists"; } }
         public static string EMAIL_EXISTS { get { return "email/exists?{0}"; } }
         public static string LOGOUT { get { return "logout"; } }
-        public static string GET_USER { get { return "user"; } }
+        public static string GET_USER { get { return "user/{0}"; } }
         public static string UPDATE_USER { get { return "user/edit"; } }
         public static string DEACTIVATE_USER { get { return "user/deactivate"; } }
         public static string SEARCH_USER { get { return "users/search"; } }

@@ -36,7 +36,10 @@
             <StackPanel x:Name="relativePanel" Grid.Row="1">
                 <StackPanel Name="relativePanelProfPic" Height="Auto">
                     <Grid>
-                    <Image Height="250" Width="250" Tapped="rectangleProfilePic_Tapped" >
+                    <Image Height="250" 
+                           Name="rectProfilePic"
+                           Width="250" 
+                           Tapped="rectangleProfilePic_Tapped" >
                         <Image.Source>
                             <BitmapImage
                                 x:Name="profPic"
@@ -152,7 +155,7 @@
 
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar Name="CommandBaEdit">
             <AppBarButton Name="appBarBtnEditDetails"
                           Click="editProfileClicked"
                           Icon="Accept"

@@ -330,7 +330,7 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
-        public static async Task<Dictionary<string, string>> getUser()
+        public static async Task<Dictionary<string, string>> getUser(int userId)
         {
             //get API Token
             HttpClient client = getHttpClient(true);
@@ -338,10 +338,10 @@ namespace Pepeza.Server.Requests
             HttpResponseMessage response;
             if (checkInternetConnection())
             {
-                response = await client.GetAsync(UserAddresses.GET_USER);
+                response = await client.GetAsync(string.Format(UserAddresses.GET_USER , userId));
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string userDetails = JsonConvert.SerializeObject(await response.Content.ReadAsAsync<JObject>());
+                    string userDetails = JsonConvert.SerializeObject(await response.Content.ReadAsStringAsync());
                     responseContent.Add(Constants.SUCCESS, userDetails);
                 }
                 else

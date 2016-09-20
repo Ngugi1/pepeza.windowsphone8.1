@@ -54,7 +54,7 @@ namespace Pepeza.Views.Profile
             cts = new CancellationTokenSource();
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-        int avatarId;
+        int avatarId , userId;
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -66,105 +66,114 @@ namespace Pepeza.Views.Profile
             #region
             if (e.Parameter != null)
             {
-                WriteableBitmap profilePic = e.Parameter as WriteableBitmap;
-                if (profilePic != null)
+                if (e.Parameter.GetType() == typeof(WriteableBitmap))
                 {
-                    PBProfilePicUpdating.Visibility = Visibility.Visible;
-                    this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-                    this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-                   
-                    try
+                    WriteableBitmap profilePic = e.Parameter as WriteableBitmap;
+                    if (profilePic != null)
                     {
-                        
-                        //If successful , add it to isolated storage 
-                        var file = await AvatarUploader.WriteableBitmapToStorageFile(profilePic,
-                            Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg ,
-                            Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
-                       // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                        Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file , currentUser.avatarId);
-                        if (results.ContainsKey(Constants.SUCCESS))
+                        PBProfilePicUpdating.Visibility = Visibility.Visible;
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+
+                        try
                         {
-                            try
+
+                            //If successful , add it to isolated storage 
+                            var file = await AvatarUploader.WriteableBitmapToStorageFile(profilePic,
+                                Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
+                                Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
+                            // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, currentUser.avatarId);
+                            if (results.ContainsKey(Constants.SUCCESS))
                             {
-                                //Save the image locally now , remove the temp file 
-                                JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
-                                TAvatar avatar = new TAvatar()
+                                try
                                 {
-                                    id = (int)avatarObject["avatar"]["id"],
-                                    linkNormal = (string)avatarObject["avatar"]["linkNormal"],
-                                    linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                    dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
-                                    dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
-                                };
-                                var localAvatar = await AvatarHelper.get(avatar.id);
-                                if (localAvatar != null)
-                                {
-                                    await AvatarHelper.update(avatar);
+                                    //Save the image locally now , remove the temp file 
+                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                    TAvatar avatar = new TAvatar()
+                                    {
+                                        id = (int)avatarObject["avatar"]["id"],
+                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
+                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                    };
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    if (localAvatar != null)
+                                    {
+                                        await AvatarHelper.update(avatar);
+                                    }
+                                    else
+                                    {
+                                        await AvatarHelper.add(avatar);
+                                    }
+                                    profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                    ToastStatus.Message = (string)avatarObject["message"];
                                 }
-                                else
+                                catch
                                 {
-                                    await AvatarHelper.add(avatar);
+                                    ToastStatus.Message = "upload failed";
+                                    //Throw a toast that the image failed
+                                    return;
                                 }
-                                profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                                await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
-                                ToastStatus.Message = (string)avatarObject["message"];
+
+
+
                             }
-                            catch
+                            else
                             {
-                                ToastStatus.Message = "upload failed";
-                                //Throw a toast that the image failed
-                                return;
+                                //Restore previous image
+                                ToastStatus.Message = results[Constants.ERROR];
+
                             }
-                           
-                            
-                            
-                        }
-                        else
-                        {
-                            //Restore previous image
-                            ToastStatus.Message = results[Constants.ERROR];
+                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
                         }
-                        PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-
+                        catch (Exception ex)
+                        {
+                            string x = ex.StackTrace;
+                        }
+                        //Upload the profile pic 
                     }
-                    catch (Exception ex)
+                }
+                else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
+                {
+                    userId = (int)e.Parameter;
+                    // get the data from the sqlilte database
+                    data = await getUserProfile(userId);
+                    //Get the user avatar 
+                    data.username = "@" + data.username;
+                    grid.DataContext = data;
+                    if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
                     {
-                        string x = ex.StackTrace;
+                        setToUpdate();
+                        stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
+                        txtBlockFullName.Visibility = Visibility.Visible;
                     }
-                    //Upload the profile pic 
-               }
+                    else
+                    {
+                        setIconToEdit();
+                        stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                    }
+                    if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
+                    {
+                        //Show edit icon
+                        setIconToEdit();
+                        txtBlockFullName.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        //show update Icon
+                        setToUpdate();
+                        txtBlockFullName.Visibility = Visibility.Collapsed;
+                    }
+
+     
+                }
             }
             #endregion
-            // get the data from the sqlilte database
-            data = await getUserProfile();
-            //Get the user avatar 
-            data.username = "@" + data.username;
-            grid.DataContext = data;
-            if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
-            {
-                setToUpdate();
-                stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
-                txtBlockFullName.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                setIconToEdit();
-                stackPanelAddFirstLastName.Visibility = Visibility.Visible;
-            }
-            if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
-            {
-                //Show edit icon
-                setIconToEdit();
-                txtBlockFullName.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                //show update Icon
-                setToUpdate();
-                txtBlockFullName.Visibility = Visibility.Collapsed;
-            }
-
+           
         }
 
         void rectangleProfilePic_Finish(object sender, FFImageLoading.Args.FinishEventArgs e)
@@ -229,24 +238,57 @@ namespace Pepeza.Views.Profile
             appBarBtnEditDetails.Icon = new SymbolIcon(Symbol.Accept);
             txtBoxFirstName.Focus(Windows.UI.Xaml.FocusState.Keyboard);
         }
-        private async Task<ProfileData> getUserProfile()
+        private async Task<ProfileData> getUserProfile(int userId)
         {
+            ProfileData toReturn = null;
             var connection = DbHelper.DbConnectionAsync();
-            //int userId = (int)Settings.getValue(Constants.USERID);
-            Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>((int)(Settings.getValue(Constants.USERID)));
-            TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
-            TAvatar userAvatar = await AvatarHelper.get(info.avatarId);
-            avatarId = info.avatarId;
-            Debug.WriteLine(emailInfo.email);
-            var toReturn = new ProfileData()
+            int localUserId = (int)Settings.getValue(Constants.USERID);
+            if (localUserId != userId)
             {
-                email = emailInfo.email,
-                fname = info.firstName,
-                lname = info.lastName,
-                profilePicPath = userAvatar.linkNormal,
-                username = info.username,
-                avatarId = info.avatarId
-            };
+                //Disabe editing capabilities 
+                CommandBaEdit.Visibility = Visibility.Collapsed;
+                ImageMask.IsTapEnabled = rectProfilePic.IsTapEnabled = false;
+
+                //Get the profile from the server 
+                Dictionary<string, string> results = await RequestUser.getUser(userId);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    JObject json = JObject.Parse(results[Constants.SUCCESS]);
+                    data = new ProfileData()
+                    {
+                         avatarId =  (int)json["avatar"]["id"],
+                         email = (string)json["email"]["email"],
+                         fname = (string)json["firstName"],
+                         lname = (string)json["lastName"],
+                         profilePicPath = (string)json["avatar"]["linkNormal"],
+                         username = (string)json["username"]
+                    };
+                }
+                else
+                {
+                    ToastStatus.Message = results[Constants.ERROR];
+                }
+            }
+            else
+            {
+                Db.Models.TUserInfo info = await connection.GetAsync<Db.Models.TUserInfo>((int)(Settings.getValue(Constants.USERID)));
+                if (info != null) // We must be local 
+                {
+                    TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
+                    TAvatar userAvatar = await AvatarHelper.get(info.avatarId);
+                    avatarId = info.avatarId;
+                    Debug.WriteLine(emailInfo.email);
+                    toReturn = new ProfileData()
+                    {
+                        email = emailInfo.email,
+                        fname = info.firstName,
+                        lname = info.lastName,
+                        profilePicPath = userAvatar.linkNormal,
+                        username = info.username,
+                        avatarId = info.avatarId
+                    };
+                }
+            }    
             return toReturn;
 
         }
