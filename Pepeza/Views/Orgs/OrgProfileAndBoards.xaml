@@ -57,11 +57,38 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Rectangle Grid.Row="0" Style="{StaticResource RectProfPic}">
-                                <Rectangle.Fill>
-                                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                                </Rectangle.Fill>
-                            </Rectangle>
+                            <Grid Grid.Row="0"> 
+                                
+                                <Image Width="250" Height="250"
+                               Name="ImageMask"
+                                       Tapped="rectangleProfilePic_Tapped"
+                               Source="/Assets/Images/placeholder_avatar.jpg"/>
+                                <toast:Toastinet 
+                                 AnimationType="LeftToLeft" 
+                                Background="{ThemeResource PhoneAccentBrush}"
+                                HorizontalAlignment="Center"
+                                Width="250"
+                                TextWrapping="WrapWholeWords"
+                                Name="ToastStatus"
+                                VerticalAlignment="Bottom"
+                                Style="{StaticResource ToastStyle}"
+                                    />
+                                <Image Height="250" Width="250" 
+                                       Name="rectangleProfilePic"
+                                       Tapped="rectangleProfilePic_Tapped" >
+                                    <Image.Source>
+                                        <BitmapImage
+                                x:Name="profPic"
+                                ImageOpened="BitmapImage_ImageOpened"
+                                ImageFailed="BitmapImage_ImageFailed"
+                                UriSource="{Binding linkNormal , Mode=TwoWay}" 
+                                CreateOptions="None"/>
+                                    </Image.Source>
+                                </Image>
+                                <ProgressBar IsIndeterminate="True" 
+                                 Width="250" 
+                                 Name="PBProfilePicUpdating" VerticalAlignment="Bottom"/>
+                            </Grid>
                             <TextBlock Grid.Row="1"
                                        Margin="0,12"
                                        Style="{StaticResource txtBlockStyleProfileOwner}"

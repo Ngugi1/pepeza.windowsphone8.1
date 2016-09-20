@@ -8,6 +8,7 @@ namespace Pepeza.Models.Search_Models
 {
     public class Organization : Bindable
     {
+        public int avatarId { get; set; }
         private int _id;
 
         public int Id
@@ -59,7 +60,5 @@ namespace Pepeza.Models.Search_Models
         public DateTime  dateUpdated { get; set; }
         public string timezone_updated { get; set; }
         public string timezone_type_updated { get; set; }
-
-
     }
 }

@@ -47,10 +47,15 @@ namespace Shared.Utitlity
         public async static Task<BitmapImage> getBitMap(StorageFile sentFile)
         {
             //Get hold of the file
-            var stream = await sentFile.OpenReadAsync();
-            BitmapImage bitmap = new BitmapImage();
-            await bitmap.SetSourceAsync(stream);
-            return bitmap;
+            if (sentFile != null)
+            {
+                var stream = await sentFile.OpenReadAsync();
+                BitmapImage bitmap = new BitmapImage();
+                await bitmap.SetSourceAsync(stream);
+                return bitmap;
+            }
+            return null;
+            
         }
         /// <summary>
         /// Confirms that the image is a 250 by 250 square

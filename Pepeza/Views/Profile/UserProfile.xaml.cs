@@ -171,7 +171,6 @@ namespace Pepeza.Views.Profile
         {
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
         }
-
         private async void editProfileClicked(object sender, RoutedEventArgs e)
         {
             string lname = txtBoxLastName.Text.Trim();
@@ -329,20 +328,24 @@ namespace Pepeza.Views.Profile
             }
 
         }
-
         private void BitmapImage_ImageOpened(object sender, RoutedEventArgs e)
         {
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
             ImageMask.Visibility = Visibility.Collapsed;
         }
-
         private void BitmapImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             ImageMask.Visibility = Visibility.Visible;
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
         }
-       
-
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatingFrom(e);
+        }
        
     }
 

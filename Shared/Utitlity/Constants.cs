@@ -21,6 +21,8 @@ namespace Pepeza.Utitlity
         public static string LOG_FAILED { get { return "LOG_FAILED"; } }
         public static string UPDATED { get { return "UPDATED"; }  }
         public static string SUCCESS {get{return "SUCCESS";} }
+        public static string ORG_ID_TEMP { get { return "ORG_ID"; } }
+        public static string BOARD_ID_TEMP { get { return "BOARD_ID"; } }
         public static string INVALID_DATA { get { return "INVALID_DATA"; }}
         public static string USER_EXISTS { get { return "USER_EXISTS"; } }
         public static string USERID { get { return "USERID"; } }

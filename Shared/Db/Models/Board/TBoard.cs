@@ -49,6 +49,8 @@ namespace Pepeza.Db.Models.Board
         public string singleFollowerOrMany { get; set; }
         public int avatarId { get; set; }
         public string followRestriction { get; set; }
+        public string linkSmall { get; set; }
+        public string linkNormal { get; set; }
 
     }
 }

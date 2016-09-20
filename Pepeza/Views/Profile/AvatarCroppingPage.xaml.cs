@@ -79,12 +79,19 @@ namespace Pepeza.Views.Profile
             if (e.Parameter != null)
             {
                 var source = await FilePickerHelper.getBitMap(e.Parameter as StorageFile);
-                if (source == null) this.Frame.GoBack();
                 //Set the image from the picker
-                WriteableBitmap bitmap = new WriteableBitmap(source.PixelWidth , source.PixelHeight);
-                SetPicture(e.Parameter as StorageFile);
+                if (source != null)
+                {
+                    WriteableBitmap bitmap = new WriteableBitmap(source.PixelWidth, source.PixelHeight);
+                    SetPicture(e.Parameter as StorageFile);
+                }
+                else
+                {
+                    this.Frame.GoBack();
+                }
+              
             }
-
+          
         }
         //async void uploadFile()
         //{

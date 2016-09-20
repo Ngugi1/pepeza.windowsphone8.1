@@ -7,10 +7,12 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Profile;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Orgs;
+using Shared.Server.Requests;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -19,14 +21,18 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -41,23 +47,108 @@ namespace Pepeza.Views.Boards
         TBoard boardFetched = null;
         bool isProfileLoaded, areNoticesLoaded;
         int boardId;
+        CoreApplicationView view = CoreApplication.GetCurrentView();
         TAvatar boardAvatar = null;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
         public BoardProfileAndNotices()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected  override void OnNavigatedTo(NavigationEventArgs e)
+        protected  async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
-                boardId = (int)e.Parameter;
-                //await assignRoles(await BoardHelper.getBoard(boardId));
+                if (e.Parameter.GetType() == typeof(WriteableBitmap))
+                {
+                    boardId = (int)Settings.getValue(Constants.BOARD_ID_TEMP);
+                    //Here we resume to upload the image 
+                    WriteableBitmap profilePic = e.Parameter as WriteableBitmap;
+                    if (profilePic != null)
+                    {
+                        PBProfilePicUpdating.Visibility = Visibility.Visible;
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+
+                        try
+                        {
+
+                            //If successful , add it to isolated storage 
+                            var file = await AvatarUploader.WriteableBitmapToStorageFile(profilePic,
+                                Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
+                                Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
+                            // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TBoard)rootGrid.DataContext).avatarId);
+                            if (results.ContainsKey(Constants.SUCCESS))
+                            {
+                                try
+                                {
+                                    //Save the image locally now , remove the temp file 
+                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                    TAvatar avatar = new TAvatar()
+                                    {
+                                        id = (int)avatarObject["avatar"]["id"],
+                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
+                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                    };
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    //Update local database if they are collaborators 
+                                    if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)rootGrid.DataContext).orgID) != null)
+                                    {
+                                        if (localAvatar != null)
+                                        {
+                                            await AvatarHelper.update(avatar);
+                                        }
+                                        else
+                                        {
+                                            await AvatarHelper.add(avatar);
+                                        }
+                                    }
+
+                                    profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                    ToastStatus.Message = (string)avatarObject["message"];
+                                }
+                                catch
+                                {
+                                    ToastStatus.Message = "upload failed";
+                                    //Throw a toast that the image failed
+                                    return;
+                                }
+
+
+
+                            }
+                            else
+                            {
+                                //Restore previous image
+                                ToastStatus.Message = results[Constants.ERROR];
+
+                            }
+                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            string x = ex.StackTrace;
+                        }
+                        //Upload the profile pic 
+                    }
+                }
+                else
+                {
+                    boardId = (int)e.Parameter;
+                    Settings.add(Constants.BOARD_ID_TEMP, boardId);
+                }
+               
+               
             }
             else
             {
@@ -75,6 +166,15 @@ namespace Pepeza.Views.Boards
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.get(localBoard.id);
                 boardAvatar = await AvatarHelper.get(localBoard.id);
+                if (boardAvatar != null)
+                {
+                    localBoard.linkNormal = boardAvatar.linkNormal;
+                }
+                else
+                {
+                    ImageMask.Visibility = Visibility.Visible;
+                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                }
                 if (following != null)
                 {
                     if(following.accepted == 1)
@@ -122,7 +222,7 @@ namespace Pepeza.Views.Boards
                         boardFetched.id = (int)objResults["id"];
                         boardFetched.orgID = (int)objResults["orgId"];
                         boardFetched.name = (string)objResults["name"];
-                        boardFetched.noOfFollowers = (int)objResults["noOfFollowers"]; 
+                        boardFetched.noOfFollowers = (int)objResults["noOfFollowers"];
                        
                         boardFetched.ownerId = (int)objResults["ownerId"];
                         boardFetched.followRestriction = (string)objResults["followRestriction"];
@@ -140,6 +240,7 @@ namespace Pepeza.Views.Boards
                             linkNormal = (string)objResults["avatar"]["linkNormal"],
                             linkSmall = (string)objResults["avatar"]["linkSmall"]
                         };
+                        boardFetched.avatarId = (int)objResults["avatar"]["avatarId"];
                     }
                     if (objResults["follower_item"].Type != JTokenType.Null)
                     {
@@ -397,6 +498,8 @@ namespace Pepeza.Views.Boards
                 }
                 else
                 {
+                    rectProfilePic.IsTapEnabled = false;
+                    ImageMask.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
                 }
                 if(collaborator!=null)
@@ -409,6 +512,52 @@ namespace Pepeza.Views.Boards
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardFollowers) , boardId);
+        }
+        private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+            view.Activated += view_Activated;
+        }
+        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
+        {
+            //Get the photo and navigate to the photo editing page
+            FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
+            if (args != null)
+            {
+                if (filesArgs.Files.Count == 0) return;
+
+                StorageFile choosenFile = filesArgs.Files[0];// Get the first file 
+                //Get the bitmap to determine whether to continue or not 
+                if (choosenFile != null)
+                {
+                    var bitmap = await FilePickerHelper.getBitMap(choosenFile);
+                    if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
+                    {
+                        this.Frame.Navigate(typeof(AvatarCroppingPage), choosenFile);
+                        view.Activated -= view_Activated;// Unsubscribe from this event 
+                    }
+
+                }
+            }
+
+        }
+        private void BitmapImage_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            ImageMask.Visibility = Visibility.Collapsed;
+            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+        }
+        private void BitmapImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+            ImageMask.Visibility = Visibility.Visible;
+        }
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatingFrom(e);
         }
     }
     public class BoolToTextConverter : IValueConverter

@@ -9,8 +9,12 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Boards;
+using Pepeza.Views.Profile;
+using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Orgs;
+using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Orgs;
+using Shared.Server.Requests;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -19,15 +23,19 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Phone.UI.Input;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -45,9 +53,12 @@ namespace Pepeza.Views.Orgs
         public bool isProfileLoaded { get; set; }
         public int OrgID { get; set; }
         public string role { get; set; }
+        Organization org = null;
+        CoreApplicationView view = CoreApplication.GetCurrentView();
         public OrgProfileAndBoards()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -58,26 +69,96 @@ namespace Pepeza.Views.Orgs
         {
             if (e.Parameter != null)
             {
-                Organization org = e.Parameter as Organization;
-                OrgID = org.Id;
+                if (e.Parameter.GetType() == typeof(Organization))
+                {
+                    org = e.Parameter as Organization;
+                    OrgID = org.Id;
+                    Settings.add(Constants.ORG_ID_TEMP, OrgID);
+                }
+                else if (e.Parameter.GetType() == typeof(WriteableBitmap))
+                {
+                    OrgID = (int)Settings.getValue(Constants.ORG_ID_TEMP);
+                    //Here we resume to upload the image 
+                    WriteableBitmap profilePic = e.Parameter as WriteableBitmap;
+                    if (profilePic != null)
+                    {
+                        PBProfilePicUpdating.Visibility = Visibility.Visible;
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
+
+                        try
+                        {
+
+                            //If successful , add it to isolated storage 
+                            var file = await AvatarUploader.WriteableBitmapToStorageFile(profilePic,
+                                Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
+                                Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
+                            // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TOrgInfo)RootGrid.DataContext).avatarId);
+                            if (results.ContainsKey(Constants.SUCCESS))
+                            {
+                                try
+                                {
+                                    //Save the image locally now , remove the temp file 
+                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                    TAvatar avatar = new TAvatar()
+                                    {
+                                        id = (int)avatarObject["avatar"]["id"],
+                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
+                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                    };
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    //Update local database if they are collaborators 
+                                    if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID),OrgID) != null)
+                                    {
+                                        if (localAvatar != null)
+                                        {
+                                            await AvatarHelper.update(avatar);
+                                        }
+                                        else
+                                        {
+                                            await AvatarHelper.add(avatar);
+                                        }
+                                    }
+                                    
+                                    profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                    ToastStatus.Message = (string)avatarObject["message"];
+                                }
+                                catch
+                                {
+                                    ToastStatus.Message = "upload failed";
+                                    //Throw a toast that the image failed
+                                    return;
+                                }
+
+
+
+                            }
+                            else
+                            {
+                                //Restore previous image
+                                ToastStatus.Message = results[Constants.ERROR];
+
+                            }
+                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            string x = ex.StackTrace;
+                        }
+                        //Upload the profile pic 
+                    }
+                }
+                
             }else
             {
                 CommandBarActions.Visibility = Visibility.Collapsed;
             }
                   
-            if (e.NavigationMode == NavigationMode.New)
-            {
-                areBoardsLoaded = false;
-                if (e.Parameter != null)
-                {
-                    Organization org = e.Parameter as Organization;
-                    OrgID = org.Id;
-                    //Get the org profile 
-                    await getOrgDetails(org.Id);
-                }
-            }
-           
-            
         }
         private async Task getUserRole()
         {
@@ -107,6 +188,8 @@ namespace Pepeza.Views.Orgs
             {
                 //Do not show any edit menus
                 hideCommandBar(true);
+                rectangleProfilePic.IsTapEnabled = false;
+                ImageMask.IsTapEnabled = false;
             }
            
 
@@ -118,8 +201,19 @@ namespace Pepeza.Views.Orgs
             await getUserRole();
             //Determine whethe to get them locally or online , check that the org ID exists locally or not 
             TOrgInfo localOrg = await OrgHelper.get(orgID);
+           
             if (localOrg!=null)
             {
+                TAvatar local = await AvatarHelper.get(localOrg.avatarId);
+                if (local != null && local.linkNormal != null)
+                {
+                    localOrg.linkNormal = local.linkNormal;
+                }
+                else
+                {
+                    ImageMask.Visibility = Visibility.Visible;
+                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                }
                 RootGrid.DataContext = localOrg;
             }
             else
@@ -139,7 +233,19 @@ namespace Pepeza.Views.Orgs
                         dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
                         dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]),
                     };
-                    if (info.username == null) info.username = "my boards";
+                    TAvatar orgAvatar = new TAvatar()
+                    {
+                         id = (int)objResults["avatar"]["id"],
+                         linkNormal = (string)objResults["avatar"]["linkNormal"],
+                         linkSmall = (string)objResults["avatar"]["linkSmall"],
+                         dateCreated = DateTimeFormatter.format((double)objResults["avatar"]["dateUpdated"]),
+                         dateUpdated = DateTimeFormatter.format((double)objResults["avatar"]["dateUpdated"])
+                    };
+                    info.linkNormal = orgAvatar.linkNormal;
+                    if (info.linkNormal == null)
+                    {
+                        ImageMask.Visibility = Visibility.Visible;
+                    }
                     RootGrid.DataContext = info;
                 }
                 else
@@ -150,11 +256,22 @@ namespace Pepeza.Views.Orgs
                     toastErros.Message = results[Constants.ERROR];
                 }
             }
+
             fetchingProfile(false);
         }
         private async Task loadProfileLocally()
         {
-            RootGrid.DataContext = await OrgHelper.get(OrgID);
+
+            var localOrg = await OrgHelper.get(OrgID);
+            TAvatar localOrgAvatar = await AvatarHelper.get(localOrg.avatarId);
+            if (localOrgAvatar != null)
+            {
+                localOrg.linkNormal = localOrgAvatar.linkNormal;
+            }
+            else
+            {
+                ImageMask.Visibility = Visibility.Collapsed;
+            }
         }
         private async Task loadBoardsLocally()
         {    
@@ -265,6 +382,7 @@ namespace Pepeza.Views.Orgs
                 SCVOrgProfile.Opacity = 1;
                 isProfileLoaded = true;
                 StackPanelGetOrgDetails.Visibility = Visibility.Collapsed;
+                PBProfilePicUpdating.Visibility = Visibility.Collapsed;
             }
         }
         private void fetchingBoards(bool isFetching)
@@ -309,6 +427,52 @@ namespace Pepeza.Views.Orgs
         private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ViewCollaboratorsPage) , new Dictionary<string, string>() { { "orgId" , OrgID.ToString()} , { "role" , role} });
+        }
+        private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+            view.Activated += view_Activated;
+        }
+        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
+        {
+            //Get the photo and navigate to the photo editing page
+            FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
+            if (args != null)
+            {
+                if (filesArgs.Files.Count == 0) return;
+
+                StorageFile choosenFile = filesArgs.Files[0];// Get the first file 
+                //Get the bitmap to determine whether to continue or not 
+                if (choosenFile != null)
+                {
+                    var bitmap = await FilePickerHelper.getBitMap(choosenFile);
+                    if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
+                    {
+                        this.Frame.Navigate(typeof(AvatarCroppingPage), choosenFile);
+                        view.Activated -= view_Activated;// Unsubscribe from this event 
+                    }
+
+                }
+            }
+
+        }
+        private void BitmapImage_ImageOpened(object sender, RoutedEventArgs e)
+        {
+            ImageMask.Visibility = Visibility.Collapsed;
+            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+        }
+        private void BitmapImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+            ImageMask.Visibility = Visibility.Visible;
+        }
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            }
+            base.OnNavigatingFrom(e);
         }
     }
 }
