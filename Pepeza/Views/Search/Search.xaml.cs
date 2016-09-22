@@ -219,6 +219,7 @@ namespace Pepeza.Views
                         Person p = new Person();
                         p.username = (string)row["username"];
                         p.id = (int)row["id"];
+                        p.linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg";
                         p.firstname = (string)row["firstName"];
                         p.lastname = (string)row["lastName"];
                         p.fullname = p.firstname + " " + p.lastname;

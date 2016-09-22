@@ -1,4 +1,5 @@
 ﻿using Pepeza.Db.Models.Board;
+using Shared.Db.DbHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,18 @@ namespace Pepeza.Db.DbHelpers.Board
             if (connection != null)
             {
                  boards= await connection.Table<TBoard>().ToListAsync();
+                 foreach (var item in boards)
+                 {
+                     var avatar = await AvatarHelper.get(item.avatarId);
+                     if (avatar != null)
+                     {
+                         item.linkSmall = avatar.linkSmall == null ? "/Assets/Images/placeholder_avatar.jpg" : avatar.linkSmall;
+                     }
+                     else
+                     {
+                         item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+                     }
+                 }
             }
 
             return boards;
@@ -62,7 +75,6 @@ namespace Pepeza.Db.DbHelpers.Board
                 }
                
             }
-
         public async static Task<List<TBoard>> getFollowing()
         {
             try
@@ -78,7 +90,19 @@ namespace Pepeza.Db.DbHelpers.Board
                         foreach (var item in result)
                         {
                             TBoard board = await BoardHelper.getBoard(item.boardId);
-                            if (board != null) followingBoards.Add(board);
+                            if (board != null)
+                            {
+                                var avatar = await AvatarHelper.get(board.avatarId);
+                                if (avatar != null)
+                                {
+                                    board.linkSmall = board.linkSmall == null ? "/Assets/Images/placeholder_s_avatar.png" : board.linkSmall;
+                                }
+                                else
+                                {
+                                    board.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+                                }
+                                followingBoards.Add(board);
+                            }
                             //TODO:: report error
                         }
                     }

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Toast="using:Toastinet"
+                    xmlns:FFImage="using:FFImageLoading"
                     xmlns:local="using:Pepeza.Styles">
 
     <!--  Thickness  -->
@@ -517,13 +518,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="2"
+            <FFImage:FFImage Grid.RowSpan="2"
                        Margin="0,4,0,8"
-                       Style="{StaticResource RectanglePicThumbnail}">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
+                       ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                       LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                       FadeAnimationEnabled="True"
+                       Height="50"
+                       Source="{Binding linkSmall}"
+                       Width="50"
+                       >
+                
+                      </FFImage:FFImage>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="14,0,0,0"
@@ -572,15 +577,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle 
+            <FFImage:FFImage 
                 Margin="0,8,0,0"
+                Height="50"
+                Source="{Binding linkSmall}"
+                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                Width="50"
                 VerticalAlignment="Bottom"
                 Grid.RowSpan="2"
-                       Style="{StaticResource RectanglePicThumbnail}">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
+               >
+                </FFImage:FFImage>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="12,4,12,0"
@@ -610,11 +617,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="1" Style="{StaticResource RectanglePicThumbnail}">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
+            <FFImage:FFImage 
+                Margin="0,8,0,0"
+                Grid.RowSpan="1"
+                Height="50"
+                Source="{Binding linkSmall}"
+                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                Width="50"
+                VerticalAlignment="Bottom"
+               >
+            </FFImage:FFImage>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="8"
@@ -634,15 +647,17 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Rectangle 
+            <FFImage:FFImage 
                 Margin="0,8,0,0"
+                Height="50"
+                Source="{Binding linkSmall}"
+                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                Width="50"
                 VerticalAlignment="Bottom"
                 Grid.RowSpan="2"
-                       Style="{StaticResource RectanglePicThumbnail}">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
+               >
+            </FFImage:FFImage>
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="12,4,12,0"

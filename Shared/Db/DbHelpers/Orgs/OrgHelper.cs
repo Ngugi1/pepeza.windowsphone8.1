@@ -1,6 +1,7 @@
 ﻿using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers;
 using Shared.Db.Models.Orgs;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,20 @@ namespace Pepeza.Db.DbHelpers
                 if (connection != null)
                 {
                     orgs = await connection.Table<TOrgInfo>().ToListAsync();
+                    foreach (var org in orgs)
+                    {
+                        var avatar = await AvatarHelper.get(org.avatarId);
+                        if (avatar != null)
+                        {
+                            org.linkSmall = avatar.linkSmall == null ? "/Assets/Images/placeholder_s_avatar.png" : avatar.linkSmall;
+                        }
+                        else
+                        {
+                            org.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+                        }
+
+                    }
+                    
                 }
                 return orgs;
             }

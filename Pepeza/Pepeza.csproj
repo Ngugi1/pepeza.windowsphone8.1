@@ -194,6 +194,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Images\icon.png" />
+    <Content Include="Assets\Images\placeholder_s_avatar.png" />
     <Content Include="Assets\Images\profile.jpg" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\Images\placeholder_avatar.jpg" />

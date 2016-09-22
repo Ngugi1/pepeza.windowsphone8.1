@@ -172,10 +172,8 @@ namespace Pepeza.Views.Profile
      
                 }
             }
-            #endregion
-           
+            #endregion  
         }
-
         void rectangleProfilePic_Finish(object sender, FFImageLoading.Args.FinishEventArgs e)
         {
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;

@@ -6,6 +6,7 @@
       xmlns:local="using:Pepeza"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toaster="using:Toastinet"
+      xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource PhoneBackgroundBrush}"
       RequestedTheme="Light"
       xmlns:converter="using:Pepeza"
@@ -105,13 +106,16 @@
                                     Text="delete" />
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
-                                    <Rectangle Grid.RowSpan="2"
-                       Margin="8,12,0,28"
-                       Style="{StaticResource RectanglePicThumbnail}">
-                                        <Rectangle.Fill>
-                                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
+                                    <FFImage:FFImage
+                                        Grid.RowSpan="2"
+                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        Margin="8,12,0,28"
+                                        Height="50"
+                                        Width="50"
+                                        Source="{Binding linkSmall}"
+                                        > 
+                                    </FFImage:FFImage>
                                     <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="8,10,8,6"
@@ -160,13 +164,15 @@
                                     Text="delete" />
                                         </MenuFlyout>
                                     </FlyoutBase.AttachedFlyout>
-                                    <Rectangle Grid.RowSpan="2"
-                       Margin="0,8,0,0"
-                       Style="{StaticResource RectanglePicThumbnail}">
-                                        <Rectangle.Fill>
-                                            <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                                        </Rectangle.Fill>
-                                    </Rectangle>
+                                    <FFImage:FFImage
+                                        Height="50"
+                                        Width="50"
+                                        Grid.RowSpan="2"
+                                         ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png" 
+                                        Margin="0,8,0,0"
+                                        Source="{Binding linkSmall}">
+</FFImage:FFImage>
                                     <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="14,0,0,0"

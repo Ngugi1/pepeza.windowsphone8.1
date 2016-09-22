@@ -77,9 +77,7 @@ namespace Pepeza.Views.Orgs
         public async  void loadUserBoards(int selected)
         {
             txtBlockStatus.Visibility = Visibility.Collapsed;
-            if (selected != null)
-            {
-                Dictionary<string, string> results = await OrgsService.getUserOrgs(selected);
+             Dictionary<string, string> results = await OrgsService.getUserOrgs(selected);
                 if (results != null)
                 {
                     #region Retrieve Data
@@ -116,7 +114,6 @@ namespace Pepeza.Views.Orgs
                     }
                     #endregion
                 }
-            }
             isfetchingOrgs(false);
         }
 
