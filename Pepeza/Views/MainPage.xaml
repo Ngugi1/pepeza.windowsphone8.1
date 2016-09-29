@@ -227,6 +227,7 @@
                               Icon="Find"
                               Label="search" />
                 <AppBarButton Icon="SelectAll" 
+                              Click="AppBarButton_Click"    
                               Label="select all" />
             </CommandBar.PrimaryCommands>
         </CommandBar>

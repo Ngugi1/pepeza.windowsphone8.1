@@ -40,7 +40,6 @@ namespace Pepeza.Views.Orgs
             //Register Navigation Helper
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-        
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -72,8 +71,6 @@ namespace Pepeza.Views.Orgs
             }
 
         }
-
-       
         public async  void loadUserBoards(int selected)
         {
             txtBlockStatus.Visibility = Visibility.Collapsed;
@@ -116,7 +113,6 @@ namespace Pepeza.Views.Orgs
                 }
             isfetchingOrgs(false);
         }
-
         private void ListViewUserBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Start saving page state

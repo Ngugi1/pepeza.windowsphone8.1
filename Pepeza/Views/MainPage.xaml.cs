@@ -6,6 +6,7 @@ using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Analytics;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
@@ -298,6 +299,11 @@ namespace Pepeza
             {
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(NoticeAnalytics), 3);
         }
     }
     public class IntToAttachment : IValueConverter

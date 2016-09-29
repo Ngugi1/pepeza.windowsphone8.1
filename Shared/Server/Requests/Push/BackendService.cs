@@ -1,6 +1,7 @@
 ﻿using Pepeza.Server.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Pepeza.Server.Push
             HttpResponseMessage response = null;
             if (checkInternetConnection())
             {
-                response = await client.PutAsJsonAsync("push/token", uri);
+                response = await client.PutAsJsonAsync("push/token", new Dictionary<string,string>() { {"token" , uri}});
                 if (response.IsSuccessStatusCode)
                 {
                     //Token was submitted succcessfully
@@ -26,6 +27,8 @@ namespace Pepeza.Server.Push
                 }
                 else
                 {
+                    string x =await  response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("================================= " + x);
                     isSubmitted = false;
                 }
             }

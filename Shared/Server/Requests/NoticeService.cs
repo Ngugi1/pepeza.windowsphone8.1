@@ -66,7 +66,7 @@ namespace Pepeza.Server.Requests
                         content.Add(new HttpStringContent(item.title), "title");
                         content.Add(new HttpStringContent(item.content), "content");
                         content.Add(new HttpStreamContent(await file.OpenReadAsync()), "file" , file.Name);
-                        response = await client.PostAsync(new Uri(Addresses.BASE_URL + "/notices/filenotice", UriKind.RelativeOrAbsolute), content);
+                        response = await client.PostAsync(new Uri(Addresses.BASE_URL + NoticeAddresses.FILE_NOTICE, UriKind.RelativeOrAbsolute), content);
                         if (response.IsSuccessStatusCode)
                         {
                             results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
@@ -110,8 +110,9 @@ namespace Pepeza.Server.Requests
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
+                   var x = ex.ToString();
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }

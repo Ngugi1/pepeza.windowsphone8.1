@@ -1,10 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Server.Requests;
+using Pepeza.Utitlity;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Telerik.UI.Xaml.Controls.Chart;
+using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,6 +29,7 @@ namespace Pepeza.Views.Analytics
     /// </summary>
     public sealed partial class NoticeAnalytics : Page
     {
+        int noticeId;
         public NoticeAnalytics()
         {
             this.InitializeComponent();
@@ -35,51 +41,120 @@ namespace Pepeza.Views.Analytics
             public string Percentage { get; set; }
         }
 
-        public ObservableCollection<Data> CreateData()
+        public async Task getAnalytics(int noticeId =3, int period=3)
         {
-            ObservableCollection<Data> data = new ObservableCollection<Data>();
-            data.Add(new Data() { Label = "Received" , Count = 300  , Percentage= " + 20 %"});
-            data.Add(new Data() { Label = "Read" , Count = 120 , Percentage ="+ 1 %"});
-            return data;
+            try
+            {
+                ObservableCollection<Data> data = new ObservableCollection<Data>();
+                ObservableCollection<NoticeStatItem> read_per_hour = new ObservableCollection<NoticeStatItem>();
+                //Default period is last 7 days
+                Dictionary<string, string> results = await NoticeService.getNoticeAnalytics(period, noticeId);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    JObject json = JObject.Parse(results[Constants.SUCCESS]);
+                    //Retreive the data 
+                    data.Add(new Data() { Label = "Received", Count = (int)json["new_received"]["current"], Percentage = computePercantage((int)json["new_received"]["previous"], (int)json["new_received"]["current"]) });
+                    data.Add(new Data() { Label = "Read", Count = (int)json["new_read"]["current"], Percentage = computePercantage((int)json["new_read"]["previous"], (int)json["new_read"]["current"]) });
+                    //Now get the other list 
+                    //Get the keys for the JArray 
+                    JArray listofHours = JArray.Parse(json["read_per_hour"].ToString());
+                    read_per_hour = new ObservableCollection<NoticeStatItem>(getJArrayKeysAndValues(listofHours));
+                    RadReadReceived.DataContext = data;
+                    ReadPercentage.Text = data[1].Percentage;
+                    ReceivedPercentage.Text = data[0].Percentage;
+                    ReadNoticesChart.DataContext = read_per_hour;
+                }
+
+                else
+                {
+                    //Toast an error message  
+                    //Show a retry button 
+                }
+            }
+            catch (Exception ex)
+            {
+                var x = ex.ToString();
+            }
         }
+        private string computePercantage(int previous, int current)
+        {
+            double percentage = 0;
+            if (previous != 0)
+            {
+                percentage = ((double)(current - previous) / (double)previous) * 100;
+            }
+            else if (previous == 0 && current > 0)
+            {
+                percentage = 100;
+            }
+            else if (previous == 0 && current == 0)
+            {
+                percentage = 0;
+            }
+            if (percentage >= 0)
+            {
+                return "+ " + percentage + " %";
+            }
+            else
+            {
+                return percentage + " %";
+            }
+
+        }
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            RadReadReceived.DataContext = CreateData();
-            ObservableCollection<FinancialStuff> collection = new ObservableCollection<FinancialStuff>();
-            //this.chart.DataContext = new double[] { 20, 30, 50, 10, 60, 40, 20, 80 };
-            var items = Enumerable.Range(00, 24).Select(i => i.ToString("D2"));
-            Random rand = new Random();
-            foreach (var item in items)
+            if (e.Parameter != null)
             {
-                collection.Add(new FinancialStuff() { Hour = item, Read = rand.Next(0, 200) });
+                //Then pick the notice ID
+                noticeId = (int)e.Parameter;
+                await getAnalytics(noticeId);
             }
-            ReadNoticesChart.DataContext = collection;
-            ReadPercentage.Text = "+ 20 %";
-            ReceivedPercentage.Text = "+ 1 %";
+            
         }
-        public class FinancialStuff
+        public class NoticeStatItem
         {
             public int Read { get; set; }
             public string Hour { get; set; }
         }
 
-        private void LoadChartContents()
+        private static List<NoticeStatItem> getJArrayKeysAndValues(JArray jArray)
         {
-            //Random rand = new Random();
-            //List<FinancialStuff> financialStuffList = new List<FinancialStuff>();
-            //financialStuffList.Add(new FinancialStuff() { Name = "READ", Amount = rand.Next(0, 200) });
-            //financialStuffList.Add(new FinancialStuff() { Name = "RECEIVED", Amount = rand.Next(0, 200) });
-            ////(PieChart.Series[0] as PieSeries).ItemsSource = financialStuffList;
-            //(ColumnChart.Series[0] as ColumnSeries).ItemsSource = financialStuffList;
-            //(LineChart.Series[0] as LineSeries).ItemsSource = financialStuffList;
-            //this.BarchartPeopleReadNotices.ItemsSource = financialStuffList;
-            //(BubbleChart.Series[0] as BubbleSeries).ItemsSource = financialStuffList;
-            
+            List<NoticeStatItem> available_hours = new List<NoticeStatItem>();
+            for (int i = 0; i < 23; i++)
+            {
+                available_hours.Add(new NoticeStatItem() { Hour = i.ToString(), Read = 0 });
+            }
+            if (jArray.Count > 0)
+            {
+                foreach (JObject item in jArray)
+                {
+                    foreach (JProperty property in item.Properties())
+                    {
+                        int candidateIndex = int.Parse(property.Name);
+                        available_hours.ElementAt<NoticeStatItem>(candidateIndex).Read = (int)property.Value;
+                    }
+                }
+            }
+           
+            return available_hours;
+        }
+
+        private async void ComboSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int period = (sender as ComboBox).SelectedIndex + 1;
+            await getAnalytics(noticeId, period);
+        }
+
+        private async void AppBtnReload_Click(object sender, RoutedEventArgs e)
+        {
+            int period = ComboPeriod.SelectedIndex + 1;
+            await getAnalytics(noticeId, period);
         }
     }
 }

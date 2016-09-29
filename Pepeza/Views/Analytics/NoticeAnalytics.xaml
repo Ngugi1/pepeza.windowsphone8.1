@@ -38,6 +38,8 @@
             
             <StackPanel Grid.Row="1">
                 <ComboBox BorderThickness="0,0,0,2"
+                          Name="ComboPeriod"
+                          SelectionChanged="ComboSelectionChanged"
                           Foreground="{ThemeResource PhoneAccentBrush}"
                           BorderBrush="{ThemeResource PhoneAccentBrush}"
                           Margin="12,0,4,0">
@@ -174,7 +176,10 @@
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Refresh" Label="Refresh"/>
+            <AppBarButton Icon="Refresh"
+                          Name="AppBtnReload"
+                          Click="AppBtnReload_Click"    
+                          Label="Refresh"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

@@ -240,7 +240,9 @@
                           Click="AppBarButton_Click"
                           Icon="Edit"
                           Label="edit" />
-            <AppBarButton Icon="FourBars" Label="Statistics"/>
+            <AppBarButton Icon="FourBars" 
+                          Click="AppBarButton_BoardAnalytics_click"
+                          Label="Statistics"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

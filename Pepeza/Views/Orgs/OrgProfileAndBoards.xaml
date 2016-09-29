@@ -153,7 +153,9 @@
                           Name="AppBtnCollaborators"
                           Click="AppBtnCollaborators_Click" 
                           Label="collaborators"/>
-            <AppBarButton Icon="FourBars" Label="Analytics"/>
+            <AppBarButton Icon="FourBars" 
+                          Click="AppBtinAnalytics_clicked"
+                          Label="Analytics"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

@@ -35,6 +35,10 @@ namespace Pepeza.Utitlity
         public static string ADMIN { get{ return  "admin";}}
         public static string EDITOR { get{ return "editor";} }
         public static string OWNER { get { return "owner"; } }
+        public static int TODAY { get { return 1; } }
+        public static int YESTREDAY { get { return 2; } }
+        public static int LAST_7_DAYS { get { return 3; } }
+        public static int LAST_30_DAYS { get { return 4; } }
 
     }
 }

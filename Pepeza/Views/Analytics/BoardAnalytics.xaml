@@ -29,7 +29,9 @@
                        />
             <ComboBox 
                 Grid.Row="1"
+                Name="comboPeriods"
                 BorderThickness="0,0,0,2"
+                SelectionChanged="ComboBox_SelectionChanged"
                 Foreground="{ThemeResource PhoneAccentBrush}"
                 BorderBrush="{ThemeResource PhoneAccentBrush}"
                 Margin="12,0,4,0">
@@ -57,7 +59,8 @@
                                FontSize="{StaticResource TextStyleLargeFontSize}"
                                HorizontalAlignment="Center"
                                Margin="0"/>
-                    <TextBlock Text="20K" 
+                    <TextBlock 
+                               Name="txtBlockNoOfFollowers"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                HorizontalAlignment="Center"
                                FontSize="{StaticResource TextStyleExtraLargeFontSize}"
@@ -74,13 +77,16 @@
                                FontSize="{StaticResource TextStyleLargeFontSize}"
                                HorizontalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="30" FontSize="{StaticResource TextStyleExtraLargeFontSize}"
-                               HorizontalAlignment="Center"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
+                        <TextBlock
+                            FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                            HorizontalAlignment="Center"
+                            Name="txtBlockNewFollowers"
+                            Foreground="{ThemeResource PhoneAccentBrush}"
                                />
-                        <TextBlock Text="+20 %" 
+                        <TextBlock 
                                    Foreground="Green"
                                    FontSize="16"
+                                   Name="txtBlockNewFollowersPerentage"
                                    VerticalAlignment="Bottom"
                                    Margin="4"/>
                     </StackPanel>
@@ -99,11 +105,14 @@
                     <StackPanel 
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
-                    <TextBlock Text="30" FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                    <TextBlock
+                        FontSize="{StaticResource TextStyleExtraLargeFontSize}"
                                HorizontalAlignment="Center"
+                               Name="txtBlockNewNotices"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                />
-                    <TextBlock Text="+20 %" 
+                    <TextBlock  
+                               Name="txtBlockNewNoticesPercentage"
                                    Foreground="Green"
                                    FontSize="16"
                                    VerticalAlignment="Bottom"
@@ -225,7 +234,7 @@
                    FontWeight="ExtraLight"
                    FontFamily="Segoe WP SemiLight"
                    Text="Top Notices" FontSize="28"/>
-                    <ListView>
+                    <ListView Name="ListViewTopNotices">
                         <ListViewItem>
                             <StackPanel Margin="12,4">
                                 <TextBlock Text="Exams results are out fo all the finalists"
@@ -384,7 +393,10 @@
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar>
-            <AppBarButton Icon="Refresh" Label="Refresh"/>
+            <AppBarButton Icon="Refresh"
+                          Name="AppBtnRefresh"
+                          Click="AppBtnRefresh_Click"
+                          Label="Refresh"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

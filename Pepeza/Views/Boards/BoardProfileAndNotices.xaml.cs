@@ -7,6 +7,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Analytics;
 using Pepeza.Views.Profile;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Orgs;
@@ -558,6 +559,12 @@ namespace Pepeza.Views.Boards
                 this.NavigationCacheMode = NavigationCacheMode.Disabled;
             }
             base.OnNavigatingFrom(e);
+        }
+
+      
+        private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BoardAnalytics) , boardId);
         }
     }
     public class BoolToTextConverter : IValueConverter

@@ -46,7 +46,6 @@ namespace Pepeza.Views.Profile
     {
         CancellationTokenSource cts = null;
         CoreApplicationView view = CoreApplication.GetCurrentView();
-        StorageFile toUpload = null;
         ProfileData data = null;
         public UserProfile()
         {

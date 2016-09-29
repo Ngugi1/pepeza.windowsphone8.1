@@ -8,6 +8,7 @@ using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Analytics;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Profile;
 using Shared.Db.DbHelpers;
@@ -473,6 +474,11 @@ namespace Pepeza.Views.Orgs
                 this.NavigationCacheMode = NavigationCacheMode.Disabled;
             }
             base.OnNavigatingFrom(e);
+        }
+
+        private void AppBtinAnalytics_clicked(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(OrgAnalytics), OrgID);
         }
     }
 }
