@@ -19,6 +19,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.Connectivity;
 using Windows.Networking.PushNotifications;
 using Windows.Phone.UI.Input;
 using Windows.UI;
@@ -52,6 +53,7 @@ namespace Pepeza
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
             this.RequestedTheme = ApplicationTheme.Light;
             DbHelper.createDB();
             if (Settings.getValue(Constants.LAST_UPDATED) == null)
@@ -62,6 +64,30 @@ namespace Pepeza
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             
             this.Resuming += App_Resuming;  
+        }
+
+        async void NetworkInformation_NetworkStatusChanged(object sender)
+        {
+            //If network is back do 
+            //1. Upload batch read items
+            if (CheckInternet())
+            {
+                //1. Get new data if it failed 
+                bool isGetNewDataSuccessful = (bool)Settings.getValue(Constants.DATA_PUSHED);
+                if (!isGetNewDataSuccessful)
+                {
+                    await SyncPushChanges.initUpdate();
+                }
+                //Push  all the unsubmited reads
+                await NoticeService.submitReadNoticeItems();   
+            }
+            
+        }
+        private bool CheckInternet()
+        {
+            var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
+            return connectionProfile != null && connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+             
         }
 
         protected async  override void OnActivated(IActivatedEventArgs e)
