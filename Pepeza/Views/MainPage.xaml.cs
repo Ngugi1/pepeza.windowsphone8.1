@@ -16,6 +16,7 @@ using QKit.JumpList;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Push;
+using Shared.TilesAndActionCenter;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -56,6 +57,7 @@ namespace Pepeza
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Clear the backstack 
+            ActionCenterHelper.updateActionCenter(null);
             this.Frame.BackStack.Clear();
             //Load data 
             isSelected = false;

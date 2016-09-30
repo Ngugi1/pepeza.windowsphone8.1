@@ -6,6 +6,7 @@ using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views;
 using Pepeza.Views.Analytics;
+using Pepeza.Views.Notifications;
 using Pepeza.Views.Profile;
 using Shared.Push;
 using System;
@@ -234,6 +235,7 @@ namespace Pepeza
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
+               
                 if (!rootFrame.Navigate(typeof(LoginPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
@@ -243,8 +245,15 @@ namespace Pepeza
 
             Frame frame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
-
-            frame.Navigate(typeof(LoginPage), e.Arguments);
+            if (e.Arguments.Equals("1"))
+            {
+                frame.Navigate(typeof(NotificationsPage));
+            }
+            else
+            {
+                frame.Navigate(typeof(LoginPage), e.Arguments);
+            }
+           
 
             //Register for push Notifications background Tasks
             await BackgroundAgents.registerPush();
@@ -268,12 +277,10 @@ namespace Pepeza
             await statusBar.ProgressIndicator.ShowAsync();
             //statusBar.Showing += statusBar_Showing;
         }
-
         static void statusBar_Showing(Windows.UI.ViewManagement.StatusBar sender, object args)
         {
             App.updateStatusBar();
         }
-
         /// <summary>
         /// Restores the content transitions after the app has launched.
         /// </summary>
@@ -285,7 +292,6 @@ namespace Pepeza
             rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
             rootFrame.Navigated -= this.RootFrame_FirstNavigated;
         }
-
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents

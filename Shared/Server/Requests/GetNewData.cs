@@ -19,6 +19,7 @@ using Shared.Db.Models.Notices;
 using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
 using Shared.Models.NoticeModels;
+using Shared.TilesAndActionCenter;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -302,7 +303,7 @@ namespace Pepeza.Server.Requests
                             //TODO :: Create toasts 
                         }
                         if (item["dateReceived"].Type != JTokenType.Null) noticeItem.dateReceived = DateTimeFormatter.format((long)item["dateReceived"]);
-                        if (item["dateRead"].Type != JTokenType.Null) noticeItem.dateRead = DateTimeFormatter.format((long)item["dateRead"]);
+                        if (item["dateRead"].Type != JTokenType.Null) noticeItem.dateRead = (long)item["dateRead"];
                         if (item["dateUpdateRead"].Type != JTokenType.Null) noticeItem.dateUpdateRead = DateTimeFormatter.format((long)item["dateUpdateRead"]);
                         if (item["dateUpdated"].Type != JTokenType.Null) noticeItem.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (await NoticeItemHelper.get(noticeItem.id) != null)
@@ -429,6 +430,7 @@ namespace Pepeza.Server.Requests
                             await TNotificationHelper.add(notification);
                         }
                         //TODO:: Add to notifications or action center
+                        
 
                     }
                 }
