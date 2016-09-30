@@ -49,6 +49,8 @@ namespace Pepeza.Views.Notices
             if (e.Parameter != null)
             {
                 TNotice noticeParam = e.Parameter as TNotice;
+                // Now do a sumission if we are connected to the internet
+ 
                 if (noticeParam.hasAttachment)
                 {
                     StackPanelDownload.Visibility = Visibility.Visible;

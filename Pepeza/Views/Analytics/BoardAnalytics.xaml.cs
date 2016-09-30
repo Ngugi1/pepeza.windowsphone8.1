@@ -95,10 +95,8 @@ namespace Pepeza.Views.Analytics
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                     JObject json = JObject.Parse(results[Constants.SUCCESS]);
-
                     //Get data for the percentages 
                     int followers = (int)json["no_of_followers"];
-
                     int new_followers_current = (int)json["new_followers"]["current"];
                     int new_followers_previous = (int)json["new_followers"]["previous"];
                     string follower_percentage = computePercantage(new_followers_previous, new_followers_current);

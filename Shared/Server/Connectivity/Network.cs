@@ -26,6 +26,7 @@ namespace Pepeza.Server.Connectivity
         {
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
             HasInternetConnection = connectionProfile != null && connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+           
         }
     }
 }

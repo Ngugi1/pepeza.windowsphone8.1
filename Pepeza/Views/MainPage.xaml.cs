@@ -13,6 +13,8 @@ using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
 using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
+using Shared.Db.DbHelpers.Notice;
+using Shared.Db.Models.Notices;
 using Shared.Push;
 using System;
 using System.Collections.Generic;
@@ -121,7 +123,6 @@ namespace Pepeza
         {
             await Task.Delay(2);
         }
-       
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch ((pivotMainPage.SelectedIndex))
@@ -292,11 +293,22 @@ namespace Pepeza
             this.Frame.Navigate(typeof(SettingsPage));
         }
 
-        private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TNotice notice = (sender as ListView).SelectedItem as TNotice;
             if ((sender as ListView).SelectedItem != null)
             {
+                
+                //Push that the notice was read
+                TNoticeItem tnoticeItem = await NoticeItemHelper.getByNoticeId(notice.noticeId);
+                if (tnoticeItem != null)
+                {
+                    //Update that it is read and give it the read timestamp
+                    tnoticeItem.isRead = 1;
+                    //TODO :: Confirm this timestamp
+                    tnoticeItem.dateRead = DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+                    await NoticeItemHelper.update(tnoticeItem);
+                }
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
         }

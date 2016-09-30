@@ -22,7 +22,6 @@ namespace Shared.Db.DbHelpers.Notice
             }
             return null;
         }
-
         public static async Task<TNoticeItem> get(int id)
         {
                 try
@@ -41,6 +40,42 @@ namespace Shared.Db.DbHelpers.Notice
                 return null;
                 }
             }
+        public static async Task<TNoticeItem> getByNoticeId(int id)
+        {
+            try
+            {
+                List<TNoticeItem> info = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    info = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE noticeId=?", id);
+                }
+
+                return info.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public static async Task<List<TNoticeItem>> getAllUnsubmitedNoticeItems()
+        {
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    List<TNoticeItem> unsubmitted = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE isSubmited=? AND isRead=?",true,1);
+                    return unsubmitted;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         }
     }
 

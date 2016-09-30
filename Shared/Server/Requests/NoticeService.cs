@@ -2,6 +2,8 @@
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers.Notice;
+using Shared.Db.Models.Notices;
 using Shared.Server.ServerModels.Notices;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,12 @@ using Windows.Web.Http;
 
 namespace Pepeza.Server.Requests
 {
+    class Upload
+    {
+        public string id { get; set; }
+        public double dateRead { get; set; }
+    };
+
     public class NoticeService : BaseRequest
     {
         public async static Task<Dictionary<string, string>> postNotice(Dictionary<string, string> board)
@@ -122,6 +130,63 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
-        
+        public async static Task submitReadNoticeItems()
+        {
+            List<TNoticeItem> batchUploads = await NoticeItemHelper.getAllUnsubmitedNoticeItems();
+            List<Upload> toUpload = new List<Upload>();
+           
+            foreach (var item in batchUploads)
+            {
+                toUpload.Add(new Upload()
+                {
+                    id = item.id.ToString(),
+                    dateRead = item.dateRead
+                });
+            }
+            System.Net.Http.HttpClient client = getHttpClient(true);
+            System.Net.Http.HttpResponseMessage response = null;
+            try
+            {
+                if (checkInternetConnection())
+                {
+                    response = await client.PutAsJsonAsync(NoticeAddresses.SUBMIT_READ_NOTICEITEMS, toUpload);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //Delete from the local table
+                        JObject jobject = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        JArray successfulUploads = JArray.Parse(jobject["successful"].ToString());
+                        JArray unsuccessfulUploads = JArray.Parse(jobject["not_found"].ToString());
+                        JArray forbidenUploads = JArray.Parse(jobject["forbidden"].ToString());
+                        foreach (var item in successfulUploads)
+                        {
+                            TNoticeItem candidate = await NoticeItemHelper.get((int)item);
+                            if (candidate != null)
+                            {
+                                candidate.isSubmited = true;
+                                candidate.is_not_found = false;
+                                candidate.isForbiden = false;
+                                await NoticeItemHelper.update(candidate);
+                            }
+                        }
+                        foreach (var item in forbidenUploads)
+                        {
+                            TNoticeItem candidate = await NoticeItemHelper.get((int)item);
+                            if (candidate != null)
+                            {
+                                candidate.isSubmited = true;
+                                candidate.is_not_found = false;
+                                candidate.isForbiden = true;
+                            }
+                        }
+                        //Retry if there were failure downloads 
+                    }
+                }
+                
+            }
+            catch
+            {
+                return;
+            }
+        }   
     }
 }

@@ -9,6 +9,10 @@ namespace Shared.Db.Models.Notices
 {
     public class TNoticeItem
     {
+        public TNoticeItem()
+        {
+            isSubmited = false;
+        }
         [PrimaryKey]
         public int id { get; set; }
         public int noticeId { get; set; }
@@ -19,7 +23,10 @@ namespace Shared.Db.Models.Notices
         public DateTime dateUpdateRead { get; set; }
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
-        public DateTime dateRead { get; set; }
+        public double dateRead { get; set; }
         public int isRead { get; set; }
+        public bool isSubmited { get; set; }
+        public bool isForbiden { get; set; }
+        public bool is_not_found { get; set; }
     }
 }
