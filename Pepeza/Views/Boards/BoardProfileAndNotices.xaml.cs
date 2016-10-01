@@ -8,11 +8,14 @@ using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Analytics;
+using Pepeza.Views.Notices;
 using Pepeza.Views.Profile;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Avatars;
+using Shared.Db.Models.Notices;
 using Shared.Db.Models.Orgs;
+using Shared.Models.NoticeModels;
 using Shared.Server.Requests;
 using Shared.Utitlity;
 using System;
@@ -27,6 +30,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -443,15 +447,15 @@ namespace Pepeza.Views.Boards
                     foreach (var item in notices)
                     {
                         JObject obj = JObject.Parse(item.ToString());
-                        noticeDataSource.Add(new TNotice()
-                        {
-                            noticeId = (int) obj["id"], 
-                            title = (string)obj["title"],
-                            dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
-                            dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
-                            boardId = boardId,
-                            content =(string)obj["content"]
-                        });
+                        TNotice notice = new TNotice()
+                       {
+                           noticeId = (int)obj["id"],
+                           title = (string)obj["title"],
+                           dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
+                           dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
+                           boardId = boardId
+                       };
+                       noticeDataSource.Add(notice); 
                     }
                     ListViewNotices.ItemsSource = noticeDataSource;
                     areNoticesLoaded = true;
@@ -459,11 +463,13 @@ namespace Pepeza.Views.Boards
                 else
                 {
                     //we have nothing to display
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
                 }
             }
             else
             {
                 //We hit an error 
+                toasterror.Message = Constants.UNKNOWNERROR;
             }
 
             StackPanelLoadingNotices.Visibility = Visibility.Collapsed;
@@ -496,6 +502,10 @@ namespace Pepeza.Views.Boards
                     else if (collaborator.role == Constants.EDITOR)
                     {
                         CommandBarOperations.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        ListViewNotices.SelectionChanged -= ListViewNotices_SelectionChanged;
                     }
                     if (collaborator.role != Constants.OWNER )
                     {
@@ -566,11 +576,15 @@ namespace Pepeza.Views.Boards
             }
             base.OnNavigatingFrom(e);
         }
-
-      
         private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardAnalytics) , boardId);
+        }
+
+        private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TNotice selected = (sender as ListView).SelectedItem as TNotice;
+            this.Frame.Navigate(typeof(NoticeDetails), selected.noticeId);
         }
     }
     public class BoolToTextConverter : IValueConverter
@@ -595,6 +609,57 @@ namespace Pepeza.Views.Boards
             else
             {
                 return true;
+            }
+        }
+    }
+    public class IntToAttachment : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((bool)value == true)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((Visibility)value == Visibility.Visible)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+    public class IntToForeground : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((int)value != 1)
+            {
+                return (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush);
+            }
+            else
+            {
+                return new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((SolidColorBrush)(value) == (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush))
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
             }
         }
     }

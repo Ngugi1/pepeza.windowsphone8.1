@@ -21,11 +21,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
@@ -349,6 +351,33 @@ namespace Pepeza
                 return true;
             }
             return false;
+        }
+    }
+    public class IntToForeground: IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((int)value != 1)
+            {
+                return (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush);
+            }
+            else
+            {
+                return new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((SolidColorBrush)(value) == (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush))
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }

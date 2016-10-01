@@ -130,6 +130,40 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+
+        public async static Task<Dictionary<string, string>> getNotice(int noticeId)
+        {
+            System.Net.Http.HttpClient client = getHttpClient(true);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            System.Net.Http.HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.GetAsync(string.Format(NoticeAddresses.GET_NOTICE,noticeId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // We got a 200 OK
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        // Error code 
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var x = ex.ToString();
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
         public async static Task submitReadNoticeItems()
         {
             List<TNoticeItem> batchUploads = await NoticeItemHelper.getAllUnsubmitedNoticeItems();

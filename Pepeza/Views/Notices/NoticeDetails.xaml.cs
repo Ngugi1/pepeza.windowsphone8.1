@@ -1,10 +1,13 @@
-﻿using Pepeza.Db.Models.Notices;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.Models.Notices;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Connectivity;
 using Pepeza.Server.Requests;
+using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
 using Shared.Db.DbHelpers;
 using Shared.Db.Models.Notices;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,7 +42,8 @@ namespace Pepeza.Views.Notices
         string fileName;
         private List<DownloadOperation> activeDownloads = new List<DownloadOperation>();
         private CancellationTokenSource cts;
-        TFile file = null;
+        TFile file = new TFile();
+        TNotice notice = null;
         public NoticeDetails()
         {
             cts = new CancellationTokenSource();
@@ -52,13 +56,13 @@ namespace Pepeza.Views.Notices
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter != null)
+            if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))
             {
-                TNotice noticeParam = e.Parameter as TNotice;
+                notice = e.Parameter as TNotice;
                 // Now do a sumission if we are connected to the internet
-                if (noticeParam.hasAttachment)
+                if (notice.hasAttachment)
                 {
-                     file = await FileHelper.get(noticeParam.noticeId);
+                     file = await FileHelper.get(notice.noticeId);
                    //Check if the file is downloaded
                     try
                     {
@@ -90,9 +94,84 @@ namespace Pepeza.Views.Notices
                 {
                     StackPanelDownload.Visibility = Visibility.Collapsed;
                 }
-                this.RootGrid.DataContext = noticeParam;
+                this.RootGrid.DataContext = notice;
                 await NoticeService.submitReadNoticeItems();
               
+            }else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
+            {
+                //Now load the notice itself 
+                int noticeId = (int)e.Parameter;
+                try
+                {
+                    Dictionary<string, string> noticeresults = await NoticeService.getNotice(noticeId);
+                    if (noticeresults.ContainsKey(Constants.SUCCESS))
+                    {
+                        //Get the notice details 
+                        JObject json = JObject.Parse(noticeresults[Constants.SUCCESS]);
+                        JToken attachment = (JToken)json["attachment"];
+                        TNotice notice = new TNotice();
+                        if (attachment.Type != JTokenType.Null)
+                        {
+                            notice.hasAttachment = true;
+                            file = new TFile();
+
+                            file.id = (int)json["file"]["id"];
+                            file.mimeType = (string)json["file"]["mimeType"];
+                            file.fileName = (string)json["file"]["fileName"];
+                            file.size = (long)json["file"]["size"];
+                            file.dateCreated = DateTimeFormatter.format((long)json["file"]["dateCreated"]);
+
+                            file.link = string.Format(NoticeAddresses.LINK_FORMAT, file.id);
+                            file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
+                            try
+                            {
+                                if (await folderExists(PEPEZA))
+                                {
+                                    var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                                    fileName = file.id + file.fileName;
+                                    var localFile = await folder.GetFileAsync(file.id + file.fileName);
+                                    if (localFile != null)
+                                    {
+                                        HyperLinkOpen.Visibility = Visibility.Visible;
+                                    }
+                                    else
+                                    {
+                                        HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                    }
+                                }
+
+                            }
+                            catch (Exception)
+                            {
+                                HLBDownloadAttachment.Visibility = Visibility.Visible;
+                            }
+                        }
+                        else
+                        {
+                            StackPanelDownload.Visibility = Visibility.Collapsed;
+                            notice.hasAttachment = false;
+                        }
+                       
+                        notice.title = (string)json["notice"]["title"];
+                        notice.content = (string)json["notice"]["content"];
+                        notice.dateCreated = (DateTimeFormatter.format((long)json["notice"]["dateCreated"]));
+                        
+                        
+                        RootGrid.DataContext = notice;
+                        StackPanelDownload.DataContext = file;
+                    }
+                    else
+                    {
+                        //Throw error 
+                        ToastStatus.Message = noticeresults[Constants.ERROR];
+                    }
+                }
+                catch(Exception ex)
+                {
+                    string exep = ex.ToString();
+                    ToastStatus.Message = Constants.UNKNOWNERROR;
+                }
+
             }
         }
         private void HLBDownloadAttachment_Click(object sender, RoutedEventArgs e)
