@@ -85,6 +85,8 @@ namespace Pepeza
                 {
                     EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
                 }
+              
+
                 ListViewNotices.ItemsSource = container.noticesList;
             }
             catch 
@@ -326,7 +328,7 @@ namespace Pepeza
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(NoticeAnalytics), 3);
+            //this.Frame.Navigate(typeof(NoticeAnalytics), );
         }
     }
     public class IntToAttachment : IValueConverter

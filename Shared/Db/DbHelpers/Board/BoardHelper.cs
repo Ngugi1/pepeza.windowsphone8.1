@@ -26,7 +26,7 @@ namespace Pepeza.Db.DbHelpers.Board
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
-                 boards= await connection.Table<TBoard>().ToListAsync();
+                boards = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE following=?", 0);
                  foreach (var item in boards)
                  {
                      var avatar = await AvatarHelper.get(item.avatarId);

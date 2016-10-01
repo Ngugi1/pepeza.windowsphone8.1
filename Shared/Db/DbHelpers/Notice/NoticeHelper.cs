@@ -50,11 +50,14 @@ namespace Pepeza.Db.DbHelpers.Notice
                     {
                         //Get the respective notices 
                         TNotice notice = await NoticeHelper.get(item.noticeId);
+                        notice.isRead = item.isRead;
                         TBoard board =  await BoardHelper.getBoard(notice.boardId);
                         notice.board = board.name;
                         notice.hasAttachment = await AttachmentHelper.get(notice.noticeId) != null ? true : false;
                         notices.Add(notice);
                     }
+                    notices.OrderByDescending(i => i.isRead);
+                    notices.OrderByDescending(i => i.dateCreated);
                 }
                 return notices;
             }

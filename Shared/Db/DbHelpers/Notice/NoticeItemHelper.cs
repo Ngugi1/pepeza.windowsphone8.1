@@ -65,7 +65,7 @@ namespace Shared.Db.DbHelpers.Notice
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    List<TNoticeItem> unsubmitted = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE isSubmited=? AND isRead=?",true,1);
+                    List<TNoticeItem> unsubmitted = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE isRead=?",true,1);
                     return unsubmitted;
                 }
                 return null;

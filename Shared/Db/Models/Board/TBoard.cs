@@ -36,7 +36,6 @@ namespace Pepeza.Db.Models.Board
         public DateTime dateCreated { get; set; }
         public DateTime dateUpdated { get; set; }
         public int following { get; set; }
-       
         private int _noOfFollowers;
         [Ignore]
         public int noOfFollowers
@@ -44,7 +43,6 @@ namespace Pepeza.Db.Models.Board
             get { return _noOfFollowers; }
             set { _noOfFollowers = value;  onPropertyChanged("noOfFollowers"); }
         }
-
         [Ignore]
         public string singleFollowerOrMany { get; set; }
         public int avatarId { get; set; }

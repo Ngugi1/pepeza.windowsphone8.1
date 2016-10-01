@@ -80,6 +80,10 @@ namespace Pepeza.Views.Notices
                                 HLBDownloadAttachment.Visibility = Visibility.Visible;
                             }
                         }
+                        else
+                        {
+                            HLBDownloadAttachment.Visibility = Visibility.Visible;
+                        }
                        
                     }
                     catch(Exception)
@@ -138,6 +142,10 @@ namespace Pepeza.Views.Notices
                                     {
                                         HLBDownloadAttachment.Visibility = Visibility.Visible;
                                     }
+                                }
+                                else
+                                {
+                                    HLBDownloadAttachment.Visibility = Visibility.Visible;
                                 }
 
                             }

@@ -314,6 +314,7 @@ namespace Pepeza.Views.Boards
                 following.userId = (int)objResults["userId"];
                 following.boardId = (int)objResults["boardId"];
                 following.accepted = (int)objResults["accepted"];
+                boardParam.following = 1;
                 if (objResults["dateAccepted"].Type != JTokenType.Null) DateTimeFormatter.format((double)objResults["dateAccepted"]);
                 if (await FollowingHelper.get(following.id) != null)
                 {
@@ -497,7 +498,6 @@ namespace Pepeza.Views.Boards
                     {
                         //Hide follow button
                         btnFollow.Visibility = Visibility.Collapsed;
-
                     }
                     else if (collaborator.role == Constants.EDITOR)
                     {

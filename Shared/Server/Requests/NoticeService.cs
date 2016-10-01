@@ -183,9 +183,10 @@ namespace Pepeza.Server.Requests
             {
                 if (checkInternetConnection())
                 {
-                    response = await client.PutAsJsonAsync(NoticeAddresses.SUBMIT_READ_NOTICEITEMS, toUpload);
+                    response = await client.PutAsJsonAsync(NoticeAddresses.SUBMIT_READ_NOTICEITEMS, new Dictionary<string, object>() { { "notice_items" , toUpload } });
                     if (response.IsSuccessStatusCode)
                     {
+                        
                         //Delete from the local table
                         JObject jobject = JObject.Parse(await response.Content.ReadAsStringAsync());
                         JArray successfulUploads = JArray.Parse(jobject["successful"].ToString());
