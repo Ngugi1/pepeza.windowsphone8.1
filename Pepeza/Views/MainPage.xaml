@@ -20,6 +20,13 @@
         </ResourceDictionary>
     </Page.Resources>
     <Grid Name="GridParent" Margin="0,12,0,0">
+        <toaster:Toastinet Name="ToastSuccessFailure"
+                           Grid.Column="1"
+                           Height="40"
+                           Margin="12"
+                           HorizontalContentAlignment="Center"
+                           TextHAlignment="Center"
+                           TextWrapping="Wrap" />
         <Pivot Name="pivotMainPage"
                Margin="4"
                SelectionChanged="pivotMainPage_SelectionChanged">
@@ -27,6 +34,25 @@
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                 </PivotItem.Header>
+                <Grid>
+                    <StackPanel 
+                        Name="EmptyNoticesPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+                        
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="Read"/>
+                        </Viewbox>
+                        <TextBlock Text="New notices will appear here"
+                                   HorizontalAlignment="Center"
+                                   TextLineBounds="Full"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                    </StackPanel>
                 <ListView Margin="19.5,0,8,0"
                           SelectionChanged="ListViewNotices_SelectionChanged"
                           Name="ListViewNotices">
@@ -71,42 +97,63 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
 
                 </PivotItem.Header>
-                <Jumper:AlphaJumpList Name="QJumpList">
-                    <ListView Name="ListViewBoards"
+                <Grid>
+                    <StackPanel 
+                        Name="EmptyBoardsPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  Symbol="OtherUser"
+                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                               
+                                         />
+                        </Viewbox>
+                        <TextBlock Text="All boards will appear here"
+                                   TextLineBounds="Full"
+                                   HorizontalAlignment="Center"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                    </StackPanel>
+                    <Jumper:AlphaJumpList Name="QJumpList">
+                        <ListView Name="ListViewBoards"
                               SelectionChanged="ListViewBoards_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid 
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid 
               Height="70"
               Holding="Grid_Holding"
               Style="{StaticResource GridListViewItemTemplate}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <FlyoutBase.AttachedFlyout>
-                                        <MenuFlyout Placement="Right">
-                                            <MenuFlyoutItem Name="MenuFlyOutEdit"
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout Placement="Right">
+                                                <MenuFlyoutItem Name="MenuFlyOutEdit"
                                     Click="MenuFlyOutEditBoard_Tapped"
                                                
                                     Text="edit" />
-                                            <MenuFlyoutItem 
+                                                <MenuFlyoutItem 
                                                 Name="MenuFlyoutDelete"
                                     Click="MenuFlyoutItemBoard_Delete"
                                     Text="delete" />
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
-                                    <FFImage:FFImage
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                        <FFImage:FFImage
                                         Grid.RowSpan="2"
                                         ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
                                         LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
@@ -114,57 +161,78 @@
                                         Height="50"
                                         Width="50"
                                         Source="{Binding linkSmall}"
-                                        > 
-                                    </FFImage:FFImage>
-                                    <TextBlock Grid.Row="0"
+                                        >
+                                        </FFImage:FFImage>
+                                        <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="8,10,8,6"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        Text="{Binding name}" />
-                                    <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="1"
                        Grid.Column="1"
                        Margin="8,0,14,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding desc}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Jumper:AlphaJumpList>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Jumper:AlphaJumpList>
+                </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="orgs" />
                 </PivotItem.Header>
-                <Jumper:AlphaJumpList Name="AlphaListOrgs">
-                    <ListView Name="ListViewOrgs"
+                <Grid>
+                    <StackPanel
+                        Name="EmptyOrgsPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  Symbol="List"
+                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                                         />
+                        </Viewbox>
+                        <TextBlock Text="All organisations you belong to will appear here"
+                                   TextLineBounds="Full"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                    </StackPanel>
+                    <Jumper:AlphaJumpList Name="AlphaListOrgs">
+                        <ListView Name="ListViewOrgs"
                               SelectionChanged="ListViewOrgs_SelectionChanged">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Name="OrgGrid"
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Name="OrgGrid"
               Holding="OrgGrid_Holding"
               Style="{StaticResource GridListViewItemTemplate}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <FlyoutBase.AttachedFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem 
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <FlyoutBase.AttachedFlyout>
+                                            <MenuFlyout>
+                                                <MenuFlyoutItem 
                                                  Name="MenuFlyoutEdit"
                                     Click="MenuFlyoutEditOrg_Click"
                                     Text="edit" />
-                                            <MenuFlyoutItem 
+                                                <MenuFlyoutItem 
                                                  Name="MenuFlyoutDelete"
                                     Click="MenuFlyoutDeleteOrg_Click"
                                     Text="delete" />
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
-                                    <FFImage:FFImage
+                                            </MenuFlyout>
+                                        </FlyoutBase.AttachedFlyout>
+                                        <FFImage:FFImage
                                         Height="50"
                                         Width="50"
                                         Grid.RowSpan="2"
@@ -172,22 +240,23 @@
                                         LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png" 
                                         Margin="0,8,0,0"
                                         Source="{Binding linkSmall}">
-</FFImage:FFImage>
-                                    <TextBlock Grid.Row="0"
+                                        </FFImage:FFImage>
+                                        <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Margin="14,0,0,0"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        Text="{Binding name}" />
-                                    <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="1"
                        Grid.Column="1"
                        Margin="14,4,0,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding description}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Jumper:AlphaJumpList>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Jumper:AlphaJumpList>
+                </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
@@ -195,20 +264,35 @@
 
                 </PivotItem.Header>
                 <!--  Alpha jumplist for Following Pivot  -->
-                <Jumper:AlphaJumpList Name="AlphaListFollowing">
-                    <ListView Name="ListViewFollowing"
+                <Grid>
+                    <StackPanel 
+                        Name="EmptyFollowersPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="SolidStar"/>
+                        </Viewbox>
+                        <TextBlock Text="All boards you follow will appear here"
+                                   TextLineBounds="Full"
+                                   TextAlignment="Center"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                    </StackPanel>
+
+                    <Jumper:AlphaJumpList Name="AlphaListFollowing">
+                        <ListView Name="ListViewFollowing"
                               ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
                               SelectionChanged="ListViewFollowing_SelectionChanged" />
-                </Jumper:AlphaJumpList>
+                    </Jumper:AlphaJumpList>
+                </Grid>
             </PivotItem>
         </Pivot>
-        <toaster:Toastinet Name="ToastSuccessFailure"
-                           Grid.Column="1"
-                           Height="40"
-                           Margin="12"
-                           HorizontalContentAlignment="Center"
-                           TextHAlignment="Center"
-                           TextWrapping="Wrap" />
+       
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">

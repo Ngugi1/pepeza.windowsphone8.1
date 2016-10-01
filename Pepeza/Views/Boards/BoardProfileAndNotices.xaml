@@ -96,12 +96,12 @@
                                                             Orientation="Horizontal">
                                                     <TextBlock Margin="0"
                                                                Style="{StaticResource txtBlockDisplay}"
-                                                               Text="{Binding noOfFollowers}"
+                                                               Text="{Binding noOfFollowers , Mode=TwoWay}"
                                                                Typography.NumeralStyle="Normal" />
                                                     <TextBlock Margin="12,0"
                                                                FontSize="22"
                                                                Style="{StaticResource txtBlockDisplay}"
-                                                               Text="{Binding singleFollowerOrMany}"
+                                                               Text="{Binding singleFollowerOrMany , Mode=TwoWay}"
                                                                Typography.Capitals="AllSmallCaps" />
                                                 </StackPanel>
                                             </HyperlinkButton.Content>

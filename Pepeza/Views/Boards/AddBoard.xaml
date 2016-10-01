@@ -40,6 +40,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            
             <Ellipse Width="120"
                      Height="120"
                      Margin="16,8"
@@ -78,23 +79,25 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <ComboBox  
-                    Grid.Row="2"
-                    Name="comboBoardType"
-                    Margin="16,8"
-                    SelectedIndex="0"
-                      BorderBrush="{StaticResource TextBoxBackgroundThemeBrush}"
-                      Foreground="{StaticResource PhoneForegroundBrush}">
-                    <ComboBox.Header>
-                        <TextBlock FontSize="22"
-                               Foreground="{StaticResource PhoneForegroundBrush}"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Text="select board type" />
-                    </ComboBox.Header>
-                    <ComboBoxItem Content="public board" />
-                    <ComboBoxItem Content="invite board"/>
-                </ComboBox>
-            <TextBox Grid.Row="3"
+                <StackPanel  Grid.Row="2">
+                    <CheckBox Margin="12,2,0,2"
+                              BorderThickness="3"
+                              BorderBrush="Black"
+                              Checked="checkBoxBoardType_Checked"
+                              Unchecked="checkBoxBoardType_Unchecked"
+                              Name="checkBoxBoardType"
+                              Content="Check to restrict who can follow this board"/>
+                    <CheckBox  
+                        BorderBrush="Black"
+                        BorderThickness="3"
+                        Margin="12,2,0,2"
+                        Unchecked="checkBoxVisibility_Unchecked"
+                        Checked="checkBoxVisibility_Checked"
+                        Name="checkBoxVisibility"
+                        Content="Check to make board invisible from public"/>
+                </StackPanel>
+
+                <TextBox Grid.Row="3"
                      Header="name"
                      PlaceholderText="give the board a name"
                      Style="{StaticResource txtBoxStyle}"

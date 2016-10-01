@@ -162,8 +162,20 @@ namespace Pepeza.Views.Boards
             TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
+                int numberofRealFollowers = 0;
+                // Get the board followers 
+                Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
+                if (followersCountResults.ContainsKey(Constants.SUCCESS))
+                {
+                    //We have number of followers
+                    JObject result = JObject.Parse(followersCountResults[Constants.SUCCESS]);
+                    numberofRealFollowers = (int)result["noOfRequests"];
+                }
+                
+                //We now say we are not fetching 
                 isFetchingDetails(false);
                 await assignRoles(localBoard);
+                localBoard.noOfFollowers = numberofRealFollowers;
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.get(localBoard.id);
                 boardAvatar = await AvatarHelper.get(localBoard.id);
@@ -224,8 +236,6 @@ namespace Pepeza.Views.Boards
                         boardFetched.orgID = (int)objResults["orgId"];
                         boardFetched.name = (string)objResults["name"];
                         boardFetched.noOfFollowers = (int)objResults["noOfFollowers"];
-                       
-                        boardFetched.ownerId = (int)objResults["ownerId"];
                         boardFetched.followRestriction = (string)objResults["followRestriction"];
                         boardFetched.desc = (string)objResults["description"];
                         boardFetched.dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]);
@@ -241,7 +251,7 @@ namespace Pepeza.Views.Boards
                             linkNormal = (string)objResults["avatar"]["linkNormal"],
                             linkSmall = (string)objResults["avatar"]["linkSmall"]
                         };
-                        boardFetched.avatarId = (int)objResults["avatar"]["avatarId"];
+                        boardFetched.avatarId = boardAvatar.id;
                     }
                     if (objResults["follower_item"].Type != JTokenType.Null)
                     {
@@ -272,10 +282,7 @@ namespace Pepeza.Views.Boards
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
                     isProfileLoaded = true;
-                    if(boardFetched.ownerId == (int)Settings.getValue(Constants.USERID))
-                    {
-                        btnFollow.Visibility = Visibility.Collapsed;
-                    }
+                   
                 }
                 else
                 {
@@ -355,8 +362,8 @@ namespace Pepeza.Views.Boards
                 {
                     await FollowingHelper.delete(localFollower);
                     await BoardHelper.delete(boardUnfollow);
-                    (rootGrid.DataContext as TBoard).noOfFollowers = (rootGrid.DataContext as TBoard).noOfFollowers - 1;
                 }
+                (rootGrid.DataContext as TBoard).noOfFollowers = (rootGrid.DataContext as TBoard).noOfFollowers - 1;
                 toasterror.Message = (string)objResults["message"];
                 btnFollow.IsEnabled = true;
                 btnFollow.Content = "Follow";
@@ -398,7 +405,6 @@ namespace Pepeza.Views.Boards
                         stackPanelLoading.Visibility = Visibility.Visible;
                         ContentRoot.Opacity = 0.7;
                         await getBoardDetailsAsync(boardId);
-                       
                     }
                     
                     break;

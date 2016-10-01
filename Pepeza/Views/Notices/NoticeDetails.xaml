@@ -6,12 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:toast="using:Toastinet"
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                   >
         <Grid Name="RootGrid">
+            <toast:Toastinet VerticalAlignment="Bottom" 
+                             Duration="3"
+                             Name="ToastStatus"
+                             Foreground="{ThemeResource PhoneAccentBrush}"
+                             />
             <StackPanel Margin="10,10,0,0">
                 <ScrollViewer>
                     <TextBlock 
@@ -61,7 +67,9 @@
                        Style="{StaticResource BodyTextBlockStyle}"/>
 
                     <HyperlinkButton 
-                        Click="HLBDownloadAttachment_Click"  Name="HLBDownloadAttachment">
+                        Click="HLBDownloadAttachment_Click" 
+                        Visibility="Collapsed"
+                        Name="HLBDownloadAttachment">
                         <HyperlinkButton.Content>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="download attachment"
@@ -80,6 +88,21 @@
                                         Name="SymbolOperation"
                                         Foreground="{ThemeResource PhoneAccentBrush}" Symbol="Download"/>
                                 </Viewbox>
+                            </StackPanel>
+                        </HyperlinkButton.Content>
+                    </HyperlinkButton>
+                    <HyperlinkButton Name="HyperLinkOpen"
+                                     Visibility="Collapsed"
+                                     Click="HyperLinkOpen_Click">     
+                        <HyperlinkButton.Content>
+                            <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="open file"
+                           VerticalAlignment="Center"             
+                           Margin="12,4"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           Style="{StaticResource MessageDialogContentStyle}"
+                           />
+                                <SymbolIcon Symbol="OpenFile" Foreground="{ThemeResource PhoneAccentBrush}"/>
                             </StackPanel>
                         </HyperlinkButton.Content>
                     </HyperlinkButton>

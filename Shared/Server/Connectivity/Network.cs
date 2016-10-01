@@ -8,7 +8,7 @@ using Windows.Networking.Connectivity;
 
 namespace Pepeza.Server.Connectivity
 {
-    class Network
+    public class Network
     {
         public bool HasInternetConnection { get; set; }
         public Network()

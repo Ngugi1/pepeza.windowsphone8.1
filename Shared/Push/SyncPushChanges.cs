@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Notifications;
 
 namespace Shared.Push
 {
@@ -22,12 +23,15 @@ namespace Shared.Push
     {
         public async static Task initUpdate(bool inbackground= false)
         {
+            var toast = ActionCenterHelper.getToast("Hello", "We have new data", "");
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
             try
             {
                 //Get new data 
                 Dictionary<string, string> userdata = await GetNewData.getNewData();
                 if (userdata.ContainsKey(Constants.SUCCESS))
                 {
+
                     if(await GetNewData.disectUserDetails(userdata , inbackground))
                     {
                         Settings.add(Constants.DATA_PUSHED, true);

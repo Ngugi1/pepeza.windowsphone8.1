@@ -180,11 +180,16 @@ namespace Pepeza.Server.Requests
                         }
                         //Retry if there were failure downloads 
                     }
+                    else
+                    {
+                        string x = await response.Content.ReadAsStringAsync();
+                    }
                 }
                 
             }
             catch
             {
+
                 return;
             }
         }   

@@ -57,7 +57,7 @@ namespace Pepeza
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Clear the backstack 
-            ActionCenterHelper.updateActionCenter(null);
+          //  ActionCenterHelper.updateActionCenter(null);
             this.Frame.BackStack.Clear();
             //Load data 
             isSelected = false;
@@ -79,16 +79,21 @@ namespace Pepeza
             {
                 ListContainer container = new ListContainer();
                 container.noticesList =  new ObservableCollection<Db.Models.Notices.TNotice>(await NoticeHelper.getAll());
+                if (container.noticesList.Count == 0)
+                {
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+                }
                 ListViewNotices.ItemsSource = container.noticesList;
             }
             catch 
             {
-
+                EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
             }
         }
         private async Task<bool> loadOrgs()
         {
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
+            if (orgs.Count == 0) EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
             var orgAlphaGroup = JumpListHelper.ToAlphaGroups(orgs, t => t.name);
             AlphaListOrgs.ReleaseItemsSource();
             ListViewOrgs.ItemsSource = orgAlphaGroup;
@@ -99,6 +104,7 @@ namespace Pepeza
         private async Task<bool> loadBoards()
         {
             boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
+            if (boards.Count == 0) EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
             var groupedBoards = JumpListHelper.ToAlphaGroups(boards, t => t.name);
             QJumpList.ReleaseItemsSource();
             ListViewBoards.ItemsSource = groupedBoards;
@@ -109,6 +115,7 @@ namespace Pepeza
         private async Task<bool> loadFollowing()
         {
             following = new ObservableCollection<TBoard>(await BoardHelper.getFollowing());
+            if (following.Count == 0) EmptyFollowersPlaceHolder.Visibility = Visibility.Collapsed;
             var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.name);
             AlphaListFollowing.ReleaseItemsSource();
             ListViewFollowing.ItemsSource = alphaGroups;

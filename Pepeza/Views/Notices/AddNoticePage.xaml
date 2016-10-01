@@ -61,6 +61,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
+               
                 <TextBox Name="txtBoxDesc"
                      Grid.Row="2"
                      Height="150"
@@ -93,7 +94,7 @@
                 <StackPanel Name="StackPanelLoading"
                         Grid.Row="6"
                         VerticalAlignment="Center"
-                        Visibility="Visible">
+                        Visibility="Collapsed">
                     <ProgressBar Margin="12" />
                     <TextBlock HorizontalAlignment="Center"
                            Style="{StaticResource txtBlockWait}"
@@ -101,7 +102,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="5"
                             Margin="12,8"
-                            Visibility="Visible"
+                            Visibility="Collapsed"
                             Background="{ThemeResource CommandBarBackgroundThemeBrush}"
                             Name="GridAttachment">
                     <Grid Margin="12" Background="{ThemeResource CommandBarBackgroundThemeBrush}">
@@ -186,7 +187,6 @@
                           Label="attachment"/>
             <AppBarButton Click="AppBarButton_Send"
                           Icon="Send"
-                          
                           Label="post" />
         </CommandBar>
     </Page.BottomAppBar>

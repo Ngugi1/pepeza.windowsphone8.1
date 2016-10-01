@@ -30,7 +30,6 @@ namespace Shared.TilesAndActionCenter
             
             //Retrieve XML content 
             var toastXML = ToastNotificationManager.GetTemplateContent(toastTemplate);
-            
             //Get the NodeList
             var toastTextElements = toastXML.GetElementsByTagName("text");
          

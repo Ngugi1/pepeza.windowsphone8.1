@@ -1,4 +1,5 @@
 ﻿using ByteSizeLib;
+using Coding4Fun.Toolkit.Controls;
 using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
@@ -14,10 +15,12 @@ using Shared.Server.ServerModels.Notices;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -52,13 +55,20 @@ namespace Pepeza.Views.Notices
             List<TBoard> boards = await BoardHelper.fetchAllBoards();
             if (boards.Count <= 0)
             {
-                StackPanelNoBoards.Visibility = Visibility.Visible;
+                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("No boards found", "We determined that you have not created any boards. Please create one or more to be able to post notices :-)");
+                prompt.Completed+=prompt_Completed;
+                prompt.Show();
             }
             else
             {
                 comboBoards.ItemsSource = boards;
                 comboBoards.SelectedIndex = 0;
             }
+        }
+
+        private void prompt_Completed(object sender, PopUpEventArgs<string, PopUpResult> e)
+        {
+            this.Frame.GoBack();
         }
         private async void AppBarButton_Send(object sender, RoutedEventArgs e)
         {
@@ -272,6 +282,11 @@ namespace Pepeza.Views.Notices
         {
             file = null;
             GridAttachment.Visibility = Visibility.Collapsed;
+        }
+
+        private  void RichEditBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+           
         }
     }
 }

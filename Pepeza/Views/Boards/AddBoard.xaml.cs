@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Coding4Fun.Toolkit.Controls;
+using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -43,6 +45,18 @@ namespace Pepeza.Views.Boards
                 comboOrgs.ItemsSource = orgs;
                 comboOrgs.SelectedIndex = 0;
             }
+            else
+            {
+                //Show a message to tell the user they need to create a board 
+                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("No orgs found", "We found that you do not belong to any organisation. Please create one or more to be anble to create boards :-)");
+                prompt.Show();
+                prompt.Completed += prompt_Completed;
+            }
+        }
+
+        void prompt_Completed(object sender, PopUpEventArgs<string, PopUpResult> e)
+        {
+            this.Frame.GoBack();
         }
 
         private async void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)
@@ -51,14 +65,19 @@ namespace Pepeza.Views.Boards
             txtBlockStatus.Visibility = Visibility.Collapsed;
             var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
             TOrgInfo info = comboOrgs.SelectedItem as TOrgInfo;
-            string followRestriction = comboBoardType.SelectedIndex == 0 ? Constants.PUBLIC_BOARD : Constants.REQUEST_BOARD;
+            string followRestriction = checkBoxBoardType.IsChecked == true? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
+            string boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
             if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
             {
                 //Go ahead and create the account
 
                 Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
                 {
-                    {"orgId" ,info.id.ToString()} ,{"name" , board.Name} , {"description" , board.Desc} , { "followRestriction" , followRestriction}
+                    {"org" ,info.id.ToString()} ,
+                    {"name" , board.Name} , 
+                    {"description" , board.Desc} ,
+                    { "followRestriction" , followRestriction},
+                    {"visibility" , boardVisibility}
                 });
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
@@ -102,6 +121,26 @@ namespace Pepeza.Views.Boards
             {
                 Debug.WriteLine(ex.ToString() + " ==================================== ");
             }
+        }
+
+        private void checkBoxBoardType_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxBoardType.Content = "Uncheck to allow anyone to follow this board";
+        }
+
+        private void checkBoxBoardType_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxBoardType.Content = "Check to restrict who can follow this board";
+        }
+
+        private void checkBoxVisibility_Checked(object sender, RoutedEventArgs e)
+        {
+            checkBoxVisibility.Content = "Uncheck to make board visible to public";
+        }
+
+        private void checkBoxVisibility_Unchecked(object sender, RoutedEventArgs e)
+        {
+            checkBoxVisibility.Content = "Check to make board invisible from public";
         }
     }
 }

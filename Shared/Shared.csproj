@@ -167,6 +167,7 @@
     <Compile Include="Utitlity\DateTimeFormatter.cs" />
     <Compile Include="Utitlity\FilePickerHelper.cs" />
     <Compile Include="Utitlity\LocalUserHelper.cs" />
+    <Compile Include="Utitlity\MessagePromptHelpers.cs" />
     <Compile Include="Utitlity\PageStateConstants.cs" />
     <Compile Include="Validation\OrgValidation.cs" />
     <Compile Include="Validation\TextNoticeValidation.cs" />
@@ -187,14 +188,22 @@
       <HintPath>..\packages\ByteSize.1.2.1\lib\portable-net45+win8+wpa81+wp8\ByteSizeLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Coding4Fun.Toolkit">
+      <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.8\lib\wpa81\Coding4Fun.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Coding4Fun.Toolkit.Controls">
+      <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.8\lib\wpa81\Coding4Fun.Toolkit.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Facebook">
       <HintPath>..\packages\Facebook.7.0.6\lib\portable-win81+wpa81\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="FFImageLoading">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.7\lib\portable-netcore45+wpa81\FFImageLoading.dll</HintPath>
+    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.8\lib\portable-netcore45+wpa81\FFImageLoading.dll</HintPath>
     </Reference>
-    <Reference Include="FFImageLoading.Platform">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.7\lib\portable-netcore45+wpa81\FFImageLoading.Platform.dll</HintPath>
+    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.8\lib\portable-netcore45+wpa81\FFImageLoading.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
@@ -230,6 +239,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.Coding4Fun.Toolkit.txt" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

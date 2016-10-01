@@ -379,7 +379,7 @@ namespace Pepeza.Server.Requests
                         {
                             id = (int)item["id"],
                             size = (long)item["size"],
-                            link = (string)item["link"],
+                            link = string.Format(NoticeAddresses.LINK_FORMAT,(int)item["id"]),
                             fileName = (string)item["fileName"],
                             mimeType = (string)item["mimeType"],
                             attachmentId = (int)item["attachmentId"],

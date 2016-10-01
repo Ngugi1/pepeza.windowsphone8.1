@@ -13,6 +13,7 @@ namespace Pepeza.Utitlity
         public static string EMAIL_DEFAULT_MESSAGE { get { return "Please enter a valid email address"; } }
         public static string EMAIL_NOT_AVAILABLE { get { return "Please enter a valid email address"; } }
         public static string USERNAME_TAKEN { get { return "Sorry , username is already taken!";} }
+        
 
 
     }

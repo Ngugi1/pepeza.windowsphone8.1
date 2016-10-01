@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Coding4Fun.Toolkit.Controls;
+using Newtonsoft.Json.Linq;
 using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +33,8 @@ namespace Shared.Push
             var access = await BackgroundExecutionManager.RequestAccessAsync();
             if (access == BackgroundAccessStatus.Denied)
             {
-                new MessageDialog("You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
+                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
+                prompt.Show();
                 return isRegistered;
             }
             

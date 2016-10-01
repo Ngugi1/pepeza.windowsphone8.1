@@ -1,4 +1,8 @@
 ﻿using Pepeza.Db.Models.Notices;
+using Pepeza.IsolatedSettings;
+using Pepeza.Server.Connectivity;
+using Pepeza.Server.Requests;
+using Pepeza.Utitlity;
 using Shared.Db.DbHelpers;
 using Shared.Db.Models.Notices;
 using System;
@@ -12,6 +16,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,7 +35,9 @@ namespace Pepeza.Views.Notices
     /// </summary>
     public sealed partial class NoticeDetails : Page
     {
-        private List<DownloadOperation> activeDownloads;
+        string PEPEZA = "Pepeza";
+        string fileName;
+        private List<DownloadOperation> activeDownloads = new List<DownloadOperation>();
         private CancellationTokenSource cts;
         TFile file = null;
         public NoticeDetails()
@@ -38,7 +45,6 @@ namespace Pepeza.Views.Notices
             cts = new CancellationTokenSource();
             this.InitializeComponent();
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -50,11 +56,33 @@ namespace Pepeza.Views.Notices
             {
                 TNotice noticeParam = e.Parameter as TNotice;
                 // Now do a sumission if we are connected to the internet
- 
                 if (noticeParam.hasAttachment)
                 {
+                     file = await FileHelper.get(noticeParam.noticeId);
+                   //Check if the file is downloaded
+                    try
+                    {
+                        if (await folderExists(PEPEZA))
+                        {
+                            var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                            fileName = file.id + file.fileName;
+                            var localFile = await folder.GetFileAsync(file.id + file.fileName);
+                            if (localFile != null)
+                            {
+                                HyperLinkOpen.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                HLBDownloadAttachment.Visibility = Visibility.Visible;
+                            }
+                        }
+                       
+                    }
+                    catch(Exception)
+                    {
+                        HLBDownloadAttachment.Visibility = Visibility.Visible;
+                    }
                     StackPanelDownload.Visibility = Visibility.Visible;
-                    file = await FileHelper.get(noticeParam.noticeId);
                     file.fileTypeAndSize = "("+file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size)+")";
                     this.StackPanelDownload.DataContext = file;
                 }
@@ -63,10 +91,10 @@ namespace Pepeza.Views.Notices
                     StackPanelDownload.Visibility = Visibility.Collapsed;
                 }
                 this.RootGrid.DataContext = noticeParam;
-                
+                await NoticeService.submitReadNoticeItems();
+              
             }
         }
-
         private void HLBDownloadAttachment_Click(object sender, RoutedEventArgs e)
         {
             //We need to download the file
@@ -88,101 +116,66 @@ namespace Pepeza.Views.Notices
         }
         private  async void StartDownload(TFile file)
         {
-            #region Create Destination Folder and file
-            //Create a root destination folder
-            string PEPEZA = "Pepeza";
-            //Create a download URI
-            Uri source = new Uri(file.link);
-            //Create a destination URI , make sure there will be no collission by adding file ID at the end
-            string destinationUri = file.id + file.fileName;
-            //Create the destination folder
-            StorageFolder destinationFolder = null;
-            StorageFile storageFile = null;
-            string[] mimeContent = file.mimeType.Split('/');
-            if (mimeContent[0].Contains("video") || mimeContent[0].Contains("image"))
+            Network network = new Network();
+
+            if (network.HasInternetConnection)
             {
-                //Save to Media Library
-                if (!await folderExists(PEPEZA,1))
+                #region Create Destination Folder and file
+                //Create a root destination folder
+                //Create a download URI
+                Uri source = new Uri(file.link);
+                //Create a destination URI , make sure there will be no collission by adding file ID at the end
+                string destinationUri = file.id + file.fileName;
+                //Create the destination folder
+                StorageFolder destinationFolder = null;
+                StorageFile storageFile = null;
+                if (!await folderExists(PEPEZA))
                 {
-                    //Create the folder
-                    destinationFolder = await KnownFolders.PicturesLibrary.CreateFolderAsync(PEPEZA);
+                    //Create the folder 
+                    destinationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(PEPEZA);
                 }
                 else
                 {
-                    destinationFolder = await KnownFolders.PicturesLibrary.GetFolderAsync(PEPEZA);
+                    destinationFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
                 }
-                //Here now build path to this file 
                 storageFile = await destinationFolder.CreateFileAsync(destinationUri);
-            }
-            else if (mimeContent[0].Contains("audio"))
-            {
-                //Save to music library 
-                if (!await folderExists(PEPEZA, 2))
+                #endregion
+                #region Bsckground Downloader
+                BackgroundDownloader downloader = new BackgroundDownloader();
+                if (storageFile != null)
                 {
-                    destinationFolder = await KnownFolders.MusicLibrary.CreateFolderAsync(PEPEZA);
+                    downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                    DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                    downloadOperation.Priority = BackgroundTransferPriority.High;
+                    //Now handle the download 
+                    await handleDownloadAsync(downloadOperation, true);
                 }
                 else
                 {
-                    destinationFolder = await KnownFolders.MusicLibrary.GetFolderAsync(PEPEZA);
+                    new MessageDialog("We could not download");
+                    return;
                 }
-                storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+
+
+                #endregion
             }
             else
             {
-                //Save to documents
-                if (!await folderExists(PEPEZA ,3))
-                {
-                    destinationFolder = await KnownFolders.DocumentsLibrary.CreateFolderAsync(PEPEZA);
-                }else
-                {
-                    destinationFolder = await destinationFolder.GetFolderAsync(PEPEZA);
-                }
-                storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                //Show toast that we do not have internet connection 
+                ToastStatus.Message = Constants.NO_INTERNET_CONNECTION;
             }
-            #endregion
-            #region Bsckground Downloader
-            BackgroundDownloader downloader = new BackgroundDownloader();
-            if (storageFile != null)
-            {
-                DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
-                downloadOperation.Priority = BackgroundTransferPriority.High;
-                //Now handle the download 
-                await handleDownloadAsync(downloadOperation,true);
-            }
-            else
-            {
-                new MessageDialog("We could not download");
-                return;
-            }
-
-
-            #endregion
         }
-
         /// <summary>
         /// check if the pepeza foder exists in windows phone 
         /// </summary>
         /// <param name="folderName"></param>
         /// <param name="targetFolder"></param>
         /// <returns></returns>
-        private  async Task<bool> folderExists(string folderName, int targetFolder)
+        private  async Task<bool> folderExists(string folderName)
         {
             try
             {
-                StorageFolder folder = null;
-                if (targetFolder == 1)
-                {
-                    folder = await KnownFolders.PicturesLibrary.GetFolderAsync(folderName);
-                }
-                else if (targetFolder == 2)
-                {
-                    folder = await KnownFolders.MusicLibrary.GetFolderAsync(folderName);
-                }
-                else if(targetFolder == 3)
-                {
-                    folder = await KnownFolders.DocumentsLibrary.GetFolderAsync(folderName);
-                }
-
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(folderName);
                 return true;
             }
             catch
@@ -221,8 +214,13 @@ namespace Pepeza.Views.Notices
             double percentage = 0;
             if (download.Progress.BytesReceived > 0)
             {
-                percentage = (download.Progress.BytesReceived * 100) / download.Progress.TotalBytesToReceive;
+                percentage = (double)(download.Progress.BytesReceived * 100) / (double)download.Progress.TotalBytesToReceive;
                 displayProgress(string.Format("downloading ... {0}%", percentage));
+                if (percentage == 100)
+                {
+                    HLBDownloadAttachment.Visibility = Visibility.Collapsed;
+                    HyperLinkOpen.Visibility = Visibility.Visible;
+                }
             }
             else
             {
@@ -243,5 +241,22 @@ namespace Pepeza.Views.Notices
             }
            
         }
+        private async void HyperLinkOpen_Click(object sender, RoutedEventArgs e)
+        {
+            //Launch the file 
+            try
+            {
+                var currentFolder  = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                var file = await currentFolder.GetFileAsync(fileName);
+                await Launcher.LaunchFileAsync(file);
+            }
+            catch
+            {
+                HyperLinkOpen.Visibility = Visibility.Collapsed;
+                HLBDownloadAttachment.Visibility = Visibility.Visible;
+                new MessageDialog("File could not be located. Redownload the file").ShowAsync();
+            }
+        }
+       
     }
 }
