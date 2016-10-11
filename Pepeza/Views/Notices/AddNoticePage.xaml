@@ -43,25 +43,7 @@
                      Header="title"
                      PlaceholderText="give a meaningful title"
                      Style="{StaticResource txtBoxStyle}" />
-                <ComboBox Name="comboBoards"
-                      Grid.Row="1"
-                      BorderBrush="{StaticResource TextBoxBorderThemeBrush}"
-                      Margin="16,4">
-                    <ComboBox.Header>
-                        <TextBlock FontSize="22"
-                               Foreground="{ThemeResource PhoneForegroundBrush}"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Text="select board" />
-                    </ComboBox.Header>
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Foreground="Black"
-                                   Style="{ThemeResource ComboBoxPlaceholderTextBlockStyle}"
-                                   Text="{Binding name}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-               
+
                 <TextBox Name="txtBoxDesc"
                      Grid.Row="2"
                      Height="150"

@@ -19,14 +19,20 @@ using Shared.Db.Models.Notices;
 using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
 using Shared.Models.NoticeModels;
+using Shared.Push;
 using Shared.TilesAndActionCenter;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Notifications;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace Pepeza.Server.Requests
 {
@@ -42,9 +48,13 @@ namespace Pepeza.Server.Requests
                 
                 try
                 {
-                    long date = (long)Settings.getValue(Constants.LAST_UPDATED);
-                    string url = (string.Format(GetNewdataAddresses.GET_NEW_DATA, (long)Settings.getValue(Constants.LAST_UPDATED)));
-                    response = await client.GetAsync(string.Format(GetNewdataAddresses.GET_NEW_DATA,(long)Settings.getValue(Constants.LAST_UPDATED)));
+                    long date = 0;
+                    if (Settings.getValue(Constants.LAST_UPDATED)!=null)
+                    {
+                        date = (long)Settings.getValue(Constants.LAST_UPDATED);
+                    }
+                    string url = (string.Format(GetNewdataAddresses.GET_NEW_DATA, date));
+                    response = await client.GetAsync(url);
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
@@ -112,7 +122,6 @@ namespace Pepeza.Server.Requests
                 }
 
                 #endregion
-
                 #endregion
                 #region Users
                 //Users
@@ -199,7 +208,6 @@ namespace Pepeza.Server.Requests
                 }
 
                 #endregion
-             
                 #region Boards
                 // Boards
                 foreach (var item in boards)
@@ -282,7 +290,6 @@ namespace Pepeza.Server.Requests
                     }
                 }
                 #endregion
-
                 #region notice_items
                 foreach (var item in notice_items)
                 {
@@ -328,6 +335,7 @@ namespace Pepeza.Server.Requests
                             noticeId = (int)item["id"],
                             boardId = (int)item["boardId"],
                             title = (string)item["title"],
+                            hasAttachment = (int)item["hasAttachment"],
                             content = (string)item["content"],
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
                         };
@@ -342,7 +350,7 @@ namespace Pepeza.Server.Requests
                         }
                     }
                 }
-
+                ActionCenterHelper.updateActionCenter(notices);
                 #endregion
                 #region Attachments 
                 foreach (var item in attachments)
@@ -353,10 +361,8 @@ namespace Pepeza.Server.Requests
                         {
                             id = (int)item["id"],
                             type = (string)item["type"],
-                            link = (string)item["link"],
                             noticeId = (int)item["noticeId"],
-                            dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
-
+                            dateCreated = DateTimeFormatter.format((long)item["dateCreated"]),
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) attachment.dateUpdated = DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (await AttachmentHelper.get(attachment.id) != null)
@@ -417,6 +423,7 @@ namespace Pepeza.Server.Requests
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"]),
                             content = (string)item["content"]
                         };
+                        
                         if (item["dateReceived"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateReceived"]);
                         if (item["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (item["dateRead"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateRead"]);
@@ -430,16 +437,20 @@ namespace Pepeza.Server.Requests
                             await TNotificationHelper.add(notification);
                         }
                         //TODO:: Add to notifications or action center
-                        
-
+                        var toast = ActionCenterHelper.getToast(notification.title, notification.content);
+                        ToastNotificationManager.CreateToastNotifier().Show(toast);
                     }
                 }
+                long lastUpdate = (long)content["last_updated"];
+                Settings.add(Constants.LAST_UPDATED, lastUpdate);
+                Settings.add(Constants.DATA_PUSHED, 1);
                 #endregion
                 return true;
             }
             catch(Exception ex)
             {
                 string x = ex.ToString();
+                Settings.add(Constants.DATA_PUSHED, 0);
                 return false;
             }
         }

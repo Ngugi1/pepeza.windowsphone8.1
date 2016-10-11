@@ -100,9 +100,7 @@ namespace Pepeza.Views.Account
             userAvatar.dateCreated = DateTimeFormatter.format((long)avatar["dateCreated"]);
             userAvatar.dateUpdated = DateTimeFormatter.format((long)avatar["dateUpdated"]);
             // Now get all user orgs, boards , notices and following 
-            long initialLastUpdated = 0;
             string token =  (string)details[Constants.APITOKEN];
-            Settings.add(Constants.LAST_UPDATED, initialLastUpdated);
             Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
             //Save User ID
             Settings.add(Constants.USERID, (int)profileInfo["id"]);

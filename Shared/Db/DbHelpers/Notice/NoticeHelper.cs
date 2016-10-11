@@ -53,11 +53,19 @@ namespace Pepeza.Db.DbHelpers.Notice
                         notice.isRead = item.isRead;
                         TBoard board =  await BoardHelper.getBoard(notice.boardId);
                         notice.board = board.name;
-                        notice.hasAttachment = await AttachmentHelper.get(notice.noticeId) != null ? true : false;
+                        if (notice.hasAttachment == 1)
+                        {
+                            var attacho = await AttachmentHelper.get(notice.noticeId);
+                            if (attacho != null)
+                            {
+                                notice.attachmentId = attacho.id;
+                            }
+                        }
+                       
                         notices.Add(notice);
                     }
-                    notices.OrderByDescending(i => i.isRead);
-                    notices.OrderByDescending(i => i.dateCreated);
+                   notices.OrderByDescending<TNotice, DateTime>(i => i.dateCreated);
+                   notices.Reverse();
                 }
                 return notices;
             }

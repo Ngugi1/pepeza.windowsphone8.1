@@ -17,17 +17,16 @@ namespace Shared.TilesAndActionCenter
             //TODO :: Polish here
             foreach (var notice in notifications)
             {              
-              ToastNotification toast = getToast((string)notice["title"],(string)notice["content"], "");
+              ToastNotification toast = getToast((string)notice["title"],(string)notice["content"] , "2");
               ToastNotificationManager.CreateToastNotifier().Show(toast);
             }
   
 
         }
-        public static ToastNotification getToast(string title, string content, string group)
+        public static ToastNotification getToast(string title, string content , string extra ="1")
         {
             //Get a Toast Template 
             var toastTemplate = ToastTemplateType.ToastText02;
-            
             //Retrieve XML content 
             var toastXML = ToastNotificationManager.GetTemplateContent(toastTemplate);
             //Get the NodeList
@@ -37,10 +36,10 @@ namespace Shared.TilesAndActionCenter
             toastTextElements[0].AppendChild(toastXML.CreateTextNode(title));
             toastTextElements[1].AppendChild(toastXML.CreateTextNode(content));
             var toastUriElement = ((XmlElement)toastXML.SelectSingleNode("/toast"));
-            toastUriElement.SetAttribute("launch", "1");
+            toastUriElement.SetAttribute("launch",extra);
             //Get full toast 
             ToastNotification toast = new ToastNotification(toastXML);
-            toast.Group = "Group boys";
+            toast.Group = "PEPEZA";
             return toast;
         }
     }

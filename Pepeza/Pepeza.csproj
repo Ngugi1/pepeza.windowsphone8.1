@@ -146,8 +146,8 @@
     <Compile Include="Views\Notices\NoticeDetails.xaml.cs">
       <DependentUpon>NoticeDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Notifications\NotificationsPage.xaml.cs">
-      <DependentUpon>NotificationsPage.xaml</DependentUpon>
+    <Compile Include="Views\Notifications\Notificationspage.xaml.cs">
+      <DependentUpon>Notificationspage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Orgs\AddCollaboratorPage.xaml.cs">
       <DependentUpon>AddCollaboratorPage.xaml</DependentUpon>
@@ -283,7 +283,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Notifications\NotificationsPage.xaml">
+    <Page Include="Views\Notifications\Notificationspage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

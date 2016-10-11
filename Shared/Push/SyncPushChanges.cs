@@ -23,31 +23,20 @@ namespace Shared.Push
     {
         public async static Task initUpdate(bool inbackground= false)
         {
-            var toast = ActionCenterHelper.getToast("Hello", "We have new data", "");
-            ToastNotificationManager.CreateToastNotifier().Show(toast);
+           
             try
             {
                 //Get new data 
                 Dictionary<string, string> userdata = await GetNewData.getNewData();
                 if (userdata.ContainsKey(Constants.SUCCESS))
                 {
-
-                    if(await GetNewData.disectUserDetails(userdata , inbackground))
-                    {
-                        Settings.add(Constants.DATA_PUSHED, true);
-                    }else
-                    {
-                        Settings.add(Constants.DATA_PUSHED, false);
-                    }
+                 await GetNewData.disectUserDetails(userdata , inbackground);
                 }
-                else
-                {
-                    // Mark process as failed and save information to tell app to download data on launch
-                    Settings.add(Constants.DATA_PUSHED, false);
-                }
+                   
             }
-            catch
+            catch(Exception ex)
             {
+                string content = ex.ToString();
                 // Mark process as failed 
                 Settings.add(Constants.DATA_PUSHED, false);
             }

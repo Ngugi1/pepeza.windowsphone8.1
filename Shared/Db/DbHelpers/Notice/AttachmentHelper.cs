@@ -16,13 +16,13 @@ namespace Shared.Db.DbHelpers.Notice
 
             try
             {
-                TAttachment attachment = null;
+                List<TAttachment> attachment = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    attachment = await connection.GetAsync<TAttachment>(id);
+                    attachment = await connection.QueryAsync<TAttachment>("SELECT * FROM TAttachment WHERE noticeId=?", id);
                 }
-                return attachment;
+                return attachment.FirstOrDefault();
             }
             catch
             {

@@ -60,30 +60,36 @@ namespace Pepeza.Views.Notices
             {
                 notice = e.Parameter as TNotice;
                 // Now do a sumission if we are connected to the internet
-                if (notice.hasAttachment)
+                if (notice.hasAttachment==1)
                 {
-                     file = await FileHelper.get(notice.noticeId);
+                    
                    //Check if the file is downloaded
                     try
                     {
-                        if (await folderExists(PEPEZA))
+                        file = await FileHelper.getByAttachmentId(notice.attachmentId);
+                        if (file!=null)
                         {
-                            var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                            fileName = file.id + file.fileName;
-                            var localFile = await folder.GetFileAsync(file.id + file.fileName);
-                            if (localFile != null)
+                            file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
+                            if (await folderExists(PEPEZA))
                             {
-                                HyperLinkOpen.Visibility = Visibility.Visible;
+                                var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                                fileName = file.id + file.fileName;
+                                var localFile = await folder.GetFileAsync(file.id + file.fileName);
+                                if (localFile != null)
+                                {
+                                    HyperLinkOpen.Visibility = Visibility.Visible;
+                                }
+                                else
+                                {
+                                    HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                }
                             }
                             else
                             {
                                 HLBDownloadAttachment.Visibility = Visibility.Visible;
                             }
                         }
-                        else
-                        {
-                            HLBDownloadAttachment.Visibility = Visibility.Visible;
-                        }
+                       
                        
                     }
                     catch(Exception)
@@ -91,7 +97,6 @@ namespace Pepeza.Views.Notices
                         HLBDownloadAttachment.Visibility = Visibility.Visible;
                     }
                     StackPanelDownload.Visibility = Visibility.Visible;
-                    file.fileTypeAndSize = "("+file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size)+")";
                     this.StackPanelDownload.DataContext = file;
                 }
                 else
@@ -116,9 +121,7 @@ namespace Pepeza.Views.Notices
                         TNotice notice = new TNotice();
                         if (attachment.Type != JTokenType.Null)
                         {
-                            notice.hasAttachment = true;
                             file = new TFile();
-
                             file.id = (int)json["file"]["id"];
                             file.mimeType = (string)json["file"]["mimeType"];
                             file.fileName = (string)json["file"]["fileName"];
@@ -157,14 +160,12 @@ namespace Pepeza.Views.Notices
                         else
                         {
                             StackPanelDownload.Visibility = Visibility.Collapsed;
-                            notice.hasAttachment = false;
                         }
                        
                         notice.title = (string)json["notice"]["title"];
+                        notice.hasAttachment = (int)json["notice"]["hasAttachment"];
                         notice.content = (string)json["notice"]["content"];
                         notice.dateCreated = (DateTimeFormatter.format((long)json["notice"]["dateCreated"]));
-                        
-                        
                         RootGrid.DataContext = notice;
                         StackPanelDownload.DataContext = file;
                     }

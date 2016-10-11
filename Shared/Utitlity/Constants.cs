@@ -32,7 +32,7 @@ namespace Pepeza.Utitlity
         public static string NOT_DELETED { get { return "Sorry , we couldn't delete the item."; } }
         public static string PERMISSION_DENIED { get { return "Sorry ,Permission Denied"; } }
         public static string LAST_UPDATED { get { return "LAST_UPDATED"; } }
-        public static string DATA_PUSHED { get; set; }
+        public static string DATA_PUSHED { get { return "DATA_PUSHED"; } }
         public static string ADMIN { get{ return  "admin";}}
         public static string EDITOR { get{ return "editor";} }
         public static string OWNER { get { return "owner"; } }

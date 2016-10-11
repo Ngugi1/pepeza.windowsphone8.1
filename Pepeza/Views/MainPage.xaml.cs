@@ -70,7 +70,7 @@ namespace Pepeza
             //Orgs alpha groups
             await loadOrgs();
             //Set up followers
-            await loadFollowing();
+            //await loadFollowing();
             isSelected = true;
             this.Frame.BackStack.Clear();
             
@@ -116,17 +116,17 @@ namespace Pepeza
             ListViewBoards.SelectedItem = null;
             return true;
         }
-        private async Task<bool> loadFollowing()
-        {
-            following = new ObservableCollection<TBoard>(await BoardHelper.getFollowing());
-            if (following.Count == 0) EmptyFollowersPlaceHolder.Visibility = Visibility.Collapsed;
-            var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.name);
-            AlphaListFollowing.ReleaseItemsSource();
-            ListViewFollowing.ItemsSource = alphaGroups;
-            AlphaListFollowing.ApplyItemsSource();
-            ListViewFollowing.SelectedItem = null;
-            return true;
-        }
+        //private async Task<bool> loadFollowing()
+        //{
+        //    //following = new ObservableCollection<TBoard>(await BoardHelper.getFollowing());
+        //    //if (following.Count == 0) EmptyFollowersPlaceHolder.Visibility = Visibility.Visible;
+        //    //var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.name);
+        //    //AlphaListFollowing.ReleaseItemsSource();
+        //    //ListViewFollowing.ItemsSource = alphaGroups;
+        //    //AlphaListFollowing.ApplyItemsSource();
+        //    //ListViewFollowing.SelectedItem = null;
+        //    return true;
+        //}
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
@@ -137,27 +137,8 @@ namespace Pepeza
             await Task.Delay(2);
         }
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
-        {
-            switch ((pivotMainPage.SelectedIndex))
-            {
-                case 0:
-                    //Notices
-                    this.Frame.Navigate(typeof(AddNoticePage));
-                    break;
-                case 1:
-                    //boards
-                    this.Frame.Navigate(typeof(AddBoard));
-                    break;
-                case 2:
-                    //orgs 
-                    this.Frame.Navigate(typeof(AddOrg));
-                    break;
-                case 3:
-                    //following 
-                    break;
-                default:
-                    break;
-            }
+        {  
+          this.Frame.Navigate(typeof(AddOrg));       
         }
         private void ListViewBoards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -171,7 +152,7 @@ namespace Pepeza
         private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int selectedIndex = (sender as Pivot).SelectedIndex;
-            if (selectedIndex != 3)
+            if (selectedIndex == 2)
             {
                 AppBtnAdd.Visibility = Visibility.Visible;
             }
@@ -325,10 +306,10 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
         }
-
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
             //this.Frame.Navigate(typeof(NoticeAnalytics), );
+           
         }
     }
     public class IntToAttachment : IValueConverter
@@ -336,7 +317,7 @@ namespace Pepeza
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if ((bool)value == true)
+            if ((int)value == 1)
             {
                 return Visibility.Visible;
             }
@@ -350,9 +331,9 @@ namespace Pepeza
         {
             if ((Visibility)value == Visibility.Visible)
             {
-                return true;
+                return 1;
             }
-            return false;
+            return 0;
         }
     }
     public class IntToForeground: IValueConverter

@@ -51,25 +51,18 @@ namespace Pepeza.Views.Notices
         /// This parameter is typically used to configure the page.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //fetch all the boards and feed them to the combobox
-            List<TBoard> boards = await BoardHelper.fetchAllBoards();
-            if (boards.Count <= 0)
+            if (e.Parameter != null)
             {
-                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("No boards found", "We determined that you have not created any boards. Please create one or more to be able to post notices :-)");
-                prompt.Completed+=prompt_Completed;
-                prompt.Show();
+                boardID = (int)e.Parameter;
             }
             else
             {
-                comboBoards.ItemsSource = boards;
-                comboBoards.SelectedIndex = 0;
+                this.Frame.GoBack();
             }
+       
         }
 
-        private void prompt_Completed(object sender, PopUpEventArgs<string, PopUpResult> e)
-        {
-            this.Frame.GoBack();
-        }
+       
         private async void AppBarButton_Send(object sender, RoutedEventArgs e)
         {
             string title, desc;
@@ -82,8 +75,7 @@ namespace Pepeza.Views.Notices
                 {
                     StackPanelLoading.Visibility = Visibility.Visible;
                     title = txtBoxTitle.Text.Trim();
-                    boardID = (comboBoards.SelectedItem as TBoard).id;
-                   toPost = new Dictionary<string, string>()
+                    toPost = new Dictionary<string, string>()
                     {
                         {"boardId" , boardID.ToString()} , {"title" , title } ,{"content",desc}
                     };
@@ -106,6 +98,7 @@ namespace Pepeza.Views.Notices
                                     noticeId = (int)obj["id"],
                                     boardId = boardID,
                                     title = title,
+                                    hasAttachment = (int)obj["hasAttachment"],
                                     content = desc,
                                     dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
                                     dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
@@ -163,6 +156,7 @@ namespace Pepeza.Views.Notices
                          title = toPost.title,
                          content = toPost.content,
                          noticeId  = (int)jobject["id"],
+                         hasAttachment = (int)jobject["hasAttachment"],
                          dateCreated = DateTimeFormatter.format((long)jobject["dateCreated"]),
                        };
                     if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = DateTimeFormatter.format((long)jobject["dateUpdated"]);                    //We have results , get attachment details  

@@ -24,7 +24,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="1">
-            <Pivot SelectionChanged="Pivot_SelectionChanged" Style="{StaticResource CustomPivot}">
+            <Pivot SelectionChanged="Pivot_SelectionChanged"
+                   Name="PivotParent"
+                   Style="{StaticResource CustomPivot}">
+               
                 <PivotItem>
                     <PivotItem.Header>
                         <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="profile" />
@@ -48,13 +51,13 @@
                                 <Grid Name="GridContentHide" Opacity="0">
                                     <StackPanel>
 
-                             <Grid Grid.Row="0">
+                                        <Grid Grid.Row="0">
 
-                                        <Image Width="250" Height="250"
+                                            <Image Width="250" Height="250"
                                Name="ImageMask"
                                        Tapped="rectangleProfilePic_Tapped"
                                Source="/Assets/Images/placeholder_avatar.jpg"/>
-                                        <Toast:Toastinet 
+                                            <Toast:Toastinet 
                                  AnimationType="LeftToLeft" 
                                 Background="{ThemeResource PhoneAccentBrush}"
                                 HorizontalAlignment="Center"
@@ -64,23 +67,23 @@
                                 VerticalAlignment="Bottom"
                                 Style="{StaticResource ToastStyle}"
                                     />
-                                        <Image Height="250" Width="250"
+                                            <Image Height="250" Width="250"
                                                Name="rectProfilePic"
                                        Tapped="rectangleProfilePic_Tapped" >
-                                            <Image.Source>
-                                                <BitmapImage
+                                                <Image.Source>
+                                                    <BitmapImage
                                 x:Name="profPic"
                                 ImageOpened="BitmapImage_ImageOpened"
                                 ImageFailed="BitmapImage_ImageFailed"
                                 UriSource="{Binding linkNormal , Mode=TwoWay}" 
                                 CreateOptions="None"/>
-                                            </Image.Source>
-                                        </Image>
-                                        <ProgressBar IsIndeterminate="True" 
+                                                </Image.Source>
+                                            </Image>
+                                            <ProgressBar IsIndeterminate="True" 
                                  Width="250" 
                                  Name="PBProfilePicUpdating" VerticalAlignment="Bottom"/>
-                                </Grid>
-                                <TextBlock Name="txtBlockName"
+                                        </Grid>
+                                        <TextBlock Name="txtBlockName"
                                                    Grid.Row="2"
                                                    Margin="18,8"
                                                    Foreground="Black"
@@ -107,8 +110,14 @@
                                                 </StackPanel>
                                             </HyperlinkButton.Content>
                                         </HyperlinkButton>
+                                        <HyperlinkButton Content="Public Board" 
+                                                         FontSize="{StaticResource  TextStyleLargeFontSize}"
+                                                         Foreground="{ThemeResource PhoneAccentBrush}"
+                                                         HorizontalAlignment="Center"/>
                                         <Button Name="btnFollow"
                                                 Margin="16,0"
+                                                Foreground="White"
+                                                Background="{ThemeResource PhoneAccentBrush}"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Bottom"
                                                 Click="btnFollow_Click"
@@ -127,7 +136,8 @@
                                     <Grid>
                                         <StackPanel Name="stackPanelLoading"
                                                     Grid.Row="1"
-                                                    VerticalAlignment="Center">
+                                                    
+                                                    VerticalAlignment="Bottom">
                                             <ProgressBar Grid.Row="1" />
                                             <TextBlock HorizontalAlignment="Center"
                                                        Style="{StaticResource txtBlockWait}"
@@ -139,7 +149,8 @@
                                                    ScrollViewer.VerticalScrollMode="Auto"
                                                    Style="{StaticResource txtBlockDisplay}"
                                                    Text="{Binding desc}"
-                                                   TextAlignment="Justify"
+                                                   
+                                                   Margin="12,4"
                                                    TextWrapping="Wrap" />
                                     </Grid>
                                 </ScrollViewer>
@@ -153,7 +164,7 @@
                         </Grid>
                     </ScrollViewer>
                 </PivotItem>
-                <PivotItem>
+                <PivotItem Name="PivotItemNotices">
                     <PivotItem.Header>
                         <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                     </PivotItem.Header>
@@ -197,13 +208,13 @@
                                         Margin="0"
                                         VerticalAlignment="Bottom"
                                         Style="{StaticResource txtBlockListViewItemHeader}"/>
-                                        
+
                                         <TextBlock Grid.Row="2"
                                                    Margin="0"
                                                    Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
                                                    FontSize="{StaticResource TextStyleMediumFontSize}"
                                                    Text="{Binding dateCreated , Mode=TwoWay}"/>
-                                       </Grid>
+                                    </Grid>
 
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -218,19 +229,24 @@
                         </StackPanel>
                     </Grid>
                 </PivotItem>
-
             </Pivot>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarOperations">
+            <AppBarButton Icon="Comment" 
+                          Click="AppBarButton_BoardAnalytics_click"
+                          Label="Statistics"/>
             <AppBarButton Name="AppBtnEdit"
+                          Visibility="Collapsed"
                           Click="AppBarButton_Click"
                           Icon="Edit"
                           Label="edit" />
-            <AppBarButton Icon="FourBars" 
-                          Click="AppBarButton_BoardAnalytics_click"
-                          Label="Statistics"/>
+          
+            <AppBarButton Icon="Add" 
+                          Click="AppBtnAddNotice_Click"
+                          Name="AppBtnAddNotice"
+                          Label="new notice"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

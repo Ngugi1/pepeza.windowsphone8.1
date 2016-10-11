@@ -28,5 +28,23 @@ namespace Shared.Db.DbHelpers
                 return null;
             }
         }
+        public async static Task<List<TNotification>> getAll()
+        {
+
+            try
+            {
+                List<TNotification> notification = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    notification = await connection.Table<TNotification>().ToListAsync();
+                }
+                return notification;
+            }
+            catch (InvalidOperationException ex)
+            {
+                return null;
+            }
+        }
     }
 }

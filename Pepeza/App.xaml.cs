@@ -46,6 +46,7 @@ namespace Pepeza
         private TransitionCollection transitions;
         public static bool IsDataLoaded { get; set; }
         private ContinuationManager _continuationManager;
+        ListContainer container = new ListContainer();
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -56,12 +57,7 @@ namespace Pepeza
             this.Suspending += this.OnSuspending;
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
             this.RequestedTheme = ApplicationTheme.Light;
-            DbHelper.createDB();
-            if (Settings.getValue(Constants.LAST_UPDATED) == null)
-            {
-                Settings.add(Constants.LAST_UPDATED, "0000-00-00 00:00:00");
-            }
-            
+            DbHelper.createDB(); 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
             
             this.Resuming += App_Resuming;  
@@ -198,6 +194,15 @@ namespace Pepeza
             #region Predefined Actions
             Frame rootFrame = Window.Current.Content as Frame;
 
+            if (Settings.getValue(Constants.DATA_PUSHED) != null)
+            {
+                int updated = (int)Settings.getValue(Constants.DATA_PUSHED);
+                if (updated == 0)
+                {
+                    await GetNewData.getNewData();
+                }
+            }
+
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -245,16 +250,15 @@ namespace Pepeza
 
             Frame frame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
-            if (e.Arguments.Equals("1"))
+            if (!e.Arguments.Equals("1"))
             {
-                frame.Navigate(typeof(NotificationsPage));
+                //Go to main page 
+                frame.Navigate(typeof(LoginPage), e.Arguments);
             }
             else
             {
                 frame.Navigate(typeof(LoginPage), e.Arguments);
             }
-           
-
             //Register for push Notifications background Tasks
             await BackgroundAgents.registerPush();
             //Deal with the statusbar

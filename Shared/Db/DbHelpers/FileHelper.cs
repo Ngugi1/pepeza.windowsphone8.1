@@ -29,6 +29,25 @@ namespace Shared.Db.DbHelpers
             }
             
         }
+        public async static Task<TFile> getByAttachmentId(int id)
+        {
+
+            try
+            {
+               List<TFile> file = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    file = await connection.QueryAsync<TFile>("SELECT * FROM  TFile WHERE attachmentId=?", id);
+                }
+                return file.FirstOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
 
     }
 }
