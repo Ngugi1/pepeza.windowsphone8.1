@@ -27,7 +27,8 @@
                    Grid.ColumnSpan="2"
                    Style="{StaticResource MessageDialogTitleStyle}"/>
                 </ScrollViewer>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal"
+                            Name="StackPanelSentFrom">
                     <TextBlock Text="sent from :"
                            Typography.Capitals="SmallCaps"
                            Margin="12,4"
@@ -52,7 +53,8 @@
                            FontWeight="ExtraLight"
                            />
 
-                <StackPanel Name="StackPanelDownload" Visibility="Visible">
+                <StackPanel Name="StackPanelDownload" 
+                            Visibility="Visible">
                     <Viewbox Height="80" 
                      HorizontalAlignment="Left"
                      Width="60">

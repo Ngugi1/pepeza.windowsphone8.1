@@ -62,7 +62,8 @@ namespace Pepeza.Views.Notices
                 // Now do a sumission if we are connected to the internet
                 if (notice.hasAttachment==1)
                 {
-                    
+                    StackPanelDownload.Visibility = Visibility.Visible;
+                   
                    //Check if the file is downloaded
                     try
                     {
@@ -103,12 +104,21 @@ namespace Pepeza.Views.Notices
                 {
                     StackPanelDownload.Visibility = Visibility.Collapsed;
                 }
+                if (string.IsNullOrWhiteSpace(notice.board))
+                {
+                    StackPanelSentFrom.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    StackPanelSentFrom.Visibility = Visibility.Visible;
+                }
                 this.RootGrid.DataContext = notice;
                 await NoticeService.submitReadNoticeItems();
               
             }else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
             {
                 //Now load the notice itself 
+                StackPanelSentFrom.Visibility = Visibility.Collapsed;
                 int noticeId = (int)e.Parameter;
                 try
                 {
@@ -166,6 +176,14 @@ namespace Pepeza.Views.Notices
                         notice.hasAttachment = (int)json["notice"]["hasAttachment"];
                         notice.content = (string)json["notice"]["content"];
                         notice.dateCreated = (DateTimeFormatter.format((long)json["notice"]["dateCreated"]));
+                        if (notice.hasAttachment == 1)
+                        {
+                            StackPanelDownload.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            StackPanelDownload.Visibility = Visibility.Collapsed;
+                        }
                         RootGrid.DataContext = notice;
                         StackPanelDownload.DataContext = file;
                     }
@@ -240,11 +258,9 @@ namespace Pepeza.Views.Notices
                 }
                 else
                 {
-                    new MessageDialog("We could not download");
+                    await new MessageDialog("We could not download").ShowAsync();
                     return;
                 }
-
-
                 #endregion
             }
             else
@@ -290,6 +306,7 @@ namespace Pepeza.Views.Notices
             catch
             {
                 new MessageDialog("Could not download").ShowAsync();
+        
             }
             finally
             {

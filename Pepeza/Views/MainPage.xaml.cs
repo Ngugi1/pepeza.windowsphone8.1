@@ -333,7 +333,11 @@ namespace Pepeza
             {
                 return 1;
             }
-            return 0;
+            else
+            {
+                return 0;
+            }
+           
         }
     }
     public class IntToForeground: IValueConverter
