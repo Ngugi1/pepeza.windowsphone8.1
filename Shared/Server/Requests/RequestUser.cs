@@ -341,8 +341,8 @@ namespace Pepeza.Server.Requests
                 response = await client.GetAsync(string.Format(UserAddresses.GET_USER , userId));
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    string userDetails = JsonConvert.SerializeObject(await response.Content.ReadAsStringAsync());
-                    responseContent.Add(Constants.SUCCESS, userDetails);
+
+                    responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                 }
                 else
                 {

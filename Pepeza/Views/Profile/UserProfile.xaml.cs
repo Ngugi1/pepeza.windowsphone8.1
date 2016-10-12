@@ -51,7 +51,7 @@ namespace Pepeza.Views.Profile
         {
             this.InitializeComponent();
             cts = new CancellationTokenSource();
-            this.NavigationCacheMode = NavigationCacheMode.Required;
+            
         }
         int avatarId , userId;
         /// <summary>
@@ -61,6 +61,7 @@ namespace Pepeza.Views.Profile
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+
             TUserInfo currentUser = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
             #region
             if (e.Parameter != null)
@@ -139,34 +140,48 @@ namespace Pepeza.Views.Profile
                 else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
                 {
                     userId = (int)e.Parameter;
+                    int localUserId = (int)Settings.getValue(Constants.USERID);
                     // get the data from the sqlilte database
                     data = await getUserProfile(userId);
                     //Get the user avatar 
                     data.username = "@" + data.username;
                     grid.DataContext = data;
-                    if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
+                    if (userId == localUserId)
                     {
-                        setToUpdate();
-                        stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
-                        txtBlockFullName.Visibility = Visibility.Visible;
+                        if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
+                        {
+                            setToUpdate();
+                            stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
+                            txtBlockFullName.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            setIconToEdit();
+                            stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                        }
+                        if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
+                        {
+                            //Show edit icon
+                            setIconToEdit();
+                            txtBlockFullName.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            //show update Icon
+                            setToUpdate();
+                            txtBlockFullName.Visibility = Visibility.Collapsed;
+                        }
                     }
                     else
                     {
-                        setIconToEdit();
-                        stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                        CommandBaEdit.Visibility = Visibility.Collapsed;
+                        rectProfilePic.IsTapEnabled = false;
                     }
-                    if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
+                    if (string.IsNullOrWhiteSpace(data.fullname))
                     {
-                        //Show edit icon
-                        setIconToEdit();
-                        txtBlockFullName.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        //show update Icon
-                        setToUpdate();
                         txtBlockFullName.Visibility = Visibility.Collapsed;
                     }
+                    
 
      
                 }
@@ -251,7 +266,7 @@ namespace Pepeza.Views.Profile
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                     JObject json = JObject.Parse(results[Constants.SUCCESS]);
-                    data = new ProfileData()
+                    toReturn = new ProfileData()
                     {
                          avatarId =  (int)json["avatar"]["id"],
                          email = (string)json["email"]["email"],
@@ -377,14 +392,7 @@ namespace Pepeza.Views.Profile
             ImageMask.Visibility = Visibility.Visible;
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
         }
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                this.NavigationCacheMode = NavigationCacheMode.Disabled;
-            }
-            base.OnNavigatingFrom(e);
-        }
+       
        
     }
 

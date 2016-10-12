@@ -68,42 +68,40 @@
                                  Name="PBProfilePicUpdating"/>
                     <TextBlock Style="{StaticResource txtBlockStyleProfileOwner}"
                                Text="{Binding fullname}"
+                               Margin="2"
                                Name="txtBlockFullName"
                                Visibility="Visible" />
-                    <Rectangle Height="1"
-                               Margin="12"
-                               Fill="{StaticResource PhoneAccentBrush}" />
-                    <StackPanel>
+                    <StackPanel Name="StackPanelDetailsDisplay">
                         <StackPanel Name="stackPanelDisplayUsername"
-                                    Margin="24,12,4,4"
-                                    HorizontalAlignment="Left"
+                                    Margin="24,4"
+                                    HorizontalAlignment="Center"
                                     Orientation="Horizontal">
+                            <StackPanel>
                             <TextBlock Name="txtBlockAccount"
-                                       Width="100"
-                                       HorizontalAlignment="Left"
+                                       HorizontalAlignment="Center"
                                        Style="{StaticResource txtBlockListViewDesc}"
                                        Text="Username" />
 
                             <TextBlock Name="txtBlockUsername"
-                                       Margin="28,4"
+                                       HorizontalAlignment="Center"
                                        VerticalAlignment="Bottom"
                                        Foreground="Black"
                                        Style="{StaticResource txtBlockDisplay}"
                                        Text="{Binding username}" />
-
+                            </StackPanel>
                         </StackPanel>
 
 
-                        <StackPanel Margin="24,12,4,4"
-                                    HorizontalAlignment="Left"
+                        <StackPanel 
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Orientation="Horizontal">
-                            <TextBlock Width="100"
+                                    Orientation="Vertical">
+                            <TextBlock 
                                        VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center"
                                        Style="{StaticResource txtBlockListViewDesc}"
                                        Text="Email" />
                             <TextBlock Name="txtblockEmail"
-                                       Margin="28,4"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        Foreground="Black"
@@ -117,23 +115,17 @@
                                             ElementName=relativePanel}"
                             HorizontalAlignment="Left"
                             Orientation="Vertical">
-                    <Rectangle Height="1"
-                               Margin="12"
-                               Fill="{ThemeResource PhoneAccentBrush}" />
-                    <TextBlock Margin="12"
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               Text="Update profile" />
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" Visibility="Collapsed">
                         <TextBox Name="txtBoxFirstName"
-                                 Width="150"
-                                 Margin="16,4"
+                                 Header="First Name"
+                                 Style="{StaticResource txtBoxStyle}"
                                  Background="Transparent"
                                  MaxLength="10"
                                  PlaceholderText="Firstname"
                                  Text="{Binding fname}" />
                         <TextBox Name="txtBoxLastName"
-                                 Width="150"
-                                 Margin="16,4"
+                                 Header="Last Name"
+                                 Style="{StaticResource txtBoxStyle}"
                                  Background="Transparent"
                                  PlaceholderText="Lastname"
                                  Text="{Binding lname}" />

@@ -1,4 +1,5 @@
 ﻿using Pepeza.Db.DbHelpers;
+using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Account;
@@ -82,7 +83,15 @@ namespace Pepeza.Views.Configurations
                 }
                 else
                 {
-                    this.Frame.Navigate(config.page);
+                    if (config.page == typeof(UserProfile))
+                    {
+                        this.Frame.Navigate(config.page , (int)Settings.getValue(Constants.USERID));
+                    }
+                    else
+                    {
+                        this.Frame.Navigate(config.page);
+                    }
+                   
                 }
                ListViewSettings.SelectedItem = null;
             }

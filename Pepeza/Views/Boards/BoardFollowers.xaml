@@ -55,6 +55,7 @@
         </StackPanel>
         <ListView Name="ListViewBoardFollowers"
                   Grid.Row="1"
+                  SelectionChanged="ListViewBoardFollowers_SelectionChanged"
                  >
             <ListView.ItemTemplate>
                 <DataTemplate>

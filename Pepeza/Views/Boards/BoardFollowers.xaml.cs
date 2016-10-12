@@ -2,6 +2,7 @@
 using Pepeza.Models.UserModels;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Profile;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,6 +77,15 @@ namespace Pepeza.Views.Boards
 
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
+        }
+
+        private void ListViewBoardFollowers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Follower follower = ((sender as ListView).SelectedItem as Follower);
+            if (follower != null)
+            {
+                this.Frame.Navigate(typeof(UserProfile), follower.userId);
+            }
         }
     }
     public class BoolToFollowStatus : IValueConverter
