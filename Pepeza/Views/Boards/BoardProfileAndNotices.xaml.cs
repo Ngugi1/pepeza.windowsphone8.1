@@ -78,7 +78,6 @@ namespace Pepeza.Views.Boards
                         PBProfilePicUpdating.Visibility = Visibility.Visible;
                         this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
                         this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-
                         try
                         {
 

@@ -49,8 +49,9 @@ namespace Pepeza.Views.Notices
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override  void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             if (e.Parameter != null)
             {
                 boardID = (int)e.Parameter;
@@ -98,7 +99,7 @@ namespace Pepeza.Views.Notices
                                     noticeId = (int)obj["id"],
                                     boardId = boardID,
                                     title = title,
-                                    hasAttachment = (int)obj["hasAttachment"],
+                                    hasAttachment = 0,
                                     content = desc,
                                     dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
                                     dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
@@ -156,7 +157,7 @@ namespace Pepeza.Views.Notices
                          title = toPost.title,
                          content = toPost.content,
                          noticeId  = (int)jobject["id"],
-                         hasAttachment = (int)jobject["hasAttachment"],
+                         hasAttachment = 1,
                          dateCreated = DateTimeFormatter.format((long)jobject["dateCreated"]),
                        };
                     if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = DateTimeFormatter.format((long)jobject["dateUpdated"]);                    //We have results , get attachment details  
