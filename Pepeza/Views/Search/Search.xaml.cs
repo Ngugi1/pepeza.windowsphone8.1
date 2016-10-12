@@ -86,7 +86,12 @@ namespace Pepeza.Views
         {
             //Get selected Item
             Organization org = (sender as ListView).SelectedItem as Organization;
-            this.Frame.Navigate(typeof(Views.Orgs.OrgProfileAndBoards), org);
+            if (org != null)
+            {
+                this.Frame.Navigate(typeof(Views.Orgs.OrgProfileAndBoards), org);
+                listViewSearchOrgs.SelectedItem = null;
+            }
+           
         }
         private void ListViewUser_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -95,6 +100,7 @@ namespace Pepeza.Views
             {
                 this.Frame.Navigate(typeof(UserOrgs), selected);
             }
+            ListViewUser.SelectedItem = null;
         }
         /// <summary>
         /// Begin search
@@ -369,9 +375,9 @@ namespace Pepeza.Views
             Pepeza.Models.Search_Models.Board board = (sender as ListView).SelectedItem as Pepeza.Models.Search_Models.Board;
             if (board != null)
             {
-
                 this.Frame.Navigate(typeof(BoardProfileAndNotices), board.id);
             }
+            ListViewBoards.SelectedItem = null;
         }
     }
 }

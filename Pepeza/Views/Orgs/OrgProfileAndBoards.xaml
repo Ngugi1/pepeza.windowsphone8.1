@@ -21,8 +21,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-
         <Pivot Name="OrgPivot"
                Grid.RowSpan="2"
                Margin="0"
@@ -140,6 +138,12 @@
                                      Style="{StaticResource ToastStyle}"
                                      TextWrapping="WrapWholeWords" />
                 </Grid>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="collaborators" />
+                </PivotItem.Header>
+                
             </PivotItem>
         </Pivot>
     </Grid>
