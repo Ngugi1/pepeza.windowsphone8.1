@@ -46,7 +46,8 @@ namespace Pepeza.Views.Boards
             if (followers.ContainsKey(Constants.SUCCESS))
             {
                 //Unpack the boards
-                JArray jArray = JArray.Parse(followers[Constants.SUCCESS]);
+                JObject jsonObject = JObject.Parse(followers[Constants.SUCCESS].ToString());
+                JArray jArray = JArray.Parse(jsonObject["followers"].ToString());
                 if (jArray.Count > 0)
                 {
                     foreach (var item in jArray)
@@ -57,8 +58,10 @@ namespace Pepeza.Views.Boards
                             userName = (string)item["username"],
                             firstName = (string)item["firstName"],
                             lastName = (string)item["lastName"],
-                            accepted = (bool)item["accepted"]
+                            accepted = (bool)item["accepted"],
+                            linkSmall = (string)item["linkSmall"] == null ? "/Assets/Images/placeholder_s_avatar.png" : (string)item["linkSmall"]
                         });
+                        
                     }
                     ListViewBoardFollowers.ItemsSource = boardFollowers;
                 }
@@ -70,5 +73,26 @@ namespace Pepeza.Views.Boards
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
+    }
+}
+class BoolToTextConverter: IValueConverter
+{
+
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        if ((bool)value)
+        {
+            return "accepted";
+        }
+        else
+        {
+            return "pending";
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    {
+        if ((string)value == "accepted") return true;
+        return false;
     }
 }

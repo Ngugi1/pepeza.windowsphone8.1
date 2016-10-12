@@ -188,6 +188,7 @@
                                    />
                         </StackPanel>
                         <ListView Name="ListViewNotices"
+                                  Visibility="Visible"
                                   SelectionChanged="ListViewNotices_SelectionChanged"
                                   >
                             <ListView.ItemTemplate>

@@ -542,28 +542,21 @@
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="ListViewFollowersDataTemplate">
-        <Grid Style="{StaticResource GridListViewItemTemplate}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid Margin="12,4" Height="50">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Rectangle Grid.RowSpan="2" Style="{StaticResource RectanglePicThumbnail}">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                </Rectangle.Fill>
-            </Rectangle>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="1"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding userName}" />
-            <TextBlock Grid.Row="1"
-                       Grid.Column="2"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding FullName}" />
+            <FFImage:FFImage Width="50"
+                                     Source="{Binding linkSmall, Mode=TwoWay}"
+                                     Height="50">
+
+            </FFImage:FFImage>
+            <TextBlock Grid.Column="1"
+                               VerticalAlignment="Center"
+                               Margin="12,8,0,0"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Text="{Binding title, Mode=TwoWay}"/>
         </Grid>
     </DataTemplate>
    

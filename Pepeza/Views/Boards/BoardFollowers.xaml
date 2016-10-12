@@ -4,6 +4,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Pepeza.Views.Boards"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:FFImage="using:FFImageLoading"
+      xmlns:converter="using:Pepeza.Views.Boards"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
       mc:Ignorable="d">
@@ -12,7 +14,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/styles/styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converter:BoolToTextConverter x:Key="boolToText"/>
         </ResourceDictionary>
+        
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -32,7 +36,53 @@
         </StackPanel>
         <ListView Name="ListViewBoardFollowers"
                   Grid.Row="1"
-                  ItemTemplate="{StaticResource ListViewFollowersDataTemplate}" />
+                 >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                <Grid 
+                    Width="{Binding ActualWidth, ElementName=ListViewBoardFollowers}"
+                    Height="70">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <FFImage:FFImage
+                                        Grid.RowSpan="2"
+                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        Margin="12,0,12,10"
+                                        Source="{Binding linkSmall, Mode=TwoWay}"
+                                        VerticalAlignment="Bottom"
+                                        Height="50"
+                                        Width="50"
+                                        >
+                    </FFImage:FFImage>
+                    <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="8,10,8,6"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding userName , Mode=TwoWay}" />
+                    <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="8,0,14,0"
+                       Style="{StaticResource txtBlockListViewDesc}"
+                       Text="{Binding FullName}"/>
+                    <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
+                               Margin="12,0"
+                               Grid.Column="2"
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               VerticalAlignment="Bottom"
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               />
+                </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
 
     </Grid>

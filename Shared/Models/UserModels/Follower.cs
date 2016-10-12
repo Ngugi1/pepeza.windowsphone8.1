@@ -13,6 +13,7 @@ namespace Pepeza.Models.UserModels
         public string lastName { get; set; }
         public int userId { get; set; }
         public bool accepted { get; set; }
+        public string linkSmall { get; set; }
         private string _fullName;
 
         public string FullName

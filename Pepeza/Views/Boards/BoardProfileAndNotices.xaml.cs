@@ -503,7 +503,7 @@ namespace Pepeza.Views.Boards
                     rectProfilePic.IsTapEnabled = false;
                     ImageMask.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
-                    PivotItemNotices.Visibility = Visibility.Collapsed;
+                    
                 }
                 #endregion
 
