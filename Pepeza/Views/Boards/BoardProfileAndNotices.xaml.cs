@@ -165,7 +165,7 @@ namespace Pepeza.Views.Boards
             TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
-                int numberofRequests = 0;
+                int numberofRequests;
                 // Get the board followers 
                 Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
                 if (followersCountResults.ContainsKey(Constants.SUCCESS))
@@ -178,7 +178,11 @@ namespace Pepeza.Views.Boards
                 //We now say we are not fetching 
                 isFetchingDetails(false);
                 await assignRoles(localBoard);
-                localBoard.noOfFollowers = JArray.Parse(follower_result["followers"].ToString()).Count;
+                if (followersCountResults.ContainsKey(Constants.SUCCESS))
+                {
+                    JArray followerArray = JArray.Parse(follower_result["followers"].ToString());
+                    localBoard.noOfFollowers = followerArray != null ? followerArray.Count : 0;
+                }
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
                 boardAvatar = await AvatarHelper.get(localBoard.id);

@@ -110,7 +110,7 @@
                                                 </StackPanel>
                                             </HyperlinkButton.Content>
                                         </HyperlinkButton>
-                                        <HyperlinkButton Content="Public Board" 
+                                        <HyperlinkButton Content="{Binding followRestriction, Mode=TwoWay}" 
                                                          FontSize="{StaticResource  TextStyleLargeFontSize}"
                                                          Foreground="{ThemeResource PhoneAccentBrush}"
                                                          HorizontalAlignment="Center"/>

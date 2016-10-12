@@ -14,7 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/styles/styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <converter:BoolToTextConverter x:Key="boolToText"/>
+            <converter:BoolToFollowStatus x:Key="boolToText"/>
         </ResourceDictionary>
         
     </Page.Resources>
@@ -33,6 +33,25 @@
             <TextBlock HorizontalAlignment="Center"
                        Style="{StaticResource txtBlockWait}"
                        Text="Loading followers ..." />
+        </StackPanel>
+        <StackPanel 
+            Grid.Row="1"
+                        Name="EmptyNoticesPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+            <Viewbox Width="100" Height="100">
+                <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="People"/>
+            </Viewbox>
+            <TextBlock Text="No followers found"
+                                   HorizontalAlignment="Center"
+                                   TextLineBounds="Full"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
         </StackPanel>
         <ListView Name="ListViewBoardFollowers"
                   Grid.Row="1"

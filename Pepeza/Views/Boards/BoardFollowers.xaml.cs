@@ -65,6 +65,10 @@ namespace Pepeza.Views.Boards
                     }
                     ListViewBoardFollowers.ItemsSource = boardFollowers;
                 }
+                else
+                {
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
+                }
             }
             else
             {
@@ -74,25 +78,26 @@ namespace Pepeza.Views.Boards
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
     }
-}
-class BoolToTextConverter: IValueConverter
-{
-
-    public object Convert(object value, Type targetType, object parameter, string language)
+    public class BoolToFollowStatus : IValueConverter
     {
-        if ((bool)value)
+
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return "accepted";
+            if ((bool)value)
+            {
+                return "accepted";
+            }
+            else
+            {
+                return "pending";
+            }
         }
-        else
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return "pending";
+            if ((string)value == "accepted") return true;
+            return false;
         }
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        if ((string)value == "accepted") return true;
-        return false;
-    }
 }
