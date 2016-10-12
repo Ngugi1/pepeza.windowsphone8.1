@@ -119,4 +119,11 @@
         </Grid>
 
     </ScrollViewer>
+    <Page.BottomAppBar>
+        <CommandBar Name="CommandBarControls" Visibility="Collapsed">
+            <AppBarButton Icon="Comment" 
+                          Click="AppBarButton_Click"
+                          Label="Analytics"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

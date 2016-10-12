@@ -1,12 +1,19 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.Db.DbHelpers;
+using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
+using Pepeza.Db.Models.Orgs;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Connectivity;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
+using Pepeza.Views.Analytics;
 using Shared.Db.DbHelpers;
+using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Notices;
+using Shared.Db.Models.Orgs;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -44,6 +51,7 @@ namespace Pepeza.Views.Notices
         private CancellationTokenSource cts;
         TFile file = new TFile();
         TNotice notice = null;
+        int noticeId;
         public NoticeDetails()
         {
             cts = new CancellationTokenSource();
@@ -59,6 +67,7 @@ namespace Pepeza.Views.Notices
             if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))
             {
                 notice = e.Parameter as TNotice;
+                noticeId = notice.noticeId;
                 // Now do a sumission if we are connected to the internet
                 if (notice.hasAttachment==1)
                 {
@@ -99,6 +108,7 @@ namespace Pepeza.Views.Notices
                     }
                     StackPanelDownload.Visibility = Visibility.Visible;
                     this.StackPanelDownload.DataContext = file;
+                    assignRoles(notice.boardId);
                 }
                 else
                 {
@@ -119,7 +129,7 @@ namespace Pepeza.Views.Notices
             {
                 //Now load the notice itself 
                 StackPanelSentFrom.Visibility = Visibility.Collapsed;
-                int noticeId = (int)e.Parameter;
+                noticeId = (int)e.Parameter;
                 try
                 {
                     Dictionary<string, string> noticeresults = await NoticeService.getNotice(noticeId);
@@ -173,6 +183,8 @@ namespace Pepeza.Views.Notices
                         }
                        
                         notice.title = (string)json["notice"]["title"];
+                        notice.noticeId = (int)json["notice"]["id"];
+                        notice.boardId = (int)json["notice"]["boardId"];
                         notice.hasAttachment = (int)json["notice"]["hasAttachment"];
                         notice.content = (string)json["notice"]["content"];
                         notice.dateCreated = (DateTimeFormatter.format((long)json["notice"]["dateCreated"]));
@@ -186,6 +198,7 @@ namespace Pepeza.Views.Notices
                         }
                         RootGrid.DataContext = notice;
                         StackPanelDownload.DataContext = file;
+                        assignRoles(notice.boardId);
                     }
                     else
                     {
@@ -200,6 +213,29 @@ namespace Pepeza.Views.Notices
                 }
 
             }
+        }
+        private async void assignRoles(int boardId)
+        {
+            //Get the board with the given ID 
+            TBoard notice_board = await BoardHelper.getBoard(boardId);
+            if (notice_board != null)
+            {
+                TOrgInfo notice_org = await OrgHelper.get(notice_board.orgID);
+                if (notice_org != null)
+                {
+                    //Get the role 
+                    TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), notice_org.id);
+                    if (collaborator != null)
+                    {
+                        if (collaborator.role == Constants.EDITOR || collaborator.role == Constants.ADMIN || collaborator.role == Constants.OWNER)
+                        {
+                            CommandBarControls.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+            }
+           
+           
         }
         private void HLBDownloadAttachment_Click(object sender, RoutedEventArgs e)
         {
@@ -361,6 +397,11 @@ namespace Pepeza.Views.Notices
                 HLBDownloadAttachment.Visibility = Visibility.Visible;
                 new MessageDialog("File could not be located. Redownload the file").ShowAsync();
             }
+        }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(NoticeAnalytics), noticeId);
         }
        
     }
