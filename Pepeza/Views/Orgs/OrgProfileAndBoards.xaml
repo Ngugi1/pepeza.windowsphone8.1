@@ -5,6 +5,7 @@
       xmlns:local="using:Pepeza.Views.Orgs"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toast="using:Toastinet"
+      xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
       mc:Ignorable="d">
@@ -143,7 +144,86 @@
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="collaborators" />
                 </PivotItem.Header>
-                
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" 
+                                Name="StackPanelPermissionDenied"
+                                Visibility="Collapsed">
+                        <Viewbox Height="100" Width="100">
+                            <SymbolIcon Symbol="Admin" Foreground="{ThemeResource PhoneAccentBrush}"/>
+                        </Viewbox>
+                        <TextBlock 
+                            TextLineBounds="Full"
+                                   HorizontalAlignment="Center"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                             Text="You do not have permissions to see the collaborator information.
+                                   Please talk to the owner of this organisation"/>
+                    </StackPanel>
+                    <ListView Name="ListViewCollaborators">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                            <Grid
+                                Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+
+                                </Grid.ColumnDefinitions>
+
+                                <FFImage:FFImage Width="50" 
+                                                 Margin="19,0,0,0"
+                                                     Source="/Assets/Images/placeholder_s_avatar.png"
+                                                     Grid.RowSpan="2"
+                                                     Height="50">
+
+                                </FFImage:FFImage>
+                                <TextBlock
+                       Grid.Row="0"
+                       Margin="16,4"
+                       TextLineBounds="Tight"
+                       Grid.Column="1"
+                       VerticalAlignment="Bottom"
+                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Text="{Binding username , Mode=TwoWay}"
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
+                                <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       Margin="16,4"
+                       VerticalAlignment="Bottom"
+                       TextLineBounds="Tight"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       Text="{Binding name, Mode=TwoWay}"
+                       TextTrimming="CharacterEllipsis"
+                       TextWrapping="NoWrap" />
+                                <TextBlock 
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               Grid.Row="0"
+                               Margin="0,0,8,0"
+                               Typography.Capitals="AllSmallCaps"
+                               Grid.Column="2"
+                               Grid.RowSpan="1"
+                               Style="{StaticResource txtBlockDisplay}"
+                               HorizontalAlignment="Left"
+                               Text="{Binding role , Mode=TwoWay}"
+                               VerticalAlignment="Bottom"
+                               />
+                                <TextBlock Grid.Row="1" Grid.Column="2"
+                                           Text="{Binding active}"
+                                           />
+
+                            </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </PivotItem>
         </Pivot>
     </Grid>
@@ -153,13 +233,14 @@
                           Click="EditProfilleClick"
                           Icon="Edit"
                           Label="edit" />
-            <AppBarButton Icon="Permissions" 
-                          Name="AppBtnCollaborators"
-                          Click="AppBtnCollaborators_Click" 
-                          Label="collaborators"/>
+            
             <AppBarButton Icon="FourBars" 
+                          Name="AppBtnAnalytics"
                           Click="AppBtinAnalytics_clicked"
                           Label="Analytics"/>
+            <AppBarButton Icon="Add" 
+                          Name="AppBtnAdd"
+                          Label="add board"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

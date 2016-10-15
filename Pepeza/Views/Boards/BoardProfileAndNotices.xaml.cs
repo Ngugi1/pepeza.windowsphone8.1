@@ -414,6 +414,9 @@ namespace Pepeza.Views.Boards
                 case 0:
                     //if data is not loaded, laod
                     stackPanelLoading.Visibility = Visibility.Visible;
+                    AppBtnAddNotice.Visibility = Visibility.Collapsed;
+                    AppBtnEdit.Visibility = Visibility.Visible;
+                    AppBtnAnalytics.Visibility = Visibility.Visible;
                     ContentRoot.Opacity = 0.7;
                     await getBoardDetailsAsync(boardId);
                     break;
@@ -421,6 +424,10 @@ namespace Pepeza.Views.Boards
                     //Load notices if not loaded already
                         StackPanelLoadingNotices.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
+                        AppBtnAddNotice.Visibility = Visibility.Visible;
+                        AppBtnEdit.Visibility = Visibility.Collapsed;
+                        AppBtnAnalytics.Visibility = Visibility.Collapsed;
+                    
                     break;
                 default :
                     break;

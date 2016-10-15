@@ -236,6 +236,7 @@
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarOperations">
             <AppBarButton Icon="Comment" 
+                          Name="AppBtnAnalytics"
                           Click="AppBarButton_BoardAnalytics_click"
                           Label="Statistics"/>
             <AppBarButton Name="AppBtnEdit"
