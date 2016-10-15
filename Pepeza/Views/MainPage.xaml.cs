@@ -85,6 +85,10 @@ namespace Pepeza
                 {
                     EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
                 }
+                else
+                {
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
+                }
               
 
                 ListViewNotices.ItemsSource = container.noticesList;
@@ -97,7 +101,14 @@ namespace Pepeza
         private async Task<bool> loadOrgs()
         {
             orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
-            if (orgs.Count == 0) EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
+            if (orgs.Count == 0)
+            {
+                EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
+            }
             var orgAlphaGroup = JumpListHelper.ToAlphaGroups(orgs, t => t.name);
             AlphaListOrgs.ReleaseItemsSource();
             ListViewOrgs.ItemsSource = orgAlphaGroup;
@@ -108,7 +119,14 @@ namespace Pepeza
         private async Task<bool> loadBoards()
         {
             boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
-            if (boards.Count == 0) EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+            if (boards.Count == 0)
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+            }
             var groupedBoards = JumpListHelper.ToAlphaGroups(boards, t => t.name);
             QJumpList.ReleaseItemsSource();
             ListViewBoards.ItemsSource = groupedBoards;
