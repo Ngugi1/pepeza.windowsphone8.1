@@ -239,6 +239,7 @@
                           Click="AppBtinAnalytics_clicked"
                           Label="Analytics"/>
             <AppBarButton Icon="Add" 
+                          Click="AppBtnAdd_Click"
                           Name="AppBtnAdd"
                           Label="add board"/>
         </CommandBar>

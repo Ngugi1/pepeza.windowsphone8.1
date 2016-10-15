@@ -52,8 +52,7 @@ namespace Pepeza.Views.Orgs
     public sealed partial class OrgProfileAndBoards : Page
     {
         ObservableCollection<TBoard> boards = new ObservableCollection<TBoard>();
-        public bool areBoardsLoaded { get; set; }
-        public bool isProfileLoaded { get; set; }
+       
         public int OrgID { get; set; }
         public string role { get; set; }
         Organization org = null;
@@ -70,6 +69,7 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            OrgPivot.SelectedIndex = 0;
             if (e.Parameter != null)
             {
                 if (e.Parameter.GetType() == typeof(Organization))
@@ -247,7 +247,7 @@ namespace Pepeza.Views.Orgs
                 {
                     //There was an error , throw a toast
                     SCVOrgProfile.Opacity = 1;
-                    isProfileLoaded = false;
+                    
                     toastErros.Message = results[Constants.ERROR];
                 }
             }
@@ -298,10 +298,9 @@ namespace Pepeza.Views.Orgs
                     {
                         hideCommandBar(true);
                     }
-                    if (!isProfileLoaded)
-                    {
+                   
                         await getOrgDetails(OrgID);
-                    }
+                    
                     break;
                 case 1:
                     //load boards
@@ -322,11 +321,7 @@ namespace Pepeza.Views.Orgs
                     {
                         hideCommandBar();
                     }
-                    if (!areBoardsLoaded)
-                    {
-                       
-                        areBoardsLoaded= await fetchOrgBoards(OrgID);
-                    }
+                     await fetchOrgBoards(OrgID);
                     break;
                 case 2:
                     //Load org collaborators 
@@ -450,7 +445,6 @@ namespace Pepeza.Views.Orgs
             else
             {
                 SCVOrgProfile.Opacity = 1;
-                isProfileLoaded = true;
                 StackPanelGetOrgDetails.Visibility = Visibility.Collapsed;
                 PBProfilePicUpdating.Visibility = Visibility.Collapsed;
             }
@@ -466,7 +460,7 @@ namespace Pepeza.Views.Orgs
             {
                 StackPanelLoading.Visibility = Visibility.Collapsed;
                 ListViewOrgBoards.Opacity = 1;
-                areBoardsLoaded = true;
+               
             }
         }
         private void EditProfilleClick(object sender, RoutedEventArgs e)
@@ -638,6 +632,20 @@ namespace Pepeza.Views.Orgs
 
             public string linkSmall { get; set; }
             public string linkNormal { get; set; }
+        }
+
+        private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            if (OrgPivot.SelectedIndex == 1)
+            {
+                //Go to add board
+                this.Frame.Navigate(typeof(AddBoard) , OrgID);
+            }
+            else if(OrgPivot.SelectedIndex == 2)
+            {
+                //Go to add collaborator
+                this.Frame.Navigate(typeof(AddCollaboratorPage),OrgID);
+            }
         }
     }
     

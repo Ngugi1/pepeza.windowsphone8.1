@@ -41,45 +41,8 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             
-            <Ellipse Width="120"
-                     Height="120"
-                     Margin="16,8"
-                     HorizontalAlignment="Left" />
-            <Border Width="120"
-                    Height="120"
-                    Margin="16,8"
-                    HorizontalAlignment="Left"
-                    BorderBrush="{ThemeResource PhoneAccentBrush}"
-                    BorderThickness="3"
-                    CornerRadius="100">
-                <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           FontSize="16"
-                           Foreground="{ThemeResource PhoneAccentBrush}"
-                           Style="{StaticResource ListViewItemContentTextBlockStyle}"
-                           Text="add icon" />
-            </Border>
-                <ComboBox Name="comboOrgs"
-                      Grid.Row="1"
-                      Margin="16,8"
-                      BorderBrush="{StaticResource TextBoxBackgroundThemeBrush}"
-                      Foreground="{StaticResource PhoneForegroundBrush}">
-                    <ComboBox.Header>
-                        <TextBlock FontSize="22"
-                               Foreground="{StaticResource PhoneForegroundBrush}"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Text="select organisation" />
-                    </ComboBox.Header>
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Foreground="Black"
-                                   Opacity="1"
-                                   Style="{ThemeResource ComboBoxPlaceholderTextBlockStyle}"
-                                   Text="{Binding username}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <StackPanel  Grid.Row="2">
+
+                <StackPanel  Grid.Row="5">
                     <CheckBox Margin="12,2,0,2"
                               BorderThickness="3"
                               BorderBrush="Black"
@@ -97,26 +60,26 @@
                         Content="Check to make board invisible from public"/>
                 </StackPanel>
 
-                <TextBox Grid.Row="3"
+                <TextBox Grid.Row="0"
                      Header="name"
                      PlaceholderText="give the board a name"
                      Style="{StaticResource txtBoxStyle}"
                      Text="{Binding Name,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="4"
+            <TextBlock Grid.Row="1"
                        Style="{StaticResource txtBlockError}"
                        Text="please enter a valid name"
                        Visibility="{Binding IsNameValid,
                                             Converter={StaticResource converter}}" />
-            <TextBox Grid.Row="5"
+            <TextBox Grid.Row="2"
                      Header="description"
                      PlaceholderText="what is this board about?"
                      Style="{StaticResource txtBoxStyle}"
                      Text="{Binding Desc,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="6"
+            <TextBlock Grid.Row="3"
                        Style="{StaticResource txtBlockError}"
                        Text="please enter a valid description"
                        Visibility="{Binding IsDescValid,
@@ -126,7 +89,7 @@
                        Style="{StaticResource txtBlockError}" />
             <StackPanel Name="progressRingAddBoard"
                         Grid.Row="8"
-                        Visibility="Collapsed">
+                        Visibility="Visible">
                 <ProgressBar Margin="12,8" />
                 <TextBlock HorizontalAlignment="Center"
                            Style="{StaticResource txtBlockWait}"

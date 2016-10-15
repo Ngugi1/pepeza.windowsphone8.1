@@ -30,41 +30,26 @@ namespace Pepeza.Views.Boards
         {
             this.InitializeComponent();
         }
-
+        int orgId;
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Load all the organisatios
-            List<TOrgInfo> orgs = await OrgHelper.getAuthorizedOrgs((int)Settings.getValue(Constants.USERID));
-            if (orgs.Count > 0)
+            if (e.Parameter != null)
             {
-                comboOrgs.ItemsSource = orgs;
-                comboOrgs.SelectedIndex = 0;
+                orgId = (int)e.Parameter;
             }
-            else
-            {
-                //Show a message to tell the user they need to create a board 
-                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("No orgs found", "We found that you do not belong to any organisation. Please create one or more to be anble to create boards :-)");
-                prompt.Show();
-                prompt.Completed += prompt_Completed;
-            }
+            
         }
-
-        void prompt_Completed(object sender, PopUpEventArgs<string, PopUpResult> e)
-        {
-            this.Frame.GoBack();
-        }
-
         private async void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)
         {
             progressRingAddBoard.Visibility = Visibility.Visible;
             txtBlockStatus.Visibility = Visibility.Collapsed;
             var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
-            TOrgInfo info = comboOrgs.SelectedItem as TOrgInfo;
             string followRestriction = checkBoxBoardType.IsChecked == true? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
             string boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
             if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
@@ -73,7 +58,7 @@ namespace Pepeza.Views.Boards
 
                 Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
                 {
-                    {"org" ,info.id.ToString()} ,
+                    {"org" ,orgId.ToString()} ,
                     {"name" , board.Name} , 
                     {"description" , board.Desc} ,
                     { "followRestriction" , followRestriction},
@@ -82,7 +67,7 @@ namespace Pepeza.Views.Boards
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                     //Update local database
-                    insertBoardToDb(results, board, info);
+                    insertBoardToDb(results, board);
                     this.Frame.GoBack();
                 }
                 else
@@ -100,7 +85,7 @@ namespace Pepeza.Views.Boards
             progressRingAddBoard.Visibility = Visibility.Collapsed;
         }
 
-        private async void insertBoardToDb(Dictionary<string, string> results,Board model, TOrgInfo org)
+        private async void insertBoardToDb(Dictionary<string, string> results,Board model)
         {
             try
             {
@@ -109,7 +94,7 @@ namespace Pepeza.Views.Boards
                 toInsert.id = (int)board["id"];
                 toInsert.name = (string)model.Name;
                 toInsert.desc = (string)model.Desc;
-                toInsert.orgID = (int)org.id;
+                toInsert.orgID = orgId;
                 toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
                 toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
              
