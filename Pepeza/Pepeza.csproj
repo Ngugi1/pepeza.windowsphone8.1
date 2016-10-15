@@ -167,9 +167,6 @@
     <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
       <DependentUpon>UserOrgs.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Orgs\ViewCollaboratorsPage.xaml.cs">
-      <DependentUpon>ViewCollaboratorsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Profile\AvatarCroppingPage.xaml.cs">
       <DependentUpon>AvatarCroppingPage.xaml</DependentUpon>
     </Compile>
@@ -310,10 +307,6 @@
     <Page Include="Views\Orgs\UserOrgs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Orgs\ViewCollaboratorsPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Profile\AvatarCroppingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
