@@ -258,7 +258,8 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS,toPost["orgId"]), toPost);
+
+                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS, toPost["orgId"]), new Dictionary<string, string>() { { "newCollaboratorUserId", toPost["newCollaboratorUserId"] } , {"role" , toPost["role"]} });
                     if (responseMessage.IsSuccessStatusCode)
                     {
                         //we added collaborators successfully
@@ -267,7 +268,8 @@ namespace Pepeza.Server.Requests
                     else
                     {
                         //We hit a dead end 
-                        string s = responseMessage.Content.ToString();
+                        string s = await responseMessage.Content.ReadAsStringAsync();
+                        Debug.WriteLine("===========================" + s);
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
@@ -320,8 +322,8 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    StringContent content = new StringContent("");
-                    response = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ACTIVATEDEACTIVATE_COLLABORATOR, orgId, collaboratorId , route) , content);
+               
+                    response = await client.PutAsync(string.Format(OrgsAddresses.ACTIVATEDEACTIVATE_COLLABORATOR, orgId, collaboratorId , route) , null);
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

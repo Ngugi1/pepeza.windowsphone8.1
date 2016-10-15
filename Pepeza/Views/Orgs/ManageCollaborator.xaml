@@ -5,89 +5,112 @@
     xmlns:local="using:Pepeza.Views.Orgs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toast="using:Toastinet"
-    xmlns:converters="using:Pepeza.Views.Orgs"
     mc:Ignorable="d"
+   xmlns:Toast="using:Toastinet"
+    xmlns:FFImage="using:FFImageLoading"
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries >
+            <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:RoleToVisibility x:Key="RoleToVisibility"/>
-            <converters:BoolToStatusConverter x:Key="BoolToRole" />
         </ResourceDictionary>
     </Page.Resources>
+    <ScrollViewer>
     <Grid Name="RootGrid">
-        <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="Collaborator Details" 
-                           Style="{StaticResource txtBlockPageHeader}"/>
-                <StackPanel Grid.Row="1">
-                    <TextBlock
-                       Margin="12,0"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="username"
-                       />
-                    <TextBlock
-                       Margin="12,4"
-                       Foreground="{ThemeResource PhoneAccentBrush}"
-                       Style="{StaticResource BodyTextBlockStyle}"
-                       Text="{Binding username , Mode=TwoWay}" />
-
-                    <TextBlock 
-                       Margin="12,0"
-                               
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="name" />
-                    <TextBlock 
-                       Margin="12,4"
-                       Foreground="{ThemeResource PhoneAccentBrush}"
-                       Style="{StaticResource BodyTextBlockStyle}"
-                       Text="{Binding name , Mode=TwoWay}" />
-
-            <TextBlock Margin="12,0"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="role" />
-            <TextBlock 
-                       Grid.Column="2"
-                       Margin="12,4"
-                       Foreground="{ThemeResource PhoneAccentBrush}"
-                       Style="{StaticResource BodyTextBlockStyle}"
-                       Text="{Binding onDeviceRole , Mode=TwoWay}" />
-
-
-            <TextBlock Margin="12,0"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="status" />
-            <TextBlock 
-                       Grid.Column="2"
-                       Margin="12,4"
-                       Foreground="{ThemeResource PhoneAccentBrush}"
-                       Style="{StaticResource BodyTextBlockStyle}"
-                       Text="{Binding active , Mode=TwoWay , Converter={StaticResource BoolToRole}}" />
-
-
-        </StackPanel>
-        <toast:Toastinet Name="toastMessages" 
-                         Style="{StaticResource ToastStyle}" 
-                         VerticalAlignment="Center" Grid.Row="1" 
-                         Duration="4"
-                         Height="Auto"
-                         FontSize="20"
-                         AnimationType="RightToRight"/>
+            <Toast:Toastinet Name="ToastNetStatus" Style="{StaticResource ToastStyle}"/>
+            <StackPanel>
+            <Image Height="250"
+                             Width="250"
+                             Source="/Assets/Images/placeholder_avatar.jpg"
+                             Margin="12,12,4,4"
+                             >
+            </Image>
+                <StackPanel Name="StackPanelUploading" Visibility="Collapsed">
+                    <ProgressBar IsIndeterminate="True" Margin="12,4"/>
+                    <TextBlock Text="Just a moment ... " Style="{StaticResource txtBlockWait}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            <TextBlock Foreground="Black"
+                       Name="txtBlockName"
+                       Text="{Binding name , Mode=TwoWay}"
+                       Style="{StaticResource txtBlockStyleProfileOwner}"/>
+            <TextBlock />
+            <TextBlock Text="Username" Style="{StaticResource txtBlockListViewDesc}" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding username}" Style="{StaticResource txtBlockDisplay}"
+                       FontWeight="SemiBold"
+                       Foreground="Black"
+                       HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Role"
+                               VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource txtBlockListViewDesc}"/>
+                    <Viewbox Height="30" Width="30">
+                        <SymbolIcon Symbol="Edit" 
+                                    Tapped="AppBtnEdit_Click"/>
+                    </Viewbox>
+                </StackPanel>
+            <Grid>
+                    <ComboBox 
+                        Name="ComboRole"
+                        BorderBrush="{ThemeResource PhoneAccentBrush}"
+                        Visibility="Collapsed"
+                        Width="150">
+                        
+                    </ComboBox>
+                <TextBlock Text="{Binding role , Mode=TwoWay}" 
+                           Name="txtBlockRole"
+                           Visibility="Visible"
+                           Foreground="Black"
+                           Style="{StaticResource txtBlockDisplay}" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                
+            </Grid>
+            <TextBlock Text="Status" Style="{StaticResource txtBlockListViewDesc}"
+                       HorizontalAlignment="Center"/>
+                <StackPanel 
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock Text="{Binding active, Mode=TwoWay}" Style="{StaticResource txtBlockDisplay}" 
+                       HorizontalAlignment="Center" 
+                               Name="txtBlockActive"
+                       Foreground="Black" 
+                       FontWeight="SemiBold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="158,0,94,0">
+                <Button HorizontalAlignment="Center" 
+                        Name="BtnActivation"
+                        Foreground="White"
+                        Click="BtnActivation_Click"
+                        Content="Activate"
+                        Background="{ThemeResource PhoneAccentBrush}"
+                        BorderBrush="Transparent"
+                        >
+                
+                </Button>
+                    <Viewbox 
+                        Margin="4,0"
+                        Height="30" Width="30">
+                    <ProgressRing  
+                        Name="ProgressRingUpdating"
+                        Background="Transparent"
+                        Foreground="{ThemeResource PhoneAccentBrush}"
+                        IsActive="True"
+                        IsEnabled="True"
+                        Visibility="Collapsed"/>
+                    </Viewbox>
+                </StackPanel>
+            </StackPanel>
     </Grid>
+    </ScrollViewer>
     <Page.BottomAppBar>
-        <CommandBar IsOpen="True" 
-                    Visibility="{Binding  onDeviceRole , Mode=TwoWay , Converter={StaticResource RoleToVisibility}}"
-                    Name="CommandBarActions">
-            <AppBarButton Icon="{Binding Icon , Mode=TwoWay}" 
-                          Click="AppBarButton_Click" 
-                          Name="appBtnButtonActivateDeactivate"
-                          Label="{Binding ActivateDeactivate , Mode=TwoWay}"/>
+        <CommandBar Visibility="Collapsed" Name="CommandBarActions">
+
+            <AppBarButton Icon="Accept"
+                          Visibility="Collapsed"
+                          Click="AppBtnSave_Click"
+                          Name="AppBtnSave"
+                          Label="Accept"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

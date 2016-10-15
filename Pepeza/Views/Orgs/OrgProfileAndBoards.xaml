@@ -160,7 +160,9 @@
                              Text="You do not have permissions to see the collaborator information.
                                    Please talk to the owner of this organisation"/>
                     </StackPanel>
-                    <ListView Name="ListViewCollaborators">
+                    <ListView Name="ListViewCollaborators"
+                              SelectionChanged="ListViewCollaborators_SelectionChanged"
+                              >
 
                         <ListView.ItemTemplate>
                             <DataTemplate>

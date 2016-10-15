@@ -1,13 +1,20 @@
-﻿using Pepeza.Server.Requests;
+﻿using Newtonsoft.Json.Linq;
+using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System;
-using Pepeza.IsolatedSettings;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -22,7 +29,7 @@ namespace Pepeza.Views.Orgs
         {
             this.InitializeComponent();
         }
-        private Collaborator collabo { get; set; }
+        Pepeza.Views.Orgs.OrgProfileAndBoards.Collaborator collaborator;
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -30,92 +37,110 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if(e.Parameter != null)
+            if (e.Parameter != null)
             {
-                getParams(e);
+                 collaborator = e.Parameter as Pepeza.Views.Orgs.OrgProfileAndBoards.Collaborator;
+                 if (collaborator.active == "Active")
+                 {
+                     BtnActivation.Content = "Deactivate";
+                 }
+                 else
+                 {
+                     BtnActivation.Content = "Activate";
+                 }
+                 List<string> roles = new List<string>();
+                 if (collaborator.onDeviceRole == Constants.OWNER)
+                 {
+                     roles.Add("owner");
+                     roles.Add("admin");
+                     roles.Add("editor");
+                 }
+                 else if (collaborator.onDeviceRole == Constants.ADMIN)
+                 {
+                     roles.Add("editor");
+                 }
+                 ComboRole.ItemsSource = roles;
+                 if (string.IsNullOrWhiteSpace(collaborator.name)) txtBlockName.Visibility = Visibility.Collapsed;
+                this.RootGrid.DataContext = collaborator;
             }
+            
         }
-        private void getParams(NavigationEventArgs e)
+        private async void AppBtnSave_Click(object sender, RoutedEventArgs e)
         {
-            collabo = e.Parameter as Collaborator;
-            if (string.IsNullOrWhiteSpace(collabo.name)) collabo.name = "N/A";
-            this.DataContext = collabo;
-            if (collabo.userId != (int)Settings.getValue(Constants.USERID))
-            {
-                if (collabo.onDeviceRole.Equals(Constants.ADMIN) && collabo.role.Equals(Constants.OWNER))
-                {
-                    CommandBarActions.Visibility = Visibility.Collapsed;
-                }
-                else if (collabo.onDeviceRole.Equals(Constants.ADMIN) && collabo.role.Equals(Constants.ADMIN))
-                {
-                    CommandBarActions.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    CommandBarActions.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                CommandBarActions.Visibility = Visibility.Collapsed;
-            }
 
-        }
-        private async void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (collabo != null)
+            if (ComboRole.SelectedItem != null)
             {
-                Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(collabo.orgId, !collabo.active, collabo.id);
-                if (!results.ContainsKey(Constants.SUCCESS))
+                AppBtnSave.IsEnabled = false;
+                string oldRole = txtBlockRole.Text;
+                txtBlockRole.Text = ComboRole.SelectedItem.ToString();
+                txtBlockRole.Visibility = Visibility.Visible;
+                ComboRole.Visibility = Visibility.Collapsed;
+                try
                 {
-                    //Switch the messages and AppButtonIcons
-                    if (collabo.active)
+                    StackPanelUploading.Visibility = Visibility.Visible;
+                    Dictionary<string, string> results = await OrgsService.addCollaborator(new Dictionary<string, string>() { { "newCollaboratorUserId", collaborator.userId.ToString() }, { "orgId", collaborator.orgId.ToString() }, { "role", ComboRole.SelectedItem.ToString() } });
+                    if (results.ContainsKey(Constants.SUCCESS))
                     {
-                        //Means we were deactivating , show unblock
-                        collabo.Icon = new SymbolIcon(Symbol.AddFriend);
-                        collabo.active = false;
-                        collabo.ActivateDeactivate = "Activate";
+                        ToastNetStatus.Message = "Update successfull";
+
                     }
                     else
                     {
-                        //Means we activated , show block
-                        collabo.Icon = new SymbolIcon(Symbol.BlockContact);
-                        collabo.active = true;
-                        collabo.ActivateDeactivate = "Block";
+                        ToastNetStatus.Message = results[Constants.ERROR];
+                        txtBlockRole.Text = oldRole;
                     }
                 }
-                else
+                catch
                 {
-                    //TODO :: Throw a toast 
-                    toastMessages.Message = results[Constants.ERROR];
-
+                    ToastNetStatus.Message = Constants.UNKNOWNERROR;
+                    txtBlockRole.Text = oldRole;
                 }
+                AppBtnSave.IsEnabled = true;
             }
-        } 
-    }
-
-    public class BoolToStatusConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if(value!=null && (bool)value == true)
-            {
-                return "Active";
-            }else
-            {
-                return "Blocked";
-            }
+           
+            AppBtnSave.Visibility = Visibility.Collapsed;
+            StackPanelUploading.Visibility = Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        private async void BtnActivation_Click(object sender, RoutedEventArgs e)
         {
-            if (value.Equals("Active"))
+            BtnActivation.IsEnabled = false;
+            ProgressRingUpdating.Visibility = Visibility.Visible;
+            if ((RootGrid.DataContext as Pepeza.Views.Orgs.OrgProfileAndBoards.Collaborator).active == "Active")
             {
-                return true;
-            }else
-            {
-                return false;
+                Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(collaborator.orgId, false, collaborator.userId);
+                BtnActivation.Content = "Activate";
+                JObject feedback = JObject.Parse(results[Constants.SUCCESS]);
+                ToastNetStatus.Message = (string)feedback["message"];
+                
             }
+            else
+            {
+                Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(collaborator.orgId, true, collaborator.userId);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    BtnActivation.Content = "Deactivate";
+                    JObject feedback = JObject.Parse(results[Constants.SUCCESS].ToString());
+                    ToastNetStatus.Message = (string)feedback["message"];
+                }
+                else if (results.ContainsKey(Constants.ERROR))
+                {
+                    JObject feedback = JObject.Parse(results[Constants.ERROR].ToString());
+                    ToastNetStatus.Message = (string)feedback["message"];
+                }
+               
+
+            }
+            BtnActivation.IsEnabled = true;
+            ProgressRingUpdating.Visibility = Visibility.Collapsed;
+        }
+
+        private void AppBtnEdit_Click(object sender, TappedRoutedEventArgs e)
+        {
+            CommandBarActions.Visibility = Visibility.Visible;
+            AppBtnSave.Visibility = Visibility.Visible;
+            ComboRole.Visibility = Visibility.Visible;
+            txtBlockRole.Visibility = Visibility.Collapsed;
         }
     }
 }

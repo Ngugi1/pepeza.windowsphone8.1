@@ -492,10 +492,10 @@ namespace Pepeza.Views.Orgs
                 AppBtnEdit.IsEnabled = false;
             }
         }
-        private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(ViewCollaboratorsPage) , new Dictionary<string, string>() { { "orgId" , OrgID.ToString()} , { "role" , role} });
-        }
+        //private void AppBtnCollaborators_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.Frame.Navigate(typeof(ViewCollaboratorsPage) , new Dictionary<string, string>() { { "orgId" , OrgID.ToString()} , { "role" , role} });
+        //}
         private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
@@ -649,6 +649,15 @@ namespace Pepeza.Views.Orgs
             {
                 //Go to add collaborator
                 this.Frame.Navigate(typeof(AddCollaboratorPage),OrgID);
+            }
+        }
+
+        private void ListViewCollaborators_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var collaborator = (sender as ListView).SelectedItem as Collaborator;
+            if (collaborator != null)
+            {
+                this.Frame.Navigate(typeof(ManageCollaborator) , collaborator);
             }
         }
     }
