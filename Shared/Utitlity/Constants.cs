@@ -8,6 +8,8 @@ namespace Pepeza.Utitlity
     public class Constants
     {
         public static string NO_RESULTS { get{return "No results matched your query";}}
+        public static string LINK_SMALL_PLACEHOLDER { get { return "/Assets/Images/placeholder_s_avatar.png"; } }
+        public static string LINK_NORMAL_PLACEHOLDER { get { return "/Assets/Images/placeholder_avatar.jpg"; } }
         public static string REQUEST_BOARD { get { return "request"; } }
         public static string PUBLIC_BOARD { get { return "public"; } }
         public static string PRIVATE_BOARD { get { return "private"; } }

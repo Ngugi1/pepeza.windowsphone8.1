@@ -31,6 +31,8 @@ namespace Pepeza.Views.Boards
             this.InitializeComponent();
         }
         int orgId;
+        string followRestriction;
+        string boardVisibility;
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -50,8 +52,8 @@ namespace Pepeza.Views.Boards
             progressRingAddBoard.Visibility = Visibility.Visible;
             txtBlockStatus.Visibility = Visibility.Collapsed;
             var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
-            string followRestriction = checkBoxBoardType.IsChecked == true? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
-            string boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
+            followRestriction = checkBoxBoardType.IsChecked == true? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
+            boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
             if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
             {
                 //Go ahead and create the account
@@ -95,6 +97,7 @@ namespace Pepeza.Views.Boards
                 toInsert.name = (string)model.Name;
                 toInsert.desc = (string)model.Desc;
                 toInsert.orgID = orgId;
+                toInsert.followRestriction = followRestriction;
                 toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
                 toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
              

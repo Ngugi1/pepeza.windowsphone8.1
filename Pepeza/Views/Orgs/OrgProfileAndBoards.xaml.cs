@@ -271,6 +271,10 @@ namespace Pepeza.Views.Orgs
         private async Task loadBoardsLocally()
         {    
             boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllOrgBoards(OrgID));
+            foreach (var item in boards)
+            {
+                if (item.linkSmall == null) item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+            }
             ListViewOrgBoards.ItemsSource = boards;
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -405,9 +409,9 @@ namespace Pepeza.Views.Orgs
                             boards.Add(new TBoard()
                             {
                                 id = (int)board["id"],
+                                linkSmall = (string)board["linkSmall"],
                                 name = (string)board["name"],
                                 orgID = orgId,
-                                
                             });
                         }
                         ListViewOrgBoards.ItemsSource = boards;

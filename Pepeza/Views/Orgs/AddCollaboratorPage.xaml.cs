@@ -88,6 +88,7 @@ namespace Pepeza.Views.Orgs
                             JObject row = JObject.Parse(jArray[i].ToString());
                             Person p = new Person();
                             p.username = (string)row["username"];
+                            p.linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"];
                             p.id = (int)row["id"];
                             p.firstname = (string)row["firstName"];
                             p.lastname = (string)row["lastName"];
@@ -127,69 +128,6 @@ namespace Pepeza.Views.Orgs
           //Reset the listview selected Item
           ListViewSearchCollaborator.SelectedItem = null;
         }
-        private void AcceptRoleBtnClick(object sender, RoutedEventArgs e)
-        {
-            //Pick up the ID 
-            if (selectedPerson != null)
-            {
-                listAdmins.Clear();
-                listAdmins.Add(selectedPerson);
-            }
-            GridViewAddedUsers.ItemsSource = listAdmins;
-            closePopUp(false);
-            userId = selectedPerson.id;
-            //Get the selected item
-            switch ((string)ComboBox_SelectRole.SelectedItem)
-            {
-                case "admin":
-                    role = "admin";
-                    break;
-                case "editor":
-                    role = "editor";
-                    break;
-                case "owner":
-                    role = "owner";
-                    break;
-                default:
-                    App.displayMessageDialog("Please select a role");
-                    break;
-            }
-
-        }
-        private void CancelRoleBtnClick(object sender, RoutedEventArgs e)
-        {
-            closePopUp(false);
-        }
-        private void closePopUp(bool close)
-        {
-            popUpAddCollaborator.IsOpen = close;
-            if (!close) RootGrid.Opacity = 1;
-            else RootGrid.Opacity = 0.5;
-        }
-        //Upload the collaborators
-        private async void AppBtnAddCollaborator_Click(object sender, RoutedEventArgs e)
-        {
-            //Take the selected Item
-            if (selectedPerson!=null&&!string.IsNullOrEmpty(role))
-               {
-                StackPanelAddingCollaborator.Visibility = Visibility.Visible;
-                Dictionary<string, string> newRole = new Dictionary<string, string>()
-                {
-                    {"newCollaboratorUserId", userId.ToString()}, {"role", role }, { "orgId" , orgId.ToString()}
-                };
-                //Now go ahead and hit the server end point
-                Dictionary<string,string> results = await OrgsService.addCollaborator(newRole);
-                if (results != null)
-                {
-                    processCollaborators(results);
-                }
-                else
-                {
-                    App.displayMessageDialog(Constants.UNKNOWNERROR);
-                }
-            }
-            StackPanelAddingCollaborator.Visibility = Visibility.Collapsed;
-        }
         //Process collaborator results 
         private async void processCollaborators(Dictionary<string,string> results)
         {
@@ -215,15 +153,58 @@ namespace Pepeza.Views.Orgs
                 {
                     await CollaboratorHelper.add(collaborator);
                 }
+                ToastStatus.Message = "Collaborator added successfully";
+                popUpAddCollaborator.IsOpen = false;
+
             }
             else
             {
                 //We have errors to display 
                 if (results.ContainsKey(Constants.ERROR))
                 {
-                    App.displayMessageDialog(results[Constants.ERROR]);
+                   TxtBlockStatus.Text = results[Constants.ERROR];
                 }
             }
+        }
+
+        private async void SymbolAccept_tapped(object sender, TappedRoutedEventArgs e)
+        {
+            //Make a request to add the user as a collaborator
+            //Take the selected Item
+            if (selectedPerson != null && ComboBox_SelectRole.SelectedItem != null)
+            {
+                role = ComboBox_SelectRole.SelectedItem.ToString();
+                StackPanelLoading.Visibility = Visibility.Visible;
+                Dictionary<string, string> newRole = new Dictionary<string, string>()
+                {
+                    {"newCollaboratorUserId", selectedPerson.id.ToString ()}, {"role", role }, { "orgId" , orgId.ToString()}
+                };
+                    //Now go ahead and hit the server end point
+                    Dictionary<string, string> results = await OrgsService.addCollaborator(newRole);
+                    if (results != null)
+                    {
+                        processCollaborators(results);
+                        RootGrid.Opacity = 1;
+                        popUpAddCollaborator.IsOpen = false;
+                        ToastStatus.Message = "Collaborator added successfully";
+                        
+                        
+                    }
+                    else
+                    {
+                        StackPanelLoading.Visibility = Visibility.Collapsed;
+                        TxtBlockStatus.Text = results[Constants.ERROR];
+                    }
+               
+            }
+           
+            StackPanelLoading.Visibility = Visibility.Collapsed;
+            
+        }
+
+        private void SymbolCancel_tapped(object sender, TappedRoutedEventArgs e)
+        {
+            popUpAddCollaborator.IsOpen = false;
         }
     }
 }

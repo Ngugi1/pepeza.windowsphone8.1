@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:toast="using:Toastinet"
     RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -20,31 +21,19 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <toast:Toastinet 
+                Name="ToastStatus"
+                Style="{StaticResource ToastStyle}" VerticalAlignment="Center" Grid.Row="1" Duration="5"/>
             <StackPanel>
-                <TextBlock Margin="20,0" Style="{StaticResource txtBlockPageHeader}"
-                   Text="Roles"/>
-                <GridView  IsSwipeEnabled="True"
-                   Margin="8"
-                   Name="GridViewAddedUsers"
-                   >
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Background="WhiteSmoke"
-                         Orientation="Horizontal"
-                         Margin="8"
-                         >
-                                <TextBlock Text="{Binding username}"
-                           Foreground="Black" 
-                           VerticalAlignment="Center"
-                           Style="{StaticResource txtBlockListViewItemHeader}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
+                <TextBlock Margin="14,0,26,0" Style="{StaticResource txtBlockPivotHeader}"
+            		Text="search for people"
+            		VerticalAlignment="Bottom"
+            		Typography.Capitals="Normal"
+                           />
             </StackPanel>
             <StackPanel Grid.Row="1">
-                <TextBox  PlaceholderText="Search for users"
-                     Margin="12,8,12,8"
+                <TextBox  PlaceholderText="Search for people"
+                     Margin="12,0,12,8"
                      HorizontalAlignment="Stretch"
                      Background="Transparent"
                      Padding="8" 
@@ -60,7 +49,6 @@
                       Name="ListViewSearchCollaborator">
 
                 </ListView>
-
             </StackPanel>
             <TextBlock Name="txtBlockWhat"
                        Grid.Row="1"
@@ -73,38 +61,30 @@
                        Style="{ThemeResource ListViewItemTextBlockStyle}"
                        TextAlignment="Center"
                        TextWrapping="Wrap"/>
-            <StackPanel Grid.Row="1"
-                        Visibility="Collapsed"
-                        Name="StackPanelAddingCollaborator"
-                        VerticalAlignment="Center"
-                        >
-                <ProgressBar />
-                <TextBlock  Style="{StaticResource txtBlockWait}"
-                            HorizontalAlignment="Center"
-                            Text="Adding collaborator. . ."/>
-            </StackPanel>
-           
             <Popup
-            Name="popUpAddCollaborator"
-            Grid.Row="1"
-            IsOpen="False"
-            IsLightDismissEnabled="False"
-            VerticalAlignment="Top">
-                <StackPanel Background="{ThemeResource PhoneAccentBrush}" 
+                Name="popUpAddCollaborator"
+                Grid.Row="1"
+                IsOpen="False"
+                IsLightDismissEnabled="False"
+                >
+                <StackPanel 
+                   Background="{ThemeResource CommandBarBackgroundThemeBrush}"
                         Width="{Binding ActualWidth, ElementName=RootGrid}"
                        >
                     <TextBlock Text="Select role" 
                                HorizontalAlignment="Center"
                                Margin="12"
                                Style="{StaticResource ListViewEmptyStaticTextBlockStyle}" 
-                               Foreground="White"/>
+                               Foreground="Black"/>
                     <TextBlock FontWeight="Bold" 
                            Name="txtBlockUsername"
+                               Foreground="Black"
                            HorizontalAlignment="Center"
                            Style="{StaticResource SubheaderTextBlockStyle}"
-                           Foreground="White">Ngugi Ndung'u</TextBlock>
+                           />
                     <ComboBox BorderBrush="{StaticResource PhoneAccentBrush}" 
-                          HorizontalAlignment="Center" 
+                          HorizontalAlignment="Center"
+                              Width="300"
                           Name="ComboBox_SelectRole"    
                           Margin="16">
                         <ComboBox.Header>
@@ -113,18 +93,41 @@
                                Style="{StaticResource txtBlockDisplay}"
                                Text="select role" />
                         </ComboBox.Header>
-                       </ComboBox>
+                    </ComboBox>
+                    <StackPanel 
+                        Visibility="Collapsed"
+                        Name="StackPanelLoading">
+                    <ProgressBar  IsIndeterminate="True" Margin="12,4"/>
+                    <TextBlock Text="just a moment..." Style="{StaticResource txtBlockWait}"
+                               HorizontalAlignment="Center"
+                               />
+                    </StackPanel>
+                    <TextBlock Name="TxtBlockStatus" 
+                               Visibility="Collapsed"
+                               Style="{StaticResource txtBlockError}"/>
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                        <AppBarButton Foreground="White" Click="CancelRoleBtnClick" Icon="Cancel"  BorderBrush="White" Label="cancel" IsCompact="False" Margin="12"/>
-                        <AppBarButton Foreground="White"  Click="AcceptRoleBtnClick" BorderBrush="White" Icon="Accept" Label="add role" IsCompact="False" Margin="12"/>
+                        <Viewbox Height="80"
+                             
+                                 Width="80"
+                                 >
+                            <SymbolIcon 
+                                Symbol="Cancel"
+                                Name="SymbolCancel"
+                                Tapped="SymbolCancel_tapped"
+                                Margin="12"/>
+                        </Viewbox>
+
+                        <Viewbox Height="80" Width="80"
+                                 >
+                            <SymbolIcon  
+                                Tapped="SymbolAccept_tapped"
+                                        Symbol="Accept" 
+                                        Margin="12"/>
+                        </Viewbox>
                     </StackPanel>
                 </StackPanel>
             </Popup>
         </Grid>
     </ScrollViewer>
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Accept" Label="done" Click="AppBtnAddCollaborator_Click"/>
-        </CommandBar>
-    </Page.BottomAppBar>
+    
 </Page>

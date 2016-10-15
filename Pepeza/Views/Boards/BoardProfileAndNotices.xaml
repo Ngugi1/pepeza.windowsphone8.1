@@ -14,8 +14,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <connvert:BoolToTextConverter x:Key="Converter"/>
-            <connvert:IntToAttachment x:Key="intToAttachment"/>
         </ResourceDictionary>
        
     </Page.Resources>

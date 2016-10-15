@@ -267,6 +267,7 @@ namespace Pepeza.Server.Requests
                     else
                     {
                         //We hit a dead end 
+                        string s = responseMessage.Content.ToString();
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
