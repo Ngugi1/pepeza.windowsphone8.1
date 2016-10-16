@@ -134,17 +134,7 @@ namespace Pepeza
             ListViewBoards.SelectedItem = null;
             return true;
         }
-        //private async Task<bool> loadFollowing()
-        //{
-        //    //following = new ObservableCollection<TBoard>(await BoardHelper.getFollowing());
-        //    //if (following.Count == 0) EmptyFollowersPlaceHolder.Visibility = Visibility.Visible;
-        //    //var alphaGroups = JumpListHelper.ToAlphaGroups(following, t => t.name);
-        //    //AlphaListFollowing.ReleaseItemsSource();
-        //    //ListViewFollowing.ItemsSource = alphaGroups;
-        //    //AlphaListFollowing.ApplyItemsSource();
-        //    //ListViewFollowing.SelectedItem = null;
-        //    return true;
-        //}
+     
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));

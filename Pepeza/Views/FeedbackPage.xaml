@@ -1,0 +1,124 @@
+﻿<Page
+    x:Class="Pepeza.Views.FeedbackPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:toast="using:Toastinet"
+    RequestedTheme="Light"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <ScrollViewer VerticalScrollMode="Auto" 
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollMode="Auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Talk to us" 
+                   Style="{StaticResource txtBlockPageHeader}"
+                   Foreground="Black"
+                   />
+        <StackPanel Grid.Row="1" Visibility="Collapsed" Name="StackPanelProgress">
+            <ProgressBar IsIndeterminate="True" Margin="12"/>
+            <TextBlock Text="Sending feedback..." Style="{StaticResource txtBlockWait}"
+                       HorizontalAlignment="Center"
+                       />
+        </StackPanel>
+        <StackPanel 
+            Tapped="StackPanelSmile"
+            Grid.Row="2"
+            Name="SmileStackPanel"
+            Margin="12,4"
+            Orientation="Horizontal">
+            <Image Width="50" 
+                   Source="/Assets/Images/ic_mood_smile.png"
+                   Height="50">
+                
+            </Image>
+            <TextBlock Text="Send us a smile" 
+                       Margin="12"
+                       Style="{StaticResource BaseTextBlockStyle}" VerticalAlignment="Bottom"/>
+            <SymbolIcon 
+                Name="AcceptSmile"
+                Visibility="Collapsed"
+                Symbol="Accept">
+
+            </SymbolIcon>
+        </StackPanel >
+        <StackPanel Grid.Row="3"
+                    Name="ConfuseStackPanel"
+                    Tapped="StackPanel_Confused"
+                    Margin="12,4"
+                    Orientation="Horizontal">
+            <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_confused.png"/>
+            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="Send us a confuse" VerticalAlignment="Bottom" Margin="12"/>
+            <SymbolIcon 
+                Name="AcceptConfused"
+                Visibility="Collapsed"
+                Symbol="Accept">
+
+            </SymbolIcon>
+        </StackPanel>
+        <StackPanel 
+            Tapped="StackPanelFrown"
+            Grid.Row="4"
+            Name="FrownStackPanel"
+                    Margin="12,4"
+                    Orientation="Horizontal">
+            <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_sad.png"/>
+            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="Send us a frown" VerticalAlignment="Bottom" Margin="12"/>
+            <SymbolIcon Symbol="Accept" 
+                         Name="AcceptFrown"
+                        Visibility="Collapsed"/>
+        </StackPanel>
+        <StackPanel Grid.Row="6">
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="I changed my mind , switch the mood"
+                       Margin="12,0,0,0"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       VerticalAlignment="Center"
+                       />
+                <Viewbox Height="50" 
+                         Tapped="Viewbox_Tapped"
+                         Width="50">
+                    <SymbolIcon 
+               
+                Visibility="Visible"
+                Symbol="Switch">
+
+            </SymbolIcon>
+                </Viewbox>
+
+            </StackPanel>
+            <TextBox  Height="100" 
+                      Margin="12,4"
+                      Name="txtBoxFeedBack"
+                      Foreground="Black"
+                      Header="Tell us why you feel this way?"
+                      Style="{StaticResource txtBoxStyle}"/>
+        </StackPanel>
+        <toast:Toastinet Name="ToastStatus" Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
+    </Grid>
+    </ScrollViewer>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Comment" 
+                          Click="SendFeedBackClicked"
+                          Label="feedback"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

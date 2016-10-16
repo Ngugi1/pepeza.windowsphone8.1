@@ -110,8 +110,16 @@ namespace Pepeza.Views.Orgs
             {
                 Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(collaborator.orgId, false, collaborator.userId);
                 BtnActivation.Content = "Activate";
-                JObject feedback = JObject.Parse(results[Constants.SUCCESS]);
-                ToastNetStatus.Message = (string)feedback["message"];
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    JObject feedback = JObject.Parse(results[Constants.SUCCESS]);
+                    ToastNetStatus.Message = (string)feedback["message"];
+                }
+                else if(results.ContainsKey(Constants.ERROR))
+                {
+                    ToastNetStatus.Message = results[Constants.ERROR];
+                }
+                
                 
             }
             else
@@ -125,8 +133,8 @@ namespace Pepeza.Views.Orgs
                 }
                 else if (results.ContainsKey(Constants.ERROR))
                 {
-                    JObject feedback = JObject.Parse(results[Constants.ERROR].ToString());
-                    ToastNetStatus.Message = (string)feedback["message"];
+
+                    ToastNetStatus.Message = (string)results["message"];
                 }
                
 

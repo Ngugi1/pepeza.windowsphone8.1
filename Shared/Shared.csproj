@@ -107,6 +107,7 @@
     <Compile Include="Server\OAuth\Services\GoogleService.cs" />
     <Compile Include="Server\OAuth\Services\OAuthBase.cs" />
     <Compile Include="Server\Requests\AvatarUploader.cs" />
+    <Compile Include="Server\Requests\FeedBackService.cs" />
     <Compile Include="Server\ServerModels\Notices\FileNoticeModel.cs" />
     <Compile Include="TilesAndActionCenter\ActionCenterHelper.cs" />
     <Compile Include="Db\DbHelpers\Board\BoardHelper.cs" />

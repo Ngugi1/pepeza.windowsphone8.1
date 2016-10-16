@@ -18,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converter:IntToAttachment x:Key="Converter"/>
             <converter:IntToForeground x:Key="IntToForeground"/>
-                
+
         </ResourceDictionary>
     </Page.Resources>
     <Grid Name="GridParent" Margin="0,12,0,0">
@@ -41,7 +41,7 @@
                         Name="EmptyNoticesPlaceHolder"
                         Visibility="Collapsed"
                         VerticalAlignment="Center">
-                        
+
                         <Viewbox Width="100" Height="100">
                             <SymbolIcon  
                                 Foreground="{ThemeResource PhoneAccentBrush}"
@@ -55,51 +55,51 @@
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
-                <ListView Margin="19.5,0,8,0"
+                    <ListView Margin="19.5,0,8,0"
                           SelectionChanged="ListViewNotices_SelectionChanged"
                           Name="ListViewNotices">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,4" 
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,4" 
                                   Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
 
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding title , Mode=TwoWay}" 
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding title , Mode=TwoWay}" 
                                         Foreground="Black"
                                         Margin="0"
                                         VerticalAlignment="Bottom"
                                         Style="{StaticResource txtBlockListViewItemHeader}"/>
-                                <TextBlock  
+                                    <TextBlock  
                                         Grid.Row="1"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
                                         Text="{Binding board , Mode=TwoWay}"/>
-                                <TextBlock Grid.Row="2"
+                                    <TextBlock Grid.Row="2"
                        Margin="0"
                        Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
                        Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                        Text="{Binding content , Mode=TwoWay}"/>
-                                <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
+                                    <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
                                     HorizontalAlignment="Left" 
                                     VerticalAlignment="Bottom"
                                      Grid.Column="1" />
-                                <SymbolIcon Symbol="Attach" 
+                                    <SymbolIcon Symbol="Attach" 
                                         HorizontalAlignment="Right"
                                         Grid.RowSpan="2"
                                         Visibility="{Binding hasAttachment , Converter={StaticResource Converter}}"
                                         Grid.Row="1" Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -271,7 +271,9 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="following" />
 
                 </PivotItem.Header>
-                --><!--  Alpha jumplist for Following Pivot  --><!--
+                -->
+            <!--  Alpha jumplist for Following Pivot  -->
+            <!--
                 <Grid>
                     <StackPanel 
                         Name="EmptyFollowersPlaceHolder"
@@ -300,7 +302,7 @@
                 </Grid>
             </PivotItem>-->
         </Pivot>
-       
+
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">
