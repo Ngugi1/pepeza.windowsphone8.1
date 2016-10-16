@@ -6,7 +6,6 @@ using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views;
 using Pepeza.Views.Analytics;
-using Pepeza.Views.Notifications;
 using Pepeza.Views.Profile;
 using Shared.Push;
 using System;
@@ -250,7 +249,7 @@ namespace Pepeza
 
             Frame frame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
-            if (!e.Arguments.Equals("1"))
+            if (e.Arguments.Equals("1"))
             {
                 //Go to main page 
                 frame.Navigate(typeof(LoginPage), e.Arguments);

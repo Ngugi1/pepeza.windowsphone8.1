@@ -150,9 +150,6 @@
     <Compile Include="Views\Notices\NoticeDetails.xaml.cs">
       <DependentUpon>NoticeDetails.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Notifications\Notificationspage.xaml.cs">
-      <DependentUpon>Notificationspage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Orgs\AddCollaboratorPage.xaml.cs">
       <DependentUpon>AddCollaboratorPage.xaml</DependentUpon>
     </Compile>
@@ -290,10 +287,6 @@
     <Page Include="Views\Notices\NoticeDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Notifications\Notificationspage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Orgs\AddCollaboratorPage.xaml">
       <SubType>Designer</SubType>

@@ -17,7 +17,7 @@ namespace Shared.TilesAndActionCenter
             //TODO :: Polish here
             foreach (var notice in notifications)
             {              
-              ToastNotification toast = getToast((string)notice["title"],(string)notice["content"] , "2");
+              ToastNotification toast = getToast((string)notice["title"],(string)notice["content"]  , "0");
               ToastNotificationManager.CreateToastNotifier().Show(toast);
             }
   

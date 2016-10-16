@@ -348,6 +348,7 @@ namespace Pepeza.Server.Requests
                         {
                             await NoticeHelper.add(notice);
                         }
+
                     }
                 }
                 ActionCenterHelper.updateActionCenter(notices);
