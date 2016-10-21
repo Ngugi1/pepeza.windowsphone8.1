@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Utitlity;
+using Pepeza.Views.Boards;
 using Shared.Db.DbHelpers;
 using Shared.Db.Models.Notification;
 using System;
@@ -148,6 +149,18 @@ namespace Pepeza.Views.UserNotifications
             catch
             {
 
+            }
+        }
+
+        private void ListViewNotifications_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((sender as ListView).SelectedItem as DisplayNotification) != null)
+            {
+                var selected = (sender as ListView).SelectedItem as DisplayNotification;
+                if (selected.type == "new_board_request")
+                {
+                    this.Frame.Navigate(typeof(AcceptDeclineRequests), selected.boardId);
+                }
             }
         }
     }

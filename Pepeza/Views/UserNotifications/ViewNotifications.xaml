@@ -37,6 +37,7 @@
                 </PivotItem.Header>
                 <ListView 
                     Name="ListViewNotifications"
+                    SelectionChanged="ListViewNotifications_SelectionChanged"
                     Grid.Row="1">
                     <ListView.ItemTemplate>
                         <DataTemplate>
