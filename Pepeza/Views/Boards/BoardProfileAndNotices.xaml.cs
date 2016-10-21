@@ -591,6 +591,11 @@ namespace Pepeza.Views.Boards
         {
             this.Frame.Navigate(typeof(AddNoticePage), boardId);
         }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AcceptDeclineRequests), boardId);
+        }
     }
     public class BoolToTextConverter : IValueConverter
     {

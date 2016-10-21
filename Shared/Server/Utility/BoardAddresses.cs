@@ -9,6 +9,7 @@ namespace Pepeza.Server.Utility
     class BoardAddresses : Addresses
     {
         public static  string CREATE { get { return "boards/new"; } }
+        public static string ACCEPT_DECLINE_REQUEST { get { return "follower/{0}/request/{1}"; } }
         public static string GET_BOARD { get { return "boards/{0}"; } }
         public static string UPDATE_BOARD { get { return "board/{0}"; } }
         public static string DELETE { get { return "boards/{0}";}}
@@ -18,5 +19,6 @@ namespace Pepeza.Server.Utility
         public static string LOAD_FOLLOWERS { get { return "board/{0}/followers"; }}
         public static string LOAD_NOTICES { get { return "board/{0}/notices"; } }
         public static string BOARD_ANALYTICS { get { return "analytics/board/{0}?period={1}"; } }
+        public static string LOAD_BOARD_REQUESTS { get { return "board/{0}/followers/requests"; } }
     }
 }

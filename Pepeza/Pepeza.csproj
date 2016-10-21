@@ -116,6 +116,9 @@
     <Compile Include="Views\Analytics\OrgAnalytics.xaml.cs">
       <DependentUpon>OrgAnalytics.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Boards\AcceptDeclineRequests.xaml.cs">
+      <DependentUpon>AcceptDeclineRequests.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Boards\AddBoard.xaml.cs">
       <DependentUpon>AddBoard.xaml</DependentUpon>
     </Compile>
@@ -180,6 +183,10 @@
     <Compile Include="Views\Signup\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserNotifications\TNotfication.cs" />
+    <Compile Include="Views\UserNotifications\ViewNotifications.xaml.cs">
+      <DependentUpon>ViewNotifications.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ViewHelpers\BoardViewHelper.cs" />
     <Compile Include="Views\ViewHelpers\OrgViewHelper.cs" />
   </ItemGroup>
@@ -243,6 +250,10 @@
     <Page Include="Views\Analytics\OrgAnalytics.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Boards\AcceptDeclineRequests.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Boards\AddBoard.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -327,6 +338,10 @@
     <Page Include="Views\Signup\SignUpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserNotifications\ViewNotifications.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

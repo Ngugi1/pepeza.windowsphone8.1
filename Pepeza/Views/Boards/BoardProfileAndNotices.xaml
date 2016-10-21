@@ -48,8 +48,7 @@
                                 </Grid.RowDefinitions>
                                 <Grid Name="GridContentHide" Opacity="0">
                                     <StackPanel>
-
-                                        <Grid Grid.Row="0">
+                                         <Grid Grid.Row="0">
 
                                             <Image Width="250" Height="250"
                                Name="ImageMask"
@@ -89,7 +88,6 @@
                                                    Text="{Binding name}" />
                                         <HyperlinkButton Name="btnViewFollowers"
                                                          HorizontalAlignment="Center"
-                                                         Background="Transparent"
                                                          Click="btnViewFollowers_Click"
                                                          Foreground="{ThemeResource PhoneAccentBrush}">
                                             <HyperlinkButton.Content>
@@ -97,21 +95,56 @@
                                                             HorizontalAlignment="Center"
                                                             Orientation="Horizontal">
                                                     <TextBlock Margin="0"
-                                                               Style="{StaticResource txtBlockDisplay}"
+                                                               
                                                                Text="{Binding noOfFollowers , Mode=TwoWay}"
                                                                Typography.NumeralStyle="Normal" />
-                                                    <TextBlock Margin="12,0"
+                                                    <RichTextBlock Margin="12,0"
                                                                FontSize="22"
-                                                               Style="{StaticResource txtBlockDisplay}"
-                                                               Text="{Binding singleFollowerOrMany , Mode=TwoWay}"
-                                                               Typography.Capitals="AllSmallCaps" />
+                                                               Typography.Capitals="AllSmallCaps" >
+                                                        <Paragraph>
+                                                            <Bold>
+                                                                <Underline>
+                                                                    <Run Text="{Binding singleFollowerOrMany}"/>
+                                                                </Underline>
+                                                            </Bold>
+                                                        </Paragraph>
+                                                    </RichTextBlock>
+                                                    <SymbolIcon Symbol="View" 
+                                                                Height="30" 
+                                                                Width="40"/>
                                                 </StackPanel>
                                             </HyperlinkButton.Content>
                                         </HyperlinkButton>
-                                        <HyperlinkButton Content="{Binding followRestriction, Mode=TwoWay}" 
-                                                         FontSize="{StaticResource  TextStyleLargeFontSize}"
+                                        <HyperlinkButton  
                                                          Foreground="{ThemeResource PhoneAccentBrush}"
-                                                         HorizontalAlignment="Center"/>
+                                                         Click="HyperlinkButton_Click"
+                                                         HorizontalAlignment="Center">
+                                            <HyperlinkButton.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="3" 
+                                                           Margin="4"
+                                                           Foreground="{ThemeResource PhoneAccentBrush}"/>
+                                                    <RichTextBlock 
+                                                            FontSize="22"
+                                                           Margin="4"
+                                                        Foreground="{ThemeResource PhoneAccentBrush}"
+                                                           >
+                                                        <Paragraph>
+                                                            <Underline>
+                                                                <Bold>
+                                                                    Follow Requests
+                                                                </Bold>
+                                                            </Underline>
+                                                        </Paragraph>
+                                                    </RichTextBlock>
+                                                    <SymbolIcon Symbol="Flag"
+                                                            Foreground="{ThemeResource PhoneAccentBrush}"
+                                                            Margin="4,0"
+                                                            Height="30" Width="40"/>
+                                                
+                                            </StackPanel>
+                                            </HyperlinkButton.Content>
+                                        </HyperlinkButton>
                                         <Button Name="btnFollow"
                                                 Margin="16,0"
                                                 Foreground="White"
@@ -120,11 +153,7 @@
                                                 VerticalAlignment="Bottom"
                                                 Click="btnFollow_Click"
                                                 IsEnabled="True" />
-                                        <Rectangle Height="1"
-                                                   Margin="12"
-                                                   Fill="{ThemeResource PhoneAccentBrush}" />
-
-                                    </StackPanel>
+                                                 </StackPanel>
                                 </Grid>
 
                                 <ScrollViewer Grid.Row="1"

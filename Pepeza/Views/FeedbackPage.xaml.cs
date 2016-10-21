@@ -94,6 +94,7 @@ namespace Pepeza.Views
                 ToastStatus.Message = (string)resulst[Constants.ERROR];
             }
             StackPanelProgress.Visibility = Visibility.Collapsed;
+            this.Frame.GoBack();
         }
     }
 }

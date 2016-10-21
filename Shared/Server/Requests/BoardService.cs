@@ -331,5 +331,58 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+        public async static Task<Dictionary<string, string>> getBoardFollowRequests(int boardId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            try
+            {
+                if (checkInternetConnection())
+                {
+                    response = await client.GetAsync(string.Format(BoardAddresses.LOAD_BOARD_REQUESTS , boardId));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    }
+                }
+                else
+                {
+                    results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                }
+            }
+            catch
+            {
+                results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+            }
+            return results;
+        }
+        public async static Task<Dictionary<string, string>> acceptDeclineRequests(int followerId, string accept)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                response = await client.PutAsync(string.Format(BoardAddresses.ACCEPT_DECLINE_REQUEST ,followerId , accept), null);
+                if (response.IsSuccessStatusCode)
+                {
+                    results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    results.Add(Constants.ERROR, await response.Content.ReadAsStringAsync());
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 }

@@ -7,6 +7,7 @@ using Pepeza.Utitlity;
 using Pepeza.Views;
 using Pepeza.Views.Analytics;
 using Pepeza.Views.Profile;
+using Pepeza.Views.UserNotifications;
 using Shared.Push;
 using System;
 using System.Collections.Generic;
@@ -252,7 +253,7 @@ namespace Pepeza
             if (e.Arguments.Equals("1"))
             {
                 //Go to main page 
-                frame.Navigate(typeof(LoginPage), e.Arguments);
+                frame.Navigate(typeof(ViewNotifications), e.Arguments);
             }
             else
             {
