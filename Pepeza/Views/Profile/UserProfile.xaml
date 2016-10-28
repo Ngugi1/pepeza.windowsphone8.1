@@ -115,8 +115,10 @@
                             Width="{Binding ActualWidth,
                                             ElementName=relativePanel}"
                             HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
                             Orientation="Vertical">
-                    <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical" 
+                                Visibility="Visible">
                         <TextBox Name="txtBoxFirstName"
                                  Header="First Name"
                                  Style="{StaticResource txtBoxStyle}"

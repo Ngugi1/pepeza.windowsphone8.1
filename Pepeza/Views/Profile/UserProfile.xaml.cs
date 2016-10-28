@@ -158,6 +158,7 @@ namespace Pepeza.Views.Profile
                         {
                             setIconToEdit();
                             stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                            stackPanelAddFirstLastName.Visibility = Visibility.Visible;
                         }
                         if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
                         {
