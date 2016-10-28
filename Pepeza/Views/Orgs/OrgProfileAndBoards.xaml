@@ -38,7 +38,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions />
-
+                
                     <ScrollViewer Name="SCVOrgProfile"
                                   Grid.Row="1"
                                   Opacity="0"
@@ -126,6 +126,26 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
                 </PivotItem.Header>
                 <Grid>
+                    <StackPanel 
+                        Grid.Row="1"
+                        Name="EmptyBoardsPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  Symbol="OtherUser"
+                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                               
+                                         />
+                        </Viewbox>
+                        <TextBlock Text="No boards to display here (-:"
+                                   TextLineBounds="Full"
+                                   HorizontalAlignment="Center"
+                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                    </StackPanel>
                     <ListView Name="ListViewOrgBoards"
                               ItemTemplate="{StaticResource ListViewSearchBoards}"
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" />
@@ -147,6 +167,16 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="collaborators" />
                 </PivotItem.Header>
                 <Grid>
+                    <StackPanel 
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center"
+                        Name="stackPanelLoadCollaborators">
+                        <ProgressBar Margin="12"/>
+                        <TextBlock Style="{StaticResource txtBlockWait}"
+                                   
+                                   Text="Just a moment , fetching collaborators"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
                     <StackPanel VerticalAlignment="Center" 
                                 Name="StackPanelPermissionDenied"
                                 Visibility="Collapsed">

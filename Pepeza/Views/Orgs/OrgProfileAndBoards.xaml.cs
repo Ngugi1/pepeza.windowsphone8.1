@@ -279,6 +279,14 @@ namespace Pepeza.Views.Orgs
             {
                 if (item.linkSmall == null) item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
             }
+            if (boards.Count == 0)
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+            }
             ListViewOrgBoards.ItemsSource = boards;
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -388,6 +396,7 @@ namespace Pepeza.Views.Orgs
         {
             try
             {
+                stackPanelLoadCollaborators.Visibility = Visibility.Visible;
                 Dictionary<string, string> results = await OrgsService.requestCollaborators(id);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
@@ -402,7 +411,11 @@ namespace Pepeza.Views.Orgs
             }
             catch (Exception ex)
             {
-                await new MessageDialog(Constants.UNKNOWNERROR).ShowAsync();
+                //await new MessageDialog(Constants.UNKNOWNERROR).ShowAsync();
+            }
+            finally
+            {
+                stackPanelLoadCollaborators.Visibility = Visibility.Collapsed;
             }
         }
         private void hideCommandBar(bool hide=true)
@@ -443,6 +456,15 @@ namespace Pepeza.Views.Orgs
                                 name = (string)board["name"],
                                 orgID = orgId,
                             });
+                        }
+                        if (boards.Count == 0)
+                        {
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                            
                         }
                         ListViewOrgBoards.ItemsSource = boards;
                     }
