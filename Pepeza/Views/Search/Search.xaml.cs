@@ -302,6 +302,7 @@ namespace Pepeza.Views
                                 searchedBoard.id = (int)board["id"];
                                 searchedBoard.name = (string)board["name"];
                                 searchedBoard.score = (double)board["score"];
+                                searchedBoard.linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg";
                                 boardSource.Add(searchedBoard);
                                 boardSource.Distinct();
 
@@ -349,6 +350,7 @@ namespace Pepeza.Views
                          Id = (int)row["id"],
                          Name = (string)row["name"],
                          Score = (double)row["score"],
+                         linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg",
                          Username =(string)row["username"]
                     };
                     orgSource.Add(org);

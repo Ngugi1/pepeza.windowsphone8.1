@@ -95,7 +95,6 @@ namespace Pepeza.Views.Boards
                 {
                     requestsource.Remove(tag);
                     if (requestsource.Count == 0) EmptyFollowRequestsPlaceHolder.Visibility = Visibility.Visible;
-
                 }
 
             }

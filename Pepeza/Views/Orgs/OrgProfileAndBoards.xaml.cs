@@ -156,6 +156,10 @@ namespace Pepeza.Views.Orgs
                         //Upload the profile pic 
                     }
                 }
+                else if (e.Parameter.GetType() == typeof(int))
+                {
+                    OrgID = (int)e.Parameter;
+                }
                 
             }else
             {
@@ -287,21 +291,28 @@ namespace Pepeza.Views.Orgs
                     //load profile
                     await getUserRole();
                     AppBtnAdd.Visibility = Visibility.Collapsed;
-                   
-                    if (role.Equals(Constants.EDITOR))
+                    if (role != null)
                     {
-                        AppBtnEdit.Visibility = Visibility.Collapsed;
-                        AppBtnAnalytics.Visibility = Visibility.Visible;
-                    }
-                    else if(role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
-                    {
-                        AppBtnEdit.Visibility = Visibility.Visible;
-                        AppBtnAnalytics.Visibility = Visibility.Visible;
+                        if (role.Equals(Constants.EDITOR))
+                        {
+                            AppBtnEdit.Visibility = Visibility.Collapsed;
+                            AppBtnAnalytics.Visibility = Visibility.Visible;
+                        }
+                        else if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
+                        {
+                            AppBtnEdit.Visibility = Visibility.Visible;
+                            AppBtnAnalytics.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            hideCommandBar(true);
+                        }
                     }
                     else
                     {
-                        hideCommandBar(true);
+                        hideCommandBar();
                     }
+                    
                    
                         await getOrgDetails(OrgID);
                     
@@ -313,40 +324,59 @@ namespace Pepeza.Views.Orgs
                     AppBtnEdit.Visibility = Visibility.Collapsed;
                     AppBtnAdd.Label = "add board";
                     AppBtnAnalytics.Visibility = Visibility.Collapsed;
-                    if (role.Equals(Constants.EDITOR))
+                    if (role != null)
                     {
-                        AppBtnAdd.Visibility = Visibility.Collapsed;
-                    }
-                    else if(role == Constants.OWNER || role== Constants.ADMIN)
-                    {
-                        AppBtnAdd.Visibility = Visibility.Visible;
+                        if (role.Equals(Constants.EDITOR))
+                        {
+                            AppBtnAdd.Visibility = Visibility.Collapsed;
+                        }
+                        else if (role == Constants.OWNER || role == Constants.ADMIN)
+                        {
+                            AppBtnAdd.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            hideCommandBar();
+                        }
                     }
                     else
                     {
                         hideCommandBar();
                     }
+                    
                      await fetchOrgBoards(OrgID);
                     break;
                 case 2:
                     //Load org collaborators 
                     //Get user role first in this organisation 
-                    loadOrgCollaborators(OrgID);
                     AppBtnAnalytics.Visibility = Visibility.Collapsed;
                     AppBtnEdit.Visibility = Visibility.Collapsed;
                     AppBtnAdd.Label = "add collaborator";
-                    if (role.Equals(Constants.EDITOR))
+                    if (role != null)
                     {
-                        hideCommandBar();
-                    }
-                    else if (role == Constants.OWNER || role == Constants.ADMIN)
-                    {
-                        hideCommandBar(false);
-                        AppBtnAdd.Visibility = Visibility.Visible;
+
+                        if (role.Equals(Constants.EDITOR))
+                        {
+                            loadOrgCollaborators(OrgID);
+                            hideCommandBar();
+                        }
+                        else if (role == Constants.OWNER || role == Constants.ADMIN)
+                        {
+                            hideCommandBar(false);
+                            loadOrgCollaborators(OrgID);
+                            AppBtnAdd.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            hideCommandBar();
+                        }
                     }
                     else
                     {
                         hideCommandBar();
+                        StackPanelPermissionDenied.Visibility = Visibility.Visible;
                     }
+                    
                     break;
                 default:
                     break;

@@ -87,9 +87,11 @@
             <TextBlock Name="txtBlockStatus"
                        Grid.Row="7"
                        Style="{StaticResource txtBlockError}" />
-            <StackPanel Name="progressRingAddBoard"
+            <StackPanel 
+                Visibility="Collapsed"
+                Name="progressRingAddBoard"
                         Grid.Row="8"
-                        Visibility="Visible">
+                        >
                 <ProgressBar Margin="12,8" />
                 <TextBlock HorizontalAlignment="Center"
                            Style="{StaticResource txtBlockWait}"

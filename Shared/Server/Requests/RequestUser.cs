@@ -37,8 +37,7 @@ namespace Pepeza.Server.Requests
             //Dictionary to return content 
             Dictionary<string, string> resContent = new Dictionary<string, string>();
             //Check for internet connectivity
-            Network network = new Network();
-            if (network.HasInternetConnection)
+            if (checkInternetConnection())
             {
                 try
                 {

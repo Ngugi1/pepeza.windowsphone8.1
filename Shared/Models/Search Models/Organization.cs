@@ -60,5 +60,6 @@ namespace Pepeza.Models.Search_Models
         public DateTime  dateUpdated { get; set; }
         public string timezone_updated { get; set; }
         public string timezone_type_updated { get; set; }
+        public string linkSmall { get; set; }
     }
 }

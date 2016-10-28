@@ -77,8 +77,9 @@ namespace Pepeza.Views
                     {
                         //update UI Accordinglly
                         processErrors(results, user);
-                        
+
                     }
+                    
                 }
             }
             else
@@ -201,6 +202,7 @@ namespace Pepeza.Views
                         //Email already exists
                         txtBlockEmailStatus.Text = CustomMessages.EMAIL_NOT_AVAILABLE;
                         txtBlockEmailStatus.Visibility = Visibility.Visible;
+                        txtBlockEmailStatus.Text = "Email is already registered with another account";
                         user.IsEmailValid = false;
                     }else
                     {

@@ -11,5 +11,6 @@ namespace Pepeza.Models.Search_Models
         public int id { get; set; }
         public string name { get; set; }
         public double score { get; set; }
+        public string linkSmall { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Utitlity;
 using Pepeza.Views.Boards;
+using Pepeza.Views.Orgs;
 using Shared.Db.DbHelpers;
 using Shared.Db.Models.Notification;
 using System;
@@ -161,6 +162,15 @@ namespace Pepeza.Views.UserNotifications
                 {
                     this.Frame.Navigate(typeof(AcceptDeclineRequests), selected.boardId);
                 }
+                else if (selected.type == "new_follower" || selected.type == "user_board_request_accepted")
+                {
+                    this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.boardId);
+                }
+                else if (selected.type == "added_to_org" || selected.type == "user_collaborator_status" || selected.type == "user_org_role_changed")
+                {
+                    this.Frame.Navigate(typeof(OrgProfileAndBoards) , selected.orgId);
+                }
+                
             }
         }
     }

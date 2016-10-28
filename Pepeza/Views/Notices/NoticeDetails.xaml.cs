@@ -280,7 +280,15 @@ namespace Pepeza.Views.Notices
                 {
                     destinationFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
                 }
-                storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                try
+                {
+                    storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                }
+                catch
+                {
+                    return;
+                }
+               
                 #endregion
                 #region Bsckground Downloader
                 BackgroundDownloader downloader = new BackgroundDownloader();

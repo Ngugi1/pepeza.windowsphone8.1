@@ -86,7 +86,9 @@
                                 </Image>
                                 <ProgressBar IsIndeterminate="True" 
                                  Width="250" 
-                                 Name="PBProfilePicUpdating" VerticalAlignment="Bottom"/>
+                                 Name="PBProfilePicUpdating" 
+                                             Visibility="Collapsed"
+                                             VerticalAlignment="Bottom"/>
                             </Grid>
                             <TextBlock Grid.Row="1"
                                        Margin="0,12"
@@ -153,12 +155,16 @@
                         </Viewbox>
                         <TextBlock 
                             TextLineBounds="Full"
+                            TextAlignment="Center"
                                    HorizontalAlignment="Center"
                                   Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
+                            
                                    Typography.Capitals="Unicase"
                              Text="You do not have permissions to see the collaborator information.
-                                   Please talk to the owner of this organisation"/>
+                                   You must be a collaborator to access this content"
+                            
+                            />
                     </StackPanel>
                     <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"

@@ -8,7 +8,7 @@
       xmlns:local="using:Pepeza.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:pageHeader="using:Pepeza.CustomControls"
-      xmlns:vmLogin="using:Pepeza.ViewModels"
+      xmlns:vmLogin="using:Pepeza.Models"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       Loaded="Page_Loaded"
       RequestedTheme="Light"
@@ -20,7 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
             <User:GetUser x:Key="User" />
             <converter:QuickVisibilityConverter x:Key="converter" />
-            <vmLogin:ViewModelLogin x:Key="vmLogin" />
+            <vmLogin:GetUser x:Key="vmLogin" />
         </ResourceDictionary>
 
     </Page.Resources>

@@ -162,20 +162,21 @@ namespace Pepeza.Views.Boards
         {
             //Determine whether to load board details locally or online
             TBoard localBoard = await BoardHelper.getBoard(boardId);
-            if (localBoard != null)
+            int numberofRequests = 0;
+            // Get the board followers 
+            Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
+            if (followersCountResults.ContainsKey(Constants.SUCCESS))
             {
-                int numberofRequests;
-                // Get the board followers 
-                Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
-                if (followersCountResults.ContainsKey(Constants.SUCCESS))
-                {
-                    //We have number of followers
-                    follower_result = JObject.Parse(followersCountResults[Constants.SUCCESS]);
-                    numberofRequests = (int)follower_result["noOfRequests"];
-                }
-                
+                //We have number of followers
+                follower_result = JObject.Parse(followersCountResults[Constants.SUCCESS]);
+                numberofRequests = (int)follower_result["noOfRequests"];
+            }
+            if (localBoard != null)
+            {            
                 //We now say we are not fetching 
                 isFetchingDetails(false);
+                localBoard.noOfFollowRequests = numberofRequests;
+                if (localBoard.followRestriction == "request") HyperLinkBtnRequests.Visibility = Visibility.Visible;
                 await assignRoles(localBoard);
                 if (followersCountResults.ContainsKey(Constants.SUCCESS))
                 {
@@ -211,6 +212,7 @@ namespace Pepeza.Views.Boards
                     if(localBoard.followRestriction == "Request")
                     {
                         btnFollow.Content = "Requested";
+                        HyperLinkBtnRequests.Visibility = Visibility.Visible;
                     }
                     else
                     {
@@ -246,8 +248,7 @@ namespace Pepeza.Views.Boards
                         boardFetched.desc = (string)objResults["description"];
                         boardFetched.dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]);
                         boardFetched.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]);
-                       
-                   
+                        boardFetched.noOfFollowRequests = numberofRequests;
                     if (objResults["avatar"].Type!= JTokenType.Null)
                     {
                        
@@ -287,6 +288,10 @@ namespace Pepeza.Views.Boards
                     }
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
+                    if (boardFetched.followRestriction == "request")
+                    {
+                        btnFollow.Visibility = Visibility.Visible;
+                    }
                    
                 }
                 else
@@ -505,6 +510,7 @@ namespace Pepeza.Views.Boards
                     }
                     else
                     {
+                        HyperLinkBtnRequests.Visibility = Visibility.Collapsed;
                         CommandBarOperations.Visibility = Visibility.Collapsed;
                     }
                 }

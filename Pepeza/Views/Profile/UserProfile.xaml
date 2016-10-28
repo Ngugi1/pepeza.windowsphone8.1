@@ -65,6 +65,7 @@
 
                     <ProgressBar IsIndeterminate="True" 
                                  Width="250" 
+                                 Visibility="Collapsed"
                                  Name="PBProfilePicUpdating"/>
                     <TextBlock Style="{StaticResource txtBlockStyleProfileOwner}"
                                Text="{Binding fullname}"

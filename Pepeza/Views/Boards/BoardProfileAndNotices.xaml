@@ -78,7 +78,9 @@
                                             </Image>
                                             <ProgressBar IsIndeterminate="True" 
                                  Width="250" 
-                                 Name="PBProfilePicUpdating" VerticalAlignment="Bottom"/>
+                                 Name="PBProfilePicUpdating" 
+                                                         Visibility="Collapsed"
+                                                         VerticalAlignment="Bottom"/>
                                         </Grid>
                                         <TextBlock Name="txtBlockName"
                                                    Grid.Row="2"
@@ -118,10 +120,12 @@
                                         <HyperlinkButton  
                                                          Foreground="{ThemeResource PhoneAccentBrush}"
                                                          Click="HyperlinkButton_Click"
-                                                         HorizontalAlignment="Center">
+                                            Name="HyperLinkBtnRequests" 
+                                            Visibility="Collapsed"
+                                            HorizontalAlignment="Center">
                                             <HyperlinkButton.Content>
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="3" 
+                                                    <TextBlock Text="{Binding noOfFollowRequests, Mode=TwoWay}" 
                                                            Margin="4"
                                                            Foreground="{ThemeResource PhoneAccentBrush}"/>
                                                     <RichTextBlock 
