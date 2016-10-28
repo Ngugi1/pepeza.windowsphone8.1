@@ -28,7 +28,9 @@
         <StackPanel Grid.Row="0">
             <TextBlock 
                 Style="{StaticResource txtBlockPageHeader}" 
-                Text="edit profile" />
+                Text="edit profile"
+                Typography.Capitals="Normal"
+                />
 
         </StackPanel>
         <ScrollViewer Grid.Row="1" 
@@ -50,18 +52,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Rectangle Grid.Row="0"
-                           Grid.ColumnSpan="2"
-                           Width="192"
-                           Height="192"
-                           Margin="16,8"
-                           HorizontalAlignment="Center"
-                           Stroke="{StaticResource PhoneAccentBrush}"
-                           StrokeThickness="2">
-                    <Rectangle.Fill>
-                        <ImageBrush ImageSource="/Assets/Images/profile.jpg" />
-                    </Rectangle.Fill>
-                </Rectangle>
+               
                 <Grid Grid.Row="1" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -74,9 +65,16 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel  Orientation="Vertical">
+                        <TextBlock 
+                            Text="Organisation username"
+                            Style="{StaticResource txtBlockDisplay}"
+                            Margin="16,4"
+                            HorizontalAlignment="Left"/>
                         <TextBlock Name="txtBlockUsername"
                                    Grid.Row="1"
+                                   HorizontalAlignment="Left"
+                                   Margin="20,4"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource txtBlockStyleProfileOwner}" />
                     </StackPanel>

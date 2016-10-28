@@ -529,6 +529,7 @@ namespace Pepeza.Views.Orgs
             else
             {
                 if (org != null) this.Frame.Navigate(typeof(EditOrg), org);
+                this.NavigationCacheMode = NavigationCacheMode.Disabled;
                 
             }
             
