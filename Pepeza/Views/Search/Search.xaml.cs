@@ -44,10 +44,14 @@ namespace Pepeza.Views
         ObservableCollection<Person> personSource = new ObservableCollection<Person>();
         ObservableCollection<Organization> orgSource = new ObservableCollection<Organization>();
         ObservableCollection<Models.Search_Models.Board> boardSource = new ObservableCollection<Models.Search_Models.Board>();
+        DispatcherTimer timer = new DispatcherTimer();
+        bool isRequested = false;
+        int timer_count = 0;
         #endregion
         public Search()
         {
             this.InitializeComponent();
+            timer.Interval = new TimeSpan(0, 0, 0, 1);
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
@@ -107,22 +111,44 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void txtBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
+            isRequested = false;
            //Clear previous search results 
             clearPreviousResults();
             //Call the method from the server 
              if (TextBoxReady())
              {
-                 updateWhatToSearch();
-                 await generalSearch();
+                 timer.Start();
+                 timer.Tick += timer_Tick;
              }
              else
              {
                  //Display what to search
                  updateWhatToSearch();
+                 clearPreviousResults();
              }
             
+        }
+
+        async void timer_Tick(object sender, object e)
+        {
+
+            timer_count++;
+            if (TextBoxReady())
+            {
+                if (timer_count >= 2 && isRequested == false)
+                {
+                    timer.Stop();
+                    timer_count = 0;
+                    timer.Tick -= timer_Tick;
+                    updateWhatToSearch();
+                    isRequested = true;
+                    await generalSearch();
+                    isRequested = true;
+                }
+            }
+           
         }
         #endregion
         #region Utility Functions
@@ -131,14 +157,13 @@ namespace Pepeza.Views
         /// </summary>
         private void clearPreviousResults()
         {
-            if (personSource.Count > 0)
-            {
-                personSource.Clear();
-                int count = personSource.Count;
-            }
-           
+            
+            personSource.Clear();
             boardSource.Clear();
             orgSource.Clear();
+            listViewSearchOrgs.ItemsSource = orgSource;
+            ListViewUser.ItemsSource = personSource;
+            ListViewBoards.ItemsSource = boardSource;
         }
 
         /// <summary>
@@ -210,6 +235,7 @@ namespace Pepeza.Views
         private async Task searchUser()
         {
             personSource = new ObservableCollection<Person>();
+            ListViewUser.ItemsSource = personSource;
             txtBlockWhat.Visibility = Visibility.Collapsed;
             Dictionary<string, string> searchResults = await RequestUser.searchUser(txtBoxSearch.Text.Trim());
             if (searchResults.ContainsKey(Constants.SUCCESS))
@@ -231,6 +257,7 @@ namespace Pepeza.Views
                         p.fullname = p.firstname + " " + p.lastname;
                         personSource.Add(p);
                     }
+                    personSource.Distinct();
                 }
                 else
                 {
@@ -285,6 +312,7 @@ namespace Pepeza.Views
         private async Task searchBoards()
          {
              boardSource = new ObservableCollection<Models.Search_Models.Board>();
+             ListViewBoards.ItemsSource = boardSource;
             try
             {
 
@@ -304,9 +332,9 @@ namespace Pepeza.Views
                                 searchedBoard.score = (double)board["score"];
                                 searchedBoard.linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg";
                                 boardSource.Add(searchedBoard);
-                                boardSource.Distinct();
-
+                            
                             }
+                            boardSource.Distinct();
                         }
                         else
                         {
@@ -334,6 +362,7 @@ namespace Pepeza.Views
         private async Task searchOrg()
         {
             orgSource.Clear();
+            listViewSearchOrgs.ItemsSource = orgSource;
             Dictionary<string, string> result = await OrgsService.search(txtBoxSearch.Text.Trim());
             if (result.ContainsKey(Constants.SUCCESS))
             {
