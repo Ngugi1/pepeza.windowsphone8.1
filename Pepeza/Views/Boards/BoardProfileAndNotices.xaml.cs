@@ -440,6 +440,8 @@ namespace Pepeza.Views.Boards
         }
         private async void loadBoardNotices(int boardId)
         {
+            noticeDataSource.Clear();
+            ListViewNotices.ItemsSource = noticeDataSource;
             Dictionary<string, string> results = await BoardService.getBoardNotices(boardId);
             if (results.ContainsKey(Constants.SUCCESS))
             {

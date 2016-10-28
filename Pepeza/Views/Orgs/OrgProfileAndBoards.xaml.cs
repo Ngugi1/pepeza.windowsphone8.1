@@ -320,9 +320,8 @@ namespace Pepeza.Views.Orgs
                     {
                         hideCommandBar();
                     }
-                    
                    
-                        await getOrgDetails(OrgID);
+                   await getOrgDetails(OrgID);
                     
                     break;
                 case 1:
@@ -351,7 +350,8 @@ namespace Pepeza.Views.Orgs
                     {
                         hideCommandBar();
                     }
-                    
+                     boards.Clear();
+                     ListViewOrgBoards.ItemsSource = boards;
                      await fetchOrgBoards(OrgID);
                     break;
                 case 2:
