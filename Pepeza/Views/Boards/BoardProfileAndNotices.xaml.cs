@@ -246,6 +246,7 @@ namespace Pepeza.Views.Boards
                         boardFetched.noOfFollowers = (int)objResults["noOfFollowers"];
                         boardFetched.followRestriction = (string)objResults["followRestriction"];
                         boardFetched.desc = (string)objResults["description"];
+                        boardFetched.boardVisibility = (string)objResults["visibility"];
                         boardFetched.dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]);
                         boardFetched.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]);
                         boardFetched.noOfFollowRequests = numberofRequests;

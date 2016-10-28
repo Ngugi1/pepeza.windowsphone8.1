@@ -31,6 +31,9 @@
         <StackPanel>
             <TextBlock Style="{StaticResource txtBlockPageHeader}"
                        Text="edit board"
+                      
+                       Margin="32,4"
+                       Typography.Capitals="Normal"
                        />
         </StackPanel>
         <Grid Grid.Row="1" x:Name="ContentRoot" 
@@ -42,19 +45,24 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+            </Grid.RowDefinitions> 
             <StackPanel>
-                <Rectangle Width="250"
-                     Height="250"
-                           Margin="12,0,12,12"
-                     HorizontalAlignment="Center"
-                     >
-                    <Rectangle.Fill>
-                        <ImageBrush ImageSource="/Assets/Images/profile.jpg"/>
-                    </Rectangle.Fill>
-                </Rectangle>
+                <CheckBox BorderThickness="3"
+                          Name="checkPublic"
+                          Checked="checkPublic_Checked"
+                          Unchecked="checkPublic_Unchecked"
+                          Content="Check here to make board private"
+                      Margin="16,4"
+                      />
+                <CheckBox BorderThickness="3" 
+                          Name="checkVisibility"
+                          Checked="checkVisibility_Checked"
+                          Unchecked="checkVisibility_Unchecked"
+                          Content="Check to hide board from public"
+                      Margin="16,4"
+                      />
             </StackPanel>
-            
+           
             <TextBox Style="{StaticResource txtBoxStyle}"
                      TextChanged="txtBoxName_TextChanged"
                      Name="txtBoxName"
@@ -86,10 +94,17 @@
                        Name="txtBlockStatus"
                        Visibility="Collapsed"
                        Style="{StaticResource txtBlockError}"/>
-            <ProgressBar  Visibility="Collapsed"
-                          Name="PRUpdateBoard"
-                          Grid.Row="6"
+            <StackPanel Grid.Row="6"
+                        HorizontalAlignment="Center"
+                        Name="PRUpdateBoard"
+                        Visibility="Collapsed"
+                        Margin="8">
+                <ProgressBar  
+                          Margin="12"
+                          
                           />
+                <TextBlock Text="Updating board , just a moment ... " Style="{StaticResource txtBlockWait}"/>
+            </StackPanel>
         </Grid>
     </Grid>
     <Page.BottomAppBar>

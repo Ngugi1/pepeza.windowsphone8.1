@@ -75,22 +75,32 @@ namespace Pepeza.Views.Boards
                     boardID = board.id;
                     orgID = board.orgID;
                     LayoutRoot.DataContext = board;
+                    if (board.followRestriction == Constants.REQUEST_BOARD)
+                    {
+                        checkPublic.Content = "Uncheck to make board public";
+                        checkPublic.IsChecked = true;
+                    }
+                    else
+                    {
+                        checkPublic.IsChecked = false;
+                        checkPublic.Content = "Check to make board private";
+                    }
+
+                    if (board.boardVisibility == Constants.PRIVATE_BOARD)
+                    {
+                        checkVisibility.IsChecked = true;
+                        checkVisibility.Content = "Uncheck to make board visible to public";
+                    }
+                    else
+                    {
+                        checkVisibility.IsChecked = false;
+                        checkVisibility.Content = "Check to make board invisible from public";
+                    }
                 }
-                else
-                {
-                    boardID = (e.Parameter as FetchedBoard).id;
-                    orgID = (e.Parameter as FetchedBoard).OrgID;
-                    LayoutRoot.DataContext = e.Parameter as FetchedBoard;
-                }
+               
             }
             AppBarButtonUpdate.IsEnabled = canUpdate;
         }
-
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            
-        }
-
         #endregion
 
         #region Handlers
@@ -114,15 +124,20 @@ namespace Pepeza.Views.Boards
 
         private async void UpdateBoardProfile(string desc, string name)
         {
-         
+
+            string restriction = checkPublic.IsChecked == true ? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
+            string visibility = checkVisibility.IsChecked == true? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
+
             //Make the request 
-            Dictionary<string, string> results = await  BoardService.updateBoard(new Dictionary<string, string>(){
-                {"orgId",orgID.ToString()} , {"name" , name} , {"description" , desc}
+            Dictionary<string, string> results = await  BoardService.updateBoard(new Dictionary<string, string>(){ {"name" , name} , 
+            {"description" , desc} , 
+            {"followRestriction" , restriction} ,
+            {"visibility" ,visibility }
             } , boardID);
             if (results != null && results.ContainsKey(Constants.SUCCESS))
             {
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
-                updateLocalDatabase(objResults , desc ,name);
+                updateLocalDatabase(objResults , desc ,name , restriction,visibility);
             }
             else
             {
@@ -134,13 +149,15 @@ namespace Pepeza.Views.Boards
 
         }
 
-        private async void updateLocalDatabase(JObject objResults , string desc ,string name)
+        private async void updateLocalDatabase(JObject objResults , string desc ,string name , string restriction,string visibility)
         {
             //Get board with given Id , then update it
             TBoard toUpdate = await BoardHelper.getBoard(board.id);
-            toUpdate.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]["date"]);
+            toUpdate.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]);
             toUpdate.desc = desc;
             toUpdate.name = name;
+            toUpdate.boardVisibility = visibility;
+            toUpdate.followRestriction = restriction;
             if (toUpdate != null)
             {
                 await BoardHelper.update(toUpdate);
@@ -188,6 +205,26 @@ namespace Pepeza.Views.Boards
             }
         }
         #endregion
+
+        private void checkPublic_Checked(object sender, RoutedEventArgs e)
+        {
+            updateVisibility();
+        }
+
+        private void checkVisibility_Checked(object sender, RoutedEventArgs e)
+        {
+            updateVisibility();
+        }
+
+        private void checkVisibility_Unchecked(object sender, RoutedEventArgs e)
+        {
+            updateVisibility();
+        }
+
+        private void checkPublic_Unchecked(object sender, RoutedEventArgs e)
+        {
+            updateVisibility();
+        }
 
        
 

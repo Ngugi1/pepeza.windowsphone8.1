@@ -12,6 +12,7 @@ namespace Pepeza.Db.Models.Board
     {
         [PrimaryKey]
         public int id { get; set; }
+        public string boardVisibility { get; set; }
         public int orgID { get; set; }
         private string _name;
         public string name
