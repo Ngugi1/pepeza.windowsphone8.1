@@ -22,7 +22,7 @@ namespace Shared.Server.Auth
 
         //Facebook Constans region 
         #region Facebook Constants
-        public static string FacebookAppId { get{return "267592303598829";} }
+        public static string FacebookAppId { get { return "249110072113719"; } }
         public static Uri FacebookCallBackUrl { get{ return  WebAuthenticationBroker.GetCurrentApplicationCallbackUri();} }
         public static string FacebookPermissions = "email,public_profile";
         #endregion

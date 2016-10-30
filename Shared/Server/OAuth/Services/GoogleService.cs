@@ -39,7 +39,8 @@ namespace Shared.Server.OAuth.Services
             if (webAuthResultResponseData != null)
             {
                 var split = webAuthResultResponseData.Split('&');
-                return split.FirstOrDefault(value => value.Contains("code"));
+                var split2 = split[0].Split('=');
+                return split2[1];
             }
             else
             {
@@ -92,7 +93,7 @@ namespace Shared.Server.OAuth.Services
             {
                 try
                 {
-                    responseMessage = await client.PostAsJsonAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
+                    responseMessage = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>("code", code),
                         new KeyValuePair<string, string>("client_id",AuthConstants.GoogleAppId),
@@ -107,6 +108,11 @@ namespace Shared.Server.OAuth.Services
                         JToken jsonToken = JToken.Parse(data.ToString());
                         string token = (string)jsonToken.SelectToken("access_token");
                         results.Add(Constants.SUCCESS, token);
+                    }
+                    else
+                    {
+                        var data = await responseMessage.Content.ReadAsStringAsync();
+                        results.Add(Constants.ERROR, data);
                     }
 
                 }

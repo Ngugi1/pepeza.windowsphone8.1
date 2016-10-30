@@ -406,6 +406,17 @@ namespace Pepeza.Server.Requests
                         string data = await response.Content.ReadAsStringAsync();
                         results.Add(Constants.SUCCESS, data);
                     }
+                    else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        JObject json = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                        results.Add(Constants.ERROR, (string)json["message"]);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        JObject json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.ERROR, (string)json["message"]);
+                    }
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);

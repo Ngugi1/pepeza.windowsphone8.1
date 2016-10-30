@@ -31,6 +31,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Activation;
 using Pepeza.Common;
+using Coding4Fun.Toolkit.Controls;
 
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -134,6 +135,8 @@ namespace Pepeza.Views
 
         private void LoginWithGoogle(object sender, RoutedEventArgs e)
         {
+            txtBlockError.Visibility = Visibility.Collapsed;
+
             try
             {
                 GoogleService.Login();
@@ -147,6 +150,7 @@ namespace Pepeza.Views
 
         public async void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
         {
+            StackPanelLogging.Visibility = Visibility.Visible;
             //TODO continue here 
             if (args.WebAuthenticationResult != null)
             {
@@ -175,25 +179,34 @@ namespace Pepeza.Views
                             if (results.ContainsKey(Constants.SUCCESS))
                             {
                             //We posted successfully 
-                            App.displayMessageDialog(results[Constants.SUCCESS]);
+                                txtBlockError.Text = results[Constants.SUCCESS];
+                                txtBlockError.Visibility = Visibility.Visible;
                                // this.Frame.Navigate(typeof(SetUpPage), results[Constants.SUCCESS]);
                             }
                             else
                             {
-                                App.displayMessageDialog(results[Constants.ERROR]);
+                                txtBlockError.Text = results[Constants.ERROR];
+                                txtBlockError.Visibility = Visibility.Visible;
                                 return;
                             }
 
 
                     }else
                     {
-                        App.displayMessageDialog(Constants.UNKNOWNERROR);
+                        txtBlockError.Text = Constants.UNKNOWNERROR;
+                        txtBlockError.Visibility = Visibility.Visible;
+
                     }
 
                 }
                 catch
                 {
-                    App.displayMessageDialog(results[Constants.ERROR]);
+                    txtBlockError.Text = results[Constants.ERROR];
+                    txtBlockError.Visibility = Visibility.Visible;
+                }
+                finally
+                {
+                    StackPanelLogging.Visibility = Visibility.Collapsed;
                 }
 
             }
@@ -201,6 +214,7 @@ namespace Pepeza.Views
 
         private void LoginWithFacebook(object sender, RoutedEventArgs e)
         {
+            txtBlockError.Visibility = Visibility.Collapsed;
             FacebookService.LoginWithFacebook();
         }
     }

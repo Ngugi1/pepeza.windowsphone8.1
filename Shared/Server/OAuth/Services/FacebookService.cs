@@ -32,6 +32,7 @@ namespace Shared.Server.OAuth.Services
                 scope = AuthConstants.FacebookPermissions,
                 display = "popup",
                 response_type = "token"
+
             });
 
             //Now authenticate and continue

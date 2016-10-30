@@ -199,9 +199,13 @@
   <ItemGroup>
     <Content Include="Assets\Images\attach.png" />
     <Content Include="Assets\Images\clip.png" />
+    <Content Include="Assets\Images\facebook.png" />
+    <Content Include="Assets\Images\fbook.png" />
     <Content Include="Assets\Images\file.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\Images\google.png" />
+    <Content Include="Assets\Images\gplus.png" />
     <Content Include="Assets\Images\icon.png" />
     <Content Include="Assets\Images\ic_mood_confused.png" />
     <Content Include="Assets\Images\ic_mood_sad.png" />

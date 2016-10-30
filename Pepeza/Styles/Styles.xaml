@@ -67,7 +67,7 @@
     <!--  TextBlock Styles  -->
     <Style x:Key="txtBlockError" TargetType="TextBlock">
         <Setter Property="TextLineBounds" Value="TrimToBaseline" />
-        <Setter Property="Foreground" Value="{ThemeResource PhoneAccentBrush}" />
+        <Setter Property="Foreground" Value="Red" />
         <Setter Property="Margin" Value="16,4" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="FontSize" Value="18" />

@@ -9,6 +9,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:pageHeader="using:Pepeza.CustomControls"
       xmlns:vmLogin="using:Pepeza.Models"
+      xmlns:coding4Fun="using:Coding4Fun.Toolkit.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       Loaded="Page_Loaded"
       RequestedTheme="Light"
@@ -55,10 +56,11 @@
                        Visibility="{Binding IsErrorVisible,
                                             Converter={StaticResource converter}}" />
 
-            <StackPanel Margin="12,4"
+            <StackPanel Margin="12,0"
                         HorizontalAlignment="Left"
                         Orientation="Horizontal">
-                <TextBlock Margin="36,8,4,0"
+                <TextBlock Margin="12,4"
+                           VerticalAlignment="Center"
                            Style="{StaticResource txtBlockStatus}"
                            Text="You forgot your password ?" />
                 <HyperlinkButton Name="hylResetPassword"
@@ -69,28 +71,20 @@
                                  Style="{ThemeResource hlbtnStyle}" />
             </StackPanel>
 
-            <StackPanel Margin="12,4"
+                <StackPanel Margin="12,4"
                         HorizontalAlignment="Left"
                         Orientation="Horizontal">
-                <TextBlock Name="txtBlockNoAccount"
+                    <TextBlock Name="txtBlockNoAccount"
                            Margin="36,8,4,8"
                            Style="{StaticResource txtBlockStatus}"
                            Text="Don't have an Account?" />
-                <HyperlinkButton Name="hypBtnSignUp"
+                    <HyperlinkButton Name="hypBtnSignUp"
                                  Margin="4"
                                  Click="hypBtnSignUp_Click"
                                  Content="Sign Up"
                                  Style="{StaticResource hlbtnStyle}" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="12">
-                <Button Content="Login with Google"
-                        Click="LoginWithGoogle"
-                        HorizontalAlignment="Center" BorderBrush="{ThemeResource TextBoxBorderThemeBrush}"  BorderThickness="2"/>
-                <Button Content="Login with Facebok"
-                       Click="LoginWithFacebook"   
-                        HorizontalAlignment="Center"  BorderBrush="{ThemeResource TextBoxBorderThemeBrush}" BorderThickness="2"/>
-            </StackPanel>
-            <StackPanel Name="StackPanelLogging"
+                </StackPanel>
+                <StackPanel Name="StackPanelLogging"
                         Margin="12"
                         Visibility="Collapsed">
                 <ProgressBar Margin="12,8" />
@@ -98,12 +92,76 @@
                            Style="{StaticResource txtBlockWait}"
                            Text="loging in, just a moment" />
             </StackPanel>
-        </StackPanel>
+                <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Bottom"
+                        Grid.Row="1"
+                        Margin="12">
+                    <TextBlock Text="You prefer google or facebook?" 
+                       Typography.Capitals="Normal"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       Style="{StaticResource txtBlockDisplay}"
+                       HorizontalAlignment="Center"
+                       />
+                    
+                    <Button 
+                        Click="LoginWithGoogle"
+                        HorizontalAlignment="Center"
+                    BorderBrush="Transparent"  
+                    BorderThickness="2"
+                        Width="{Binding ActualWidth, ElementName=btnLoginWithFacebook}">
+                        <StackPanel Orientation="Horizontal"
+                                    Background="Blue"
+                                    HorizontalAlignment="Left" Width="246">
+                            <Image
+                             Margin="4"
+                                HorizontalAlignment="Left"
+                                Source="/Assets/Images/gplus.png"
+                                Height="50" Width="50"/>
+
+                            <TextBlock 
+                                Margin="8,4"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="sign in with google" 
+                        Style="{StaticResource txtBlockDisplay}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                       Click="LoginWithFacebook"   
+                        HorizontalAlignment="Center" 
+                        Name="btnLoginWithFacebook"
+                        BorderBrush="Transparent"
+                        BorderThickness="2">
+                        <StackPanel Orientation="Horizontal"
+                                    Background="#3b5998"
+                                    
+                                    HorizontalAlignment="Left">
+                            <Image
+                                HorizontalAlignment="Left"
+                                Margin="4"
+                                Source="/Assets/Images/fbook.png" Height="50"
+                                Width="50"/>
+                            <TextBlock 
+                                Margin="8,4"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="sign in with facebook" Style="{StaticResource txtBlockDisplay}"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="Could not login"
+                               Name="txtBlockError"
+                               Visibility="Collapsed"
+                               Style="{StaticResource txtBlockError}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
         </ScrollViewer>
+       
         <Toast:Toastinet x:Name="ToastFieldsIncomplete"
                          Grid.Row="1"
                          Visibility="Collapsed"
                          Style="{StaticResource ToastStyle}" />
+     
     </Grid>
     <Page.BottomAppBar>
         <CommandBar>
