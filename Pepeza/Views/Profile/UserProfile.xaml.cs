@@ -287,6 +287,7 @@ namespace Pepeza.Views.Profile
         }
        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
+            bool wasAvatarEmpty = false;
             //Get the photo and navigate to the photo editing page
             FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
             if (args != null)
@@ -303,7 +304,11 @@ namespace Pepeza.Views.Profile
                         var cropped = FilePickerHelper.centerCropImage(bitmap);
                         var originalSource = rectProfilePic.Source == null ? ImageMask.Source : rectProfilePic.Source;
                         rectProfilePic.Source = cropped;
-                        ImageMask.Visibility = Visibility.Collapsed;
+                        if (ImageMask.Visibility == Visibility.Visible)
+                        {
+                            wasAvatarEmpty = true;
+                            ImageMask.Visibility = Visibility.Collapsed;
+                        }
                         PBProfilePicUpdating.Visibility = Visibility.Visible;
                         try
                         {
@@ -346,20 +351,18 @@ namespace Pepeza.Views.Profile
                                 {
                                     ToastStatus.Message = "upload failed";
                                     rectProfilePic.Source = originalSource;
+                                    if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                                     //Throw a toast that the image failed
                                     return;
                                 }
-                                finally
-                                {
-                                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-                                }
+                                
                             }
                             else
                             {
                                 //Restore previous image
                                 ToastStatus.Message = results[Constants.ERROR];
                                 rectProfilePic.Source = originalSource;
-
+                                if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                             }
                             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
@@ -367,7 +370,9 @@ namespace Pepeza.Views.Profile
                         catch (Exception ex)
                         {
                             string x = ex.StackTrace;
+                            if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                         }
+                        
                         view.Activated -= view_Activated;// Unsubscribe from this event 
                     }
                   

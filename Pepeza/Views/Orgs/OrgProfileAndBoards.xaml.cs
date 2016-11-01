@@ -477,6 +477,8 @@ namespace Pepeza.Views.Orgs
         }
         async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
+            bool wasAvatarEmpty = false;
+            if (ImageMask.Visibility == Visibility.Visible) wasAvatarEmpty = true;
             //Get the photo and navigate to the photo editing page
             FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
             if (args != null)
@@ -539,6 +541,7 @@ namespace Pepeza.Views.Orgs
                                 catch
                                 {
                                     ToastStatus.Message = "upload failed";
+                                    if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                                     rectangleProfilePic.Source = originalsource;
                                     //Throw a toast that the image failed
                                     return;
@@ -549,6 +552,7 @@ namespace Pepeza.Views.Orgs
                                 //Restore previous image
                                 ToastStatus.Message = results[Constants.ERROR];
                                 rectangleProfilePic.Source = originalsource;
+                                if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
 
                             }
                             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
@@ -556,6 +560,7 @@ namespace Pepeza.Views.Orgs
                         }
                         catch (Exception ex)
                         {
+                            if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                             string x = ex.StackTrace;
                         }
                         //Upload the avatar otherwise load the previous one

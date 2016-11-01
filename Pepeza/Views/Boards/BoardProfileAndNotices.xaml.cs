@@ -465,6 +465,8 @@ namespace Pepeza.Views.Boards
         }
         async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
+            bool wasAvatarEmpty = false;
+            if (ImageMask.Visibility == Visibility.Visible) wasAvatarEmpty = true;
             //Get the photo and navigate to the photo editing page
             FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
             if (args != null)
@@ -543,6 +545,7 @@ namespace Pepeza.Views.Boards
                                     {
                                         //Restore previous image
                                         ToastStatus.Message = results[Constants.ERROR];
+                                        if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                                         rectProfilePic.Source = originalsource;
                                     }
                                     PBProfilePicUpdating.Visibility = Visibility.Collapsed;
@@ -551,11 +554,12 @@ namespace Pepeza.Views.Boards
                                 catch (Exception ex)
                                 {
                                     string x = ex.StackTrace;
+                                    if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
+
                                 }
                                 //Upload the profile pic 
                             }
                         }
-                        else
                         view.Activated -= view_Activated;// Unsubscribe from this event 
                     }
 
