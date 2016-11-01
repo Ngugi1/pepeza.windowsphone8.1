@@ -67,7 +67,7 @@ namespace Pepeza.Views.Orgs
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected  override void OnNavigatedTo(NavigationEventArgs e)
         {
             OrgPivot.SelectedIndex = 0;
             if (e.Parameter != null)
@@ -77,84 +77,6 @@ namespace Pepeza.Views.Orgs
                     org = e.Parameter as Organization;
                     OrgID = org.Id;
                     Settings.add(Constants.ORG_ID_TEMP, OrgID);
-                }
-                else if (e.Parameter.GetType() == typeof(WriteableBitmap))
-                {
-                    OrgID = (int)Settings.getValue(Constants.ORG_ID_TEMP);
-                    //Here we resume to upload the image 
-                    WriteableBitmap profilePic = e.Parameter as WriteableBitmap;
-                    if (profilePic != null)
-                    {
-                        PBProfilePicUpdating.Visibility = Visibility.Visible;
-                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-                        this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
-
-                        try
-                        {
-
-                            //If successful , add it to isolated storage 
-                            var file = await AvatarUploader.WriteableBitmapToStorageFile(profilePic,
-                                Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
-                                Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
-                            // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TOrgInfo)RootGrid.DataContext).avatarId);
-                            if (results.ContainsKey(Constants.SUCCESS))
-                            {
-                                try
-                                {
-                                    //Save the image locally now , remove the temp file 
-                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
-                                    TAvatar avatar = new TAvatar()
-                                    {
-                                        id = (int)avatarObject["avatar"]["id"],
-                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
-                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
-                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
-                                    };
-                                    var localAvatar = await AvatarHelper.get(avatar.id);
-                                    //Update local database if they are collaborators 
-                                    if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID),OrgID) != null)
-                                    {
-                                        if (localAvatar != null)
-                                        {
-                                            await AvatarHelper.update(avatar);
-                                        }
-                                        else
-                                        {
-                                            await AvatarHelper.add(avatar);
-                                        }
-                                    }
-                                    
-                                    profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
-                                    ToastStatus.Message = (string)avatarObject["message"];
-                                }
-                                catch
-                                {
-                                    ToastStatus.Message = "upload failed";
-                                    //Throw a toast that the image failed
-                                    return;
-                                }
-
-
-
-                            }
-                            else
-                            {
-                                //Restore previous image
-                                ToastStatus.Message = results[Constants.ERROR];
-
-                            }
-                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-
-                        }
-                        catch (Exception ex)
-                        {
-                            string x = ex.StackTrace;
-                        }
-                        //Upload the profile pic 
-                    }
                 }
                 else if (e.Parameter.GetType() == typeof(int))
                 {
@@ -391,7 +313,6 @@ namespace Pepeza.Views.Orgs
                    
             }
         }
-
         private async  void loadOrgCollaborators(int id)
         {
             try
@@ -569,13 +490,83 @@ namespace Pepeza.Views.Orgs
                     var bitmap = await FilePickerHelper.getBitMap(choosenFile);
                     if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
                     {
-                        this.Frame.Navigate(typeof(AvatarCroppingPage), choosenFile);
+                        //Now center crop it here
+                        var cropped = FilePickerHelper.centerCropImage(bitmap);
+                        var originalsource = rectangleProfilePic.Source == null ? ImageMask.Source : rectangleProfilePic.Source;
+                        rectangleProfilePic.Source = cropped;
+                        PBProfilePicUpdating.Visibility = Visibility.Visible;
+                        try
+                        {
+
+                            //If successful , add it to isolated storage 
+                            var file = await AvatarUploader.WriteableBitmapToStorageFile(cropped,
+                                Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
+                                Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_org);
+                            // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TOrgInfo)RootGrid.DataContext).id ,"org" ,((TOrgInfo)RootGrid.DataContext).avatarId);
+                            if (results.ContainsKey(Constants.SUCCESS))
+                            {
+                                try
+                                {
+                                    //Save the image locally now , remove the temp file 
+                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                    TAvatar avatar = new TAvatar()
+                                    {
+                                        id = (int)avatarObject["avatar"]["id"],
+                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
+                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                    };
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    //Update local database if they are collaborators 
+                                    if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), OrgID) != null)
+                                    {
+                                        if (localAvatar != null)
+                                        {
+                                            await AvatarHelper.update(avatar);
+                                        }
+                                        else
+                                        {
+                                            await AvatarHelper.add(avatar);
+                                        }
+                                    }
+
+                                    rectangleProfilePic.Source = cropped;
+                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_org + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                    ToastStatus.Message = (string)avatarObject["message"];
+                                }
+                                catch
+                                {
+                                    ToastStatus.Message = "upload failed";
+                                    rectangleProfilePic.Source = originalsource;
+                                    //Throw a toast that the image failed
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                //Restore previous image
+                                ToastStatus.Message = results[Constants.ERROR];
+                                rectangleProfilePic.Source = originalsource;
+
+                            }
+                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            string x = ex.StackTrace;
+                        }
+                        //Upload the avatar otherwise load the previous one
+
                         view.Activated -= view_Activated;// Unsubscribe from this event 
                     }
 
                 }
-            }
 
+
+            }
         }
         private void BitmapImage_ImageOpened(object sender, RoutedEventArgs e)
         {
@@ -626,12 +617,10 @@ namespace Pepeza.Views.Orgs
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
-
         private void AppBtinAnalytics_clicked(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(OrgAnalytics), OrgID);
         }
-
         public class Collaborator : Bindable
         {
             private int _id;
@@ -690,7 +679,6 @@ namespace Pepeza.Views.Orgs
             public string linkSmall { get; set; }
             public string linkNormal { get; set; }
         }
-
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
             if (OrgPivot.SelectedIndex == 1)
@@ -704,7 +692,6 @@ namespace Pepeza.Views.Orgs
                 this.Frame.Navigate(typeof(AddCollaboratorPage),OrgID);
             }
         }
-
         private void ListViewCollaborators_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var collaborator = (sender as ListView).SelectedItem as Collaborator;

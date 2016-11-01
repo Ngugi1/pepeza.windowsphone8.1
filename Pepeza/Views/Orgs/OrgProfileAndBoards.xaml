@@ -74,6 +74,7 @@
                                     />
                                 <Image Height="250" Width="250" 
                                        Name="rectangleProfilePic"
+                                       Stretch="None"
                                        Tapped="rectangleProfilePic_Tapped" >
                                     <Image.Source>
                                         <BitmapImage

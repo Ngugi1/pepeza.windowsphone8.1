@@ -9,6 +9,8 @@ using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
+using Shared.Db.DbHelpers;
+using Shared.Db.Models.Avatars;
 using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
@@ -92,6 +94,14 @@ namespace Pepeza.Views.Boards
             try
             {
                 JObject board = JObject.Parse(results[Constants.SUCCESS]);
+                TAvatar avatar = new TAvatar()
+                {
+                    id = (int)board["id"],
+                    linkSmall = (string)board["linkSmall"],
+                    linkNormal = (string)board["linlNormal"],
+                    dateCreated = DateTimeFormatter.format((long)board["dateCreated"]),
+                    dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"])
+                };
                 TBoard toInsert = new TBoard();
                 toInsert.id = (int)board["id"];
                 toInsert.name = (string)model.Name;
@@ -100,9 +110,11 @@ namespace Pepeza.Views.Boards
                 toInsert.followRestriction = followRestriction;
                 toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
                 toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
-             
+                toInsert.avatarId = avatar.id;
+       
                     
-                int K = await BoardHelper.addBoard(toInsert);
+                await BoardHelper.addBoard(toInsert);
+                await AvatarHelper.add(avatar);
                 
             }
             catch (Exception ex)

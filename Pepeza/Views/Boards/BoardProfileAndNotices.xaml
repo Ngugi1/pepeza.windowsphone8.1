@@ -55,25 +55,26 @@
                                        Tapped="rectangleProfilePic_Tapped"
                                Source="/Assets/Images/placeholder_avatar.jpg"/>
                                             <Toast:Toastinet 
-                                 AnimationType="LeftToLeft" 
-                                Background="{ThemeResource PhoneAccentBrush}"
-                                HorizontalAlignment="Center"
-                                Width="250"
-                                TextWrapping="WrapWholeWords"
-                                Name="ToastStatus"
-                                VerticalAlignment="Bottom"
-                                Style="{StaticResource ToastStyle}"
+                                                 AnimationType="LeftToLeft" 
+                                                Background="{ThemeResource PhoneAccentBrush}"
+                                                HorizontalAlignment="Center"
+                                                Width="250"
+                                                TextWrapping="WrapWholeWords"
+                                                Name="ToastStatus"
+                                                VerticalAlignment="Bottom"
+                                                Style="{StaticResource ToastStyle}"
                                     />
                                             <Image Height="250" Width="250"
                                                Name="rectProfilePic"
-                                       Tapped="rectangleProfilePic_Tapped" >
+                                                   Stretch="None"
+                                               Tapped="rectangleProfilePic_Tapped" >
                                                 <Image.Source>
                                                     <BitmapImage
-                                x:Name="profPic"
-                                ImageOpened="BitmapImage_ImageOpened"
-                                ImageFailed="BitmapImage_ImageFailed"
-                                UriSource="{Binding linkNormal , Mode=TwoWay}" 
-                                CreateOptions="None"/>
+                                                    x:Name="profPic"
+                                                    ImageOpened="BitmapImage_ImageOpened"
+                                                    ImageFailed="BitmapImage_ImageFailed"
+                                                    UriSource="{Binding linkNormal , Mode=TwoWay}" 
+                                                    CreateOptions="None"/>
                                                 </Image.Source>
                                             </Image>
                                             <ProgressBar IsIndeterminate="True" 

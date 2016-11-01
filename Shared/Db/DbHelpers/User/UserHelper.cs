@@ -23,6 +23,7 @@ namespace Pepeza.Db.DbHelpers.User
                 if (connection != null)
                 {
                     info = await connection.GetAsync<TUserInfo>(userId);
+                   
                 }
                 return info;
             }

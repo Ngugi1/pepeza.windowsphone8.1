@@ -20,9 +20,8 @@ namespace Shared.Server.Requests
 {
     public class AvatarUploader : BaseRequest
     {
-        public async static Task<Dictionary<string,string>> uploadAvatar(StorageFile avatar , int avatarId)
+        public async static Task<Dictionary<string,string>> uploadAvatar(StorageFile avatar , int id , string type, int avatarID)
         {
-            int userId = (int)Settings.getValue(Constants.USERID);
             Windows.Web.Http.HttpClient client = new Windows.Web.Http.HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new Windows.Web.Http.Headers.HttpMediaTypeWithQualityHeaderValue("multipart/form-data"));
             client.DefaultRequestHeaders.Add(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
@@ -34,9 +33,15 @@ namespace Shared.Server.Requests
                 {
                     try
                     {
+                        //Prepare content 
                         HttpMultipartFormDataContent content = new HttpMultipartFormDataContent();
+                        content.Add(new HttpStringContent(type), "type");
+                        content.Add(new HttpStringContent(id.ToString()), "id");
                         content.Add(new HttpStreamContent(await avatar.OpenReadAsync()), "avatar", avatar.Name);
-                        response = await client.PostAsync(new Uri(string.Format(Addresses.BASE_URL+Addresses.AVATAR ,avatarId)), content);
+                        
+                        //Post the content 
+                        string url = string.Format(Addresses.BASE_URL + Addresses.AVATAR, avatarID);
+                        response = await client.PostAsync(new Uri(string.Format(Addresses.BASE_URL + Addresses.AVATAR, avatarID)),content);
                         if (response.IsSuccessStatusCode)
                         {
                             results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

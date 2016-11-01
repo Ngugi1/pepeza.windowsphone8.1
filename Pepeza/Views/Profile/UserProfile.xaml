@@ -51,12 +51,15 @@
                     </Image>
                         <Image Width="250" Height="250"
                                Name="ImageMask"
-                               Source="/Assets/Images/placeholder_avatar.jpg"/>
+                               Source="/Assets/Images/placeholder_avatar.jpg"
+                               Tapped="ImageMask_Tapped"
+                               />
                         <Toast:Toastinet 
+                            TextWrapping="Wrap"
                             AnimationType="LeftToLeft" 
                             HorizontalAlignment="Center"
                             Width="250"
-                            TextWrapping="WrapWholeWords"
+                            
                             Name="ToastStatus"
                             VerticalAlignment="Bottom"
                          Style="{StaticResource ToastStyle}"

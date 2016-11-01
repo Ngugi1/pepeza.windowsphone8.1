@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
-
 namespace Shared.Utitlity
 {
     public class FilePickerHelper
@@ -44,7 +44,7 @@ namespace Shared.Utitlity
         /// </summary>
         /// <param name="sentFile">A storage file</param>
         /// <returns></returns>
-        public async static Task<BitmapImage> getBitMap(StorageFile sentFile)
+        public async static Task<WriteableBitmap> getBitMap(StorageFile sentFile)
         {
             //Get hold of the file
             if (sentFile != null)
@@ -52,7 +52,9 @@ namespace Shared.Utitlity
                 var stream = await sentFile.OpenReadAsync();
                 BitmapImage bitmap = new BitmapImage();
                 await bitmap.SetSourceAsync(stream);
-                return bitmap;
+                WriteableBitmap writeable = new WriteableBitmap(bitmap.PixelWidth, bitmap.PixelHeight);
+                await writeable.SetSourceAsync(await sentFile.OpenReadAsync());
+                return writeable;
             }
             return null;
             
@@ -64,7 +66,7 @@ namespace Shared.Utitlity
         /// <returns></returns>
         public static async Task<bool> checkHeightAndWidth(StorageFile file)
         {
-            BitmapImage bitmap = await getBitMap(file);
+            WriteableBitmap bitmap = await getBitMap(file);
             if (bitmap != null)
             {
                 if (bitmap.PixelHeight < HEIGHT || bitmap.PixelWidth < WIDTH)
@@ -105,5 +107,76 @@ namespace Shared.Utitlity
             return bytes;
         }
 
+
+        public static WriteableBitmap centerCropImage(WriteableBitmap image)
+        {
+            
+          
+            int originalWidth = image.PixelWidth;
+            int originalHeight = image.PixelHeight;
+
+            //Getting the new width
+            int newWidth = originalWidth > originalHeight? originalHeight : originalWidth;
+
+            //Calculating the cropping points
+            int cropStartX, cropStartY;
+            if(originalWidth > originalHeight){
+	            cropStartX = (originalWidth - newWidth)/2;
+	            cropStartY = 0;	
+            }
+            else{
+	            cropStartY = (originalHeight - newWidth)/2;
+	            cropStartX = 0;	
+            }
+
+            //Then use the following values to get the cropped image
+
+	        var cropped = image.Crop(new Rect(cropStartX, cropStartY, newWidth, newWidth));
+
+            //Then resize the new square image to 250 by 250 px
+            var resized = WriteableBitmapExtensions.Resize(cropped, 250, 250, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
+
+            return resized;
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //int width = image.PixelWidth <= image.PixelHeight ? image.PixelWidth : image.PixelHeight;
+            //int height = image.PixelHeight >= image.PixelWidth ? image.PixelHeight : image.PixelWidth;
+            //double aspectRatio = (double)height / (double)width;
+            //// set the shortest side to 250px
+            //width = 250;
+            //height = (int)(aspectRatio * width);
+            ////Resize the image 
+            //var resized = WriteableBitmapExtensions.Resize(image, width, height, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
+
+            ////Now center crop the selected area
+            //int x, y;
+            //if (resized.PixelWidth > resized.PixelHeight)
+            //{
+            //    x = (resized.PixelWidth - 250) / 2;
+            //    y = 0;
+            //}
+            //else
+            //{
+            //    y = (resized.PixelHeight - 250) / 2;
+            //    x = 0;
+            //}
+            //var cropped = resized.Crop(new Rect(x, y, 250, 250));
+            //return cropped;
+        }
     }
 }
