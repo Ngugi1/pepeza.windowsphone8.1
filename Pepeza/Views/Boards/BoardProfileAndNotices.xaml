@@ -48,14 +48,14 @@
                                 </Grid.RowDefinitions>
                                 <Grid Name="GridContentHide" Opacity="0">
                                     <StackPanel>
-                                         <Grid Grid.Row="0">
+                                        <Grid Grid.Row="0">
 
                                             <Image Width="250" Height="250"
-                               Name="ImageMask"
-                                       Tapped="rectangleProfilePic_Tapped"
-                               Source="/Assets/Images/placeholder_avatar.jpg"/>
+                                                   Name="ImageMask"
+                                                   Tapped="rectangleProfilePic_Tapped"
+                                                   Source="/Assets/Images/placeholder_avatar.jpg"/>
                                             <Toast:Toastinet 
-                                                 AnimationType="LeftToLeft" 
+                                                AnimationType="LeftToLeft" 
                                                 Background="{ThemeResource PhoneAccentBrush}"
                                                 HorizontalAlignment="Center"
                                                 Width="250"
@@ -63,23 +63,23 @@
                                                 Name="ToastStatus"
                                                 VerticalAlignment="Bottom"
                                                 Style="{StaticResource ToastStyle}"
-                                    />
+                                                />
                                             <Image Height="250" Width="250"
-                                               Name="rectProfilePic"
+                                                   Name="rectProfilePic"
                                                    Stretch="None"
-                                               Tapped="rectangleProfilePic_Tapped" >
+                                                   Tapped="rectangleProfilePic_Tapped" >
                                                 <Image.Source>
                                                     <BitmapImage
-                                                    x:Name="profPic"
-                                                    ImageOpened="BitmapImage_ImageOpened"
-                                                    ImageFailed="BitmapImage_ImageFailed"
-                                                    UriSource="{Binding linkNormal , Mode=TwoWay}" 
-                                                    CreateOptions="None"/>
+                                                        x:Name="profPic"
+                                                        ImageOpened="BitmapImage_ImageOpened"
+                                                        ImageFailed="BitmapImage_ImageFailed"
+                                                        UriSource="{Binding linkNormal , Mode=TwoWay}" 
+                                                        CreateOptions="None"/>
                                                 </Image.Source>
                                             </Image>
                                             <ProgressBar IsIndeterminate="True" 
-                                 Width="250" 
-                                 Name="PBProfilePicUpdating" 
+                                                         Width="250" 
+                                                         Name="PBProfilePicUpdating" 
                                                          Visibility="Collapsed"
                                                          VerticalAlignment="Bottom"/>
                                         </Grid>
@@ -102,8 +102,8 @@
                                                                Text="{Binding noOfFollowers , Mode=TwoWay}"
                                                                Typography.NumeralStyle="Normal" />
                                                     <RichTextBlock Margin="12,0"
-                                                               FontSize="22"
-                                                               Typography.Capitals="AllSmallCaps" >
+                                                                   FontSize="22"
+                                                                   Typography.Capitals="AllSmallCaps" >
                                                         <Paragraph>
                                                             <Bold>
                                                                 <Underline>
@@ -119,21 +119,21 @@
                                             </HyperlinkButton.Content>
                                         </HyperlinkButton>
                                         <HyperlinkButton  
-                                                         Foreground="{ThemeResource PhoneAccentBrush}"
-                                                         Click="HyperlinkButton_Click"
+                                            Foreground="{ThemeResource PhoneAccentBrush}"
+                                            Click="HyperlinkButton_Click"
                                             Name="HyperLinkBtnRequests" 
                                             Visibility="Collapsed"
                                             HorizontalAlignment="Center">
                                             <HyperlinkButton.Content>
-                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding noOfFollowRequests, Mode=TwoWay}" 
-                                                           Margin="4"
-                                                           Foreground="{ThemeResource PhoneAccentBrush}"/>
+                                                               Margin="4"
+                                                               Foreground="{ThemeResource PhoneAccentBrush}"/>
                                                     <RichTextBlock 
-                                                            FontSize="22"
-                                                           Margin="4"
+                                                        FontSize="22"
+                                                        Margin="4"
                                                         Foreground="{ThemeResource PhoneAccentBrush}"
-                                                           >
+                                                        >
                                                         <Paragraph>
                                                             <Underline>
                                                                 <Bold>
@@ -143,11 +143,11 @@
                                                         </Paragraph>
                                                     </RichTextBlock>
                                                     <SymbolIcon Symbol="Flag"
-                                                            Foreground="{ThemeResource PhoneAccentBrush}"
-                                                            Margin="4,0"
-                                                            Height="30" Width="40"/>
+                                                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                                                Margin="4,0"
+                                                                Height="30" Width="40"/>
                                                 
-                                            </StackPanel>
+                                                </StackPanel>
                                             </HyperlinkButton.Content>
                                         </HyperlinkButton>
                                         <Button Name="btnFollow"
@@ -158,7 +158,7 @@
                                                 VerticalAlignment="Bottom"
                                                 Click="btnFollow_Click"
                                                 IsEnabled="True" />
-                                                 </StackPanel>
+                                    </StackPanel>
                                 </Grid>
 
                                 <ScrollViewer Grid.Row="1"
@@ -202,22 +202,22 @@
                     </PivotItem.Header>
                     <Grid>
                         <StackPanel 
-                        Name="EmptyNoticesPlaceHolder"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
+                            Name="EmptyNoticesPlaceHolder"
+                            Visibility="Collapsed"
+                            VerticalAlignment="Center">
 
                             <Viewbox Width="100" Height="100">
                                 <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="Read"/>
+                                    Foreground="{ThemeResource PhoneAccentBrush}"
+                                    Symbol="Read"/>
                             </Viewbox>
                             <TextBlock Text="No notices to show here"
-                                   HorizontalAlignment="Center"
-                                   TextLineBounds="Full"
-                                  Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
+                                       HorizontalAlignment="Center"
+                                       TextLineBounds="Full"
+                                       Style="{StaticResource TitleTextBlockStyle}"
+                                       Foreground="Black"
+                                       Typography.Capitals="Unicase"
+                                       />
                         </StackPanel>
                         <ListView Name="ListViewNotices"
                                   Visibility="Visible"
@@ -237,10 +237,10 @@
 
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding title , Mode=TwoWay}" 
-                                        Foreground="Black"
-                                        Margin="0"
-                                        VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                                   Foreground="Black"
+                                                   Margin="0"
+                                                   VerticalAlignment="Bottom"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"/>
 
                                         <TextBlock Grid.Row="2"
                                                    Margin="0"

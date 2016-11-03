@@ -36,16 +36,16 @@
 
             <Viewbox Width="100" Height="100">
                 <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="AddFriend"/>
+                    Foreground="{ThemeResource PhoneAccentBrush}"
+                    Symbol="AddFriend"/>
             </Viewbox>
             <TextBlock Text="You have no follow requests"
-                                   HorizontalAlignment="Center"
-                                   TextLineBounds="Full"
-                                  Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
+                       HorizontalAlignment="Center"
+                       TextLineBounds="Full"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Foreground="Black"
+                       Typography.Capitals="Unicase"
+                       />
         </StackPanel>
         <StackPanel
             HorizontalAlignment="Center"
@@ -69,63 +69,63 @@
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
-            <!--<ListViewItem>-->
-                <Grid Margin="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Viewbox Grid.RowSpan="2"
-                           Margin="8"
-                            Width="60"
-                            Height="60"
-                             >
-                        <Image Height="50"
-                           Source="/Assets/Images/placeholder_s_avatar.png"
-                           Width="50"
+                    <!--<ListViewItem>-->
+                    <Grid Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Viewbox Grid.RowSpan="2"
+                                 Margin="8"
+                                 Width="60"
+                                 Height="60"
+                                 >
+                            <Image Height="50"
+                                   Source="/Assets/Images/placeholder_s_avatar.png"
+                                   Width="50"
                            
-                           />
-                    </Viewbox>
-                    <TextBlock Text="{Binding fullname}"
-                               VerticalAlignment="Top"
-                               Margin="0.167,8,-0.5,0"
+                                   />
+                        </Viewbox>
+                        <TextBlock Text="{Binding fullname}"
+                                   VerticalAlignment="Top"
+                                   Margin="0.167,8,-0.5,0"
                                    Grid.ColumnSpan="2"
-                               FontWeight="SemiBold"
-                               Foreground="Black"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Grid.Column="1" Grid.RowSpan="2"/>
-                    <Button Content="Accept"
+                                   FontWeight="SemiBold"
+                                   Foreground="Black"
+                                   Style="{StaticResource txtBlockDisplay}"
+                                   Grid.Column="1" Grid.RowSpan="2"/>
+                        <Button Content="Accept"
                                 VerticalAlignment="Top"
-                            Height="0"
-                            BorderBrush="Transparent"
-                            Background="{ThemeResource PhoneAccentBrush}"
-                            Grid.Row="1"
-                            Name="AcceptRequestButton"
-                            Click="BtnAcceptRequest"
-                            Padding="0"
-                            Tag="{Binding}"
-                            Foreground="White"
-                            Grid.Column="1" Margin="0.167,22,0,0"
-                            />
-                    <Button Content="Decline" 
-                           Name="DeclineRequestBtn"
-                           Click="BtnDeclineRequest"
-                            Grid.Row="1"
-                            VerticalAlignment="Top"
-                            Padding="0"
-                            Margin="28,19,0,0"
-                            Tag="{Binding}"
-                            Background="Silver"
-                            BorderBrush="Transparent"
-                            Grid.Column="2"/>
-                </Grid>
-            <!--</ListViewItem>-->
-            </DataTemplate>
+                                Height="0"
+                                BorderBrush="Transparent"
+                                Background="{ThemeResource PhoneAccentBrush}"
+                                Grid.Row="1"
+                                Name="AcceptRequestButton"
+                                Click="BtnAcceptRequest"
+                                Padding="0"
+                                Tag="{Binding}"
+                                Foreground="White"
+                                Grid.Column="1" Margin="0.167,22,0,0"
+                                />
+                        <Button Content="Decline" 
+                                Name="DeclineRequestBtn"
+                                Click="BtnDeclineRequest"
+                                Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Padding="0"
+                                Margin="28,19,0,0"
+                                Tag="{Binding}"
+                                Background="Silver"
+                                BorderBrush="Transparent"
+                                Grid.Column="2"/>
+                    </Grid>
+                    <!--</ListViewItem>-->
+                </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>

@@ -18,6 +18,8 @@
     <ExpressionBlendVersion>12.0.51020.0</ExpressionBlendVersion>
     <NuGetPackageImportStamp>b08e0db7</NuGetPackageImportStamp>
     <AppxBundle>Always</AppxBundle>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -371,6 +373,12 @@
     <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Xamarin.FFImageLoading.2.1.8\lib\portable-netcore45+wpa81\FFImageLoading.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.HockeyApp.Core45">
+      <HintPath>..\packages\HockeySDK.Core.4.1.5\lib\portable-net45+win8+wp8+wpa81+win81+uap10.0\Microsoft.HockeyApp.Core45.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.HockeyApp.Kit">
+      <HintPath>..\packages\HockeySDK.WINRT.4.1.5\lib\portable-wpa81\Microsoft.HockeyApp.Kit.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>

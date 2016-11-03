@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <TextBlock Margin="20,0,20,0"
                    VerticalAlignment="Bottom"
-                  Style="{StaticResource txtBlockPageHeader}"
+                   Style="{StaticResource txtBlockPageHeader}"
                    Text="deactivate account" />
         <StackPanel Grid.Row="1">
             <TextBlock Margin="28"
@@ -30,31 +30,31 @@
                        Text="When you deactivate your account :" />
             <RichTextBlock Style="{StaticResource RichTextBoxStyle}">
                 <Paragraph FontSize="16" TextIndent="40">
-                    - You will
+                           - You will
                     <Bold Foreground="Black">
-                        NOT
+                          NOT
                     </Bold>
-                    appear in search results
+                          appear in search results
                 </Paragraph>
             </RichTextBlock>
             <RichTextBlock Style="{StaticResource RichTextBoxStyle}">
                 <Paragraph FontSize="16" TextIndent="40">
-                    -Your profile will
+                           -Your profile will
                     <Bold Foreground="Black">
-                        no longer be visible
+                          no longer be visible
                     </Bold>
-                    in Pepeza
+                          in Pepeza
                 </Paragraph>
             </RichTextBlock>
             <RichTextBlock Margin="28" Style="{StaticResource RichTextBoxStyle}">
                 <Paragraph TextIndent="0">
-                    You can
+                           You can
                     <Underline>
                         <Bold Foreground="Black">re-activate</Bold>
                     </Underline>
-                    your account by using your
+                        your account by using your
                     <Bold Foreground="Black">old credentials</Bold>
-                    to login.
+                        to login.
                 </Paragraph>
             </RichTextBlock>
 

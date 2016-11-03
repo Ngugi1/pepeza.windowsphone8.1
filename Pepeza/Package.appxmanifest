@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="be497bd2-a4a7-4787-afdb-d3ce5dabf72d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Pepeza(beta)</DisplayName>
-    <PublisherDisplayName>Pepeza LTD</PublisherDisplayName>
+    <PublisherDisplayName>Ndung'u Ngugi</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>

@@ -12,6 +12,7 @@ using Shared.Push;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.HockeyApp;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -54,12 +55,18 @@ namespace Pepeza
         public  App()
         {
             this.InitializeComponent();
+            HockeyClient.Current.Configure("1637aba890764d5e8ec41d1b92812495", new TelemetryConfiguration() { EnableDiagnostics = true});
+#if DEBUG
+             ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, args) =>
+             {
+                  if (Debugger.IsAttached) { Debugger.Break(); }
+             };
+#endif
             this.Suspending += this.OnSuspending;
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
             this.RequestedTheme = ApplicationTheme.Light;
             DbHelper.createDB(); 
-            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-            
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;   
             this.Resuming += App_Resuming;  
         }
 
@@ -185,15 +192,7 @@ namespace Pepeza
         /// <param name="e">Details about the launch request and process.</param>
         protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = false;
-            }
-#endif
-            #region Predefined Actions
-            Frame rootFrame = Window.Current.Content as Frame;
-
+       Frame rootFrame = Window.Current.Content as Frame;
             if (Settings.getValue(Constants.DATA_PUSHED) != null)
             {
                 int updated = (int)Settings.getValue(Constants.DATA_PUSHED);
@@ -246,7 +245,6 @@ namespace Pepeza
                     throw new Exception("Failed to create initial page");
                 }
             }
-            #endregion
 
             Frame frame = CreateRootFrame();
             await RestoreStatusAsync(e.PreviousExecutionState);
@@ -265,6 +263,17 @@ namespace Pepeza
             updateStatusBar();
             // Ensure the current window is active
             Window.Current.Activate();
+#if DEBUG
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                this.DebugSettings.EnableFrameRateCounter = false;
+            }
+#endif
+
+            await HockeyClient.Current.SendCrashesAsync(true);
+            await HockeyClient.Current.CheckForAppUpdateAsync();
+            
+         
         }
         public async static void updateStatusBar()
         {
