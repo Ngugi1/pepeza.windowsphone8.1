@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Xml.Linq;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -79,9 +80,10 @@ namespace Pepeza.Views
                 ToastStatus.Message = "Please add a comment";
                 return;
             }
+            var x = Package.Current.Id.Version.Build.ToString();
             StackPanelProgress.Visibility = Visibility.Visible;
             Dictionary<string, string> resulst = await FeedBackService.sendFeedBack(new Dictionary<string, string>(){
-                {"mood" , mood} , {"platform" , "windows phone 8.1"} , {"content" , txtBoxFeedBack.Text},{"version" ,  "1.0.0.0"}
+                {"mood" , mood} , {"platform" , "windows phone 8.1"} , {"content" , txtBoxFeedBack.Text},{"version" ,  Constants.APP_VERSION}
             });
             if (resulst.ContainsKey(Constants.SUCCESS))
             {
