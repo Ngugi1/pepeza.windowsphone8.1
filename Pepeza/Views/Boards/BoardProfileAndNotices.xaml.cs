@@ -375,6 +375,8 @@ namespace Pepeza.Views.Boards
                        {
                            noticeId = (int)obj["id"],
                            title = (string)obj["title"],
+                           content = (string)obj["trimmed_content"],
+                           hasAttachment = (int)obj["hasAttachment"],
                            dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
                            dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
                            boardId = boardId
@@ -593,7 +595,6 @@ namespace Pepeza.Views.Boards
             TNotice selected = (sender as ListView).SelectedItem as TNotice;
             this.Frame.Navigate(typeof(NoticeDetails), selected.noticeId);
         }
-
         private void AppBtnAddNotice_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AddNoticePage), boardId);
@@ -604,81 +605,6 @@ namespace Pepeza.Views.Boards
             this.Frame.Navigate(typeof(AcceptDeclineRequests), boardId);
         }
     }
-    public class BoolToTextConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if ((bool)value)
-            {
-                return "Unfollow";
-            }else
-            {
-                return "Follow";
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            if (value.Equals("Follow"))
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-    }
-    public class IntToAttachment : IValueConverter
-    {
-
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if ((bool)value == true)
-            {
-                return Visibility.Visible;
-            }
-            else
-            {
-                return Visibility.Collapsed;
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            if ((Visibility)value == Visibility.Visible)
-            {
-                return true;
-            }
-            return false;
-        }
-    }
-    public class IntToForeground : IValueConverter
-    {
-
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if ((int)value != 1)
-            {
-                return (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush);
-            }
-            else
-            {
-                return new SolidColorBrush(Colors.Black);
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            if ((SolidColorBrush)(value) == (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush))
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
-    }
+    
 }
 

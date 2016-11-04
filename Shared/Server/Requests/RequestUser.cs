@@ -58,7 +58,7 @@ namespace Pepeza.Server.Requests
                     else
                     {
                         Debug.WriteLine(Constants.UNKNOWNERROR);
-                        resContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        resContent.Add(Constants.ERROR, await response.Content.ReadAsStringAsync());
                     }
                 }
                 catch (Exception ex)
@@ -171,8 +171,8 @@ namespace Pepeza.Server.Requests
                     }
                     else
                     {
-                        var x = response.Content.ReadAsStringAsync();
-                        resConent.Add(Constants.LOG_FAILED, Constants.INVALIDCREDENTIALS);
+                        
+                        resConent.Add(Constants.LOG_FAILED, await response.Content.ReadAsStringAsync());
                     }
                     
                 }

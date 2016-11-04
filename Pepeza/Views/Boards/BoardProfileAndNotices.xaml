@@ -4,6 +4,7 @@
       xmlns:Toast="using:Toastinet"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Pepeza.Views.Boards"
+      xmlns:Converter="using:Pepeza"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
@@ -14,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Converter:IntToAttachment x:Key="IntToAttachment"/>
         </ResourceDictionary>
        
     </Page.Resources>
@@ -219,13 +221,13 @@
                                        Typography.Capitals="Unicase"
                                        />
                         </StackPanel>
-                        <ListView Name="ListViewNotices"
-                                  Visibility="Visible"
-                                  SelectionChanged="ListViewNotices_SelectionChanged"
-                                  >
+                        <ListView Margin="24,0,8,0"
+                          SelectionChanged="ListViewNotices_SelectionChanged"
+                          Name="ListViewNotices">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Margin="19.5,4" Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
+                                    <Grid Margin="0,4" 
+                                  Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -237,18 +239,25 @@
 
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding title , Mode=TwoWay}" 
-                                                   Foreground="Black"
-                                                   Margin="0"
-                                                   VerticalAlignment="Bottom"
-                                                   Style="{StaticResource txtBlockListViewItemHeader}"/>
-
-                                        <TextBlock Grid.Row="2"
-                                                   Margin="0"
-                                                   Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                                                   FontSize="{StaticResource TextStyleMediumFontSize}"
-                                                   Text="{Binding dateCreated , Mode=TwoWay}"/>
+                                        Foreground="Black"
+                                        Margin="0"
+                                        VerticalAlignment="Bottom"
+                                        Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                        <TextBlock Grid.Row="1"
+                                    Margin="0"
+                                Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                                       FontSize="{StaticResource TextStyleMediumFontSize}"
+                                       Text="{Binding content , Mode=TwoWay}"/>
+                                        <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Bottom"
+                                     Grid.Column="1" />
+                                        <SymbolIcon Symbol="Attach" 
+                                        HorizontalAlignment="Right"
+                                        Grid.RowSpan="2"
+                                        Visibility="{Binding hasAttachment , Converter={StaticResource IntToAttachment}}"
+                                        Grid.Row="1" Grid.Column="1"/>
                                     </Grid>
-
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

@@ -107,6 +107,7 @@ namespace Pepeza.Views.Profile
                     {
                         CommandBaEdit.Visibility = Visibility.Collapsed;
                         rectProfilePic.IsTapEnabled = false;
+                        stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
                     }
                     if (string.IsNullOrWhiteSpace(data.fullname))
                     {
