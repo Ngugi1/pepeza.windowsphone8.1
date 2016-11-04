@@ -59,18 +59,18 @@
                             <Grid Grid.Row="0"> 
                                 
                                 <Image Width="250" Height="250"
-                               Name="ImageMask"
+                                       Name="ImageMask"
                                        Tapped="rectangleProfilePic_Tapped"
-                               Source="/Assets/Images/placeholder_avatar.jpg"/>
+                                       Source="/Assets/Images/placeholder_avatar.jpg"/>
                                 <toast:Toastinet 
-                                 AnimationType="LeftToLeft" 
-                                Background="{ThemeResource PhoneAccentBrush}"
-                                HorizontalAlignment="Center"
-                                Width="250"
-                                TextWrapping="WrapWholeWords"
-                                Name="ToastStatus"
-                                VerticalAlignment="Bottom"
-                                Style="{StaticResource ToastStyle}"
+                                    AnimationType="LeftToLeft" 
+                                    Background="{ThemeResource PhoneAccentBrush}"
+                                    HorizontalAlignment="Center"
+                                    Width="250"
+                                    TextWrapping="WrapWholeWords"
+                                    Name="ToastStatus"
+                                    VerticalAlignment="Bottom"
+                                    Style="{StaticResource ToastStyle}"
                                     />
                                 <Image Height="250" Width="250" 
                                        Name="rectangleProfilePic"
@@ -78,34 +78,30 @@
                                        Tapped="rectangleProfilePic_Tapped" >
                                     <Image.Source>
                                         <BitmapImage
-                                x:Name="profPic"
-                                ImageOpened="BitmapImage_ImageOpened"
-                                ImageFailed="BitmapImage_ImageFailed"
-                                UriSource="{Binding linkNormal , Mode=TwoWay}" 
-                                CreateOptions="None"/>
+                                            x:Name="profPic"
+                                            ImageOpened="BitmapImage_ImageOpened"
+                                            ImageFailed="BitmapImage_ImageFailed"
+                                            UriSource="{Binding linkNormal , Mode=TwoWay}" 
+                                            CreateOptions="None"/>
                                     </Image.Source>
                                 </Image>
                                 <ProgressBar IsIndeterminate="True" 
-                                 Width="250" 
-                                 Name="PBProfilePicUpdating" 
+                                             Width="250" 
+                                             Name="PBProfilePicUpdating" 
                                              Visibility="Collapsed"
                                              VerticalAlignment="Bottom"/>
                             </Grid>
                             <StackPanel Grid.Row="1">
-                            <TextBlock 
-                                       Margin="0,12"
-                                       Style="{StaticResource txtBlockStyleProfileOwner}"
-                                       Text="{Binding name}"
-                                       TextWrapping="WrapWholeWords" />
+                                <TextBlock 
+                                    Margin="0,12"
+                                    Style="{StaticResource txtBlockStyleProfileOwner}"
+                                    Text="{Binding name}"
+                                    TextWrapping="WrapWholeWords" />
                                 <TextBlock Style="{StaticResource txtBlockDisplay}"
                                            Text="{Binding category, Mode=TwoWay}"
                                            HorizontalAlignment="Center"
                                            />
                             </StackPanel>
-                            <Rectangle Grid.Row="2"
-                                       Height="1"
-                                       Margin="12"
-                                       Fill="{ThemeResource PhoneAccentBrush}" />
                             <TextBlock Grid.Row="3"
                                        Margin="16,8"
                                        HorizontalAlignment="Center"
@@ -141,21 +137,61 @@
 
                         <Viewbox Width="100" Height="100">
                             <SymbolIcon  Symbol="OtherUser"
-                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
                                
                                          />
                         </Viewbox>
                         <TextBlock Text="No boards to display here (-:"
                                    TextLineBounds="Full"
                                    HorizontalAlignment="Center"
-                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
                     <ListView Name="ListViewOrgBoards"
-                              ItemTemplate="{StaticResource ListViewSearchBoards}"
-                              SelectionChanged="ListViewOrgBoards_SelectionChanged" />
+                              
+                              SelectionChanged="ListViewOrgBoards_SelectionChanged" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <FFImage:FFImage 
+                                        Margin="0,8,0,0"
+                                        VerticalAlignment="Center"
+                                        Grid.RowSpan="2"
+                                        Height="50"
+                                        Source="/Assets/Images/placeholder_avatar.jpg"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                        Width="50"
+                                        
+                                        >
+                                    </FFImage:FFImage>
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="1"
+                                               Margin="8,2"
+                                               TextTrimming="WordEllipsis"
+                                               Foreground="Black"
+                                               Style="{StaticResource GroupHeaderTextBlockStyle}"
+                                               Text="{Binding name}" />
+                                    <TextBlock Grid.Row="1"
+                                               Margin="8,2"
+                                               Grid.Column="1"
+                                               TextTrimming="CharacterEllipsis"
+                                               Text="{Binding desc, Mode=TwoWay}"
+                                               Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                     <StackPanel Name="StackPanelLoading" VerticalAlignment="Center">
                         <ProgressBar Margin="12" />
                         <TextBlock HorizontalAlignment="Center"
@@ -193,13 +229,13 @@
                         <TextBlock 
                             TextLineBounds="Full"
                             TextAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                  Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Foreground="Black"
                             
-                                   Typography.Capitals="Unicase"
-                             Text="You do not have permissions to see the collaborator information.
-                                   You must be a collaborator to access this content"
+                            Typography.Capitals="Unicase"
+                            Text="You do not have permissions to see the collaborator information.
+                            You must be a collaborator to access this content"
                             
                             />
                     </StackPanel>
@@ -209,63 +245,63 @@
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                            <Grid
-                                Margin="0,8"
-                                Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
+                                <Grid
+                                    Margin="0,8"
+                                    Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
 
-                                </Grid.ColumnDefinitions>
+                                    </Grid.ColumnDefinitions>
 
-                                <FFImage:FFImage Width="50" 
-                                                 Margin="19,0,0,0"
+                                    <FFImage:FFImage Width="50" 
+                                                     Margin="19,0,0,0"
                                                      Source="/Assets/Images/placeholder_s_avatar.png"
                                                      Grid.RowSpan="2"
                                                      Height="50">
 
-                                </FFImage:FFImage>
-                                <TextBlock
-                       Grid.Row="0"
-                       Margin="16,4"
-                       TextLineBounds="Tight"
-                       Grid.Column="1"
-                       VerticalAlignment="Bottom"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding username , Mode=TwoWay}"
-                       TextTrimming="WordEllipsis"
-                       TextWrapping="NoWrap" />
-                                <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="16,4"
-                       VerticalAlignment="Bottom"
-                       TextLineBounds="Tight"
-                       Style="{StaticResource BaseTextBlockStyle}"
-                       Text="{Binding name, Mode=TwoWay}"
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="NoWrap" />
-                                <TextBlock 
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               Grid.Row="0"
-                               Margin="0,0,8,0"
-                               Typography.Capitals="AllSmallCaps"
-                               Grid.Column="2"
-                               Grid.RowSpan="1"
-                               Style="{StaticResource txtBlockDisplay}"
-                               HorizontalAlignment="Left"
-                               Text="{Binding role , Mode=TwoWay}"
-                               VerticalAlignment="Bottom"
-                               />
-                                <TextBlock Grid.Row="1" Grid.Column="2"
-                                           Text="{Binding active}"
-                                           />
+                                    </FFImage:FFImage>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Margin="16,4"
+                                        TextLineBounds="Tight"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Bottom"
+                                        Style="{StaticResource txtBlockListViewItemHeader}"
+                                        Text="{Binding username , Mode=TwoWay}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="NoWrap" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Margin="16,4"
+                                               VerticalAlignment="Bottom"
+                                               TextLineBounds="Tight"
+                                               Style="{StaticResource BaseTextBlockStyle}"
+                                               Text="{Binding name, Mode=TwoWay}"
+                                               TextTrimming="CharacterEllipsis"
+                                               TextWrapping="NoWrap" />
+                                    <TextBlock 
+                                        Foreground="{ThemeResource PhoneAccentBrush}"
+                                        Grid.Row="0"
+                                        Margin="0,0,8,0"
+                                        Typography.Capitals="AllSmallCaps"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="1"
+                                        Style="{StaticResource txtBlockDisplay}"
+                                        HorizontalAlignment="Left"
+                                        Text="{Binding role , Mode=TwoWay}"
+                                        VerticalAlignment="Bottom"
+                                        />
+                                    <TextBlock Grid.Row="1" Grid.Column="2"
+                                               Text="{Binding active}"
+                                               />
 
-                            </Grid>
+                                </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
