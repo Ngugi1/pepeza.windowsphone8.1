@@ -19,9 +19,6 @@
     <SolidColorBrush x:Key="pageBackground" Color="WhiteSmoke" />
     <SolidColorBrush x:Key="mainForeground" Color="#127575" />
     <SolidColorBrush x:Key="BtnBackground" Color="#00BAD4" />
-    <SolidColorBrush x:Key="txtBoxBorderBrush" Color="#FF7A7A7A" />
-
-
     <!--  Rectangles  -->
     <Style x:Key="RectanglePicThumbnail" TargetType="Rectangle">
         <Setter Property="Width" Value="50" />
@@ -37,11 +34,7 @@
     </Style>
     <!--  TextBox header template  -->
     <DataTemplate x:Key="HeaderTemplate">
-        <TextBlock FontFamily="Segoe UI Light"
-                   FontSize="22"
-                   Foreground="{StaticResource PhoneForegroundBrush}"
-                   Style="{StaticResource BaseTextBlockStyle}"
-                   Text="{Binding}" />
+        <TextBlock Text="{Binding}" />
     </DataTemplate>
 
     <!--  Progress Ring  -->
@@ -57,7 +50,7 @@
     <!--  TextBox Styles  -->
     <Style x:Key="txtBoxStyle" TargetType="TextBox">
         <Setter Property="Margin" Value="16,8" />
-        <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,2"/>
         <Setter Property="FontFamily" Value="Segoe UI Light" />
         <Setter Property="FontWeight" Value="Light" />
         <Setter Property="Background" Value="Transparent" />
@@ -155,7 +148,7 @@
     <!--  Password Box Style  -->
     <Style x:Name="passBoxStyle" TargetType="PasswordBox">
         <Setter Property="Margin" Value="16,8" />
-        <Setter Property="BorderBrush" Value="{StaticResource txtBoxBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,2"/>
         <Setter Property="FontWeight" Value="Thin" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
@@ -497,7 +490,7 @@
             <TextBlock Grid.Row="1"
                        Margin="0"
                        Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{StaticResource txtBoxBorderBrush}" 
+                       
                            Text="This isisajdsd s fdbvrvrbv rbv"/>
             <TextBlock Text="12/06/2013"
                            HorizontalAlignment="Left" 

@@ -248,11 +248,11 @@ namespace Pepeza.Server.Requests
                             id = (int)item["id"],
                             avatarId = (int)item["avatarId"],
                             name = (string)item["name"],
+                            category = (string)item["category"],
                             userId = (int)item["userId"],
                             username = (string)item["username"],
                             description = (string)item["description"],
                             dateCreated = DateTimeFormatter.format((long)item["dateCreated"])
-
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)item["dateUpdated"]);
                         if (await OrgHelper.get(org.id) != null)

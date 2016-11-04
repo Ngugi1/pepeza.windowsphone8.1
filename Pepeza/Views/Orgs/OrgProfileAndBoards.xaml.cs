@@ -150,6 +150,7 @@ namespace Pepeza.Views.Orgs
                         userId = (int)objResults["userId"],
                         username = (string)objResults["username"],
                         description = (string)objResults["description"],
+                        category = (string)objResults["category"],
                         name = (string)objResults["name"],
                         dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
                         dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]),

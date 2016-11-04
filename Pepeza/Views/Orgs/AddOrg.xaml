@@ -31,7 +31,8 @@
         </Grid.RowDefinitions>
         <TextBlock Margin="20,0,20,0"
                    Style="{StaticResource txtBlockPageHeader}"
-                   Text="create organisation" />
+                   Text="create organisation" 
+                   Typography.Capitals="Normal"/>
         <ScrollViewer Grid.Row="1" Height="Auto">
             <Grid>
                 <Grid.RowDefinitions>
@@ -73,29 +74,49 @@
                                  IsIndeterminate="True"
                                  Visibility="Collapsed" />
                 </StackPanel>
-
+                <StackPanel  Grid.Row="2">
+                <ComboBox 
+                    SelectionChanged="ComboOrgTypes_SelectionChanged"
+                    BorderBrush="{StaticResource TextBoxBorderThemeBrush}"      
+                    BorderThickness="0"
+                    Name="ComboOrgTypes"
+                         
+                          Margin="12,8"
+                          >
+                    <ComboBox.Header>
+                        <TextBlock Text="type of organisation"
+                                   Margin="0"/>
+                    </ComboBox.Header>
+                    
+                </ComboBox>
+                    <TextBlock Text="please select a cartegory here" 
+                               Name="txtBlockSelectCategory"
+                               Visibility="Collapsed"
+                               Style="{StaticResource txtBlockError}"/>
+                </StackPanel>
 
                 <TextBox Name="txtBoxOrgName"
-                         Grid.Row="2"
+                         Grid.Row="3"
                          MaxLength="100"
                          PlaceholderText="Actual name of the organisation"
                          Style="{StaticResource txtBoxStyle}"
                          Text="{Binding Org.Name,
                                         UpdateSourceTrigger=PropertyChanged,
                                         Mode=TwoWay}"
-                         TextWrapping="Wrap">
+                         TextWrapping="Wrap" 
+                         AcceptsReturn="True">
                     <TextBox.Header>organisation full name</TextBox.Header>
                 </TextBox>
                 <TextBlock Name="txtBlockNameStatus"
-                           Grid.Row="3"
+                           Grid.Row="4"
                            Style="{StaticResource txtBlockError}"
                            Text="Orgainsation name can be at least 3 characters"
                            Visibility="{Binding Org.IsNameValid,
                                                 Converter={StaticResource Converter},
                                                 Mode=TwoWay}" />
                 <TextBox Name="txtBoxOrgDesc"
-                         Grid.Row="4"
-                         Header="Description"
+                         Grid.Row="5"
+                         Header="description"
                          MaxLength="250"
                          PlaceholderText="What happens in your organisation ?"
                          Style="{StaticResource txtBoxStyle}"
@@ -104,18 +125,18 @@
                                         Mode=TwoWay}"
                          TextWrapping="Wrap" />
                 <TextBlock Name="txtBlockDescStatus"
-                           Grid.Row="5"
+                           Grid.Row="6"
                            Style="{StaticResource txtBlockError}"
                            Text="Describe the organisation in at least 10 characters"
                            Visibility="{Binding Org.IsDescValid,
                                                 Converter={StaticResource Converter},
                                                 Mode=TwoWay}" />
                 <TextBlock Name="TxtBlockCreateOrgStatus"
-                           Grid.Row="6"
+                           Grid.Row="7"
                            Margin="12"
                            Style="{StaticResource txtBlockError}"
                            Visibility="Collapsed" />
-                <StackPanel Grid.Row="7"
+                <StackPanel Grid.Row="8"
                             Grid.ColumnSpan="2"
                             Margin="22"
                             HorizontalAlignment="Center"

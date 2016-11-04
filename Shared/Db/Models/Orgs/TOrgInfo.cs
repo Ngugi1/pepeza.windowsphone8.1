@@ -12,6 +12,7 @@ namespace Pepeza.Db.Models.Orgs
         [PrimaryKey]
         public int id { get; set; }
         public int userId { get; set; }
+        public string category { get; set; }
         [MaxLength(20)]
         public string username {get; set;}
         [MaxLength(100)]

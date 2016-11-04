@@ -91,11 +91,17 @@
                                              Visibility="Collapsed"
                                              VerticalAlignment="Bottom"/>
                             </Grid>
-                            <TextBlock Grid.Row="1"
+                            <StackPanel Grid.Row="1">
+                            <TextBlock 
                                        Margin="0,12"
                                        Style="{StaticResource txtBlockStyleProfileOwner}"
                                        Text="{Binding name}"
                                        TextWrapping="WrapWholeWords" />
+                                <TextBlock Style="{StaticResource txtBlockDisplay}"
+                                           Text="{Binding category, Mode=TwoWay}"
+                                           HorizontalAlignment="Center"
+                                           />
+                            </StackPanel>
                             <Rectangle Grid.Row="2"
                                        Height="1"
                                        Margin="12"

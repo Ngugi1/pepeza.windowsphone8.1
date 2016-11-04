@@ -41,13 +41,20 @@ namespace Pepeza.Views.Orgs
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
+
+        EditOrgModel orgModel = null;
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
+                List<string> orgstypes = new List<string>() { "Church", "College", "Company", "Group", "Non-Profit Organization", "School", "University",
+
+        "Other"};
+                ComboOrgTypes.ItemsSource = orgstypes;
                 org = e.Parameter as TOrgInfo;
-                EditOrgModel orgModel = RootGrid.DataContext as EditOrgModel;
+                orgModel = RootGrid.DataContext as EditOrgModel;
                 orgModel.Name = org.name;
+                ComboOrgTypes.SelectedItem = org.category;
                 orgModel.Desc = org.description;
                 txtBlockUsername.Text = org.username;
                 orgModel.CanUpdateProfile = false;
@@ -70,7 +77,7 @@ namespace Pepeza.Views.Orgs
         {
             stackPanelUpdating.Visibility = Visibility.Visible;
             Dictionary<string, string> results = await OrgsService.updateOrg(new Dictionary<string, string>() { {"orgId" , org.id.ToString()} 
-                ,{"username" ,org.username},{ "name", model.Name }, { "description", model.Desc } });
+                ,{"username" ,org.username},{ "name", model.Name }, { "description", model.Desc }, {"category" , ComboOrgTypes.SelectedItem.ToString()}});
             if (results != null && results.ContainsKey(Constants.SUCCESS))
             {
                 //Update the information n the local database
@@ -94,6 +101,12 @@ namespace Pepeza.Views.Orgs
                 txtBlockStatus.Text = results[Constants.ERROR];
             }
             stackPanelUpdating.Visibility = Visibility.Collapsed;
+        }
+
+        private void ComboOrgTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            orgModel.CanUpdateProfile = true;
+            AppBtnUpdate.IsEnabled = true;
         }
     }
 }

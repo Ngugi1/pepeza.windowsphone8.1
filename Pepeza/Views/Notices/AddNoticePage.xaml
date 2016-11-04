@@ -46,8 +46,8 @@
 
                 <TextBox Name="txtBoxDesc"
                      Grid.Row="2"
-                     Height="150"
-                     Background="Transparent"
+                     AcceptsReturn="True"
+                         Background="Transparent"
                      Header="description"
                      PlaceholderText="provide a short description of the notice"
                      Style="{StaticResource txtBoxStyle}"

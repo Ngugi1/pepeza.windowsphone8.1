@@ -30,9 +30,9 @@ namespace Pepeza.Server.Requests
                 }
                 else
                 {
-                    var content = response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("Error is here ==================> " + content);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    responseContent.Add(Constants.ERROR, content);
                 }
             }
             else

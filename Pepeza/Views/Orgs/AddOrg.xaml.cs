@@ -54,7 +54,10 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            List<string> orgstypes = new List<string>() { "Church", "College", "Company", "Group", "Non-Profit Organization", "School", "University",
 
+        "Other"};
+            ComboOrgTypes.ItemsSource = orgstypes;
         }
 
         private async void btnCreateOrg_Click(object sender, RoutedEventArgs e)
@@ -66,14 +69,15 @@ namespace Pepeza.Views.Orgs
                 model.IsProgressRingVisible = true;
                 if (OrgValidation.IsUsernameValid(txtBoxUsername.Text.Trim()) &&
                     OrgValidation.VaidateOrgName(txtBoxOrgName.Text.Trim()) &&
-                    OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim()))
+                    OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim())&&!string.IsNullOrEmpty((string)ComboOrgTypes.SelectedItem))
                 {
 
                     Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
                 {
                     {"username" , txtBoxUsername.Text.Trim()},
                     {"name", txtBoxOrgName.Text.Trim()},
-                    {"description" , txtBoxOrgDesc.Text.Trim()}
+                    {"description" , txtBoxOrgDesc.Text.Trim()},
+                    {"category" , ComboOrgTypes.SelectedItem.ToString()}
                 });
                     if (result.ContainsKey(Constants.SUCCESS))
                     {
@@ -84,6 +88,7 @@ namespace Pepeza.Views.Orgs
                             //Organisation details
                             TOrgInfo toInsert = new TOrgInfo();
                             toInsert.id = (int)orgInfo["organization"]["id"];
+                            toInsert.category = ComboOrgTypes.SelectedItem.ToString();
                             toInsert.username = model.Username;
                             toInsert.name = model.Name;
                             toInsert.userId = (int)Settings.getValue(Constants.USERID);
@@ -91,8 +96,6 @@ namespace Pepeza.Views.Orgs
                             toInsert.dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["dateCreated"]);
                             if(orgInfo["organization"]["dateUpdated"].Type != JTokenType.Null)toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]);
                             toInsert.avatarId = (int)orgInfo["organization"]["id"];
-
-
                             //Org avatars 
                             TAvatar orgAvatar = new TAvatar()
                             {
@@ -139,7 +142,15 @@ namespace Pepeza.Views.Orgs
                 }
                 else
                 {
+                    
                     TxtBlockCreateOrgStatus.Text = "Please fill in all the fields";
+                    if (ComboOrgTypes.SelectedItem == null)
+                    {
+                        model.IsProgressRingVisible = false;
+                        model.CanCreateOrg = false;
+                        txtBlockSelectCategory.Visibility = Visibility.Visible;
+                    }
+                   
                 }
             }
             else
@@ -189,6 +200,19 @@ namespace Pepeza.Views.Orgs
                 txtBlockUsernameStatus.Text = CustomMessages.USERNAME_DEFAULT_ERROR_MESSAGE;
             }
             PBCheckUserName.Visibility = Visibility.Collapsed;
+        }
+
+        private void ComboOrgTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboOrgTypes.SelectedItem != null)
+            {
+                txtBlockSelectCategory.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                txtBlockSelectCategory.Visibility = Visibility.Visible;
+
+            }
         }
     }
 }

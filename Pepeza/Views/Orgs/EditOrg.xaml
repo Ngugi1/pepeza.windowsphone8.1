@@ -67,8 +67,8 @@
 
                     <StackPanel  Orientation="Vertical">
                         <TextBlock 
-                            Text="Organisation username"
-                            Style="{StaticResource txtBlockDisplay}"
+                            Text="organisation username"
+                            Style="{StaticResource BaseTextBlockStyle}"
                             Margin="16,4"
                             HorizontalAlignment="Left"/>
                         <TextBlock Name="txtBlockUsername"
@@ -77,11 +77,25 @@
                                    Margin="20,4"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource txtBlockStyleProfileOwner}" />
+                        <StackPanel>
+                            <ComboBox 
+                                SelectionChanged="ComboOrgTypes_SelectionChanged"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Margin="12,8"
+                                Name="ComboOrgTypes">
+                                <ComboBox.Header>
+                                    <TextBlock Text="select organisation cartegory"/>
+                                </ComboBox.Header>
+                            </ComboBox>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
+                
                 <TextBox Name="txtBoxOrgName"
                          Grid.Row="3"
                          Grid.ColumnSpan="2"
+                         PlaceholderText="what is the name of the org?"
                          Header="organisation name"
                          Style="{StaticResource txtBoxStyle}"
                          Text="{Binding Name,
@@ -97,6 +111,7 @@
                                                 Converter={StaticResource converter}}" />
                 <TextBox Name="txtBoxDesc"
                          Grid.Row="5"
+                         PlaceholderText="what happens in your org?"
                          Grid.ColumnSpan="2"
                          Header="description"
                          Style="{StaticResource txtBoxStyle}"
@@ -132,6 +147,7 @@
         <CommandBar>
             <AppBarButton Click="UpdateProfileClick"
                           Icon="Accept"
+                          Name="AppBtnUpdate"
                           IsCompact="True"
                           IsEnabled="{Binding CanUpdateProfile,
                                               Mode=TwoWay}"
