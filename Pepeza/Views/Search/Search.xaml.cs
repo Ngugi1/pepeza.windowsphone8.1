@@ -6,6 +6,7 @@ using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Orgs;
+using Pepeza.Views.Profile;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -102,7 +103,7 @@ namespace Pepeza.Views
             Person selected = (sender as ListView).SelectedItem as Person;
             if (selected != null)
             {
-                this.Frame.Navigate(typeof(UserOrgs), selected);
+                this.Frame.Navigate(typeof(PublicUserProfile), selected.id);
             }
             ListViewUser.SelectedItem = null;
         }

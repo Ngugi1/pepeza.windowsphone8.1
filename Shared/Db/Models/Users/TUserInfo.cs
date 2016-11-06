@@ -11,6 +11,8 @@ namespace Pepeza.Db.Models
     {
         [PrimaryKey]
         public int id { get; set; }
+        [Ignore]
+        public string linkSmall { get; set; }
         [Unique]
         public int emailId { get; set; }
         [MaxLength(20)]

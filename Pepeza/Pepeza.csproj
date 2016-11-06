@@ -173,6 +173,9 @@
     <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
       <DependentUpon>UserOrgs.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Profile\PublicUserProfile.xaml.cs">
+      <DependentUpon>PublicUserProfile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Profile\UserProfile.xaml.cs">
       <DependentUpon>UserProfile.xaml</DependentUpon>
     </Compile>
@@ -326,6 +329,10 @@
     <Page Include="Views\Orgs\UserOrgs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Profile\PublicUserProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Profile\UserProfile.xaml">
       <Generator>MSBuild:Compile</Generator>

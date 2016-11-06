@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -214,7 +215,7 @@ namespace Pepeza.Server.Requests
             }
             return responseContent;
         }
-        public async static Task<Dictionary<string, string>> getUserOrgs(int orgId)
+        public async static Task<Dictionary<string, string>> getUserOrgs(int userId)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
@@ -223,16 +224,20 @@ namespace Pepeza.Server.Requests
             {
                 try
                 {
-                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_USER_ORGS, orgId));
+                    response = await client.GetAsync(string.Format(OrgsAddresses.GET_USER_ORGS, userId));
                     if (response.IsSuccessStatusCode)
                     {
                         //Got boards for the org 
                         string x = await response.Content.ReadAsStringAsync();
                         responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
-                    else
+                    else if(response.StatusCode == HttpStatusCode.Forbidden)
                     {
                         //Nothing here
+                        responseContent.Add(Constants.PERMISSION_DENIED, Constants.UNKNOWNERROR);
+                    }
+                    else
+                    {
                         responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }

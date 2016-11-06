@@ -20,5 +20,7 @@ namespace Pepeza.Server.Utility
         public static string LOAD_NOTICES { get { return "board/{0}/notices"; } }
         public static string BOARD_ANALYTICS { get { return "analytics/board/{0}?period={1}"; } }
         public static string LOAD_BOARD_REQUESTS { get { return "board/{0}/followers/requests"; } }
+        public static string LOAD_BOARDS_USER_FOLLOWS { get { return "boards/{0}/following"; } }
+
     }
 }

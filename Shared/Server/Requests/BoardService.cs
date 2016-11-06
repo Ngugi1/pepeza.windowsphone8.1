@@ -384,5 +384,32 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
+        public async static Task<Dictionary<string, string>> getBoardsUserIsFollowing(int userId)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            if (checkInternetConnection())
+            {
+                response = await client.GetAsync(string.Format(BoardAddresses.LOAD_BOARDS_USER_FOLLOWS, userId));
+                if (response.IsSuccessStatusCode)
+                {
+                    results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    results.Add(Constants.PERMISSION_DENIED, Constants.PERMISSION_DENIED);
+                }
+                else
+                {
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+        }
     }
 }

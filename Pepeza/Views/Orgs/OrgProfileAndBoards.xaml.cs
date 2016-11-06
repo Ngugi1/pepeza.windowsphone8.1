@@ -393,6 +393,7 @@ namespace Pepeza.Views.Orgs
                     else
                     {
                         //No boards boy
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                     }
                 }
                 else
