@@ -375,7 +375,7 @@ namespace Pepeza.Views.Boards
                        {
                            noticeId = (int)obj["id"],
                            title = (string)obj["title"],
-                           content = (string)obj["trimmed_content"],
+                           content = (string)obj["content"],
                            hasAttachment = (int)obj["hasAttachment"],
                            dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
                            dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),

@@ -209,7 +209,7 @@ namespace Pepeza
         }
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            showFlyOutMenu(sender, e);
+            // showFlyOutMenu(sender, e);
         }
         private void showFlyOutMenu(object sender , HoldingRoutedEventArgs e)
         {
@@ -287,7 +287,7 @@ namespace Pepeza
         }
         private void OrgGrid_Holding(object sender, HoldingRoutedEventArgs e)
         {
-            showFlyOutMenu(sender, e);
+            //showFlyOutMenu(sender, e);
         }
 
         private void AppBtnSettings_Click(object sender, RoutedEventArgs e)

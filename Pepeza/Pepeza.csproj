@@ -173,9 +173,6 @@
     <Compile Include="Views\Orgs\UserOrgs.xaml.cs">
       <DependentUpon>UserOrgs.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\AvatarCroppingPage.xaml.cs">
-      <DependentUpon>AvatarCroppingPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Profile\UserProfile.xaml.cs">
       <DependentUpon>UserProfile.xaml</DependentUpon>
     </Compile>
@@ -198,6 +195,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\BadgeLogo.scale-240.png" />
     <Content Include="Assets\Images\attach.png" />
     <Content Include="Assets\Images\clip.png" />
     <Content Include="Assets\Images\facebook.png" />
@@ -326,10 +324,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Orgs\UserOrgs.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Profile\AvatarCroppingPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -88,15 +88,19 @@ namespace Pepeza.Views.Notices
                                 if (localFile != null)
                                 {
                                     HyperLinkOpen.Visibility = Visibility.Visible;
+                                    HLBDownloadAttachment.Visibility = Visibility.Collapsed;
                                 }
                                 else
                                 {
+                                    HyperLinkOpen.Visibility = Visibility.Collapsed;
                                     HLBDownloadAttachment.Visibility = Visibility.Visible;
                                 }
                             }
                             else
                             {
                                 HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                HyperLinkOpen.Visibility = Visibility.Collapsed;
+
                             }
                         }
                        
@@ -104,6 +108,7 @@ namespace Pepeza.Views.Notices
                     }
                     catch(Exception)
                     {
+                        HyperLinkOpen.Visibility = Visibility.Collapsed;
                         HLBDownloadAttachment.Visibility = Visibility.Visible;
                     }
                     StackPanelDownload.Visibility = Visibility.Visible;
