@@ -48,6 +48,7 @@ namespace Pepeza.Views.Profile
         CancellationTokenSource cts = null;
         CoreApplicationView view = CoreApplication.GetCurrentView();
         ProfileData data = null;
+        List<string> comboSource = new List<string>() { "private", "public" };
         public UserProfile()
         {
             this.InitializeComponent();
@@ -63,6 +64,7 @@ namespace Pepeza.Views.Profile
         {
 
             TUserInfo currentUser = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
+            ComboVisibility.ItemsSource = comboSource;
             #region
             if (e.Parameter != null)
             {
@@ -75,7 +77,8 @@ namespace Pepeza.Views.Profile
                     data = await getUserProfile(userId);
                     //Get the user avatar 
                     data.username = "@" + data.username;
-                    grid.DataContext = data;
+
+                    this.grid.DataContext = data;
                     if (userId == localUserId)
                     {
                         if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
@@ -128,7 +131,7 @@ namespace Pepeza.Views.Profile
         {
             string lname = txtBoxLastName.Text.Trim();
             string fname = txtBoxFirstName.Text.Trim();
-            if (appBarBtnEditDetails.Label.Equals("update"))
+            if (appBarBtnEditDetails.Label.Equals("update") && !string.IsNullOrEmpty(ComboVisibility.SelectedItem.ToString()))
             {
                 if (txtBoxFirstName.Text.Any(char.IsLetter))
                 {
@@ -137,7 +140,7 @@ namespace Pepeza.Views.Profile
                     Dictionary<string, string> results = await
                         RequestUser.updateUserProfile(new Dictionary<string, string>() 
                         { {"firstName" , fname}, 
-                {"lastName", lname}});
+                {"lastName", lname} , {"visibility" , ComboVisibility.SelectedItem.ToString()}});
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong
@@ -147,8 +150,10 @@ namespace Pepeza.Views.Profile
                     {
                         //Get the object with given user ID
                         TUserInfo info = await UserHelper.getUserInfo((int)(Settings.getValue(Constants.USERID)));
+                        txtBlockVisibility.Text = ComboVisibility.SelectedItem.ToString();
                         info.firstName = fname;
                         info.lastName = lname;
+                        info.visibility = ComboVisibility.SelectedItem.ToString();
                         await UserHelper.update(info);
                         //Hide textboxes and update the textblock
                         updateUI();
@@ -159,6 +164,7 @@ namespace Pepeza.Views.Profile
             else if (appBarBtnEditDetails.Label.Equals("edit"))
             {
                 stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+
                 setToUpdate();
               
             }
@@ -225,6 +231,7 @@ namespace Pepeza.Views.Profile
                     toReturn = new ProfileData()
                     {
                         email = emailInfo.email,
+                        visibility = info.visibility,
                         fname = info.firstName,
                         lname = info.lastName,
                         profilePicPath = userAvatar.linkNormal,
@@ -238,6 +245,7 @@ namespace Pepeza.Views.Profile
         }
         private class ProfileData : Bindable
         {
+            public string visibility { get; set; }
             public int avatarId { get; set; }
             private string _email;
 

@@ -136,6 +136,7 @@ namespace Pepeza.Server.Requests
                         info.username = (string)user["username"];
                         info.firstName = (string)user["firstName"];
                         info.lastName = (string)user["lastName"];
+                        info.visibility = (string)user["visibility"];
                         info.dateCreated = DateTimeFormatter.format((long)user["dateCreated"]);
                         if(user["dateUpdated"].Type != JTokenType.Null)info.dateUpdated = DateTimeFormatter.format((long)user["dateUpdated"]);
                       

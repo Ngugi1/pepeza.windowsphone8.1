@@ -75,6 +75,11 @@
                                Margin="2"
                                Name="txtBlockFullName"
                                Visibility="Visible" />
+                    <TextBlock Style="{StaticResource txtBlockDisplay}"
+                               HorizontalAlignment="Center"
+                               Text="{Binding visibility}"
+                               Name="txtBlockVisibility"
+                               />
                     <StackPanel Name="StackPanelDetailsDisplay">
                         <StackPanel Name="stackPanelDisplayUsername"
                                     Margin="24,4"
@@ -112,6 +117,15 @@
                                        Style="{StaticResource txtBlockListViewDesc}"
                                        Text="{Binding email}" />
                         </StackPanel>
+                        <StackPanel Name="StackPanelUpdatingProfile"
+                            Margin="4"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed">
+                            <ProgressBar Margin="12,8" />
+                            <TextBlock HorizontalAlignment="Center"
+                               Style="{StaticResource txtBlockWait}"
+                               Text="updating profile ..." />
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Name="stackPanelAddFirstLastName"
@@ -119,9 +133,22 @@
                                             ElementName=relativePanel}"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
+                            Visibility="Visible"
                             Orientation="Vertical">
                     <StackPanel Orientation="Vertical" 
                                 Visibility="Visible">
+                        <ComboBox Margin="12,8" 
+                                  Name="ComboVisibility"
+                                  Header="profile visibility"
+                                  SelectedItem="{Binding visibility}"
+                                  BorderBrush="Transparent">
+                            <ComboBoxItem>
+                                public
+                            </ComboBoxItem>
+                            <ComboBoxItem>
+                                private
+                            </ComboBoxItem>
+                        </ComboBox>
                         <TextBox Name="txtBoxFirstName"
                                  Header="First Name"
                                  Style="{StaticResource txtBoxStyle}"
@@ -136,16 +163,6 @@
                                  PlaceholderText="Lastname"
                                  Text="{Binding lname}" />
                     </StackPanel>
-                </StackPanel>
-                <StackPanel Name="StackPanelUpdatingProfile"
-                            Grid.Row="1"
-                            Margin="4"
-                            VerticalAlignment="Center"
-                            Visibility="Collapsed">
-                    <ProgressBar Margin="12,8" />
-                    <TextBlock HorizontalAlignment="Center"
-                               Style="{StaticResource txtBlockWait}"
-                               Text="updating profile ..." />
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
