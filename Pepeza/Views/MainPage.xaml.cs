@@ -44,7 +44,7 @@ namespace Pepeza
         public static ObservableCollection<TOrgInfo> orgs { get; set; }
         public static ObservableCollection<TBoard> following{ get; set; }
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
-        Boolean isSelected = false;
+        bool isSelected = false;
         public MainPage()
         {
             this.InitializeComponent();
@@ -61,9 +61,9 @@ namespace Pepeza
             //Clear the backstack 
           //  ActionCenterHelper.updateActionCenter(null);
             this.Frame.BackStack.Clear();
-            //Load data 
+           //Load data 
             isSelected = false;
-            //Load notices 
+           //Load notices 
             loadNotices();
             //Load boards
             await loadBoards();
@@ -74,7 +74,10 @@ namespace Pepeza
             isSelected = true;
             this.Frame.BackStack.Clear();
             
+            
         }
+
+        
         private async void loadNotices()
         {
             try
@@ -168,26 +171,8 @@ namespace Pepeza
             {
                 AppBtnAdd.Visibility = Visibility.Collapsed;
             }
-            switch (selectedIndex)
-            {
-                case 0:
-
-                    break;
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
-                case 3:
-                    //Here load all the boards which the user is following 
-                    //Hide the add button 
-                    break;
-                default:
-
-                    break;
-            }
-        }
+      }
+        
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   
             //Following is just a board , push the user to board profile
@@ -222,17 +207,17 @@ namespace Pepeza
             var datacontext = getFrameworkElement(e).DataContext as TBoard;
             Dictionary<string, string> deleteResults = await BoardService.deleteBoard(datacontext.id);
             Dictionary<string,string> isSuccess = await BoardViewHelper.isBoardDeleted(deleteResults , datacontext);
-            if(isSuccess.ContainsKey(Constants.DELETED))
+            if(isSuccess.ContainsKey(Pepeza.Utitlity.Constants.DELETED))
             {
                 //show toast with given message 
                 boards.Remove(datacontext);
                 ListViewBoards.ItemsSource = boards;
-                ToastSuccessFailure.Message = isSuccess[Constants.DELETED];
+                ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
             }
             else
             {
                 //toast 
-                ToastSuccessFailure.Message = isSuccess[Constants.NOT_DELETED];
+                ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.NOT_DELETED];
             }
         
         }
@@ -253,7 +238,7 @@ namespace Pepeza
             }
             else
             {
-                ToastSuccessFailure.Message = Constants.PERMISSION_DENIED;
+                ToastSuccessFailure.Message = Pepeza.Utitlity.Constants.PERMISSION_DENIED;
             }
         }
         private async void MenuFlyoutDeleteOrg_Click(object sender, RoutedEventArgs e)
@@ -263,22 +248,22 @@ namespace Pepeza
             {
                 Dictionary<string, string> delResults = await OrgsService.deleteOrg(org.id);
                 Dictionary<string, string> isSuccess = await OrgViewHelper.isOrgDeleted(org, delResults);
-                if (isSuccess.ContainsKey(Constants.DELETED))
+                if (isSuccess.ContainsKey(Pepeza.Utitlity.Constants.DELETED))
                 {
                     //Toast success
-                    ToastSuccessFailure.Message = isSuccess[Constants.DELETED];
+                    ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
                     orgs.Remove(org);
                     ListViewOrgs.ItemsSource = orgs;
                 }
                 else
                 {
                     //toast fail
-                    ToastSuccessFailure.Message = isSuccess[Constants.NOT_DELETED];
+                    ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.NOT_DELETED];
                 }
             }
             else
             {
-                ToastSuccessFailure.Message = Constants.NOT_DELETED;
+                ToastSuccessFailure.Message = Pepeza.Utitlity.Constants.NOT_DELETED;
             }
         }
         private FrameworkElement getFrameworkElement(RoutedEventArgs e )
@@ -314,11 +299,8 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
         }
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(NoticeAnalytics), );
-           
-        }
+       
+
     }
     public class IntToAttachment : IValueConverter
     {

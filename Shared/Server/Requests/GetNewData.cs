@@ -38,6 +38,7 @@ namespace Pepeza.Server.Requests
 {
     public class GetNewData : BaseRequest
     {
+        ObservableCollection<TNotification> notifications = new ObservableCollection<TNotification>();
         public async static Task<Dictionary<string, string>> getNewData()
         {
             Dictionary<string, string> results = new Dictionary<string, string>();
@@ -439,20 +440,21 @@ namespace Pepeza.Server.Requests
                             await TNotificationHelper.add(notification);
                         }
                         //TODO:: Add to notifications or action center
+                        
                         var toast = ActionCenterHelper.getToast(notification.title, notification.content);
                         ToastNotificationManager.CreateToastNotifier().Show(toast);
                     }
                 }
                 long lastUpdate = (long)content["last_updated"];
                 Settings.add(Constants.LAST_UPDATED, lastUpdate);
-                Settings.add(Constants.DATA_PUSHED, 1);
+                Settings.add(Constants.DATA_PUSHED, true);
                 #endregion
                 return true;
             }
             catch(Exception ex)
             {
                 string x = ex.ToString();
-                Settings.add(Constants.DATA_PUSHED, 0);
+                Settings.add(Constants.DATA_PUSHED, false);
                 return false;
             }
         }

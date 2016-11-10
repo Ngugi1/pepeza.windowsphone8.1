@@ -404,7 +404,7 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         string data = await response.Content.ReadAsStringAsync();
-                        results.Add(Constants.SUCCESS, data);
+                        results.Add(Constants.APITOKEN, data);
                     }
                     else if(response.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -419,6 +419,7 @@ namespace Pepeza.Server.Requests
                     }
                     else
                     {
+                        var error = await response.Content.ReadAsStringAsync();
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
@@ -432,6 +433,39 @@ namespace Pepeza.Server.Requests
                 results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
             return results;
+        }
+        public static async Task<Dictionary<string, string>> submitUserName(string username)
+        {
+            HttpClient client = getHttpClient(true);
+            HttpResponseMessage response = null;
+            Dictionary<string,string> result = new Dictionary<string,string>();
+            if(checkInternetConnection())
+            {
+                try
+                {
+                    response = await client.PutAsJsonAsync(UserAddresses.SUBMIT_USERNAME, new Dictionary<string, string>() { {"username" , username}});
+                    if(response.IsSuccessStatusCode)
+                    {
+                         JObject json1 = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        result.Add(Constants.SUCCESS , (string)json1["message"]);
+                    }
+                    else if(response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        //Process the codes
+                        JObject json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        result.Add(Constants.ERROR , (string)json["message"]);
+                    }
+                }
+                catch
+                {
+
+                    result.Add(Constants.ERROR , Constants.UNKNOWNERROR);
+                }
+            }else
+            {
+                result.Add(Constants.ERROR , Constants.NO_INTERNET_CONNECTION);
+            }
+            return result;
         }
     }
 

@@ -1,0 +1,66 @@
+﻿<Page
+    x:Class="Pepeza.Views.Signup.AddUsername"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza.Views.Signup"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    RequestedTheme="Light"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <Grid>
+        <StackPanel VerticalAlignment="Top" Margin="12,32">
+        <TextBlock Text="You are almost done! Provide a username..."
+                   Style="{ThemeResource TitleTextBlockStyle}"
+                    TextAlignment="Center"
+                   Foreground="Black"
+                   TextWrapping="WrapWholeWords"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   
+                   />
+        <TextBox  Style="{StaticResource txtBoxStyle}"
+                  Header="username"
+                  TextChanged="txtBoxUsername_TextChanged"
+                  Name="txtBoxUsername"
+                  PlaceholderText="username uniquely identifies your account"
+                  />
+            <StackPanel 
+                Visibility="Collapsed"
+                Name="StackPanelCheckingUsername">
+                <ProgressBar IsIndeterminate="True" Margin="12,4"/>
+                <TextBlock Text="checking username availability ..." Style="{StaticResource txtBlockDisplay}"
+                           HorizontalAlignment="Center"
+                           />
+            </StackPanel>
+            <TextBlock Style="{StaticResource txtBlockError}"
+                       Name="txtBlockIsUsernameValid"
+                       />
+            <TextBlock Text="" 
+                       Name="IsUserNameAvailable" 
+                       Style="{StaticResource txtBlockDisplay}"/>
+            <StackPanel Name="StackPanelSubmiting" Visibility="Collapsed">
+                <ProgressBar IsIndeterminate="True" Margin="12,4"/>
+                <TextBlock Text="Just a moment ... " Style="{StaticResource txtBlockWait}"
+                           HorizontalAlignment="Center"
+                           />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" 
+                          Name="AppBarSubmit"
+                          Click="AppBarSubmit_Click"
+                          Label="submit"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+   
+</Page>

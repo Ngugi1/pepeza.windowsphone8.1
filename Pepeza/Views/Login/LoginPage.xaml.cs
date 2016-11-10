@@ -32,6 +32,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Activation;
 using Pepeza.Common;
 using Coding4Fun.Toolkit.Controls;
+using Pepeza.Views.Signup;
 
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
@@ -53,29 +54,36 @@ namespace Pepeza.Views
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override  void OnNavigatedTo(NavigationEventArgs e)
+        protected async override  void OnNavigatedTo(NavigationEventArgs e)
         {
 
             this.Frame.BackStack.Clear();
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (settings.Values.ContainsKey(Constants.APITOKEN))
             {
-                this.Frame.Navigate(typeof(MainPage));
+                if (settings.Values.ContainsKey(Constants.ISUSERNAMESET))
+                {
+                    bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
+                    if (isusernameSet)
+                    {
+                        this.Frame.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        this.Frame.Navigate(typeof(AddUsername));
+                    }
+                }
+                
             }
             if (!settings.Values.ContainsKey(DbConstants.DB_CREATED))
             {
-                DbHelper.createDB();
+                await DbHelper.createDB();
             }
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SignUpPage));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.ToastFieldsIncomplete.Message = "This is a  new message";
         }
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -159,12 +167,27 @@ namespace Pepeza.Views
                 //Get the access token and save it 
                 if (args.ContinuationData!=null && args.ContinuationData.ContainsKey("google"))
                 {
-                    token = await GoogleService.GetAccessToken(args.WebAuthenticationResult);
-                    providerName = GoogleService.Provider;
+                    if (args.WebAuthenticationResult != null)
+                    {
+                        token = await GoogleService.GetAccessToken(args.WebAuthenticationResult);
+                        providerName = GoogleService.Provider;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    
                 } else if (args.ContinuationData == null)
                 {
                    providerName = FacebookService.provider;
-                   token =  await FacebookService.GetAccessTokenFromWebResults(args.WebAuthenticationResult);
+                   if (args.WebAuthenticationResult != null)
+                   {
+                       token = await FacebookService.GetAccessTokenFromWebResults(args.WebAuthenticationResult);
+                   }
+                   else
+                   {   return;
+                   }
+                   
                 }
                 //Now post the token to the server
                 Dictionary<string, string> results = new Dictionary<string, string>();
@@ -176,12 +199,10 @@ namespace Pepeza.Views
                         {
                             {"providerName", providerName }, {"accessToken", token} , {"pushId", pushId}
                         });
-                            if (results.ContainsKey(Constants.SUCCESS))
+                            if (results.ContainsKey(Constants.APITOKEN))
                             {
                             //We posted successfully 
-                                txtBlockError.Text = results[Constants.SUCCESS];
-                                txtBlockError.Visibility = Visibility.Visible;
-                               // this.Frame.Navigate(typeof(SetUpPage), results[Constants.SUCCESS]);
+                                this.Frame.Navigate(typeof(SetUpPage), results);
                             }
                             else
                             {

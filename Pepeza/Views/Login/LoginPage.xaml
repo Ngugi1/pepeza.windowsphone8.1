@@ -106,7 +106,8 @@
                     <Button 
                         Click="LoginWithGoogle"
                         HorizontalAlignment="Center"
-                    BorderBrush="Transparent"  
+                    BorderBrush="Transparent" 
+                        Visibility="Collapsed"
                     BorderThickness="2"
                         Width="{Binding ActualWidth, ElementName=btnLoginWithFacebook}">
                         <StackPanel Orientation="Horizontal"

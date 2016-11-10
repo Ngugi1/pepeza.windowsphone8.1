@@ -64,8 +64,7 @@ namespace Pepeza
 #endif
             this.Suspending += this.OnSuspending;
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
-            this.RequestedTheme = ApplicationTheme.Light;
-            DbHelper.createDB(); 
+            this.RequestedTheme = ApplicationTheme.Light; 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;   
             this.Resuming += App_Resuming;  
         }
@@ -77,11 +76,19 @@ namespace Pepeza
             if (CheckInternet())
             {
                 //1. Get new data if it failed 
-                bool isGetNewDataSuccessful = (bool)Settings.getValue(Constants.DATA_PUSHED);
+                if(Settings.getValue(Constants.DATA_PUSHED)!=null)
+                {
+                    bool isGetNewDataSuccessful = (bool)Settings.getValue(Constants.DATA_PUSHED);
                 if (!isGetNewDataSuccessful)
                 {
                     await SyncPushChanges.initUpdate();
                 }
+                }
+                else
+                {
+                    return;
+                }
+                
                 //Push  all the unsubmited reads
                 await NoticeService.submitReadNoticeItems();   
             }
@@ -192,11 +199,12 @@ namespace Pepeza
         /// <param name="e">Details about the launch request and process.</param>
         protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
-       Frame rootFrame = Window.Current.Content as Frame;
+            await DbHelper.createDB();
+            Frame rootFrame = Window.Current.Content as Frame;
             if (Settings.getValue(Constants.DATA_PUSHED) != null)
             {
-                int updated = (int)Settings.getValue(Constants.DATA_PUSHED);
-                if (updated == 0)
+                bool updated = (bool)Settings.getValue(Constants.DATA_PUSHED);
+                if (updated)
                 {
                     await GetNewData.getNewData();
                 }

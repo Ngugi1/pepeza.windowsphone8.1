@@ -11,6 +11,7 @@ using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Signup;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.DbHelpers.Orgs;
@@ -29,6 +30,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -44,6 +46,7 @@ namespace Pepeza.Views.Account
     /// </summary>
     public sealed partial class SetUpPage : Page
     {
+        bool isUserNameNull = false;
         public SetUpPage()
         {
             this.InitializeComponent();
@@ -79,10 +82,10 @@ namespace Pepeza.Views.Account
             userInfo.firstName = (string)profileInfo["firstName"];
             userInfo.lastName = (string)profileInfo["lastName"];
             userInfo.username = (string)profileInfo["username"];
+            if (userInfo.username != null) { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); } else { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); }
             userInfo.avatarId = (int)avatar["id"];
             if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]);
             userInfo.dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]);
-            
             //Get email iformation 
             TEmail emailInfo = new TEmail();
             emailInfo.emailID = (int)profileInfo["email"]["id"];
@@ -91,7 +94,6 @@ namespace Pepeza.Views.Account
             if(profileInfo["dateVerified"]!=null) DateTimeFormatter.format((long)(profileInfo["email"]["dateVerified"]));
             emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]));
             if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]));
-
             //get avatars 
             TAvatar userAvatar = new TAvatar();
             userAvatar.id = (int)avatar["id"];
@@ -140,7 +142,11 @@ namespace Pepeza.Views.Account
 
                     if (await GetNewData.disectUserDetails(userdata, false))
                     {
-                        this.Frame.Navigate(typeof(MainPage));
+                        if (!isUserNameNull)
+                        {
+                            this.Frame.Navigate(typeof(MainPage));
+                        }
+                       
                     }
                     else
                     {
@@ -182,7 +188,16 @@ namespace Pepeza.Views.Account
 
                 if (await GetNewData.disectUserDetails(userdata, false))
                 {
-                    this.Frame.Navigate(typeof(MainPage));
+                    if (isUserNameNull)
+                    {
+                        //Go to the main page
+                        this.Frame.Navigate(typeof(MainPage));
+                    }
+                    else
+                    {
+                        //Tell user to set up their username 
+                        this.Frame.Navigate(typeof(AddUsername));
+                    }
                 }
                 else
                 {

@@ -78,7 +78,7 @@ namespace Pepeza.Views.Profile
                                 item.Id = (int)org["id"];
                                 item.Name = (string)org["name"];
                                 item.Username = (string)org["username"];
-                                item.linkSmall = (string)org["linkSmall"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)org["linkSmall"]; 
+                                item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)org["linkNormal"]; 
                                 item.Description = (string)org["description"];
                                 UserOrganisations.Add(item);
                             }

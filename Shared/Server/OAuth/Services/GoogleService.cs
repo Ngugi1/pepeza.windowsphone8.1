@@ -35,17 +35,17 @@ namespace Shared.Server.OAuth.Services
     /// <returns></returns>
     private static string Getcode(string webAuthResultResponseData)
         {
-           
-            if (webAuthResultResponseData != null)
+
+            if (string.IsNullOrEmpty(webAuthResultResponseData)) return null;
+            var parts = webAuthResultResponseData.Split('&')[0].Split('=');
+            for (int i = 0; i < parts.Length; ++i)
             {
-                var split = webAuthResultResponseData.Split('&');
-                var split2 = split[0].Split('=');
-                return split2[1];
+                if (parts[i] == "Success code")
+                {
+                    return parts[i + 1];
+                }
             }
-            else
-            {
-                return null;
-            }
+            return null;
             
         }
         public static async Task<string> GetAccessToken(WebAuthenticationResult result)
@@ -86,35 +86,33 @@ namespace Shared.Server.OAuth.Services
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
             //Access URL
             Dictionary<string, string> results = new Dictionary<string, string>();
-            var client = new HttpClient();
-            HttpResponseMessage responseMessage = null;
             //check for connectivity 
             if (connectionProfile!=null&& (connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess))
             {
                 try
                 {
-                    responseMessage = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
-                    {
-                        new KeyValuePair<string, string>("code", code),
-                        new KeyValuePair<string, string>("client_id",AuthConstants.GoogleAppId),
-                        new KeyValuePair<string, string>("client_secret",AuthConstants.GoogleAppSecret),
-                        new KeyValuePair<string, string>("grant_type","authorization_code"),
-                        new KeyValuePair<string, string>("redirect_uri","urn:ietf:wg:oauth:2.0:oob"),
-                    }));
+                        var client = new HttpClient();
+                        var auth = await client.PostAsync("https://accounts.google.com/o/oauth2/token", new FormUrlEncodedContent(new[]
+                        {
+                            new KeyValuePair<string, string>("code", code),
+                            new KeyValuePair<string, string>("client_id",AuthConstants.GoogleAppId), 
+                            new KeyValuePair<string, string>("client_secret",AuthConstants.GoogleAppSecret), 
+                            new KeyValuePair<string, string>("grant_type","authorization_code"),
+                            new KeyValuePair<string, string>("redirect_uri","urn:ietf:wg:oauth:2.0:oob"),  
+                        }));
 
-                    if (responseMessage.IsSuccessStatusCode)
-                    {
-                        var data = await responseMessage.Content.ReadAsStringAsync();
-                        JToken jsonToken = JToken.Parse(data.ToString());
-                        string token = (string)jsonToken.SelectToken("access_token");
-                        results.Add(Constants.SUCCESS, token);
-                    }
-                    else
-                    {
-                        var data = await responseMessage.Content.ReadAsStringAsync();
-                        results.Add(Constants.ERROR, data);
-                    }
-
+                        if (auth.IsSuccessStatusCode)
+                        {
+                            var data = await auth.Content.ReadAsStringAsync();
+                            var j = JToken.Parse(data);
+                            var token = j.SelectToken("access_token");
+                            results.Add(Constants.SUCCESS, token.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        }
+                       
                 }
                 catch
                 {

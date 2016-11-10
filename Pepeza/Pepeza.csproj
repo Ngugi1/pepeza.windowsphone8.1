@@ -19,7 +19,7 @@
     <NuGetPackageImportStamp>b08e0db7</NuGetPackageImportStamp>
     <AppxBundle>Always</AppxBundle>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -182,6 +182,9 @@
     <Compile Include="Views\Search\Search.xaml.cs">
       <DependentUpon>Search.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Signup\AddUsername.xaml.cs">
+      <DependentUpon>AddUsername.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Signup\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
     </Compile>
@@ -342,6 +345,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Signup\AddUsername.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Signup\SignUpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -380,9 +387,8 @@
     <Reference Include="Microsoft.HockeyApp.Kit">
       <HintPath>..\packages\HockeySDK.WINRT.4.1.5\lib\portable-wpa81\Microsoft.HockeyApp.Kit.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="NotificationsExtensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c936aba0ac6438e9, processorArchitecture=MSIL">
       <HintPath>..\packages\NotificationsExtensions.Portable.1.0.7\lib\dotnet\NotificationsExtensions.dll</HintPath>
@@ -406,9 +412,6 @@
     </Reference>
     <Reference Include="Toastinet">
       <HintPath>..\packages\Toastinet.2.8\lib\wpa81\Toastinet.dll</HintPath>
-    </Reference>
-    <Reference Include="WriteableBitmapEx.WinRT">
-      <HintPath>..\packages\WriteableBitmapEx.1.5.0.0\lib\wpa81\WriteableBitmapEx.WinRT.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

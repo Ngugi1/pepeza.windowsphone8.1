@@ -31,6 +31,7 @@ namespace Shared.Push
                 if (userdata.ContainsKey(Constants.SUCCESS))
                 {
                  await GetNewData.disectUserDetails(userdata , inbackground);
+
                 }
                    
             }
