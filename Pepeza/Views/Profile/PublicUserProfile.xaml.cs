@@ -78,7 +78,7 @@ namespace Pepeza.Views.Profile
                                 item.Id = (int)org["id"];
                                 item.Name = (string)org["name"];
                                 item.Username = (string)org["username"];
-                                item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)org["linkNormal"]; 
+                                item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)org["linkSmall"]; 
                                 item.Description = (string)org["description"];
                                 UserOrganisations.Add(item);
                             }
@@ -117,7 +117,7 @@ namespace Pepeza.Views.Profile
                     TUserInfo userinfo = new TUserInfo()
                     {
                          id = (int)json["id"],
-                         linkSmall = (string)json["linkSmall"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)json["linkSmall"],
+                         linkSmall = (string)json["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)json["linkNormal"],
                          username = (string)json["username"],
                          firstName = (string)json["firstName"] == null ? "N/A" : (string)json["firstName"],
                          lastName = (string)json["lastName"] == null ? "N/A" : (string)json["lastName"]

@@ -10,7 +10,7 @@ namespace Pepeza.Models.Search_Models
     {
         public int avatarId { get; set; }
         private int _id;
-
+        public string linkSmall { get; set; }
         public int Id
         {
             get { return _id; }
@@ -60,6 +60,6 @@ namespace Pepeza.Models.Search_Models
         public DateTime  dateUpdated { get; set; }
         public string timezone_updated { get; set; }
         public string timezone_type_updated { get; set; }
-        public string linkSmall { get; set; }
+        public string linkNormal{ get; set; }
     }
 }

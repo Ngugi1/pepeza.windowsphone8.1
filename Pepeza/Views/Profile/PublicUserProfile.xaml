@@ -34,14 +34,13 @@
                 </PivotItem.Header>
                 <StackPanel Margin="19.5,4">
                     <FFImage:FFImage 
-                        Source="{Binding linkSmall}"
+                        Source="{Binding linkSmall , Mode=TwoWay}"
                         LoadingPlaceholder="/Assets/Images/placeholder_avatar.png"
-                         ErrorPlaceholder="/Assets/Images/placeholder_avatar.png"
-                         Width="200"
-                         Stretch="UniformToFill"
-                         HorizontalAlignment="Left"
-                          Height="200"
-                   
+                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.png"
+                        Width="250"
+                        Stretch="UniformToFill"
+                        HorizontalAlignment="Left"
+                        Height="250"
                            />
                     <Grid>
                     <StackPanel VerticalAlignment="Center"
