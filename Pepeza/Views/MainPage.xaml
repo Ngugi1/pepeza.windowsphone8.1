@@ -1,4 +1,4 @@
-﻿<Page x:Class="Pepeza.MainPage"
+﻿<Page xmlns:WindowsPhone81="using:Microsoft.AdMediator.WindowsPhone81"  xmlns:UI="using:Microsoft.Advertising.Mobile.UI"  x:Class="Pepeza.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Jumper="using:QKit"
@@ -37,6 +37,7 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                 </PivotItem.Header>
                 <Grid>
+                   
                     <StackPanel 
                         Name="EmptyNoticesPlaceHolder"
                         Visibility="Collapsed"
@@ -50,18 +51,18 @@
                         <TextBlock Text="New notices will appear here"
                                    HorizontalAlignment="Center"
                                    TextLineBounds="Full"
-                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
                     <ListView Margin="19.5,0,8,0"
-                          SelectionChanged="ListViewNotices_SelectionChanged"
-                          Name="ListViewNotices">
+                              SelectionChanged="ListViewNotices_SelectionChanged"
+                              Name="ListViewNotices">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,4" 
-                                  Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
+                                      Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -73,33 +74,46 @@
 
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding title , Mode=TwoWay}" 
-                                        Foreground="Black"
-                                        Margin="0"
-                                        VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                               Foreground="Black"
+                                               Margin="0"
+                                               VerticalAlignment="Bottom"
+                                               Style="{StaticResource txtBlockListViewItemHeader}"/>
                                     <TextBlock  
                                         Grid.Row="1"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
                                         Text="{Binding board , Mode=TwoWay}"/>
                                     <TextBlock Grid.Row="2"
-                       Margin="0"
-                       Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
-                       Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
-                                       FontSize="{StaticResource TextStyleMediumFontSize}"
-                                       Text="{Binding content , Mode=TwoWay}"/>
+                                               Margin="0"
+                                               Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                                               Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
+                                               FontSize="{StaticResource TextStyleMediumFontSize}"
+                                               Text="{Binding content , Mode=TwoWay}"/>
                                     <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
-                                    HorizontalAlignment="Left" 
-                                    VerticalAlignment="Bottom"
-                                     Grid.Column="1" />
+                                               HorizontalAlignment="Left" 
+                                               VerticalAlignment="Bottom"
+                                               Grid.Column="1" />
                                     <SymbolIcon Symbol="Attach" 
-                                        HorizontalAlignment="Right"
-                                        Grid.RowSpan="2"
-                                        Visibility="{Binding hasAttachment , Converter={StaticResource Converter}}"
-                                        Grid.Row="1" Grid.Column="1"/>
+                                                HorizontalAlignment="Right"
+                                                Grid.RowSpan="2"
+                                                Visibility="{Binding hasAttachment , Converter={StaticResource Converter}}"
+                                                Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        
+
                     </ListView>
+                    <WindowsPhone81:AdMediatorControl
+                                Id="NoticeAdId" 
+                                   Height="50"
+                                   Width="Auto"
+                                   Background="Transparent"
+                                   Margin="12,4"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="1"
+                                   VerticalAlignment="Bottom"
+                                   AdMediatorError="AdMediatorControl_AdMediatorError"
+                                   Name="NoticesTabAd"/>
                 </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -119,14 +133,14 @@
 
                         <Viewbox Width="100" Height="100">
                             <SymbolIcon  Symbol="OtherUser"
-                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
                                
                                          />
                         </Viewbox>
                         <TextBlock Text="All boards will appear here"
                                    TextLineBounds="Full"
                                    HorizontalAlignment="Center"
-                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
@@ -135,13 +149,13 @@
                         Grid.Row="1"
                         Name="QJumpList">
                         <ListView Name="ListViewBoards"
-                              SelectionChanged="ListViewBoards_SelectionChanged">
+                                  SelectionChanged="ListViewBoards_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid 
-              Height="70"
-              Holding="Grid_Holding"
-              Style="{StaticResource GridListViewItemTemplate}">
+                                        Height="70"
+                                        Holding="Grid_Holding"
+                                        Style="{StaticResource GridListViewItemTemplate}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -153,40 +167,55 @@
                                         <FlyoutBase.AttachedFlyout>
                                             <MenuFlyout Placement="Right">
                                                 <MenuFlyoutItem Name="MenuFlyOutEdit"
-                                    Click="MenuFlyOutEditBoard_Tapped"
+                                                                Click="MenuFlyOutEditBoard_Tapped"
                                                
-                                    Text="edit" />
+                                                                Text="edit" />
                                                 <MenuFlyoutItem 
-                                                Name="MenuFlyoutDelete"
-                                    Click="MenuFlyoutItemBoard_Delete"
-                                    Text="delete" />
+                                                    Name="MenuFlyoutDelete"
+                                                    Click="MenuFlyoutItemBoard_Delete"
+                                                    Text="delete" />
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
                                         <FFImage:FFImage
-                                        Grid.RowSpan="2"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        Margin="8,12,0,28"
-                                        Height="50"
-                                        Width="50"
-                                        Source="{Binding linkSmall}"
-                                        >
+                                            Grid.RowSpan="2"
+                                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            Margin="8,12,0,28"
+                                            Height="50"
+                                            Width="50"
+                                            Source="{Binding linkSmall}"
+                                            >
                                         </FFImage:FFImage>
                                         <TextBlock Grid.Row="0"
-                       Grid.Column="1"
-                       Margin="8,10,8,6"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding name}" />
+                                                   Grid.Column="1"
+                                                   Margin="8,10,8,6"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"
+                                                   Text="{Binding name}" />
                                         <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="8,0,14,0"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding desc}" />
+                                                   Grid.Column="1"
+                                                   Margin="8,0,14,0"
+                                                   Style="{StaticResource txtBlockListViewDesc}"
+                                                   Text="{Binding desc}" />
+                                        
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
+                           
                         </ListView>
+                        
                     </Jumper:AlphaJumpList>
+
+                    <WindowsPhone81:AdMediatorControl
+                                Id="BoardAdId" 
+                                   Height="50"
+                                   Width="Auto"
+                                   Background="Transparent"
+                                   Margin="12,4"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="1"
+                                   VerticalAlignment="Bottom"
+                                   AdMediatorError="AdMediatorControl_AdMediatorError"
+                                   Name="BoardsTabAd"/>
                 </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -200,26 +229,26 @@
                         VerticalAlignment="Center">
                         <Viewbox Width="100" Height="100">
                             <SymbolIcon  Symbol="List"
-                                           Foreground="{ThemeResource PhoneAccentBrush}"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
                                          />
                         </Viewbox>
                         <TextBlock Text="All organisations you belong to will appear here"
                                    TextLineBounds="Full"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
-                                  Style="{StaticResource TitleTextBlockStyle}"
+                                   Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
                     <Jumper:AlphaJumpList Name="AlphaListOrgs">
                         <ListView Name="ListViewOrgs"
-                              SelectionChanged="ListViewOrgs_SelectionChanged">
+                                  SelectionChanged="ListViewOrgs_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Name="OrgGrid"
-              Holding="OrgGrid_Holding"
-              Style="{StaticResource GridListViewItemTemplate}">
+                                          Holding="OrgGrid_Holding"
+                                          Style="{StaticResource GridListViewItemTemplate}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
@@ -231,39 +260,50 @@
                                         <FlyoutBase.AttachedFlyout>
                                             <MenuFlyout>
                                                 <MenuFlyoutItem 
-                                                 Name="MenuFlyoutEdit"
-                                    Click="MenuFlyoutEditOrg_Click"
-                                    Text="edit" />
+                                                    Name="MenuFlyoutEdit"
+                                                    Click="MenuFlyoutEditOrg_Click"
+                                                    Text="edit" />
                                                 <MenuFlyoutItem 
-                                                 Name="MenuFlyoutDelete"
-                                    Click="MenuFlyoutDeleteOrg_Click"
-                                    Text="delete" />
+                                                    Name="MenuFlyoutDelete"
+                                                    Click="MenuFlyoutDeleteOrg_Click"
+                                                    Text="delete" />
                                             </MenuFlyout>
                                         </FlyoutBase.AttachedFlyout>
                                         <FFImage:FFImage
-                                        Height="50"
-                                        Width="50"
-                                        Grid.RowSpan="2"
-                                         ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png" 
-                                        Margin="0,8,0,0"
-                                        Source="{Binding linkSmall}">
+                                            Height="50"
+                                            Width="50"
+                                            Grid.RowSpan="2"
+                                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png" 
+                                            Margin="0,8,0,0"
+                                            Source="{Binding linkSmall}">
                                         </FFImage:FFImage>
                                         <TextBlock Grid.Row="0"
-                       Grid.Column="1"
-                       Margin="14,0,0,0"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding name}" />
+                                                   Grid.Column="1"
+                                                   Margin="14,0,0,0"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"
+                                                   Text="{Binding name}" />
                                         <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="14,4,0,0"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding description}" />
+                                                   Grid.Column="1"
+                                                   Margin="14,4,0,0"
+                                                   Style="{StaticResource txtBlockListViewDesc}"
+                                                   Text="{Binding description}" />
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
                     </Jumper:AlphaJumpList>
+                    <WindowsPhone81:AdMediatorControl
+                                Id="OrgAdId" 
+                                   Height="50"
+                                   Width="Auto"
+                                   Background="Transparent"
+                                   Margin="12,4"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="1"
+                                   VerticalAlignment="Bottom"
+                                   AdMediatorError="AdMediatorControl_AdMediatorError"
+                                   Name="OrgTabAd"/>
                 </Grid>
             </PivotItem>
             <!--<PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -271,35 +311,38 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="following" />
 
                 </PivotItem.Header>
-                -->
-            <!--  Alpha jumplist for Following Pivot  -->
-            <!--
-                <Grid>
-                    <StackPanel 
-                        Name="EmptyFollowersPlaceHolder"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
 
-                        <Viewbox Width="100" Height="100">
-                            <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="SolidStar"/>
-                        </Viewbox>
-                        <TextBlock Text="All boards you follow will appear here"
-                                   TextLineBounds="Full"
-                                   TextAlignment="Center"
-                                  Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
+               
 
-                    <Jumper:AlphaJumpList Name="AlphaListFollowing">
-                        <ListView Name="ListViewFollowing"
-                              ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
-                              SelectionChanged="ListViewFollowing_SelectionChanged" />
-                    </Jumper:AlphaJumpList>
-                </Grid>
+                --><!--  Alpha jumplist for Following Pivot  -->
+                <!--
+                 <Grid>
+                 <StackPanel 
+                 Name="EmptyFollowersPlaceHolder"
+                 Visibility="Collapsed"
+                 VerticalAlignment="Center">
+                 
+                 <Viewbox Width="100" Height="100">
+                 <SymbolIcon  
+                 Foreground="{ThemeResource PhoneAccentBrush}"
+                 Symbol="SolidStar"/>
+                 </Viewbox>
+                 <TextBlock Text="All boards you follow will appear here"
+                 TextLineBounds="Full"
+                 TextAlignment="Center"
+                 Style="{StaticResource TitleTextBlockStyle}"
+                 Foreground="Black"
+                 Typography.Capitals="Unicase"
+                 />
+                 </StackPanel>
+                 
+                 <Jumper:AlphaJumpList Name="AlphaListFollowing">
+                 <ListView Name="ListViewFollowing"
+                 ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
+                 SelectionChanged="ListViewFollowing_SelectionChanged" />
+                 </Jumper:AlphaJumpList>
+                 </Grid>--><!--
+               
             </PivotItem>-->
         </Pivot>
 

@@ -1,4 +1,5 @@
-﻿using Pepeza.Db.DbHelpers.Board;
+﻿using Microsoft.AdMediator.WindowsPhone81;
+using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
@@ -50,12 +51,15 @@ namespace Pepeza
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             current = this;
+
         }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
+        AdMediatorControl control = new AdMediatorControl();
+        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Clear the backstack 
@@ -298,6 +302,11 @@ namespace Pepeza
                 }
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
+        }
+
+        private void AdMediatorControl_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
+        {
+
         }
        
 

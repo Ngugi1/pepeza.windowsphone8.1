@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=8E01651D-3CF3-4B92-825F-3867CFEFBFE2</Publisher>
-  <PublisherDisplayName>Ndung'u Ngugi</PublisherDisplayName>
+  <PublisherDisplayName>Pepeza LTD</PublisherDisplayName>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
@@ -361,6 +361,8 @@
     <MainPackageIdentityName>7111Samthegreat.Pepezabeta</MainPackageIdentityName>
     <ReservedNames>
       <ReservedName>Pepeza(beta)</ReservedName>
+      <ReservedName>Pepeza</ReservedName>
+      <ReservedName>Pepeza App</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
@@ -368,7 +370,6 @@
     <MainPackageIdentityName>7111Samthegreat.SuperSports</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.CocoNuts</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.hehehe</MainPackageIdentityName>
-    <MainPackageIdentityName>7111Samthegreat.Pepeza</MainPackageIdentityName>
     <MainPackageIdentityName>7111Samthegreat.yooo</MainPackageIdentityName>
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH4SQDX" />
