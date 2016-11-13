@@ -113,7 +113,7 @@ namespace Pepeza.Views.Account
                 //Now get all user data 
                 getData();
             }
-            catch
+            catch(Exception ex)
             {
                 if (Settings.getValue(Constants.APITOKEN) != null)
                 {
