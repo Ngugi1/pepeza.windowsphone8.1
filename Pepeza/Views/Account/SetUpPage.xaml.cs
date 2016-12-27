@@ -139,12 +139,12 @@ namespace Pepeza.Views.Account
 
                 if (userdata.ContainsKey(Constants.SUCCESS))
                 {
-
-                    if (await GetNewData.disectUserDetails(userdata, false))
+                    Dictionary<string,int> results = await GetNewData.disectUserDetails(userdata, false);
+                    if (results[Constants.SUCCESS]==1)
                     {
                         if (!isUserNameNull)
                         {
-                            this.Frame.Navigate(typeof(MainPage));
+                            this.Frame.Navigate(typeof(MainPage) , results);
                         }
                        
                     }
@@ -185,19 +185,23 @@ namespace Pepeza.Views.Account
 
             if (userdata.ContainsKey(Constants.SUCCESS))
             {
-
-                if (await GetNewData.disectUserDetails(userdata, false))
+                Dictionary<string,int> results = await GetNewData.disectUserDetails(userdata, false);
+                if (results!=null)
                 {
-                    if (isUserNameNull)
+                    if (results[Constants.SUCCESS] == 1)
                     {
-                        //Go to the main page
-                        this.Frame.Navigate(typeof(MainPage));
+                        if (isUserNameNull)
+                        {
+                            //Go to the main page
+                            this.Frame.Navigate(typeof(MainPage));
+                        }
+                        else
+                        {
+                            //Tell user to set up their username 
+                            this.Frame.Navigate(typeof(AddUsername));
+                        }
                     }
-                    else
-                    {
-                        //Tell user to set up their username 
-                        this.Frame.Navigate(typeof(AddUsername));
-                    }
+                    
                 }
                 else
                 {

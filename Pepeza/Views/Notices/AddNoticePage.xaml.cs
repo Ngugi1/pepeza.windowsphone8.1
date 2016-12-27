@@ -16,6 +16,7 @@ using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
@@ -194,7 +195,52 @@ namespace Pepeza.Views.Notices
                     await DBHelperBase.add(tfile);
                     await DBHelperBase.add(attachment);
                     await DBHelperBase.add(fileNotice);
-                }
+                    StorageFolder folder = null;
+                    //Save the attachment to another folder 
+                    try
+                    {
+                       folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Pepeza");
+                    }
+                    catch
+                    {
+                        folder = null;
+                    }
+                    
+                    string fileName = tfile.id + tfile.fileName;
+                    if (folder != null)
+                    {
+                        if (await folder.GetFileAsync(fileName) == null)
+                        {
+                            await folder.CreateFileAsync(fileName);
+                            using (var stream = await file.OpenStreamForWriteAsync())
+                            {
+                                using (StreamWriter writer = new StreamWriter(stream))
+                                {
+                                    await writer.FlushAsync();
+                                }
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                       
+                        folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Pepeza");
+                        if (folder!= null)
+                            {
+                                await folder.CreateFileAsync(fileName);
+                                using (var stream = await file.OpenStreamForWriteAsync())
+                                {
+                                    using (StreamWriter writer = new StreamWriter(stream))
+                                    {
+                                        await writer.FlushAsync();
+                                    }
+
+                                }
+                            }
+                           
+                        }
+                    }
                 else
                 {
                     showErrorToast(results[Constants.ERROR]);

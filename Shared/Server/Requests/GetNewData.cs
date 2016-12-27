@@ -38,7 +38,6 @@ namespace Pepeza.Server.Requests
 {
     public class GetNewData : BaseRequest
     {
-        ObservableCollection<TNotification> notifications = new ObservableCollection<TNotification>();
         public async static Task<Dictionary<string, string>> getNewData()
         {
             Dictionary<string, string> results = new Dictionary<string, string>();
@@ -76,8 +75,9 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
-        public async  static Task<bool> disectUserDetails(Dictionary<string, string> userdata , bool inBackground)
+        public async  static Task<Dictionary<string,int>> disectUserDetails(Dictionary<string, string> userdata , bool inBackground)
         {
+            Dictionary<string, int> results = new Dictionary<string, int>();
             try
             {
                 #region Collections
@@ -95,8 +95,6 @@ namespace Pepeza.Server.Requests
                 JArray notice_items = JArray.Parse(content["notice_items"].ToString());
                 JArray org_collaborators = JArray.Parse(content["org_collaborators"].ToString());
                 JArray boards = JArray.Parse(content["boards"].ToString());
-
-
                 #region Org Collaborators
                 foreach (var item in org_collaborators)
                 {
@@ -409,7 +407,7 @@ namespace Pepeza.Server.Requests
 
                 #endregion
                 #region Notifications
-
+                results.Add(Constants.NOTIFICATION_COUNT, notifications.Count);
                 foreach (var item in notifications)
                 {
                     if (notifications.Count > 0)
@@ -449,13 +447,15 @@ namespace Pepeza.Server.Requests
                 Settings.add(Constants.LAST_UPDATED, lastUpdate);
                 Settings.add(Constants.DATA_PUSHED, true);
                 #endregion
-                return true;
+                results.Add(Constants.SUCCESS, 1);
+                return results;
             }
             catch(Exception ex)
             {
                 string x = ex.ToString();
                 Settings.add(Constants.DATA_PUSHED, false);
-                return false;
+                results.Add(Constants.SUCCESS, 0);
+                return results;
             }
         }
     }

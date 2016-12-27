@@ -21,8 +21,9 @@ namespace Shared.Push
 {
     public class SyncPushChanges
     {
-        public async static Task initUpdate(bool inbackground= false)
+        public async static Task<Dictionary<string,int>> initUpdate(bool inbackground= false)
         {
+            Dictionary<string, int> results = new Dictionary<string, int>();
            
             try
             {
@@ -30,9 +31,9 @@ namespace Shared.Push
                 Dictionary<string, string> userdata = await GetNewData.getNewData();
                 if (userdata.ContainsKey(Constants.SUCCESS))
                 {
-                 await GetNewData.disectUserDetails(userdata , inbackground);
-
+                    results =  await GetNewData.disectUserDetails(userdata , inbackground);
                 }
+                return results;
                    
             }
             catch(Exception ex)
@@ -40,6 +41,7 @@ namespace Shared.Push
                 string content = ex.ToString();
                 // Mark process as failed 
                 Settings.add(Constants.DATA_PUSHED, false);
+                return null;
             }
 
         }

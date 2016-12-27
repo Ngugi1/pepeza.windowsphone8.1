@@ -201,15 +201,6 @@ namespace Pepeza
         {
             await DbHelper.createDB();
             Frame rootFrame = Window.Current.Content as Frame;
-            if (Settings.getValue(Constants.DATA_PUSHED) != null)
-            {
-                bool updated = (bool)Settings.getValue(Constants.DATA_PUSHED);
-                if (updated)
-                {
-                    await GetNewData.getNewData();
-                }
-            }
-
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
             if (rootFrame == null)
@@ -265,8 +256,6 @@ namespace Pepeza
             {
                 frame.Navigate(typeof(LoginPage), e.Arguments);
             }
-            //Register for push Notifications background Tasks
-            await BackgroundAgents.registerPush();
             //Deal with the statusbar
             updateStatusBar();
             // Ensure the current window is active

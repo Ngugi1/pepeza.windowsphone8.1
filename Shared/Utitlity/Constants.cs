@@ -8,6 +8,7 @@ namespace Pepeza.Utitlity
 {
     public class Constants
     {
+        public static string IS_PUSH_TOKEN_SUBMITTED { get { return "IS_PUSH_TOKEN_SUBMITTED"; } }
         public static string NO_RESULTS { get{return "No results matched your query";}}
         public static string LINK_SMALL_PLACEHOLDER { get { return "/Assets/Images/placeholder_s_avatar.png"; } }
         public static string LINK_NORMAL_PLACEHOLDER { get { return "/Assets/Images/placeholder_avatar.jpg"; } }
@@ -48,5 +49,6 @@ namespace Pepeza.Utitlity
         public static string APP_VERSION { get { return Package.Current.Id.Version.Major.ToString() + "." + 
             Package.Current.Id.Version.Minor.ToString() +"."+Package.Current.Id.Version.Build.ToString()+ 
             "." + Package.Current.Id.Version.Revision.ToString(); } }
+        public static string NOTIFICATION_COUNT { get { return "count"; } }
     }
 }

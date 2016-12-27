@@ -137,46 +137,6 @@ namespace Shared.Utitlity
             var resized = WriteableBitmapExtensions.Resize(cropped, 250, 250, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
 
             return resized;
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            //int width = image.PixelWidth <= image.PixelHeight ? image.PixelWidth : image.PixelHeight;
-            //int height = image.PixelHeight >= image.PixelWidth ? image.PixelHeight : image.PixelWidth;
-            //double aspectRatio = (double)height / (double)width;
-            //// set the shortest side to 250px
-            //width = 250;
-            //height = (int)(aspectRatio * width);
-            ////Resize the image 
-            //var resized = WriteableBitmapExtensions.Resize(image, width, height, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
-
-            ////Now center crop the selected area
-            //int x, y;
-            //if (resized.PixelWidth > resized.PixelHeight)
-            //{
-            //    x = (resized.PixelWidth - 250) / 2;
-            //    y = 0;
-            //}
-            //else
-            //{
-            //    y = (resized.PixelHeight - 250) / 2;
-            //    x = 0;
-            //}
-            //var cropped = resized.Crop(new Rect(x, y, 250, 250));
-            //return cropped;
         }
     }
 }

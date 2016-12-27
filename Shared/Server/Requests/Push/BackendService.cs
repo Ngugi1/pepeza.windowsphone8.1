@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Pepeza.Server.Push
 {
-    class BackendService : BaseRequest
+    public class BackendService : BaseRequest
     {
         //Upload the token 
         public async static Task<bool> submitPushUri(string uri)

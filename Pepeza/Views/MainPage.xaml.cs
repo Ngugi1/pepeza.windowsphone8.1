@@ -1,13 +1,14 @@
-﻿using Microsoft.AdMediator.WindowsPhone81;
-using Pepeza.Db.DbHelpers.Board;
+﻿using Coding4Fun.Toolkit.Controls;
+using Microsoft.AdMediator.WindowsPhone81;
 using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
+using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
-using Pepeza.Views.Analytics;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
@@ -17,11 +18,14 @@ using QKit.JumpList;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Push;
-using Shared.TilesAndActionCenter;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Background;
+using Windows.Networking.PushNotifications;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -46,6 +50,8 @@ namespace Pepeza
         public static ObservableCollection<TBoard> following{ get; set; }
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
         bool isSelected = false;
+        AdMediatorControl control = new AdMediatorControl();
+        int notifications = 0;
         public MainPage()
         {
             this.InitializeComponent();
@@ -57,15 +63,25 @@ namespace Pepeza
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        AdMediatorControl control = new AdMediatorControl();
-        
+        /// This parameter is typically used to configure the page.</param> 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //Clear the backstack 
-          //  ActionCenterHelper.updateActionCenter(null);
             this.Frame.BackStack.Clear();
-           //Load data 
+            if (e.Parameter != null)
+            {
+                Dictionary<string, int> results = (Dictionary<string, int>)e.Parameter;
+                //Get count of notifications
+                if (results != null)
+                {
+                    if (results[Constants.NOTIFICATION_COUNT] > 0)
+                    {
+                        notifications = results[Constants.NOTIFICATION_COUNT];
+                        //Now display them onn the page 
+                    }
+                }
+            }
+            //Load data 
             isSelected = false;
            //Load notices 
             loadNotices();
@@ -77,11 +93,98 @@ namespace Pepeza
             //await loadFollowing();
             isSelected = true;
             this.Frame.BackStack.Clear();
-            
+            //Register push notifications
+            var isPushTokenSubmitted = Settings.getValue(Constants.IS_PUSH_TOKEN_SUBMITTED);
+            if (isPushTokenSubmitted != null)
+            {
+                if (!(bool)isPushTokenSubmitted)
+                {
+                    Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED ,await registerPush());   
+                }
+            }
+            else
+            {
+                Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED, await registerPush());
+            }
+
+            if (Settings.getValue(Constants.DATA_PUSHED) != null)
+            {
+                bool updated = (bool)Settings.getValue(Constants.DATA_PUSHED);
+                if (!updated)
+                {
+                    await GetNewData.getNewData();
+                }
+            }
+
             
         }
+        public async static Task<bool> registerPush()
+        {
+            //Check if access status and revoke , makes sure your app works well when there is an update
+            BackgroundExecutionManager.RemoveAccess();
+            //Unregister the Background Agent 
+            var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
+            if (entry.Value != null)
+            {
+                entry.Value.Unregister(true);
+            }
+            //is registration complete?
+            bool isRegistered = false;
+            //Request Access 
+            var access = await BackgroundExecutionManager.RequestAccessAsync();
+            if (access == BackgroundAccessStatus.Denied)
+            {
+                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
+                prompt.Show();
+                return isRegistered;
+            }
 
-        
+            //Granted 
+            BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+            taskBuilder.Name = "PepezaPushBackgroundTask";
+            PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
+            taskBuilder.SetTrigger(pushTrigger);
+            //Define Entry Point 
+            taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
+            taskBuilder.Register();
+            string uri = String.Empty;
+            try
+            {
+                //Get the channel 
+                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                uri = channel.Uri;
+
+                //Register foreground APP to receive push when running
+                channel.PushNotificationReceived += channel_PushNotificationReceived;
+
+                // Upload the URI to Pepeza Backend 
+                bool isUriSent = await BackendService.submitPushUri(uri);
+                isRegistered = (isUriSent == true) ? true : false;
+
+            }
+            catch (Exception ex)
+            {
+                string s = ex.Message;
+                isRegistered = false;
+            }
+            return isRegistered;
+        }
+        static async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
+        {
+            args.Cancel = true;
+            //Init update from the server
+            Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
+            if (results != null)
+            {
+                if (results[Constants.NOTIFICATION_COUNT] > 0)
+                {
+                    int not_count =  results[Constants.NOTIFICATION_COUNT];
+                    //Set the count here 
+
+                }
+            }
+            //Prevent background agent from being invoked 
+        }
         private async void loadNotices()
         {
             try
@@ -141,7 +244,6 @@ namespace Pepeza
             ListViewBoards.SelectedItem = null;
             return true;
         }
-     
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
@@ -175,8 +277,7 @@ namespace Pepeza
             {
                 AppBtnAdd.Visibility = Visibility.Collapsed;
             }
-      }
-        
+      }    
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   
             //Following is just a board , push the user to board profile

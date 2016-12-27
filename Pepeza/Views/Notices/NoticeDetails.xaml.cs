@@ -99,7 +99,7 @@ namespace Pepeza.Views.Notices
                             else
                             {
                                 HLBDownloadAttachment.Visibility = Visibility.Visible;
-                                HyperLinkOpen.Visibility = Visibility.Collapsed;
+                              HyperLinkOpen.Visibility = Visibility.Collapsed;
 
                             }
                         }
@@ -288,6 +288,7 @@ namespace Pepeza.Views.Notices
                 try
                 {
                     storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                    
                 }
                 catch
                 {
