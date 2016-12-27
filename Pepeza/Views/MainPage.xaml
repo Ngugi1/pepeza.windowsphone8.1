@@ -21,9 +21,14 @@
 
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Name="GridParent" Margin="0,12,0,0">
+    <Grid Name="GridParent" Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <toaster:Toastinet Name="ToastSuccessFailure"
-                           Grid.Column="1"
+                           Grid.Row="1"
                            Height="40"
                            Margin="12"
                            HorizontalContentAlignment="Center"
@@ -31,13 +36,14 @@
                            TextWrapping="Wrap" />
         <Pivot Name="pivotMainPage"
                Margin="4"
+               Grid.Row="1"
                SelectionChanged="pivotMainPage_SelectionChanged">
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
                 </PivotItem.Header>
                 <Grid>
-                   
+
                     <StackPanel 
                         Name="EmptyNoticesPlaceHolder"
                         Visibility="Collapsed"
@@ -100,7 +106,7 @@
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-                        
+
 
                     </ListView>
                     <WindowsPhone81:AdMediatorControl
@@ -196,13 +202,13 @@
                                                    Margin="8,0,14,0"
                                                    Style="{StaticResource txtBlockListViewDesc}"
                                                    Text="{Binding desc}" />
-                                        
+
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
-                           
+
                         </ListView>
-                        
+
                     </Jumper:AlphaJumpList>
 
                     <WindowsPhone81:AdMediatorControl
@@ -314,8 +320,9 @@
 
                
 
-                --><!--  Alpha jumplist for Following Pivot  -->
-                <!--
+                -->
+            <!--  Alpha jumplist for Following Pivot  -->
+            <!--
                  <Grid>
                  <StackPanel 
                  Name="EmptyFollowersPlaceHolder"
@@ -341,11 +348,25 @@
                  ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
                  SelectionChanged="ListViewFollowing_SelectionChanged" />
                  </Jumper:AlphaJumpList>
-                 </Grid>--><!--
+                 </Grid>-->
+            <!--
                
             </PivotItem>-->
         </Pivot>
-
+        <StackPanel 
+            Tapped="StackPanelViewNotifications_Tapped"
+            Orientation="Horizontal" 
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right">
+            <Viewbox Height="40" Width="Auto">
+                <SymbolIcon Symbol="ViewAll"/>
+            </Viewbox>
+            <TextBlock Text="2" 
+                       Style="{StaticResource txtBlockStatus}"
+                       Margin="4,0"
+                       Foreground="{ThemeResource PhoneAccentBrush}"
+                       VerticalAlignment="Top"/>
+        </StackPanel>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">

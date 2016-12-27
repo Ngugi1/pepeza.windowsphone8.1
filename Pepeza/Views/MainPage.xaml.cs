@@ -13,6 +13,7 @@ using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
+using Pepeza.Views.UserNotifications;
 using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
 using Shared.Db.DbHelpers.Notice;
@@ -408,6 +409,13 @@ namespace Pepeza
         private void AdMediatorControl_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
         {
 
+        }
+
+       
+
+        private void StackPanelViewNotifications_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ViewNotifications));
         }
        
 
