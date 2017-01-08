@@ -34,7 +34,7 @@ namespace Pepeza.Server.Validation
         public static bool IsUsernameValid(string username)
         {
             bool valid = false;
-                string strRegex = "^[a-z0-9_-]{3,20}$";
+            string strRegex = "^[a-z][a-z0-9_.-]{2,20}$";
                 Regex regex = new Regex(strRegex);
                 if (regex.IsMatch(username))
                 {
