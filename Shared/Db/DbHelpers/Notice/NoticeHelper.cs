@@ -61,7 +61,6 @@ namespace Pepeza.Db.DbHelpers.Notice
                                 notice.attachmentId = attacho.id;
                             }
                         }
-                       
                         notices.Add(notice);
                     }
                    notices.OrderByDescending<TNotice, long>(i => i.dateCreated);

@@ -107,6 +107,7 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
+    <Compile Include="Common\RichTextBlockProperties.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="CustomControls\PageHeader.xaml.cs">
       <DependentUpon>PageHeader.xaml</DependentUpon>
@@ -235,6 +236,7 @@
     <Content Include="Assets\Images\txtnotice.png" />
     <Content Include="Assets\WideLogo.scale-240.png" />
     <Content Include="AdMediator.config" />
+    <EmbeddedResource Include="Common\RichTextBlockHtml2Xaml.xslt" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="VMAXSDKDocumentforWindowsPhone8.1.pdf" />
   </ItemGroup>

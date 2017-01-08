@@ -9,6 +9,7 @@
       xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource PhoneBackgroundBrush}"
       RequestedTheme="Light"
+      xmlns:Common="using:Pepeza.Common"
       xmlns:converter="using:Pepeza"
       mc:Ignorable="d">
     <Page.Resources>
@@ -18,6 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converter:IntToAttachment x:Key="Converter"/>
             <converter:IntToForeground x:Key="IntToForeground"/>
+            
 
         </ResourceDictionary>
     </Page.Resources>
@@ -26,7 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
         <toaster:Toastinet Name="ToastSuccessFailure"
                            Grid.Row="1"
                            Height="40"
@@ -88,12 +90,14 @@
                                         Grid.Row="1"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
                                         Text="{Binding board , Mode=TwoWay}"/>
-                                    <TextBlock Grid.Row="2"
+                                    <RichTextBlock
+                                        Grid.Row="2"
                                                Margin="0"
-                                               Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                                               TextWrapping="NoWrap"
+                                               IsTextSelectionEnabled="False"
                                                Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
                                                FontSize="{StaticResource TextStyleMediumFontSize}"
-                                               Text="{Binding content , Mode=TwoWay}"/>
+                                               Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
                                     <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
                                                HorizontalAlignment="Left" 
                                                VerticalAlignment="Bottom"

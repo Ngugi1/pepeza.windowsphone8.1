@@ -9,6 +9,7 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
       xmlns:connvert="using:Pepeza.Views.Boards"
+      xmlns:Common="using:Pepeza.Common"
       mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
@@ -93,6 +94,7 @@
                                                    Text="{Binding name}" />
                                         <HyperlinkButton Name="btnViewFollowers"
                                                          HorizontalAlignment="Center"
+                                                         IsTapEnabled="True"
                                                          Click="btnViewFollowers_Click"
                                                          Foreground="{ThemeResource PhoneAccentBrush}">
                                             <HyperlinkButton.Content>
@@ -243,11 +245,12 @@
                                         Margin="0"
                                         VerticalAlignment="Bottom"
                                         Style="{StaticResource txtBlockListViewItemHeader}"/>
-                                        <TextBlock Grid.Row="1"
+                                        <RichTextBlock Grid.Row="1"
                                     Margin="0"
-                                Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"
+                                Style="{StaticResource BodyRichTextBlockStyle}"
                                        FontSize="{StaticResource TextStyleMediumFontSize}"
-                                       Text="{Binding content , Mode=TwoWay}"/>
+                                       Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
+                                        
                                         <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
                                     HorizontalAlignment="Left" 
                                     VerticalAlignment="Bottom"

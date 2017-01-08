@@ -352,6 +352,7 @@ namespace Pepeza.Server.Requests
                         }
                         list_notices.Add(notice);
                     }
+                   
                 }
                 foreach (var item in list_notices)
                 {

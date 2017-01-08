@@ -35,12 +35,19 @@ namespace Pepeza.Server.Validation
         {
             bool valid = false;
             string strRegex = "^[a-z][a-z0-9_.-]{2,20}$";
-                Regex regex = new Regex(strRegex);
-                if (regex.IsMatch(username))
-                {
-                    valid = true;
-                }
-                return valid;
+            Regex regex = new Regex(strRegex);
+            if (regex.IsMatch(username))
+            {
+                valid = true;
+            }
+            return valid;
+        }
+
+        public static string ScrubHtml(string value)
+        {
+            var step1 = Regex.Replace(value, @"<[^>]+>|&nbsp;", "").Trim();
+            var step2 = Regex.Replace(step1, @"\s{2,}", " ");
+            return step2;
         }
     }
 }

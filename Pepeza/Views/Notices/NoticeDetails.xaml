@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:toast="using:Toastinet"
     RequestedTheme="Light"
+    xmlns:Common="using:Pepeza.Common"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto"
@@ -109,8 +110,8 @@
                         </HyperlinkButton.Content>
                     </HyperlinkButton>
                 </StackPanel>
-                <TextBlock Text="{Binding content}" TextWrapping="WrapWholeWords"
-                       Style="{StaticResource BodyTextBlockStyle}"
+                <RichTextBlock Common:Properties.Html="{Binding content}" TextWrapping="WrapWholeWords"
+                       Style="{StaticResource BodyRichTextBlockStyle}"
                        Margin="12,4"
                        />
             </StackPanel>
