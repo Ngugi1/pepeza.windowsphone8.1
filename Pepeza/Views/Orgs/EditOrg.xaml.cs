@@ -47,9 +47,7 @@ namespace Pepeza.Views.Orgs
         {
             if (e.Parameter != null)
             {
-                List<string> orgstypes = new List<string>() { "Church", "College", "Company", "Group", "Non-Profit Organization", "School", "University",
-
-        "Other"};
+                List<string> orgstypes = new List<string>() { "Company", "Group", "Learning Institution", "Non-Profit Organization", "Religious", "Other" };
                 ComboOrgTypes.ItemsSource = orgstypes;
                 org = e.Parameter as TOrgInfo;
                 orgModel = RootGrid.DataContext as EditOrgModel;

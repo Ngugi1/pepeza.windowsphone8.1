@@ -54,9 +54,7 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            List<string> orgstypes = new List<string>() { "Church", "College", "Company", "Group", "Non-Profit Organization", "School", "University",
-
-        "Other"};
+            List<string> orgstypes = new List<string>() {  "Company", "Group", "Learning Institution", "Non-Profit Organization", "Religious","Other"};
             ComboOrgTypes.ItemsSource = orgstypes;
         }
 
