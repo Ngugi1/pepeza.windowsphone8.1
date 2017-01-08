@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:FFImage="using:FFImageLoading"
     RequestedTheme="Light"
     xmlns:Converters="using:Pepeza.Views.UserNotifications"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -20,59 +21,80 @@
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Pivot Grid.Row="1" 
-               Margin="0"
-               Background="Transparent">
-            <PivotItem 
-                Margin="16,0"
-                Name="Holder">
-                <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}"
-                   Text="Notifications"
-                               Margin="0"
-                   />
-                </PivotItem.Header>
-                <ListView 
-                    Name="ListViewNotifications"
-                    SelectionChanged="ListViewNotifications_SelectionChanged"
-                    Grid.Row="1">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid 
-                            Margin="2,8"
-                                Width="{Binding ActualWidth, ElementName=Holder}"
-                            >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Image 
-                                Margin="4"
-                                Source="{Binding linkLeft}" 
-                                     Visibility="{Binding type,Converter={StaticResource typeToAvatar}}"
-                                    Width="50"/>
-                                <TextBlock 
-                                    HorizontalAlignment="Left"
-                                    Margin="4"
-                                    Style="{StaticResource txtBlockDisplay}"
-                                    Text="{Binding content}" Grid.Column="1" 
-                                    Foreground="Black"
-                                    TextWrapping="Wrap"/>
-                                <Image Source="{Binding linkRight}" 
-                                       Visibility="{Binding type,Converter={StaticResource stringToAvatars}}"
-                                       Grid.Column="2"
-                                       Margin="4"
-                           Width="50"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </PivotItem>
-        </Pivot>
+        <ListView 
+            Name="ListViewNotifications"
+            SelectionChanged="ListViewNotifications_SelectionChanged"
+            >
+            <ListView.Header>
+                <TextBlock 
+                    Margin="8,8,0,8"
+                    Style="{StaticResource SubheaderTextBlockStyle}">
+                    Notifications
 
+                </TextBlock>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid 
+                        Margin="8,8,0,8"
+                        Width="{Binding ActualWidth, ElementName=ListViewNotifications}"
+                        >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding title}"
+                                   Foreground="Black"
+                                   Style="{StaticResource BodyTextBlockStyle}"
+                                   FontWeight="SemiBold"
+                                   Grid.Row="0"
+                                   FontSize="{StaticResource TextStyleExtraLargeFontSize}"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="2"
+                                   Margin="4"
+                                   />
+                        <FFImage:FFImage 
+                            Margin="4"
+                            Grid.Row="0"
+                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                            Source="{Binding linkLeft}" 
+                            Visibility="{Binding type,Converter={StaticResource typeToAvatar}}"
+                            Grid.RowSpan="2"
+                            Height="50"
+                            VerticalAlignment="Bottom"
+                            Width="50"/>
+                        <TextBlock 
+                            Grid.Row="1"
+                            Style="{StaticResource MessageDialogContentStyle}"
+                            Text="{Binding content}"    
+                            Grid.Column="1"
+                            Margin="4"
+                            Padding="2,0,2,2"
+                            TextWrapping="Wrap"
+                            />
+                        <FFImage:FFImage 
+                            Visibility="{Binding type,Converter={StaticResource stringToAvatars}}"
+                            Grid.Column="2"
+                            Grid.RowSpan="2"   
+                            Margin="4"
+                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                            Height="50"
+                            Source="{Binding linkRight}" 
+                            VerticalAlignment="Bottom"
+                            Width="50"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+           
+        </ListView>
     </Grid>
 </Page>

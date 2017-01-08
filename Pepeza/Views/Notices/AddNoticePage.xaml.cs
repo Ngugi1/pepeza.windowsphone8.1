@@ -102,8 +102,8 @@ namespace Pepeza.Views.Notices
                                     title = title,
                                     hasAttachment = 0,
                                     content = desc,
-                                    dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
-                                    dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
+                                    dateCreated =(long)obj["dateCreated"],
+                                    dateUpdated = (long)obj["dateUpdated"],
                                    
                                 });
                                 this.Frame.GoBack();
@@ -159,9 +159,9 @@ namespace Pepeza.Views.Notices
                          content = toPost.content,
                          noticeId  = (int)jobject["id"],
                          hasAttachment = 1,
-                         dateCreated = DateTimeFormatter.format((long)jobject["dateCreated"]),
+                         dateCreated = (long)jobject["dateCreated"]
                        };
-                    if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = DateTimeFormatter.format((long)jobject["dateUpdated"]);                    //We have results , get attachment details  
+                    if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = (long)jobject["dateUpdated"]; //We have results , get attachment details  
 
                     //Get the attachment 
                     TAttachment attachment = new TAttachment()
@@ -169,10 +169,10 @@ namespace Pepeza.Views.Notices
                         id = (int)jobject["attachment"]["id"],
                         type = (string)jobject["attachment"]["type"],
                         noticeId = (int)jobject["id"],
-                        dateCreated = DateTimeFormatter.format((long)jobject["attachment"]["dateCreated"]),
+                        dateCreated = (long)jobject["attachment"]["dateCreated"],
                     };
 
-                    if (jobject["attachment"]["dateUpdated"] != null) attachment.dateUpdated = DateTimeFormatter.format((long)jobject["attachment"]["dateUpdated"]);
+                    if (jobject["attachment"]["dateUpdated"] != null) attachment.dateUpdated = (long)jobject["attachment"]["dateUpdated"];
 
 
 
@@ -186,11 +186,11 @@ namespace Pepeza.Views.Notices
                         fileName = (string)jobject["file"]["fileName"],
                         link = (string)jobject["file"]["link"],
                         mimeType = (string)jobject["file"]["mime_type"],
-                        dateCreated = DateTimeFormatter.format((long)jobject["file"]["dateCreated"]),
+                        dateCreated = (long)jobject["file"]["dateCreated"],
                     };
                     if (jobject["file"]["dateUpdated"] != null)
                     {
-                        tfile.dateUpdated = DateTimeFormatter.format((long)jobject["file"]["dateUpdated"]);
+                        tfile.dateUpdated = (long)jobject["file"]["dateUpdated"];
                     }
                     await DBHelperBase.add(tfile);
                     await DBHelperBase.add(attachment);

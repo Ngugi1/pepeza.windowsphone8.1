@@ -35,8 +35,8 @@ namespace Pepeza.Db.Models.Board
         
         [Ignore]
         public string organisation { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
         public int following { get; set; }
         private int _noOfFollowers;
         [Ignore]

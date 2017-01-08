@@ -165,8 +165,8 @@ namespace Pepeza.Views.Boards
                         boardFetched.followRestriction = (string)objResults["followRestriction"];
                         boardFetched.desc = (string)objResults["description"];
                         boardFetched.boardVisibility = (string)objResults["visibility"];
-                        boardFetched.dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]);
-                        boardFetched.dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]);
+                        boardFetched.dateCreated =(long)objResults["dateCreated"];
+                        boardFetched.dateUpdated = (long)objResults["dateUpdated"];
                         boardFetched.noOfFollowRequests = numberofRequests;
                     if (objResults["avatar"].Type!= JTokenType.Null)
                     {
@@ -194,7 +194,7 @@ namespace Pepeza.Views.Boards
                         if (followerItem.accepted ==1 || followerItem.accepted ==0)
                         {
                             btnFollow.Content = "Unfollow";
-                            followerItem.dateAccepted = DateTimeFormatter.format((long)objResults["follower_item"]["dateAccepted"]);
+                            followerItem.dateAccepted = (long)objResults["follower_item"]["dateAccepted"];
                         }else if(followerItem.accepted ==2)
                         {
                             btnFollow.Content = "Requested";
@@ -239,7 +239,7 @@ namespace Pepeza.Views.Boards
                 following.userId = (int)objResults["userId"];
                 following.boardId = (int)objResults["boardId"];
                 following.accepted = (int)objResults["accepted"];
-                if (objResults["dateAccepted"].Type != JTokenType.Null) DateTimeFormatter.format((double)objResults["dateAccepted"]);
+                if (objResults["dateAccepted"].Type != JTokenType.Null)following.dateAccepted= (long)objResults["dateAccepted"];
                 if (await FollowingHelper.get(following.id) != null)
                 {
                     await FollowingHelper.update(following);
@@ -377,8 +377,8 @@ namespace Pepeza.Views.Boards
                            title = (string)obj["title"],
                            content = (string)obj["content"],
                            hasAttachment = (int)obj["hasAttachment"],
-                           dateCreated = DateTimeFormatter.format((long)obj["dateCreated"]),
-                           dateUpdated = DateTimeFormatter.format((long)obj["dateUpdated"]),
+                           dateCreated = (long)obj["dateCreated"],
+                           dateUpdated = (long)obj["dateUpdated"],
                            boardId = boardId
                        };
                        noticeDataSource.Add(notice); 
@@ -510,8 +510,8 @@ namespace Pepeza.Views.Boards
                                                 id = (int)avatarObject["avatar"]["id"],
                                                 linkNormal = (string)avatarObject["avatar"]["linkNormal"],
                                                 linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                                dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
-                                                dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                                dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                                dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                             };
                                             var localAvatar = await AvatarHelper.get(avatar.id);
                                             //Update local database if they are collaborators 

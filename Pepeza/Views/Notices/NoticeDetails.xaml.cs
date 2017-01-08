@@ -151,7 +151,7 @@ namespace Pepeza.Views.Notices
                             file.mimeType = (string)json["file"]["mimeType"];
                             file.fileName = (string)json["file"]["fileName"];
                             file.size = (long)json["file"]["size"];
-                            file.dateCreated = DateTimeFormatter.format((long)json["file"]["dateCreated"]);
+                            file.dateCreated = (long)json["file"]["dateCreated"];
 
                             file.link = string.Format(NoticeAddresses.LINK_FORMAT, file.id);
                             file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
@@ -192,7 +192,7 @@ namespace Pepeza.Views.Notices
                         notice.boardId = (int)json["notice"]["boardId"];
                         notice.hasAttachment = (int)json["notice"]["hasAttachment"];
                         notice.content = (string)json["notice"]["content"];
-                        notice.dateCreated = (DateTimeFormatter.format((long)json["notice"]["dateCreated"]));
+                        notice.dateCreated = (long)json["notice"]["dateCreated"];
                         if (notice.hasAttachment == 1)
                         {
                             StackPanelDownload.Visibility = Visibility.Visible;

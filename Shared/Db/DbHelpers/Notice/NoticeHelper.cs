@@ -64,7 +64,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                        
                         notices.Add(notice);
                     }
-                   notices.OrderByDescending<TNotice, DateTime>(i => i.dateCreated);
+                   notices.OrderByDescending<TNotice, long>(i => i.dateCreated);
                    notices.Reverse();
                 }
                 return notices;

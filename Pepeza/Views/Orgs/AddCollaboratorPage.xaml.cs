@@ -143,9 +143,9 @@ namespace Pepeza.Views.Orgs
                     role = (string)jsonResults["role"],
                     userId = (int)jsonResults["userId"],
                     active = (int)jsonResults["active"],
-                    dateCreated = DateTimeFormatter.format((long)jsonResults["dateCreated"]),
+                    dateCreated = (long)jsonResults["dateCreated"],
                 };
-                if (jsonResults["dateUpdated"] != null) collaborator.dateUpdated = DateTimeFormatter.format((long)jsonResults["dateUpdated"]);
+                if (jsonResults["dateUpdated"] != null) collaborator.dateUpdated = (long)jsonResults["dateUpdated"];
                 if(await CollaboratorHelper.get(collaborator.id) != null)
                 {
                     await Db.DbHelpers.DBHelperBase.update(collaborator);

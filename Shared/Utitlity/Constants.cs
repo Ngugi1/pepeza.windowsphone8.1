@@ -50,5 +50,6 @@ namespace Pepeza.Utitlity
             Package.Current.Id.Version.Minor.ToString() +"."+Package.Current.Id.Version.Build.ToString()+ 
             "." + Package.Current.Id.Version.Revision.ToString(); } }
         public static string NOTIFICATION_COUNT { get { return "count"; } }
+        public static string UNREAD_NOTIFICATIONS { get { return "UNREAD_NOTIFICATIONS"; } }
     }
 }

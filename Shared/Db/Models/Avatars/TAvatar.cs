@@ -13,7 +13,7 @@ namespace Shared.Db.Models.Avatars
         public int id { get; set; }
         public string linkNormal { get; set; }
         public string linkSmall { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
     }
 }

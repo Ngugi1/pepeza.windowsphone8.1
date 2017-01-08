@@ -14,7 +14,7 @@ namespace Shared.Models.NoticeModels
         public int id { get; set; }
         public string type { get; set; }
         public string link { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
     }
 }

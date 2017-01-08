@@ -17,8 +17,8 @@ namespace Shared.Db.Models.Notices
         public string link { get; set; }
         public string fileName { get; set; }
         public string mimeType { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
         public int attachmentId { get; set; }
     }
 }

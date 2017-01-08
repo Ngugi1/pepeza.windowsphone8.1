@@ -16,11 +16,11 @@ namespace Shared.Db.Models.Notification
         public string meta{ get; set; }
         public string content { get; set; }
         public int isReceived { get; set; }
-        public DateTime dateReceived { get; set; }
+        public long dateReceived { get; set; }
         public int isRead { get; set; }
-        public DateTime dateRead { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateRead { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
         public int userId { get; set; }
     }
 }

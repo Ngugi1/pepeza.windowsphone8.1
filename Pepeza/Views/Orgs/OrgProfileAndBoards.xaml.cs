@@ -152,16 +152,16 @@ namespace Pepeza.Views.Orgs
                         description = (string)objResults["description"],
                         category = (string)objResults["category"],
                         name = (string)objResults["name"],
-                        dateCreated = DateTimeFormatter.format((long)objResults["dateCreated"]),
-                        dateUpdated = DateTimeFormatter.format((long)objResults["dateUpdated"]),
+                        dateCreated =(long)objResults["dateCreated"],
+                        dateUpdated = (long)objResults["dateUpdated"],
                     };
                     TAvatar orgAvatar = new TAvatar()
                     {
                          id = (int)objResults["avatar"]["id"],
                          linkNormal = (string)objResults["avatar"]["linkNormal"],
                          linkSmall = (string)objResults["avatar"]["linkSmall"],
-                         dateCreated = DateTimeFormatter.format((double)objResults["avatar"]["dateUpdated"]),
-                         dateUpdated = DateTimeFormatter.format((double)objResults["avatar"]["dateUpdated"])
+                         dateCreated = (long)objResults["avatar"]["dateUpdated"],
+                         dateUpdated = (long)objResults["avatar"]["dateUpdated"]
                     };
                     info.linkNormal = orgAvatar.linkNormal;
                     if (info.linkNormal == null)
@@ -519,8 +519,8 @@ namespace Pepeza.Views.Orgs
                                         id = (int)avatarObject["avatar"]["id"],
                                         linkNormal = (string)avatarObject["avatar"]["linkNormal"],
                                         linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
-                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                        dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                        dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
                                     var localAvatar = await AvatarHelper.get(avatar.id);
                                     //Update local database if they are collaborators 

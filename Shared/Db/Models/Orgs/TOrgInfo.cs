@@ -19,8 +19,8 @@ namespace Pepeza.Db.Models.Orgs
         public string name { get; set; }
         [MaxLength(250)]
         public string description { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
         public int avatarId { get; set; }
         [Ignore]
         public string linkSmall { get; set; }

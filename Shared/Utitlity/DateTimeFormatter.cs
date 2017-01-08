@@ -18,6 +18,11 @@ namespace Shared.Utitlity
             var localDateTime = actualTimeDate.ToLocalTime();
             return localDateTime;
         }
+
+        public static long ToUnixTimestamp(DateTime date)
+        {
+            return (long)date.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
         
         
     }

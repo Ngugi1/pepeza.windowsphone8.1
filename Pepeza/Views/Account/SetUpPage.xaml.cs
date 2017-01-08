@@ -84,23 +84,23 @@ namespace Pepeza.Views.Account
             userInfo.username = (string)profileInfo["username"];
             if (userInfo.username != null) { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); } else { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); }
             userInfo.avatarId = (int)avatar["id"];
-            if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = DateTimeFormatter.format((long)profileInfo["dateUpdated"]);
-            userInfo.dateCreated = DateTimeFormatter.format((long)profileInfo["dateCreated"]);
+            if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = (long)profileInfo["dateUpdated"];
+            userInfo.dateCreated = (long)profileInfo["dateCreated"];
             //Get email iformation 
             TEmail emailInfo = new TEmail();
             emailInfo.emailID = (int)profileInfo["email"]["id"];
             emailInfo.email = (string)profileInfo["email"]["email"];
             emailInfo.verified = (int)profileInfo["email"]["verified"];
-            if(profileInfo["dateVerified"]!=null) DateTimeFormatter.format((long)(profileInfo["email"]["dateVerified"]));
-            emailInfo.dateCreated = DateTimeFormatter.format((long)(profileInfo["email"]["dateCreated"]));
-            if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = DateTimeFormatter.format((long)(profileInfo["email"]["dateUpdated"]));
+            if(profileInfo["dateVerified"]!=null) emailInfo.dateVerified=(long)(profileInfo["email"]["dateVerified"]);
+            emailInfo.dateCreated = (long)(profileInfo["email"]["dateCreated"]);
+            if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = (long)(profileInfo["email"]["dateUpdated"]);
             //get avatars 
             TAvatar userAvatar = new TAvatar();
             userAvatar.id = (int)avatar["id"];
             userAvatar.linkSmall = (string)avatar["linkSmall"];
             userAvatar.linkNormal = (string)avatar["linkNormal"];
-            userAvatar.dateCreated = DateTimeFormatter.format((long)avatar["dateCreated"]);
-            userAvatar.dateUpdated = DateTimeFormatter.format((long)avatar["dateUpdated"]);
+            userAvatar.dateCreated = (long)avatar["dateCreated"];
+            userAvatar.dateUpdated = (long)avatar["dateUpdated"];
             // Now get all user orgs, boards , notices and following 
             string token =  (string)details[Constants.APITOKEN];
             Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);

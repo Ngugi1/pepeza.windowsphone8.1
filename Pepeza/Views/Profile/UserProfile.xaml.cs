@@ -73,7 +73,7 @@ namespace Pepeza.Views.Profile
                 {
                     userId = (int)e.Parameter;
                     int localUserId = (int)Settings.getValue(Constants.USERID);
-                    // get the data from the sqlilte database
+                    // TODO :: We had an exception here after being added to an organisation get the data from the sqlilte database
                     data = await getUserProfile(userId);
                     //Get the user avatar 
                     data.username = "@" + data.username;
@@ -338,8 +338,8 @@ namespace Pepeza.Views.Profile
                                         id = (int)avatarObject["avatar"]["id"],
                                         linkNormal = (string)avatarObject["avatar"]["linkNormal"],
                                         linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                        dateCreated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateCreated"]),
-                                        dateUpdated = DateTimeFormatter.format((double)avatarObject["avatar"]["dateUpdated"])
+                                        dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                        dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
                                     var localAvatar = await AvatarHelper.get(avatar.id);
                                         if (localAvatar != null)

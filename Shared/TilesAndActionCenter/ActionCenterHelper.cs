@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Notices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,21 @@ namespace Shared.TilesAndActionCenter
               ToastNotificationManager.CreateToastNotifier().Show(toast);
             }
   
+
+        }
+        public static void updateActionCenter(List<TNotice> notifications)
+        {
+            //TODO :: Polish here
+            foreach (var notice in notifications)
+            {
+                if (notice.isRead != 1)
+                {
+                    ToastNotification toast = getToast((string)notice.title, (string)notice.content, "0");
+                    ToastNotificationManager.CreateToastNotifier().Show(toast);
+                }
+               
+            }
+
 
         }
         public static ToastNotification getToast(string title, string content , string extra ="1")

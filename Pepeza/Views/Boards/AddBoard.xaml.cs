@@ -99,8 +99,8 @@ namespace Pepeza.Views.Boards
                     id = (int)board["id"],
                     linkSmall = (string)board["linkSmall"],
                     linkNormal = (string)board["linlNormal"],
-                    dateCreated = DateTimeFormatter.format((long)board["dateCreated"]),
-                    dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"])
+                    dateCreated = (long)board["dateCreated"],
+                    dateUpdated = (long)board["dateUpdated"]
                 };
                 TBoard toInsert = new TBoard();
                 toInsert.id = (int)board["id"];
@@ -108,8 +108,8 @@ namespace Pepeza.Views.Boards
                 toInsert.desc = (string)model.Desc;
                 toInsert.orgID = orgId;
                 toInsert.followRestriction = followRestriction;
-                toInsert.dateUpdated = DateTimeFormatter.format((long)board["dateUpdated"]);
-                toInsert.dateCreated = DateTimeFormatter.format((long)board["dateCreated"]);
+                toInsert.dateUpdated = (long)board["dateUpdated"];
+                toInsert.dateCreated = (long)board["dateCreated"];
                 toInsert.avatarId = avatar.id;
        
                     

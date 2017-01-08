@@ -16,6 +16,7 @@ using Pepeza.Views.Orgs;
 using Pepeza.Views.UserNotifications;
 using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
+using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Push;
@@ -52,14 +53,13 @@ namespace Pepeza
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
         bool isSelected = false;
         AdMediatorControl control = new AdMediatorControl();
-        int notifications = 0;
         public MainPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
             current = this;
-
         }
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -69,19 +69,8 @@ namespace Pepeza
         {
             //Clear the backstack 
             this.Frame.BackStack.Clear();
-            if (e.Parameter != null)
-            {
-                Dictionary<string, int> results = (Dictionary<string, int>)e.Parameter;
-                //Get count of notifications
-                if (results != null)
-                {
-                    if (results[Constants.NOTIFICATION_COUNT] > 0)
-                    {
-                        notifications = results[Constants.NOTIFICATION_COUNT];
-                        //Now display them onn the page 
-                    }
-                }
-            }
+            //Count the number of notifications 
+            updateNotificationCount();
             //Load data 
             isSelected = false;
            //Load notices 
@@ -119,7 +108,22 @@ namespace Pepeza
 
             
         }
-        public async static Task<bool> registerPush()
+
+        private  async void updateNotificationCount()
+        {
+            int count = await TNotificationHelper.unreadNotifications();
+            if (count != 0)
+            {   
+                txtBlockNotificationsCount.Visibility = Visibility.Visible;
+                txtBlockNotificationsCount.Text = count.ToString();
+            }
+            else
+            {
+                txtBlockNotificationsCount.Visibility = Visibility.Collapsed;
+                txtBlockNotificationsCount.Text = count.ToString();
+            }
+        }
+        public async  Task<bool> registerPush()
         {
             //Check if access status and revoke , makes sure your app works well when there is an update
             BackgroundExecutionManager.RemoveAccess();
@@ -170,19 +174,14 @@ namespace Pepeza
             }
             return isRegistered;
         }
-        static async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
+         async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
             args.Cancel = true;
             //Init update from the server
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
             {
-                if (results[Constants.NOTIFICATION_COUNT] > 0)
-                {
-                    int not_count =  results[Constants.NOTIFICATION_COUNT];
-                    //Set the count here 
-
-                }
+                updateNotificationCount();
             }
             //Prevent background agent from being invoked 
         }
@@ -399,7 +398,11 @@ namespace Pepeza
                     //Update that it is read and give it the read timestamp
                     tnoticeItem.isRead = 1;
                     //TODO :: Confirm this timestamp
-                    tnoticeItem.dateRead = DateTime.Now.Subtract(new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+
+                    var date = DateTime.UtcNow;
+                    long ticks = new DateTime(1970, 1, 1).Ticks;
+                    long unixTime = ((DateTime.UtcNow.Ticks - ticks) / TimeSpan.TicksPerSecond);
+                    tnoticeItem.dateRead = unixTime;
                     await NoticeItemHelper.update(tnoticeItem);
                 }
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
@@ -410,12 +413,17 @@ namespace Pepeza
         {
 
         }
-
+        
        
 
         private void StackPanelViewNotifications_Tapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ViewNotifications));
+        }
+
+        private void OrgTabAd_AdMediatorFilled(object sender, Microsoft.AdMediator.Core.Events.AdSdkEventArgs e)
+        {
+            string company = e.SdkEventArgs + "  ===============  "+e.Name ;
         }
        
 

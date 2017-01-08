@@ -28,7 +28,7 @@ namespace Pepeza.Db.Models.Notices
             }
         }
         public int hasAttachment { get; set; }
-        public DateTime dateUpdated { get; set; }
-        public DateTime dateCreated { get; set; }
+        public long dateUpdated { get; set; }
+        public long dateCreated { get; set; }
     }
 }

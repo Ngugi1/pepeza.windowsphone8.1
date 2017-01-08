@@ -93,8 +93,8 @@ namespace Pepeza.Views.Orgs
                             toInsert.name = model.Name;
                             toInsert.userId = (int)Settings.getValue(Constants.USERID);
                             toInsert.description = model.Desc;
-                            toInsert.dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["dateCreated"]);
-                            if(orgInfo["organization"]["dateUpdated"].Type != JTokenType.Null)toInsert.dateUpdated = DateTimeFormatter.format((long)orgInfo["organization"]["dateUpdated"]);
+                            toInsert.dateCreated = (long)orgInfo["organization"]["dateCreated"];
+                            if(orgInfo["organization"]["dateUpdated"].Type != JTokenType.Null)toInsert.dateUpdated = (long)orgInfo["organization"]["dateUpdated"];
                             toInsert.avatarId = (int)orgInfo["organization"]["id"];
                             //Org avatars 
                             TAvatar orgAvatar = new TAvatar()
@@ -102,9 +102,9 @@ namespace Pepeza.Views.Orgs
                                 id = (int)orgInfo["organization"]["avatar"]["id"],
                                 linkSmall = (string)orgInfo["organization"]["avatar"]["linkSmall"],
                                 linkNormal = (string)orgInfo["organization"]["avatar"]["linkNormal"],
-                                dateCreated = DateTimeFormatter.format((long)orgInfo["organization"]["avatar"]["dateCreated"])
+                                dateCreated = (long)orgInfo["organization"]["avatar"]["dateCreated"]
                             };
-                            if(orgInfo["organization"]["avatar"]["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)orgInfo["organization"]["avatar"]["dateUpdated"]);
+                            if(orgInfo["organization"]["avatar"]["dateUpdated"].Type != JTokenType.Null)orgAvatar.dateUpdated = (long)orgInfo["organization"]["avatar"]["dateUpdated"];
 
                             // Get the org collaborators 
                             TCollaborator orgCollaborator = new TCollaborator()
@@ -114,9 +114,9 @@ namespace Pepeza.Views.Orgs
                                 active = (int)orgInfo["org_collaborator"]["active"],
                                 userId = (int)orgInfo["org_collaborator"]["userId"],
                                 role = (string)orgInfo["org_collaborator"]["role"],
-                                dateCreated = DateTimeFormatter.format((long)orgInfo["org_collaborator"]["dateCreated"])
+                                dateCreated = (long)orgInfo["org_collaborator"]["dateCreated"]
                             };
-                            if (orgInfo["org_collaborator"]["dateUpdated"].Type != JTokenType.Null) DateTimeFormatter.format((long)orgInfo["org_collaborator"]["dateUpdated"]);
+                            if (orgInfo["org_collaborator"]["dateUpdated"].Type != JTokenType.Null)orgCollaborator.dateUpdated =(long)orgInfo["org_collaborator"]["dateUpdated"];
 
                             await Db.DbHelpers.OrgHelper.add(toInsert);
                             await CollaboratorHelper.add(orgCollaborator);

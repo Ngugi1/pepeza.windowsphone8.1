@@ -21,8 +21,8 @@ namespace Pepeza.Db.Models
         public string firstName { get; set; }
         [MaxLength(20)]
         public string lastName { get; set; }
-        public DateTime dateUpdated { get; set; }
-        public DateTime dateCreated { get; set; }
+        public long dateUpdated { get; set; }
+        public long dateCreated { get; set; }
         public int avatarId { get; set; }
         public string visibility { get; set; }
 

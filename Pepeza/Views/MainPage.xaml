@@ -111,15 +111,16 @@
                     </ListView>
                     <WindowsPhone81:AdMediatorControl
                                 Id="NoticeAdId" 
-                                   Height="50"
-                                   Width="Auto"
-                                   Background="Transparent"
-                                   Margin="12,4"
-                                   HorizontalAlignment="Center"
-                                   Grid.Row="1"
-                                   VerticalAlignment="Bottom"
-                                   AdMediatorError="AdMediatorControl_AdMediatorError"
-                                   Name="NoticesTabAd"/>
+                                Height="50" 
+                                Width="320"
+                                Background="Transparent"
+                                Margin="12,4"
+                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
+                                HorizontalAlignment="Center"
+                                Grid.Row="1"
+                                VerticalAlignment="Bottom"
+                                AdMediatorError="AdMediatorControl_AdMediatorError"
+                                Name="NoticesTabAd"/>
                 </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -214,12 +215,13 @@
                     <WindowsPhone81:AdMediatorControl
                                 Id="BoardAdId" 
                                    Height="50"
-                                   Width="Auto"
+                                   Width="320"
                                    Background="Transparent"
                                    Margin="12,4"
                                    HorizontalAlignment="Center"
                                    Grid.Row="1"
                                    VerticalAlignment="Bottom"
+                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
                                    AdMediatorError="AdMediatorControl_AdMediatorError"
                                    Name="BoardsTabAd"/>
                 </Grid>
@@ -302,11 +304,12 @@
                     <WindowsPhone81:AdMediatorControl
                                 Id="OrgAdId" 
                                    Height="50"
-                                   Width="Auto"
+                                   Width="320"
                                    Background="Transparent"
                                    Margin="12,4"
                                    HorizontalAlignment="Center"
                                    Grid.Row="1"
+                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
                                    VerticalAlignment="Bottom"
                                    AdMediatorError="AdMediatorControl_AdMediatorError"
                                    Name="OrgTabAd"/>
@@ -358,12 +361,15 @@
             Orientation="Horizontal" 
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right">
-            <Viewbox Height="40" Width="Auto">
-                <SymbolIcon Symbol="ViewAll"/>
+            <Viewbox Height="35" Width="Auto">
+                <SymbolIcon Symbol="ViewAll" />
             </Viewbox>
-            <TextBlock Text="2" 
+            <TextBlock 
+                       Name="txtBlockNotificationsCount"
                        Style="{StaticResource txtBlockStatus}"
                        Margin="4,0"
+                       FontWeight="Bold"
+                       Visibility="Collapsed"
                        Foreground="{ThemeResource PhoneAccentBrush}"
                        VerticalAlignment="Top"/>
         </StackPanel>

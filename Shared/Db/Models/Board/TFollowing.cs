@@ -14,11 +14,11 @@ namespace Pepeza.Db.Models.Board
         public int id { get; set; }
         public int boardId { get; set; }
         public int userId { get; set; }
-        public DateTime dateDeclined { get; set; }
-        public DateTime dateUpdated { get; set; }
-        public DateTime dateCreated { get; set; }
+        public long dateDeclined { get; set; }
+        public long dateUpdated { get; set; }
+        public long dateCreated { get; set; }
         public int accepted { get; set; }
         public int declined { get; set; }
-        public DateTime dateAccepted { get; set; }
+        public long dateAccepted { get; set; }
     }
 }

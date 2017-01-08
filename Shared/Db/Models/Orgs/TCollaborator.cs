@@ -15,8 +15,8 @@ namespace Shared.Db.Models.Orgs
         public int orgId { get; set; }
         public int userId { get; set; }
         public int active { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
      
     }
 }

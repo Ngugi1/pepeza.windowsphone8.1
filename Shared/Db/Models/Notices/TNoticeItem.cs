@@ -19,11 +19,11 @@ namespace Shared.Db.Models.Notices
         public int userId { get; set; }
         public int isReceived { get; set; }
         public int updated { get; set; }
-        public DateTime dateReceived { get; set; }
-        public DateTime dateUpdateRead { get; set; }
-        public DateTime dateCreated { get; set; }
-        public DateTime dateUpdated { get; set; }
-        public double dateRead { get; set; }
+        public long dateReceived { get; set; }
+        public long dateUpdateRead { get; set; }
+        public long dateCreated { get; set; }
+        public long dateUpdated { get; set; }
+        public long dateRead { get; set; }
         public int isRead { get; set; }
         public bool isSubmited { get; set; }
         public bool isForbiden { get; set; }

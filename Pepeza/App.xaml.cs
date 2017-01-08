@@ -34,6 +34,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Shared.Server.Requests;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -66,9 +67,32 @@ namespace Pepeza
             NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
             this.RequestedTheme = ApplicationTheme.Light; 
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;   
-            this.Resuming += App_Resuming;  
+            this.Resuming += App_Resuming;
+            UnhandledException += App_UnhandledException;
         }
+        // In App.xaml.cs file, register with the UnhandledException event handler.
 
+
+void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+   {
+      if (e != null)
+      {
+         Exception exception = e.Exception;
+         if (exception is NullReferenceException && exception.ToString().ToUpper().Contains("SOMA"))
+         {
+            Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
+            e.Handled = true;
+            return;
+         }
+      }
+// APP SPECIFIC HANDLING HERE
+
+   if (Debugger.IsAttached)
+      {
+         // An unhandled exception has occurred; break into the debugger
+         Debugger.Break();
+      }
+   }
         async void NetworkInformation_NetworkStatusChanged(object sender)
         {
             //If network is back do 
@@ -78,7 +102,7 @@ namespace Pepeza
                 //1. Get new data if it failed 
                 if(Settings.getValue(Constants.DATA_PUSHED)!=null)
                 {
-                    bool isGetNewDataSuccessful = (bool)Settings.getValue(Constants.DATA_PUSHED);
+                bool isGetNewDataSuccessful = (bool)Settings.getValue(Constants.DATA_PUSHED);
                 if (!isGetNewDataSuccessful)
                 {
                     await SyncPushChanges.initUpdate();
@@ -91,6 +115,14 @@ namespace Pepeza
                 
                 //Push  all the unsubmited reads
                 await NoticeService.submitReadNoticeItems();   
+
+                // Push all the read notifications 
+                var unreads = Settings.getValue(Constants.UNREAD_NOTIFICATIONS);
+                if (unreads != null)
+                {
+                    long timestamp = (long)unreads;
+                    await NotificationService.submitReadNotifications(timestamp);
+                }
             }
             
         }
@@ -124,7 +156,6 @@ namespace Pepeza
 
             Window.Current.Activate();
         }
-
         public  async static void displayMessageDialog(string message)
         {
             await new MessageDialog(message).ShowAsync();

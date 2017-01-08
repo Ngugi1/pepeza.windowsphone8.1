@@ -1,5 +1,6 @@
 ﻿using Pepeza.Db.DbHelpers;
 using Shared.Db.Models.Notification;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,45 @@ namespace Shared.Db.DbHelpers
             {
                 return null;
             }
+        }
+        public async static Task<long> readAll()
+        {
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    List<TNotification> unread = await connection.QueryAsync<TNotification>("SELECT * FROM TNotification WHERE isRead = 0");
+                    if (unread != null)
+                    {
+                        foreach (var item in unread)
+                        {
+                            item.isRead = 1;
+                            item.dateRead = item.dateUpdated = DateTimeFormatter.ToUnixTimestamp(DateTime.UtcNow);
+                        }
+                        await connection.UpdateAllAsync(unread);
+                        return unread.OrderByDescending(i => i.dateUpdated).FirstOrDefault().dateUpdated;
+                    }
+
+                  
+                }
+                return 0;
+            }
+            catch (Exception)
+            {
+
+                return 0;
+            }
+        }
+        public async static Task<int> unreadNotifications()
+        {
+            var connection = DbHelper.DbConnectionAsync();
+            if (connection != null)
+            {
+                List<TNotification> unread = await connection.QueryAsync<TNotification>("SELECT * FROM TNotification WHERE isRead=?", 0);
+                return unread.Count;
+            }
+            return 0;
         }
     }
 }
