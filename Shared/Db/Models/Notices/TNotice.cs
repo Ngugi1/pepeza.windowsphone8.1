@@ -17,6 +17,7 @@ namespace Pepeza.Db.Models.Notices
         public int boardId { get; set; }
         public string title { get; set; }
         public string content { get; set; }
+        public string poster { get; set; }
         [Ignore]
         public string board { get; set; }
         private int _isRead;

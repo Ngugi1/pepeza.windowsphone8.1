@@ -39,7 +39,6 @@ namespace Pepeza.Db.DbHelpers
             if (connection != null && Info != null)
             {
                 affectedRows = await connection.UpdateAsync(Info);
-
             }
             return affectedRows;
         }

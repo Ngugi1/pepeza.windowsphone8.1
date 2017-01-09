@@ -340,6 +340,7 @@ namespace Pepeza.Server.Requests
                             hasAttachment = (int)item["hasAttachment"],
                             content = (string)item["content"],
                             dateCreated = (long)item["dateCreated"]
+                            //poster = (string)item["poster"]
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) notice.dateUpdated = (long)item["dateUpdated"];
                         if (await NoticeHelper.get(notice.noticeId) != null)
