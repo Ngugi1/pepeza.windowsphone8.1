@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -61,8 +62,21 @@ namespace Pepeza.Views.Configurations
             {
                 if(config.page == null)
                 {
-                     StackPanelInProgress.Visibility = Visibility.Visible;
-                Dictionary<string, string> logout = await RequestUser.logout();
+                    //Confirm whether the user wants to continue
+                    MessageDialog dialog = new MessageDialog("All your data will be wiped.\nDo you want to proceed?", "Logout");
+                    dialog.Commands.Add(new UICommand() { Label = "OK", Id = 0  });
+                    dialog.Commands.Add(new UICommand() { Label = "Cancel", Id = 1 });
+                    dialog.CancelCommandIndex = 0;
+                    dialog.DefaultCommandIndex = 1;
+                    var result =  await dialog.ShowAsync();
+                    //Exit if they dont want to 
+                    if ((int)result.Id == 1)
+                    {
+                        ListViewSettings.SelectedItem = null;
+                        return;
+                    }
+                    StackPanelInProgress.Visibility = Visibility.Visible;
+                    Dictionary<string, string> logout = await RequestUser.logout();
                 if (logout.ContainsKey(Constants.SUCCESS))
                 {
                     if (await LocalUserHelper.clearLocalSettingsForUser())
