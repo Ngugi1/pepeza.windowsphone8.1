@@ -11,6 +11,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <ScrollViewer>
         <Grid>
+            <StackPanel Margin="0"
+                        VerticalAlignment="Center"
+                        Visibility="Visible"
+                        Name="StackPanelLoading">
+                <ProgressRing Width="100"
+                          Style="{StaticResource PRstyle}"
+                          VerticalAlignment="Top"
+                          IsEnabled="True"
+                          Foreground="{ThemeResource PhoneAccentBrush}"
+                          Background="Transparent"
+                          Height="100"/>
+                <TextBlock Style="{StaticResource txtBlockWait}" 
+                           HorizontalAlignment="Center"
+                           Text="Just a second ... "/>
+            </StackPanel>
+            <Grid Name="RootGrid">
 
             <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -233,162 +249,59 @@
                     <TextBlock Style="{StaticResource txtBlockPageHeader}" 
                    FontWeight="ExtraLight"
                    FontFamily="Segoe WP SemiLight"
-                   Text="Top Notices" FontSize="28"/>
-                    <ListView Name="ListViewTopNotices">
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
+                   Text="Top Notices" 
+                   FontSize="28"/>
+                        <StackPanel 
+                        Name="EmptyNoticesPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                            <Viewbox Width="50" Height="50">
+                                <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="Read"/>
+                            </Viewbox>
+                            <TextBlock Text="There are no top notices found for this board (:-"
+                                   HorizontalAlignment="Center"
+                                   TextLineBounds="Full"
+                                   Style="{StaticResource txtBlockDisplay}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                        </StackPanel>
+                        <ListView Name="ListViewTopNotices">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="12,4">
+                                        <TextBlock Text="{Binding title}"
                                TextWrapping="NoWrap"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        TextTrimming="CharacterEllipsis"
                        FontWeight="ExtraLight"
                        Margin="12,8,4,0"
                        />
-                                <RichTextBlock
+                                        <RichTextBlock
                         Margin="12,0"
                         Foreground="{StaticResource PhoneAccentBrush}"
                         FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
+                                            <Paragraph>
+                                                <Span>
+                                                    <Underline>
+                                                        <Run Text="{Binding content}"/>
+                                                    </Underline>
+                                                </Span>
+                                                Reads
 
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
-                               TextWrapping="NoWrap"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="ExtraLight"
-                       Margin="12,8,4,0"
-                       />
-                                <RichTextBlock
-                        Margin="12,0"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                        FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
-
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
-                               TextWrapping="NoWrap"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="ExtraLight"
-                       Margin="12,8,4,0"
-                       />
-                                <RichTextBlock
-                        Margin="12,0"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                        FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
-
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
-                               TextWrapping="NoWrap"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="ExtraLight"
-                       Margin="12,8,4,0"
-                       />
-                                <RichTextBlock
-                        Margin="12,0"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                        FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
-
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
-                               TextWrapping="NoWrap"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="ExtraLight"
-                       Margin="12,8,4,0"
-                       />
-                                <RichTextBlock
-                        Margin="12,0"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                        FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
-
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem>
-                            <StackPanel Margin="12,4">
-                                <TextBlock Text="Exams results are out fo all the finalists"
-                               TextWrapping="NoWrap"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       FontWeight="ExtraLight"
-                       Margin="12,8,4,0"
-                       />
-                                <RichTextBlock
-                        Margin="12,0"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                        FontSize="{StaticResource TextStyleLargeFontSize}">
-                                    <Paragraph>
-                                        <Span>
-                                            <Underline>
-                                                <Run Text="0"/>
-                                            </Underline>
-                                        </Span>
-                                        Reads
-
-                                    </Paragraph>
-                                </RichTextBlock>
-                            </StackPanel>
-                        </ListViewItem>
+                                            </Paragraph>
+                                        </RichTextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
             </Grid>
 
+        </Grid>
         </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>

@@ -133,7 +133,7 @@ namespace Pepeza.Views.Analytics
         private static List<NoticeStatItem> getJArrayKeysAndValues(JArray jArray)
         {
             List<NoticeStatItem> available_hours = new List<NoticeStatItem>();
-            for (int i = 0; i < 23; i++)
+            for (int i = 0; i <= 23; i++)
             {
                 available_hours.Add(new NoticeStatItem() { Hour = i.ToString(), Read = 0 });
             }

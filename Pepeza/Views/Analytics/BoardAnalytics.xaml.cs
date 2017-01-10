@@ -29,7 +29,7 @@ namespace Pepeza.Views.Analytics
     /// </summary>
     public sealed partial class BoardAnalytics : Page
     {
-        int boardId;
+        int boardId = 0;
         public class Data
         {
             public string Label { get; set; }
@@ -66,7 +66,7 @@ namespace Pepeza.Views.Analytics
         private static List<BoardStatItem> getJArrayKeysAndValues(JArray jArray)
         {
             List<BoardStatItem> available_hours = new List<BoardStatItem>();
-            for (int i = 0; i < 23; i++)
+            for (int i = 0; i <= 23; i++)
             {
                 available_hours.Add(new BoardStatItem() { Hour = i.ToString(), Read = 0 });
             }
@@ -74,11 +74,9 @@ namespace Pepeza.Views.Analytics
             {
                 foreach (JObject item in jArray)
                 {
-                    foreach (JProperty property in item.Properties())
-                    {
-                        int candidateIndex = int.Parse(property.Name);
-                        available_hours.ElementAt<BoardStatItem>(candidateIndex).Read = (int)property.Value;
-                    }
+                    int hour = (int)item["hour"];
+                    int no_of_reads = (int)item["no_of_reads"];
+                    available_hours.ElementAt<BoardStatItem>(hour).Read = no_of_reads;
                 }
             }
 
@@ -86,6 +84,8 @@ namespace Pepeza.Views.Analytics
         }
         public async Task getAnalytics(int boardId, int period = 3)
         {
+            RootGrid.Visibility = Visibility.Collapsed;
+            StackPanelLoading.Visibility = Visibility.Visible;
             try
             {
                 ObservableCollection<Data> nunerOfPeopleWhoRead = new ObservableCollection<Data>();
@@ -117,21 +117,31 @@ namespace Pepeza.Views.Analytics
                     //Top 5 notices 
                     JArray top5Notices = JArray.Parse(json["top_notices"].ToString());
                    ObservableCollection<TNotice> notices = new ObservableCollection<TNotice>();
-                    foreach (var item in top5Notices)
-                    {
-                        //Retreive data from the objects
-                        
-                        notices.Add(new TNotice()
-                        {
-                             boardId = (int)item["boardId"],
-                             noticeId = (int)item["noticeId"],
-                             title = (string)item["title"],
-                             content = (string)item["no_of_reads"]
-                        });
-                       
-                    }
+                   if (top5Notices.Count > 0)
+                   {
+                       foreach (var item in top5Notices)
+                       {
+                           //Retreive data from the objects
+
+                           notices.Add(new TNotice()
+                           {
+                               boardId = (int)item["boardId"],
+                               noticeId = (int)item["id"],
+                               title = (string)item["title"],
+                               content = (string)item["no_of_reads"]
+                           });
+
+                       }
+                   }
+                   else
+                   {
+                       EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+                   }
+                    
                     ListViewTopNotices.ItemsSource = notices;
                     txtBlockNewFollowers.Text = new_followers_current.ToString();
+                    txtBlockNoOfFollowers.Text = followers.ToString();
+                    txtBlockNewNotices.Text = new_notices_current.ToString();
                     txtBlockNewFollowersPerentage.Text = follower_percentage;
                     if (follower_percentage.Contains("-"))
                     {
@@ -167,6 +177,8 @@ namespace Pepeza.Views.Analytics
             {
                 var x = ex.ToString();
             }
+            StackPanelLoading.Visibility = Visibility.Collapsed;
+            RootGrid.Visibility = Visibility.Visible;
         }
 
         public BoardAnalytics()
@@ -199,13 +211,17 @@ namespace Pepeza.Views.Analytics
         private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int period = (sender as ComboBox).SelectedIndex + 1;
-            await getAnalytics(boardId, period);
+            if (boardId != 0)
+            {
+                await getAnalytics(boardId, period);
+            }
+           
         }
 
         private async void AppBtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             int period = comboPeriods.SelectedIndex + 1;
-            await getAnalytics(boardId, period);
+            if(boardId!=0)await getAnalytics(boardId, period);
         }
     }
 }
