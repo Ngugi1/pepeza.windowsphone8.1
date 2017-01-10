@@ -91,7 +91,9 @@ namespace Pepeza.Views.Orgs
         }
         private async Task getUserRole()
         {
-            //Get the current user Id 
+            try
+            {
+                 //Get the current user Id 
             int userId = (int)Settings.getValue(Constants.USERID);
             TCollaborator collaborator = await CollaboratorHelper.getRole(userId, OrgID);
             if (collaborator != null)
@@ -112,6 +114,12 @@ namespace Pepeza.Views.Orgs
                 rectangleProfilePic.IsTapEnabled = false;
                 ImageMask.IsTapEnabled = false;
             }
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+           
            
 
         }
@@ -218,34 +226,41 @@ namespace Pepeza.Views.Orgs
             switch ((sender as Pivot).SelectedIndex)
             {
                 case  0:
-                    hideCommandBar(false);
-                    //load profile
-                    await getUserRole();
-                    AppBtnAdd.Visibility = Visibility.Collapsed;
-                    if (role != null)
+                    if (OrgID != 0)
                     {
-                        if (role.Equals(Constants.EDITOR))
+                        await getOrgDetails(OrgID);
+                        hideCommandBar(false);
+                        //load profile
+                        await getUserRole();
+                        AppBtnAdd.Visibility = Visibility.Collapsed;
+                        if (role != null)
                         {
-                            AppBtnEdit.Visibility = Visibility.Collapsed;
-                            AppBtnAnalytics.Visibility = Visibility.Visible;
-                        }
-                        else if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
-                        {
-                            AppBtnEdit.Visibility = Visibility.Visible;
-                            AppBtnAnalytics.Visibility = Visibility.Visible;
+                            if (role.Equals(Constants.EDITOR))
+                            {
+                                AppBtnEdit.Visibility = Visibility.Collapsed;
+                                AppBtnAnalytics.Visibility = Visibility.Visible;
+                            }
+                            else if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
+                            {
+                                AppBtnEdit.Visibility = Visibility.Visible;
+                                AppBtnAnalytics.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                hideCommandBar(true);
+                            }
                         }
                         else
                         {
-                            hideCommandBar(true);
+                            hideCommandBar();
                         }
+
+
                     }
                     else
                     {
-                        hideCommandBar();
+                        return;
                     }
-                   
-                   await getOrgDetails(OrgID);
-                    
                     break;
                 case 1:
                     //load boards

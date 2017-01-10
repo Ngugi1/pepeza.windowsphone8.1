@@ -104,11 +104,12 @@
                 </Viewbox>
 
             </StackPanel>
-            <TextBox  Height="100" 
+            <TextBox  
                       Margin="12,4"
                       Name="txtBoxFeedBack"
                       Foreground="Black"
                       Header="Tell us why you feel this way?"
+                      PlaceholderText="I like pepeza :-)"
                       Style="{StaticResource txtBoxStyle}"/>
         </StackPanel>
         <toast:Toastinet Name="ToastStatus" Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>

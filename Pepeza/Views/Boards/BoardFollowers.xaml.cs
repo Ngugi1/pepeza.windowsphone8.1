@@ -84,7 +84,7 @@ namespace Pepeza.Views.Boards
             Follower follower = ((sender as ListView).SelectedItem as Follower);
             if (follower != null)
             {
-                this.Frame.Navigate(typeof(UserProfile), follower.userId);
+                this.Frame.Navigate(typeof(PublicUserProfile), follower.userId);
             }
         }
     }
