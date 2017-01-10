@@ -18,7 +18,23 @@
         </ResourceDictionary>
     </Page.Resources>
     <ScrollViewer VerticalScrollMode="Enabled">
-    <Grid>
+        <Grid>
+            <StackPanel Margin="0"
+                        VerticalAlignment="Center"
+                        Visibility="Visible"
+                        Name="StackPanelLoading">
+            <ProgressRing Width="100"
+                          Style="{StaticResource PRstyle}"
+                          VerticalAlignment="Top"
+                          IsEnabled="True"
+                          Foreground="{ThemeResource PhoneAccentBrush}"
+                          Background="Transparent"
+                          Height="100"/>
+                <TextBlock Style="{StaticResource txtBlockWait}" 
+                           HorizontalAlignment="Center"
+                           Text="Just a second ... "/>
+            </StackPanel>
+            <Grid Name="RootGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -48,7 +64,8 @@
                     <ComboBoxItem Content="Last 7 Days" IsSelected="True"/>
                     <ComboBoxItem Content="Last 30 Days"/>
                 </ComboBox>
-                <TextBlock Text="Exam results are out"
+                <TextBlock 
+                       Name="txtBlockTitle"
                        Style="{StaticResource txtBlockListViewItemHeader}"
                        TextTrimming="CharacterEllipsis"
                        TextWrapping="NoWrap"
@@ -172,6 +189,7 @@
                     </Charts:LineSeries.ValueBinding>
                 </Charts:LineSeries>
             </Charts:RadCartesianChart>
+        </Grid>
         </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>

@@ -20,6 +20,7 @@ namespace Pepeza.Db.DbHelpers
             return affectedRows;
         }
 
+
         public async static Task<int> addAll(IEnumerable<object> items)
         {
             int affectedRows = 0;
@@ -39,6 +40,7 @@ namespace Pepeza.Db.DbHelpers
             if (connection != null && Info != null)
             {
                 affectedRows = await connection.UpdateAsync(Info);
+
             }
             return affectedRows;
         }
@@ -52,6 +54,7 @@ namespace Pepeza.Db.DbHelpers
             }
             return affectedRows;
         }
+       
 
     }
 }

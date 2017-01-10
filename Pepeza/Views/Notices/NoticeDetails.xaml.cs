@@ -51,6 +51,7 @@ namespace Pepeza.Views.Notices
         private CancellationTokenSource cts;
         TFile file = new TFile();
         TNotice notice = null;
+        string noticeTitle;
         int noticeId;
         public NoticeDetails()
         {
@@ -128,6 +129,7 @@ namespace Pepeza.Views.Notices
                     StackPanelSentFrom.Visibility = Visibility.Visible;
                 }
                 this.RootGrid.DataContext = notice;
+                noticeTitle = notice.title;
                 await NoticeService.submitReadNoticeItems();
               
             }else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
@@ -193,6 +195,7 @@ namespace Pepeza.Views.Notices
                         notice.hasAttachment = (int)json["notice"]["hasAttachment"];
                         notice.content = (string)json["notice"]["content"];
                         notice.dateCreated = (long)json["notice"]["dateCreated"];
+                        noticeTitle = notice.title;
                         if (notice.hasAttachment == 1)
                         {
                             StackPanelDownload.Visibility = Visibility.Visible;
@@ -415,7 +418,8 @@ namespace Pepeza.Views.Notices
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(NoticeAnalytics), noticeId);
+
+            this.Frame.Navigate(typeof(NoticeAnalytics), new Dictionary<string, string>() { { "id", noticeId.ToString() }, { "title", noticeTitle} });
         }
        
     }

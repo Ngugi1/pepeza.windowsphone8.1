@@ -41,8 +41,10 @@ namespace Pepeza.Views.Analytics
             public string Percentage { get; set; }
         }
 
-        public async Task getAnalytics(int noticeId =3, int period=3)
+        public async Task getAnalytics(int noticeId, int period=3)
         {
+            RootGrid.Visibility = Visibility.Collapsed;
+            StackPanelLoading.Visibility = Visibility.Visible;
             try
             {
                 ObservableCollection<Data> data = new ObservableCollection<Data>();
@@ -75,6 +77,9 @@ namespace Pepeza.Views.Analytics
             {
                 var x = ex.ToString();
             }
+            StackPanelLoading.Visibility = Visibility.Collapsed;
+            RootGrid.Visibility = Visibility.Visible;
+
         }
         private string computePercantage(int previous, int current)
         {
@@ -112,7 +117,9 @@ namespace Pepeza.Views.Analytics
             if (e.Parameter != null)
             {
                 //Then pick the notice ID
-                noticeId = (int)e.Parameter;
+                Dictionary<string, string> data = e.Parameter as Dictionary<string, string>;
+                noticeId = int.Parse(data["id"]);
+                txtBlockTitle.Text =  (string)data["title"];
                 await getAnalytics(noticeId);
             }
             
@@ -134,11 +141,14 @@ namespace Pepeza.Views.Analytics
             {
                 foreach (JObject item in jArray)
                 {
-                    foreach (JProperty property in item.Properties())
-                    {
-                        int candidateIndex = int.Parse(property.Name);
-                        available_hours.ElementAt<NoticeStatItem>(candidateIndex).Read = (int)property.Value;
-                    }
+                    int hour = (int)item["hour"];
+                    int no_of_reads = (int)item["no_of_reads"];
+                    available_hours.ElementAt<NoticeStatItem>(hour).Read = no_of_reads;
+                    //foreach (JProperty property in item.Properties())
+                    //{
+                    //    string candidateIndex = property.Name; ;
+                    //    //available_hours.ElementAt<NoticeStatItem>(candidateIndex).Read = (int)property.Value;
+                    //}
                 }
             }
            
@@ -148,7 +158,11 @@ namespace Pepeza.Views.Analytics
         private async void ComboSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int period = (sender as ComboBox).SelectedIndex + 1;
-            await getAnalytics(noticeId, period);
+            if (noticeId != 0)
+            {
+                await getAnalytics(noticeId, period);
+            }
+           
         }
 
         private async void AppBtnReload_Click(object sender, RoutedEventArgs e)

@@ -116,6 +116,7 @@ namespace Pepeza.Server.Requests
                     {
                         // Error code 
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        string s = await response.Content.ReadAsStringAsync();
                     }
                 }
                 catch(Exception ex)
