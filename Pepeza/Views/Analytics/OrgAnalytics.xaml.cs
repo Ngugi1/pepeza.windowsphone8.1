@@ -11,6 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,10 +30,11 @@ namespace Pepeza.Views.Analytics
     /// </summary>
     public sealed partial class OrgAnalytics : Page
     {
-        int orgId;
+        int orgId = 0;
         public OrgAnalytics()
         {
             this.InitializeComponent();
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
         }
 
         public class Data
@@ -141,6 +143,7 @@ namespace Pepeza.Views.Analytics
                 else
                 {
                     //Toast an error message  
+                     
                     //Show a retry button 
                 }
             }
@@ -182,7 +185,7 @@ namespace Pepeza.Views.Analytics
         private static List<OrgStatItem> getJArrayKeysAndValues(JArray jArray)
         {
             List<OrgStatItem> available_hours = new List<OrgStatItem>();
-            for (int i = 0; i < 23; i++)
+            for (int i = 0; i <= 23; i++)
             {
                 available_hours.Add(new OrgStatItem() { Hour = i.ToString(), Read = 0 });
             }

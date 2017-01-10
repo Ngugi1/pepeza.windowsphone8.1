@@ -369,6 +369,7 @@ namespace Pepeza.Server.Requests
                 else
                 {
                     //Error
+                    string s =await response.Content.ReadAsStringAsync();
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }

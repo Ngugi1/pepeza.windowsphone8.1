@@ -12,6 +12,7 @@ using Telerik.UI.Xaml.Controls.Chart;
 using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,6 +34,8 @@ namespace Pepeza.Views.Analytics
         public NoticeAnalytics()
         {
             this.InitializeComponent();
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
+
         }
         public class Data
         {
