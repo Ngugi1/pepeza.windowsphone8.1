@@ -133,7 +133,7 @@ namespace Pepeza.Views.Profile
             string fname = txtBoxFirstName.Text.Trim();
             if (appBarBtnEditDetails.Label.Equals("update") && !string.IsNullOrEmpty(ComboVisibility.SelectedItem.ToString()))
             {
-                if (txtBoxFirstName.Text.Any(char.IsLetter))
+                if (txtBoxFirstName.Text.Any(char.IsLetterOrDigit)&&txtBoxLastName.Text.Any(char.IsLetterOrDigit))
                 {
                     StackPanelUpdatingProfile.Visibility = Visibility.Visible;
 
@@ -144,7 +144,7 @@ namespace Pepeza.Views.Profile
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong
-                        //ToastNetErrors.Message = results[Constants.ERROR];   
+                        ToastStatus.Message = results[Constants.ERROR];   
                     }
                     else if (results.ContainsKey(Constants.UPDATED))
                     {
@@ -158,6 +158,10 @@ namespace Pepeza.Views.Profile
                         //Hide textboxes and update the textblock
                         updateUI();
                     }
+                }
+                else
+                {
+                    ToastStatus.Message = "Firstname and lastname can only contain letters and digits";
                 }
                 StackPanelUpdatingProfile.Visibility = Visibility.Collapsed;
             }
@@ -409,6 +413,12 @@ namespace Pepeza.Views.Profile
         {
             FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             view.Activated += view_Activated;
+        }
+
+        private void ToastStatus_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ToastStatus.Duration = 0;
+            ToastStatus.Message = "";
         }
         
        

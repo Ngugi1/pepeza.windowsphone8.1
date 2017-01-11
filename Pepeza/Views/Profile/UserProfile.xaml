@@ -58,8 +58,11 @@
                             TextWrapping="Wrap"
                             AnimationType="LeftToLeft" 
                             HorizontalAlignment="Center"
-                            Width="250"
-                            
+                            Width="350"
+                            Duration="3"
+                            Tapped="ToastStatus_Tapped"
+                            Height="70"
+                            TextHAlignment="Center"
                             Name="ToastStatus"
                             VerticalAlignment="Bottom"
                          Style="{StaticResource ToastStyle}"
@@ -137,6 +140,7 @@
                             Orientation="Vertical">
                     <StackPanel Orientation="Vertical" 
                                 Visibility="Visible">
+                        
                         <ComboBox Margin="12,8" 
                                   Name="ComboVisibility"
                                   Header="profile visibility"
@@ -164,6 +168,7 @@
                                  Text="{Binding lname}" />
                     </StackPanel>
                 </StackPanel>
+                
             </StackPanel>
         </ScrollViewer>
        

@@ -246,11 +246,11 @@ namespace Pepeza.Views.Notices
                     showErrorToast(results[Constants.ERROR]);
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 if(results != null)
                 {
-                    showErrorToast(results[Constants.ERROR]);
+                    showErrorToast(ex.Message);
                 }
                
             }

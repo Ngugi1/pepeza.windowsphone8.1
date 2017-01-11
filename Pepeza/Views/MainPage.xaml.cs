@@ -1,9 +1,11 @@
 ﻿using Coding4Fun.Toolkit.Controls;
 using Microsoft.AdMediator.WindowsPhone81;
 using Pepeza.Db.DbHelpers.Notice;
+using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
+using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Models.Search_Models;
 using Pepeza.Server.Push;
@@ -104,6 +106,20 @@ namespace Pepeza
                 {
                     await GetNewData.getNewData();
                 }
+            }
+            //Check whether the email is confirmed 
+            var userIInfo = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
+            if (userIInfo != null)
+            {
+                TEmail emailInfo = await EmailHelper.getEmail(userIInfo.emailId);
+                if (emailInfo!=null)
+                {
+                    if (emailInfo.verified == 0)
+                    {
+                        ToastConfirmEmail.Message  = "Please confirm your email address with us to stop seeing this message.";
+                    }
+                }
+                   
             }
 
             

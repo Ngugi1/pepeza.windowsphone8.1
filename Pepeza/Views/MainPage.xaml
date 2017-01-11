@@ -9,6 +9,7 @@
       xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource PhoneBackgroundBrush}"
       RequestedTheme="Light"
+      xmlns:ForFun="using:Coding4Fun.Toolkit.Controls"
       xmlns:Common="using:Pepeza.Common"
       xmlns:converter="using:Pepeza"
       mc:Ignorable="d">
@@ -19,8 +20,6 @@
             </ResourceDictionary.MergedDictionaries>
             <converter:IntToAttachment x:Key="Converter"/>
             <converter:IntToForeground x:Key="IntToForeground"/>
-            
-
         </ResourceDictionary>
     </Page.Resources>
     <Grid Name="GridParent" Margin="0,0,0,0">
@@ -28,7 +27,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+       
         <toaster:Toastinet Name="ToastSuccessFailure"
                            Grid.Row="1"
                            Height="40"
@@ -40,6 +39,7 @@
                Margin="4"
                Grid.Row="1"
                SelectionChanged="pivotMainPage_SelectionChanged">
+            
             <PivotItem Margin="{StaticResource PivotItemMargin}">
                 <PivotItem.Header>
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
@@ -125,6 +125,14 @@
                                 VerticalAlignment="Bottom"
                                 AdMediatorError="AdMediatorControl_AdMediatorError"
                                 Name="NoticesTabAd"/>
+                    <toaster:Toastinet Duration="10" 
+                                       Style="{StaticResource ToastStyle}"
+                                       VerticalAlignment="Bottom"
+                                       Width="Auto"
+                                       Height="Auto"
+                                       Name="ToastConfirmEmail"
+                                       />
+
                 </Grid>
             </PivotItem>
             <PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -132,6 +140,7 @@
                     <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
                 </PivotItem.Header>
                 <Grid>
+                   
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -317,6 +326,7 @@
                                    VerticalAlignment="Bottom"
                                    AdMediatorError="AdMediatorControl_AdMediatorError"
                                    Name="OrgTabAd"/>
+                 
                 </Grid>
             </PivotItem>
             <!--<PivotItem Margin="{StaticResource PivotItemMargin}">
@@ -363,6 +373,7 @@
         <StackPanel 
             Tapped="StackPanelViewNotifications_Tapped"
             Orientation="Horizontal" 
+            Margin="8,2"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right">
             <Viewbox Height="35" Width="Auto">
@@ -377,6 +388,7 @@
                        Foreground="{ThemeResource PhoneAccentBrush}"
                        VerticalAlignment="Top"/>
         </StackPanel>
+            
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">
