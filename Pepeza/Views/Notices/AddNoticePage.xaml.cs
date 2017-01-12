@@ -6,9 +6,11 @@ using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
+using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using Pepeza.Validation;
+using Pepeza.Views.Boards;
 using Shared.Db.Models.Notices;
 using Shared.Models.NoticeModels;
 using Shared.Server.ServerModels.Notices;
@@ -84,6 +86,7 @@ namespace Pepeza.Views.Notices
                     if (file != null)
                     {
                         postAttachmentNotice(toPost);
+                        this.Frame.Navigate(typeof(BoardProfileAndNotices), boardID);// Pass a parameter that is only 
                         return;
                     }
                     //Check if attachment is empty 
@@ -106,7 +109,8 @@ namespace Pepeza.Views.Notices
                                     dateUpdated = (long)obj["dateUpdated"],
                                    
                                 });
-                                this.Frame.GoBack();
+                                this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);// Pass a parameter that is only 
+                                
                             }
                             catch
                             {
@@ -255,7 +259,7 @@ namespace Pepeza.Views.Notices
                
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
-            this.Frame.GoBack();
+            this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);
         }
         private void showErrorToast(string message)
         {

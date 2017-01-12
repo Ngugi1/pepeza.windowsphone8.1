@@ -51,16 +51,18 @@ namespace Pepeza.Views.Boards
         }
         private async void AppBtnCreateBoardClick(object sender, RoutedEventArgs e)
         {
-            progressRingAddBoard.Visibility = Visibility.Visible;
-            txtBlockStatus.Visibility = Visibility.Collapsed;
-            var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
-            followRestriction = checkBoxBoardType.IsChecked == true? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
-            boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
-            if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
+            try
             {
-                //Go ahead and create the account
+                progressRingAddBoard.Visibility = Visibility.Visible;
+                txtBlockStatus.Visibility = Visibility.Collapsed;
+                var board = RootGrid.DataContext as Pepeza.Models.BoardModels.Board;
+                followRestriction = checkBoxBoardType.IsChecked == true ? Constants.REQUEST_BOARD : Constants.PUBLIC_BOARD;
+                boardVisibility = checkBoxVisibility.IsChecked == true ? Constants.PRIVATE_BOARD : Constants.PUBLIC_BOARD;
+                if (board.CanCreate && OrgValidation.VaidateOrgName(board.Name) && OrgValidation.ValidateDescription(board.Desc))
+                {
+                    //Go ahead and create the account
 
-                Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
+                    Dictionary<string, string> results = await BoardService.createBoard(new Dictionary<string, string>()
                 {
                     {"org" ,orgId.ToString()} ,
                     {"name" , board.Name} , 
@@ -68,25 +70,32 @@ namespace Pepeza.Views.Boards
                     { "followRestriction" , followRestriction},
                     {"visibility" , boardVisibility}
                 });
-                if (results.ContainsKey(Constants.SUCCESS))
-                {
-                    //Update local database
-                    insertBoardToDb(results, board);
-                    this.Frame.GoBack();
+                    if (results.ContainsKey(Constants.SUCCESS))
+                    {
+                        //Update local database
+                        insertBoardToDb(results, board);
+                        this.Frame.GoBack();
+                    }
+                    else
+                    {
+                        //Display errors 
+                        txtBlockStatus.Visibility = Visibility.Visible;
+                        txtBlockStatus.Text = results[Constants.ERROR];
+                    }
                 }
                 else
                 {
-                    //Display errors 
-                    txtBlockStatus.Visibility = Visibility.Visible;
-                    txtBlockStatus.Text = results[Constants.ERROR];
+                    //Show errors 
+                    toastInvalidData.Message = "Please fill in the fields correctly";
                 }
+                progressRingAddBoard.Visibility = Visibility.Collapsed;
             }
-            else
+            catch (Exception ex)
             {
-                //Show errors 
-                toastInvalidData.Message = "Please fill in the fields correctly";
+                txtBlockStatus.Text = ex.Message;
+                progressRingAddBoard.Visibility = Visibility.Collapsed;
+
             }
-            progressRingAddBoard.Visibility = Visibility.Collapsed;
         }
 
         private async void insertBoardToDb(Dictionary<string, string> results,Board model)
