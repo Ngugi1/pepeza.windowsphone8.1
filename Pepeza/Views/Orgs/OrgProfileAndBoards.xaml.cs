@@ -60,7 +60,7 @@ namespace Pepeza.Views.Orgs
         public OrgProfileAndBoards()
         {
             this.InitializeComponent();
-            this.NavigationCacheMode = NavigationCacheMode.Enabled;
+         //   this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -69,7 +69,7 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected  override void OnNavigatedTo(NavigationEventArgs e)
         {
-            OrgPivot.SelectedIndex = 0;
+            OrgPivot.SelectedIndex = 1;
             if (e.Parameter != null)
             {
                 if (e.Parameter.GetType() == typeof(Organization))

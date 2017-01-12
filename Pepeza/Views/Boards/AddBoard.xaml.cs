@@ -9,6 +9,7 @@ using Pepeza.Models.BoardModels;
 using Pepeza.Server.Requests;
 using Pepeza.Server.Validation;
 using Pepeza.Utitlity;
+using Pepeza.Views.Orgs;
 using Shared.Db.DbHelpers;
 using Shared.Db.Models.Avatars;
 using Shared.Utitlity;
@@ -74,7 +75,7 @@ namespace Pepeza.Views.Boards
                     {
                         //Update local database
                         insertBoardToDb(results, board);
-                        this.Frame.GoBack();
+                        this.Frame.Navigate(typeof(OrgProfileAndBoards) , orgId);
                     }
                     else
                     {
