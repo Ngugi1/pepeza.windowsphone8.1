@@ -1,5 +1,6 @@
 ﻿using Coding4Fun.Toolkit.Controls;
 using Microsoft.AdMediator.WindowsPhone81;
+using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models.Board;
@@ -248,6 +249,7 @@ namespace Pepeza
             if (boards.Count == 0)
             {
                 EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                txtBlockContent.Text = "All boards will appear here";
             }
             else
             {
@@ -440,6 +442,91 @@ namespace Pepeza
         private void OrgTabAd_AdMediatorFilled(object sender, Microsoft.AdMediator.Core.Events.AdSdkEventArgs e)
         {
             string company = e.SdkEventArgs + "  ===============  "+e.Name ;
+        }
+
+        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ProgressBarFiltering.Visibility = Visibility.Visible;
+            var checkbox = sender as CheckBox;
+            List<TFollowing> following = await FollowingHelper.getAll();
+            List<TBoard> followingBoards = new List<TBoard>();
+            var boardsclone = boards;
+               
+            if (checkbox.Name == "CheckBoxFollowing")
+            {
+                //Load the following only
+               CheckBoxManaging.IsChecked = false;
+               if (following != null)
+                {
+                    if (following.Count > 0)
+                    {
+                        foreach (var item in following)
+                        {
+
+                            var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
+                            if (board != null)
+                            {
+                                followingBoards.Add(board);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        txtBlockContent.Text = "You aren't following any boards.";
+                    }
+                    
+                }
+                else
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    txtBlockContent.Text = "You aren't following any boards.";
+                }
+               
+                ListViewBoards.ItemsSource = followingBoards;
+            }
+            else
+            {
+                //Load managing 
+                CheckBoxFollowing.IsChecked = false;
+                if (following != null)
+                {
+                    if (following.Count > 0)
+                    {
+                        foreach (var item in following)
+                        {
+                            var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
+                            if (board != null) boards.Remove(board); // This will leave the boards you only manage
+                        }
+                        if (boards.Count == 0)
+                        {
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        txtBlockContent.Text = "You don't manage any boards.";
+                        }
+                    }
+                   
+                    
+                }
+               
+            }
+            ProgressBarFiltering.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void CheckBoxManaging_Unchecked(object sender, RoutedEventArgs e)
+        {
+         
+            ListViewBoards.ItemsSource = boards;
+            if (boards.Count == 0)
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                txtBlockContent.Text = "All boards will appear here.";
+            }
+            else
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                txtBlockContent.Text = "All boards will appear here.";
+            }
         }
        
 

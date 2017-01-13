@@ -40,10 +40,9 @@
                Grid.Row="1"
                SelectionChanged="pivotMainPage_SelectionChanged">
             
-            <PivotItem Margin="{StaticResource PivotItemMargin}">
-                <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
-                </PivotItem.Header>
+            <PivotItem 
+                Header="notices"
+                Margin="{StaticResource PivotItemMargin}">
                 <Grid>
 
                     <StackPanel 
@@ -64,6 +63,10 @@
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
+                    
+                        
+                  
+                    
                     <ListView Margin="19.5,0,8,0"
                               SelectionChanged="ListViewNotices_SelectionChanged"
                               Name="ListViewNotices">
@@ -135,10 +138,10 @@
 
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="{StaticResource PivotItemMargin}">
-                <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
-                </PivotItem.Header>
+            <PivotItem
+                Header="boards"
+                Margin="{StaticResource PivotItemMargin}">
+                
                 <Grid>
                    
                     <Grid.RowDefinitions>
@@ -159,11 +162,33 @@
                         </Viewbox>
                         <TextBlock Text="All boards will appear here"
                                    TextLineBounds="Full"
+                                   Name="txtBlockContent"
                                    HorizontalAlignment="Center"
                                    Style="{StaticResource TitleTextBlockStyle}"
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
+                    </StackPanel>
+                    <StackPanel 
+                        Margin="19.5,0,8,0"
+                        >
+                        <ProgressBar Name="ProgressBarFiltering" 
+                                     IsIndeterminate="True"
+                                     Visibility="Collapsed"
+                                     />
+                        <StackPanel Orientation="Horizontal">
+                        <CheckBox  
+                            Name="CheckBoxManaging"
+                            Unchecked="CheckBoxManaging_Unchecked"
+                                     Checked="RadioButton_Checked"
+                                     BorderThickness="2" Content="Managing"/>
+
+                        <CheckBox 
+                            Name="CheckBoxFollowing"
+                              Checked="RadioButton_Checked"
+                            Unchecked="CheckBoxManaging_Unchecked"
+                              Content="Following" BorderThickness="2"/>
+                        </StackPanel>
                     </StackPanel>
                     <Jumper:AlphaJumpList 
                         Grid.Row="1"
@@ -239,10 +264,10 @@
                                    Name="BoardsTabAd"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="{StaticResource PivotItemMargin}">
-                <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="organisations" />
-                </PivotItem.Header>
+            <PivotItem 
+                Header="organisations"
+                Margin="{StaticResource PivotItemMargin}">
+               
                 <Grid>
                     <StackPanel
                         Name="EmptyOrgsPlaceHolder"
