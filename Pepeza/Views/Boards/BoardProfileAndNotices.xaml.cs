@@ -97,7 +97,11 @@ namespace Pepeza.Views.Boards
             if (localBoard != null)
             {            
                 //We now say we are not fetching 
+                localBoard.singleFollowerOrMany = "followers";
+                rootGrid.Visibility = Visibility.Visible;
+                rootGrid.DataContext = localBoard;
                 isFetchingDetails(false);
+                
                 localBoard.noOfFollowRequests = numberofRequests;
                 if (localBoard.followRestriction == "request") HyperLinkBtnRequests.Visibility = Visibility.Visible;
                 await assignRoles(localBoard);
