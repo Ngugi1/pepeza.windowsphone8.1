@@ -89,8 +89,8 @@ namespace Pepeza.Views.Notices
                             if (await folderExists(PEPEZA))
                             {
                                 var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                                fileName = file.id + file.fileName;
-                                var localFile = await folder.GetFileAsync(file.id + file.fileName);
+                                fileName = file.uniqueFileName;
+                                var localFile = await folder.GetFileAsync(fileName);
                                 if (localFile != null)
                                 {
                                     HyperLinkOpen.Visibility = Visibility.Visible;
@@ -114,8 +114,10 @@ namespace Pepeza.Views.Notices
                     }
                     catch(Exception)
                     {
+                        //File is not downloaded yet 
                         HyperLinkOpen.Visibility = Visibility.Collapsed;
                         HLBDownloadAttachment.Visibility = Visibility.Visible;
+                       
                     }
                     StackPanelDownload.Visibility = Visibility.Visible;
                     this.StackPanelDownload.DataContext = file;
@@ -148,115 +150,117 @@ namespace Pepeza.Views.Notices
                 this.RootGrid.DataContext = notice;
                 noticeTitle = notice.title;
                 await NoticeService.submitReadNoticeItems();
-              
+
             }
-            else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
-            {
-                //Now load the notice itself 
-                StackPanelSentFrom.Visibility = Visibility.Collapsed;
-                noticeId = (int)e.Parameter;
-                try
-                {
-                    Dictionary<string, string> noticeresults = await NoticeService.getNotice(noticeId);
-                    if (noticeresults.ContainsKey(Constants.SUCCESS))
-                    {
-                        //Get the notice details 
-                        JObject json = JObject.Parse(noticeresults[Constants.SUCCESS]);
-                        JToken attachment = (JToken)json["attachment"];
-                        TNotice notice = new TNotice();
-                        if (attachment.Type != JTokenType.Null)
-                        {
-                            file = new TFile();
-                            file.id = (int)json["file"]["id"];
-                            file.mimeType = (string)json["file"]["mimeType"];
-                            file.fileName = (string)json["file"]["fileName"];
-                            file.size = (long)json["file"]["size"];
-                            file.dateCreated = (long)json["file"]["dateCreated"];
+            #region Remote notice 
+            //else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
+            //{
+            //    //Now load the notice itself 
+            //    StackPanelSentFrom.Visibility = Visibility.Collapsed;
+            //    noticeId = (int)e.Parameter;
+            //    try
+            //    {
+            //        Dictionary<string, string> noticeresults = await NoticeService.getNotice(noticeId);
+            //        if (noticeresults.ContainsKey(Constants.SUCCESS))
+            //        {
+            //            //Get the notice details 
+            //            JObject json = JObject.Parse(noticeresults[Constants.SUCCESS]);
+            //            JToken attachment = (JToken)json["attachment"];
+            //            TNotice notice = new TNotice();
+            //            if (attachment.Type != JTokenType.Null)
+            //            {
+            //                file = new TFile();
+            //                file.id = (int)json["file"]["id"];
+            //                file.mimeType = (string)json["file"]["mimeType"];
+            //                file.fileName = (string)json["file"]["fileName"];
+            //                file.size = (long)json["file"]["size"];
+            //                file.dateCreated = (long)json["file"]["dateCreated"];
 
-                            file.link = string.Format(NoticeAddresses.LINK_FORMAT, file.id);
-                            file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
-                            try
-                            {
-                                if (await folderExists(PEPEZA))
-                                {
-                                    var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                                    fileName = file.id + file.fileName;
-                                    var localFile = await folder.GetFileAsync(file.id + file.fileName);
-                                    if (localFile != null)
-                                    {
-                                        HyperLinkOpen.Visibility = Visibility.Visible;
-                                    }
-                                    else
-                                    {
-                                        HLBDownloadAttachment.Visibility = Visibility.Visible;
-                                    }
-                                }
-                                else
-                                {
-                                    HLBDownloadAttachment.Visibility = Visibility.Visible;
-                                }
+            //                file.link = string.Format(NoticeAddresses.LINK_FORMAT, file.id);
+            //                file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
+            //                try
+            //                {
+            //                    if (await folderExists(PEPEZA))
+            //                    {
+            //                        var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+            //                        fileName = file.id + file.fileName;
+            //                        var localFile = await folder.GetFileAsync(file.id + file.fileName);
+            //                        if (localFile != null)
+            //                        {
+            //                            HyperLinkOpen.Visibility = Visibility.Visible;
+            //                        }
+            //                        else
+            //                        {
+            //                            HLBDownloadAttachment.Visibility = Visibility.Visible;
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        HLBDownloadAttachment.Visibility = Visibility.Visible;
+            //                    }
 
-                            }
-                            catch (Exception)
-                            {
-                                HLBDownloadAttachment.Visibility = Visibility.Visible;
-                            }
-                        }
-                        else
-                        {
-                            StackPanelDownload.Visibility = Visibility.Collapsed;
-                        }
+            //                }
+            //                catch (Exception)
+            //                {
+            //                    HLBDownloadAttachment.Visibility = Visibility.Visible;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                StackPanelDownload.Visibility = Visibility.Collapsed;
+            //            }
                        
-                        notice.title = (string)json["notice"]["title"];
-                        notice.noticeId = (int)json["notice"]["id"];
-                        notice.boardId = (int)json["notice"]["boardId"];
-                        notice.hasAttachment = (int)json["notice"]["hasAttachment"];
-                        notice.content = (string)json["notice"]["content"];
-                        notice.dateCreated = (long)json["notice"]["dateCreated"];
-                        noticeTitle = notice.title;
-                        if (notice.hasAttachment == 1)
-                        {
-                            StackPanelDownload.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            StackPanelDownload.Visibility = Visibility.Collapsed;
-                        }
-                        TUserInfo userInfo = await NoticePosterHelper.get(notice.userId);
-                        if (userInfo != null)
-                        {
-                            if (userInfo.firstName != null && userInfo.lastName != null)
-                            {
-                                notice.poster = userInfo.firstName + " " + userInfo.lastName;
-                            }
-                            else
-                            {
-                                notice.poster = userInfo.username;
-                            }
-                        }
-                        else
-                        {
-                            //Get the user details online
-                        }
+            //            notice.title = (string)json["notice"]["title"];
+            //            notice.noticeId = (int)json["notice"]["id"];
+            //            notice.boardId = (int)json["notice"]["boardId"];
+            //            notice.hasAttachment = (int)json["notice"]["hasAttachment"];
+            //            notice.content = (string)json["notice"]["content"];
+            //            notice.dateCreated = (long)json["notice"]["dateCreated"];
+            //            noticeTitle = notice.title;
+            //            if (notice.hasAttachment == 1)
+            //            {
+            //                StackPanelDownload.Visibility = Visibility.Visible;
+            //            }
+            //            else
+            //            {
+            //                StackPanelDownload.Visibility = Visibility.Collapsed;
+            //            }
+            //            TUserInfo userInfo = await NoticePosterHelper.get(notice.userId);
+            //            if (userInfo != null)
+            //            {
+            //                if (userInfo.firstName != null && userInfo.lastName != null)
+            //                {
+            //                    notice.poster = userInfo.firstName + " " + userInfo.lastName;
+            //                }
+            //                else
+            //                {
+            //                    notice.poster = userInfo.username;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                //Get the user details online
+            //            }
                         
 
-                        RootGrid.DataContext = notice;
-                        StackPanelDownload.DataContext = file;
-                        assignRoles(notice.boardId);
-                    }
-                    else
-                    {
-                        //Throw error 
-                        ToastStatus.Message = noticeresults[Constants.ERROR];
-                    }
-                }
-                catch(Exception ex)
-                {
-                    string exep = ex.ToString();
-                    ToastStatus.Message = Constants.UNKNOWNERROR;
-                }
+            //            RootGrid.DataContext = notice;
+            //            StackPanelDownload.DataContext = file;
+            //            assignRoles(notice.boardId);
+            //        }
+            //        else
+            //        {
+            //            //Throw error 
+            //            ToastStatus.Message = noticeresults[Constants.ERROR];
+            //        }
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        string exep = ex.ToString();
+            //        ToastStatus.Message = Constants.UNKNOWNERROR;
+            //    }
 
-            }
+            //}
+            #endregion
             StackPanelDetails.Visibility = Visibility.Visible;
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
@@ -312,8 +316,8 @@ namespace Pepeza.Views.Notices
                 //Create a root destination folder
                 //Create a download URI
                 Uri source = new Uri(file.link);
-                //Create a destination URI , make sure there will be no collission by adding file ID at the end
-                string destinationUri = file.id + file.fileName;
+                //Create a destination URI
+                string destinationUri = file.uniqueFileName;
                 //Create the destination folder
                 StorageFolder destinationFolder = null;
                 StorageFile storageFile = null;
@@ -326,18 +330,20 @@ namespace Pepeza.Views.Notices
                 {
                     destinationFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
                 }
-                try
+                if (!await fileExists(file.uniqueFileName))
                 {
-                    storageFile = await destinationFolder.CreateFileAsync(destinationUri);
-                    
+                    storageFile = await destinationFolder.CreateFileAsync(file.uniqueFileName);
                 }
-                catch
+                else
                 {
+                    storageFile = await destinationFolder.GetFileAsync(file.uniqueFileName);
+                    HyperLinkOpen.Visibility = Visibility.Visible;
+                    StackPanelDownload.Visibility = Visibility.Collapsed;
                     return;
                 }
                
                 #endregion
-                #region Bsckground Downloader
+                #region Background Downloader
                 BackgroundDownloader downloader = new BackgroundDownloader();
                 if (storageFile != null)
                 {
@@ -347,10 +353,14 @@ namespace Pepeza.Views.Notices
                     //Now handle the download 
                     await handleDownloadAsync(downloadOperation, true);
                 }
-                else
+                else 
                 {
-                    await new MessageDialog("We could not download").ShowAsync();
-                    return;
+                    storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                    downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                    DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                    downloadOperation.Priority = BackgroundTransferPriority.High;
+                    //Now handle the download 
+                    await handleDownloadAsync(downloadOperation, true);
                 }
                 #endregion
             }
@@ -371,6 +381,19 @@ namespace Pepeza.Views.Notices
             try
             {
                 StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(folderName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private async Task<bool> fileExists(string fileName)
+        {
+            try
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                await folder.GetFileAsync(fileName);
                 return true;
             }
             catch
@@ -443,7 +466,7 @@ namespace Pepeza.Views.Notices
             try
             {
                 var currentFolder  = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                var file = await currentFolder.GetFileAsync(fileName);
+                StorageFile file = await currentFolder.GetFileAsync(fileName);
                 await Launcher.LaunchFileAsync(file);
             }
             catch

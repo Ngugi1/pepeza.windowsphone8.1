@@ -20,5 +20,6 @@ namespace Shared.Db.Models.Notices
         public long dateCreated { get; set; }
         public long dateUpdated { get; set; }
         public int attachmentId { get; set; }
+        public string uniqueFileName { get; set; }
     }
 }

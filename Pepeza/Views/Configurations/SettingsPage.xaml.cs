@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -82,7 +83,19 @@ namespace Pepeza.Views.Configurations
                     if (await LocalUserHelper.clearLocalSettingsForUser())
                     {
                             //Redirect to login page 
+                        string PEPEZA = "Pepeza";
                         await DbHelper.dropDatabase();
+                        //Delete the Pepeza folder 
+                        try
+                        {
+                            var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                            await currentFolder.DeleteAsync();
+                        }
+                        catch
+                        {
+                            //Igone the exception and continue
+                        }
+                        
                         this.Frame.Navigate(typeof(LoginPage));
                         }else
                         {

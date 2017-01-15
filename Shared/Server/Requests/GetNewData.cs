@@ -476,6 +476,10 @@ namespace Pepeza.Server.Requests
                             dateCreated = (long)item["dateCreated"]
 
                         };
+                        var fileNameParts = file.fileName.Split('.');
+                        int elements = fileNameParts.Length;
+                        file.uniqueFileName = string.Format(@"{0}.{1}", Guid.NewGuid(), fileNameParts[elements - 1]);
+                        
                         if (item["dateUpdated"].Type != JTokenType.Null) file.dateUpdated = (long)item["dateUpdated"];
                         if (await FileHelper.get(file.id) != null)
                         {

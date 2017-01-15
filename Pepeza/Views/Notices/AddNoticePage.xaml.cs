@@ -191,7 +191,11 @@ namespace Pepeza.Views.Notices
                         link = (string)jobject["file"]["link"],
                         mimeType = (string)jobject["file"]["mime_type"],
                         dateCreated = (long)jobject["file"]["dateCreated"],
+                        uniqueFileName =  string.Format(@"{0}.{1}", Guid.NewGuid())
                     };
+                    var fileNameParts = tfile.fileName.Split('.');
+                    int elements = fileNameParts.Length;
+                    tfile.uniqueFileName = string.Format(@"{0}.{1}", Guid.NewGuid(), fileNameParts[elements - 1]);
                     if (jobject["file"]["dateUpdated"] != null)
                     {
                         tfile.dateUpdated = (long)jobject["file"]["dateUpdated"];
@@ -210,7 +214,7 @@ namespace Pepeza.Views.Notices
                         folder = null;
                     }
                     
-                    string fileName = tfile.id + tfile.fileName;
+                    string fileName = tfile.uniqueFileName;
                     if (folder != null)
                     {
                         if (await folder.GetFileAsync(fileName) == null)
