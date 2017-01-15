@@ -76,6 +76,25 @@ namespace Shared.Db.DbHelpers.Notice
             }
         }
 
+
+        public static async Task<List<TNoticeItem>> getBoardNotices()
+        {
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    List<TNoticeItem> unsubmitted = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE isRead=? AND isSubmited=?", 1, false);
+                    return unsubmitted;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         }
     }
 

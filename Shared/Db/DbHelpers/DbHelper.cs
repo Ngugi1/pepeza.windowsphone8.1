@@ -8,6 +8,7 @@ using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
 using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
+using Shared.Db.Models.Users;
 using Shared.Models.NoticeModels;
 using SQLite;
 using System;
@@ -42,6 +43,8 @@ namespace Pepeza.Db.DbHelpers
             await connection.CreateTableAsync<TFile>();
             await connection.CreateTableAsync<TUserInfo>();
             await connection.CreateTableAsync<TEmail>();
+            await connection.CreateTableAsync<TNoticePosterAvatar>();
+            await connection.CreateTableAsync<TNoticePoster>();
             Settings.add(DbConstants.DB_CREATED, true);
         }
         public async static Task<bool> dropDatabase()

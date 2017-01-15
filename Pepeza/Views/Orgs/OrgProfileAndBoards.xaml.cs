@@ -133,7 +133,7 @@ namespace Pepeza.Views.Orgs
            
             if (localOrg!=null)
             {
-                TAvatar local = await AvatarHelper.get(localOrg.avatarId);
+                TAvatar local = await AvatarHelper.getPosterAvatar(localOrg.avatarId);
                 if (local != null && local.linkNormal != null)
                 {
                     localOrg.linkNormal = local.linkNormal;
@@ -193,7 +193,7 @@ namespace Pepeza.Views.Orgs
         {
 
             var localOrg = await OrgHelper.get(OrgID);
-            TAvatar localOrgAvatar = await AvatarHelper.get(localOrg.avatarId);
+            TAvatar localOrgAvatar = await AvatarHelper.getPosterAvatar(localOrg.avatarId);
             if (localOrgAvatar != null)
             {
                 localOrg.linkNormal = localOrgAvatar.linkNormal;
@@ -537,7 +537,7 @@ namespace Pepeza.Views.Orgs
                                         dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                         dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
-                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
                                     //Update local database if they are collaborators 
                                     if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), OrgID) != null)
                                     {

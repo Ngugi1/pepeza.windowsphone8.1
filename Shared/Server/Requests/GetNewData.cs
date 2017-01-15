@@ -18,6 +18,7 @@ using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
 using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
+using Shared.Db.Models.Users;
 using Shared.Models.NoticeModels;
 using Shared.Push;
 using Shared.TilesAndActionCenter;
@@ -95,6 +96,8 @@ namespace Pepeza.Server.Requests
                 JArray notice_items = JArray.Parse(content["notice_items"].ToString());
                 JArray org_collaborators = JArray.Parse(content["org_collaborators"].ToString());
                 JArray boards = JArray.Parse(content["boards"].ToString());
+                JArray notice_posters = JArray.Parse(content["notice_posters"].ToString());
+                JArray notice_posters_avatars = JArray.Parse(content["notice_posters_avatars"].ToString());
                 #region Org Collaborators
                 foreach (var item in org_collaborators)
                 {
@@ -151,6 +154,43 @@ namespace Pepeza.Server.Requests
                     }
                 }
 
+                #endregion
+                #region NoticePosters
+                foreach (var poster in notice_posters)
+                {
+                    if (notice_posters.Count > 0)
+                    {
+                        TNoticePoster notice_poster = new TNoticePoster();
+                       
+                            notice_poster.id = (int)poster["id"];
+                            notice_poster.username = (string)poster["username"];
+                            notice_poster.firstName = (string)poster["firstName"];
+                            notice_poster.lastName = (string)poster["lastName"];
+                            notice_poster.dateCreated = (long)poster["dateCreated"];
+                            notice_poster.dateUpdated = (long)poster["dateCreated"];
+                            notice_poster.emailId = (int)poster["emailId"];
+                            notice_poster.avatarId =(int)poster["avatarId"];
+                            notice_poster.visibility = (string)poster["visibility"];
+                            notice_poster.password = (string)poster["password"];
+                            notice_poster.dateDeleted = (long)poster["dateDeleted"];
+                            notice_poster.active = (int)poster["active"];
+                            if (poster["dateDeactivated"].Type != JTokenType.Null) notice_poster.dateDeactivated = (long)poster["dateDeactivated"];
+                           
+
+                        
+                        if (await NoticePosterHelper.get(notice_poster.id) != null)
+                        {
+                            await DBHelperBase.update(notice_poster);
+
+                        }
+                        else
+                        {
+                           await DBHelperBase.add(notice_poster);
+                        }
+                    }
+                    
+
+                }
                 #endregion
                 #region Emails
                 //Emails 
@@ -290,6 +330,36 @@ namespace Pepeza.Server.Requests
                     }
                 }
                 #endregion
+                #region notice poster avatars
+                foreach (var posteravatar in notice_posters_avatars)
+                {
+                    if (notice_posters_avatars.Count > 0)
+                    {
+                        TNoticePosterAvatar poster_avatar = new TNoticePosterAvatar()
+                        {
+                            id = (int)posteravatar["id"],
+                            linkSmall = (string)posteravatar["linkSmall"],
+                            linkNormal = (string)posteravatar["linkNormal"],
+                            dateCreated = (long)posteravatar["dateCreated"],
+                            dateUpdated = (long)posteravatar["dateUpdated"]
+                            
+
+                        };
+                    if (posteravatar["dateDeleted"].Type != JTokenType.Null) poster_avatar.dateDeleted = (long)posteravatar["dateDeleted"];
+                    
+                    if (await AvatarHelper.getPosterAvatar((int)posteravatar["id"]) != null)
+                    {
+                        await DBHelperBase.update(poster_avatar);
+                    }
+                    else
+                    {
+                        await DBHelperBase.add(poster_avatar);
+                    }
+
+                    }
+                   
+                }
+                #endregion
                 #region notice_items
                 List<TNoticeItem> items = new List<TNoticeItem>();
                 foreach (var item in notice_items)
@@ -336,11 +406,12 @@ namespace Pepeza.Server.Requests
                         {
                             noticeId = (int)item["id"],
                             boardId = (int)item["boardId"],
+                            userId = (int)item["userId"],
                             title = (string)item["title"],
                             hasAttachment = (int)item["hasAttachment"],
                             content = (string)item["content"],
                             dateCreated = (long)item["dateCreated"]
-                            //poster = (string)item["poster"]
+                            
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) notice.dateUpdated = (long)item["dateUpdated"];
                         if (await NoticeHelper.get(notice.noticeId) != null)

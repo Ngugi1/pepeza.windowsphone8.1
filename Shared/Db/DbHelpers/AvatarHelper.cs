@@ -10,18 +10,37 @@ namespace Shared.Db.DbHelpers
 {
     public class AvatarHelper : DBHelperBase
     {
-        public async static Task<TAvatar> get(int emailId)
+        public async static Task<TAvatar> get(int id)
         {
             
             try
             {
-                TAvatar email = null;
+                TAvatar avatar = null;
                 var connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    email = await connection.GetAsync<TAvatar>(emailId);
+                    avatar = await connection.GetAsync<TAvatar>(id);
                 }
-                return email;
+                return avatar;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        public async static Task<TNoticePosterAvatar> getPosterAvatar(int id)
+        {
+
+            try
+            {
+                TNoticePosterAvatar avatar = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    avatar = await connection.GetAsync<TNoticePosterAvatar>(id);
+                }
+                return avatar;
             }
             catch
             {

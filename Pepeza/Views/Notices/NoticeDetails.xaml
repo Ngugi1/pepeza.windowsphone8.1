@@ -19,7 +19,19 @@
                              Name="ToastStatus"
                              Foreground="{ThemeResource PhoneAccentBrush}"
                              />
-            <StackPanel Margin="10,10,0,0">
+            <StackPanel VerticalAlignment="Center"
+                        Name="StackPanelLoading"
+                        Visibility="Collapsed"
+                        >
+            <ProgressRing Style="{StaticResource PRstyle}"
+                          Background="Transparent"
+                          />
+                <TextBlock Text="Loading notice ... "
+                           Style="{StaticResource txtBlockWait}"
+                           HorizontalAlignment="Center"
+                           />
+            </StackPanel>
+            <StackPanel Margin="10,10,0,0" Name="StackPanelDetails">
                 <ScrollViewer>
                     <TextBlock 
                         Text="{Binding title}"
@@ -30,22 +42,38 @@
                 </ScrollViewer>
                 <StackPanel Orientation="Horizontal"
                             Name="StackPanelSentFrom">
-                    <TextBlock Text="sent from :"
+                    <TextBlock Text="from :"
                            Typography.Capitals="SmallCaps"
-                           Margin="12,4"
+                           Margin="12,4,2,4"
                            Style="{ThemeResource BaseTextBlockStyle}"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            HorizontalAlignment="Left"
                            />
                     <TextBlock 
-                        Text="{Binding board}"  Margin="12,4"
+                        Text="{Binding poster}"  Margin="4"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           TextWrapping="Wrap"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           HorizontalAlignment="Left"
+                           />
+                   
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                <TextBlock Text="board :"
+                           Typography.Capitals="SmallCaps"
+                           Margin="12,4,2,4"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           HorizontalAlignment="Left"
+                           />
+                <TextBlock 
+                        Text="{Binding board}"  Margin="4"
                            Style="{ThemeResource BaseTextBlockStyle}"
                            TextWrapping="Wrap"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            HorizontalAlignment="Left"
                            />
                 </StackPanel>
-
 
                 <TextBlock Text="{Binding dateCreated}" Style="{StaticResource ControlContextualInfoTextBlockStyle}"
                            HorizontalAlignment="Left"

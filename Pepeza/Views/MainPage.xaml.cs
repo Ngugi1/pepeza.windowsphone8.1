@@ -199,6 +199,7 @@ namespace Pepeza
             if (results != null)
             {
                 updateNotificationCount();
+                loadNotices();
             }
             //Prevent background agent from being invoked 
         }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
 using Pepeza.IsolatedSettings;
@@ -16,6 +17,7 @@ using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
 using Shared.Db.Models.Orgs;
 using Shared.Models.NoticeModels;
+using Shared.Push;
 using Shared.Server.Requests;
 using Shared.Utitlity;
 using System;
@@ -51,6 +53,7 @@ namespace Pepeza.Views.Boards
     {
         TBoard boardFetched = null;
         int boardId;
+        bool isBoardFetched = false;
         CoreApplicationView view = CoreApplication.GetCurrentView();
         JObject follower_result = null;
         TAvatar boardAvatar = null;
@@ -105,7 +108,7 @@ namespace Pepeza.Views.Boards
                 }
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
-                boardAvatar = await AvatarHelper.get(localBoard.id);
+                boardAvatar = await AvatarHelper.getPosterAvatar(localBoard.id);
                 if (boardAvatar != null)
                 {
                     localBoard.linkNormal = boardAvatar.linkNormal;
@@ -141,6 +144,7 @@ namespace Pepeza.Views.Boards
                     
                 }
                 rootGrid.DataContext = localBoard;
+                isBoardFetched = true;
                 if(localBoard!=null)
                 {
                     if(localBoard.ownerId == (int)Settings.getValue(Constants.USERID))
@@ -209,6 +213,7 @@ namespace Pepeza.Views.Boards
                     }
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
+                    isBoardFetched = true;
                     if (boardFetched.followRestriction == "request")
                     {
                         btnFollow.Visibility = Visibility.Visible;
@@ -339,12 +344,16 @@ namespace Pepeza.Views.Boards
             {
                 case 0:
                     //if data is not loaded, laod
-                    stackPanelLoading.Visibility = Visibility.Visible;
-                    AppBtnAddNotice.Visibility = Visibility.Collapsed;
-                    AppBtnEdit.Visibility = Visibility.Visible;
-                    AppBtnAnalytics.Visibility = Visibility.Visible;
-                    ContentRoot.Opacity = 0.7;
-                    await getBoardDetailsAsync(boardId);
+                    if (!isBoardFetched)
+                    {
+                        stackPanelLoading.Visibility = Visibility.Visible;
+                        AppBtnAddNotice.Visibility = Visibility.Collapsed;
+                        AppBtnEdit.Visibility = Visibility.Visible;
+                        AppBtnAnalytics.Visibility = Visibility.Visible;
+                        ContentRoot.Opacity = 0.7;
+                        await getBoardDetailsAsync(boardId);
+                    }
+                   
                     break;
                 case 1:
                     //Load notices if not loaded already
@@ -361,45 +370,27 @@ namespace Pepeza.Views.Boards
         }
         private async void loadBoardNotices(int boardId)
         {
-            noticeDataSource.Clear();
-            ListViewNotices.ItemsSource = noticeDataSource;
-            Dictionary<string, string> results = await BoardService.getBoardNotices(boardId);
-            if (results.ContainsKey(Constants.SUCCESS))
+            try
             {
-                //We have notices
-                JArray notices = JArray.Parse(results[Constants.SUCCESS]);
-                if (notices.Count > 0)
+                
+                List<TNotice> noticelist = new List<TNotice>(await NoticeHelper.getAll(boardId));
+                if (noticelist.Count == 0)
                 {
-                    foreach (var item in notices)
-                    {
-                        JObject obj = JObject.Parse(item.ToString());
-                        TNotice notice = new TNotice()
-                       {
-                           noticeId = (int)obj["id"],
-                           title = (string)obj["title"],
-                           content = (string)obj["content"],
-                           hasAttachment = (int)obj["hasAttachment"],
-                           dateCreated = (long)obj["dateCreated"],
-                           dateUpdated = (long)obj["dateUpdated"],
-                           boardId = boardId
-                       };
-                       noticeDataSource.Add(notice); 
-                    }
-                    ListViewNotices.ItemsSource = noticeDataSource;
-                 
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    //we have nothing to display
-                    EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+                    EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
                 }
-            }
-            else
-            {
-                //We hit an error 
-                toasterror.Message = Constants.UNKNOWNERROR;
-            }
 
+
+                ListViewNotices.ItemsSource = noticelist;
+            }
+            catch
+            {
+                toasterror.Message = Constants.UNKNOWNERROR;
+                EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+            }
             StackPanelLoadingNotices.Visibility = Visibility.Collapsed;
         }
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
@@ -515,7 +506,7 @@ namespace Pepeza.Views.Boards
                                                 dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                                 dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                             };
-                                            var localAvatar = await AvatarHelper.get(avatar.id);
+                                            var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
                                             //Update local database if they are collaborators 
                                             if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)rootGrid.DataContext).orgID) != null)
                                             {
@@ -595,7 +586,7 @@ namespace Pepeza.Views.Boards
         private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TNotice selected = (sender as ListView).SelectedItem as TNotice;
-            this.Frame.Navigate(typeof(NoticeDetails), selected.noticeId);
+            this.Frame.Navigate(typeof(NoticeDetails), selected);
         }
         private void AppBtnAddNotice_Click(object sender, RoutedEventArgs e)
         {

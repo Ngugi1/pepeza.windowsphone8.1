@@ -107,6 +107,7 @@
                                                                Typography.NumeralStyle="Normal" />
                                                     <RichTextBlock Margin="12,0"
                                                                    FontSize="22"
+                                                                   IsTextSelectionEnabled="False"
                                                                    Typography.Capitals="AllSmallCaps" >
                                                         <Paragraph>
                                                             <Bold>
@@ -246,8 +247,9 @@
                                         VerticalAlignment="Bottom"
                                         Style="{StaticResource txtBlockListViewItemHeader}"/>
                                         <RichTextBlock Grid.Row="1"
-                                    Margin="0"
-                                Style="{StaticResource BodyRichTextBlockStyle}"
+                                        Margin="0"
+                                        IsTextSelectionEnabled="False"
+                                        Style="{StaticResource BodyRichTextBlockStyle}"
                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
                                         

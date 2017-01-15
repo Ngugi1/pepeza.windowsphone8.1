@@ -229,7 +229,7 @@ namespace Pepeza.Views.Profile
                 if (info != null) // We must be local 
                 {
                     TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
-                    TAvatar userAvatar = await AvatarHelper.get(info.avatarId);
+                    TAvatar userAvatar = await AvatarHelper.getPosterAvatar(info.avatarId);
                     avatarId = info.avatarId;
                     Debug.WriteLine(emailInfo.email);
                     toReturn = new ProfileData()
@@ -345,7 +345,7 @@ namespace Pepeza.Views.Profile
                                         dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                         dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
-                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                    var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
                                         if (localAvatar != null)
                                         {
                                             await AvatarHelper.update(avatar);

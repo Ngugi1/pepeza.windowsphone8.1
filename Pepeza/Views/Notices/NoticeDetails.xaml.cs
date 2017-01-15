@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.DbHelpers.User;
+using Pepeza.Db.Models;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
@@ -11,6 +13,7 @@ using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
 using Pepeza.Views.Analytics;
 using Shared.Db.DbHelpers;
+using Shared.Db.DbHelpers.Notice;
 using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Notices;
 using Shared.Db.Models.Orgs;
@@ -65,6 +68,8 @@ namespace Pepeza.Views.Notices
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            StackPanelDetails.Visibility = Visibility.Collapsed;
+            StackPanelLoading.Visibility = Visibility.Visible;
             if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))
             {
                 notice = e.Parameter as TNotice;
@@ -128,11 +133,24 @@ namespace Pepeza.Views.Notices
                 {
                     StackPanelSentFrom.Visibility = Visibility.Visible;
                 }
+                //Get the poster of the notice 
+               // Dictionary<string,string>
+                TUserInfo userInfo = await NoticePosterHelper.get(notice.userId);
+                if (userInfo.firstName != null && userInfo.lastName != null)
+                {
+                    notice.poster = userInfo.firstName + " " + userInfo.lastName;
+                }
+                else
+                {
+                    notice.poster = userInfo.username;
+                }
+
                 this.RootGrid.DataContext = notice;
                 noticeTitle = notice.title;
                 await NoticeService.submitReadNoticeItems();
               
-            }else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
+            }
+            else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
             {
                 //Now load the notice itself 
                 StackPanelSentFrom.Visibility = Visibility.Collapsed;
@@ -204,6 +222,24 @@ namespace Pepeza.Views.Notices
                         {
                             StackPanelDownload.Visibility = Visibility.Collapsed;
                         }
+                        TUserInfo userInfo = await NoticePosterHelper.get(notice.userId);
+                        if (userInfo != null)
+                        {
+                            if (userInfo.firstName != null && userInfo.lastName != null)
+                            {
+                                notice.poster = userInfo.firstName + " " + userInfo.lastName;
+                            }
+                            else
+                            {
+                                notice.poster = userInfo.username;
+                            }
+                        }
+                        else
+                        {
+                            //Get the user details online
+                        }
+                        
+
                         RootGrid.DataContext = notice;
                         StackPanelDownload.DataContext = file;
                         assignRoles(notice.boardId);
@@ -221,6 +257,8 @@ namespace Pepeza.Views.Notices
                 }
 
             }
+            StackPanelDetails.Visibility = Visibility.Visible;
+            StackPanelLoading.Visibility = Visibility.Collapsed;
         }
         private async void assignRoles(int boardId)
         {
