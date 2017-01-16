@@ -36,6 +36,7 @@ namespace Pepeza.Views.Profile
         {
             this.InitializeComponent();
         }
+        bool isProfileLoaded = false, areOrgsLoaded = false, areFollowingLoaded = false;
         ObservableCollection<Organization> UserOrganisations = new ObservableCollection<Organization>();
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -54,128 +55,145 @@ namespace Pepeza.Views.Profile
         {
             switch (PivotProfile.SelectedIndex)
             {
-                case 1:
-                    //Load user profile
-                StackPanelLoadingOrgs.Visibility = Visibility.Visible;
-                UnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
-                StackPanelError.Visibility = Visibility.Collapsed;
-                UserOrganisations.Clear();
-                Dictionary<string, string> results = await OrgsService.getUserOrgs(userId);
-                if (results != null)
-                {
-
-                    if (results.ContainsKey(Constants.SUCCESS))
-                    {
-                        //We got our boards
-                        JArray orgs = JArray.Parse((results[Constants.SUCCESS].ToString()));
-                        if (orgs.Count != 0)
-                        {
-                            //Get the boards 
-                            for (int i = 0; i < orgs.Count; i++)
-                            {
-                                JObject org = JObject.Parse(orgs[i].ToString());
-                                Organization item = new Organization();
-                                item.Id = (int)org["id"];
-                                item.Name = (string)org["name"];
-                                item.Username = (string)org["username"];
-                                item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)org["linkSmall"]; 
-                                item.Description = (string)org["description"];
-                                UserOrganisations.Add(item);
-                            }
-                            listViewOrgs.ItemsSource = UserOrganisations;
-                            EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
-
-                        }
-                        else
-                        {
-                            //Sorry we have no orgs yet
-                            EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
-
-                        }
-                    }
-                    else if (results.ContainsKey(Constants.PERMISSION_DENIED))
-                    {
-                        //Permit denied 
-                        UnauthorizedPlaceHolder.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        //Something went wrong 
-                        StackPanelError.Visibility = Visibility.Visible;
-                    }
-                }
-                StackPanelLoadingOrgs.Visibility = Visibility.Collapsed;
-                break;
+                
                 case  0:
                     //Load user profile 
-                StackPanelLoadingProfile.Visibility = Visibility.Visible;
-                DetailsStackPanel.Visibility = Visibility.Collapsed;
-                Dictionary<string, string> profile = await RequestUser.getUser(userId);
-                if (profile.ContainsKey(Constants.SUCCESS))
-                {
-                    JObject json = JObject.Parse(profile[Constants.SUCCESS]);
-                    TUserInfo userinfo = new TUserInfo()
+                    if (!isProfileLoaded)
                     {
-                         id = (int)json["id"],
-                         linkSmall = (string)json["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)json["linkNormal"],
-                         username = (string)json["username"],
-                         firstName = (string)json["firstName"] == null ? "N/A" : (string)json["firstName"],
-                         lastName = (string)json["lastName"] == null ? "N/A" : (string)json["lastName"]
-                         
-                    };
-                    this.rootgrid.DataContext = userinfo;
-                    StackPanelLoadingProfile.Visibility = Visibility.Collapsed;
-                    DetailsStackPanel.Visibility = Visibility.Visible;
-                }
-                else
-                {
 
-                }
-                    break;
-                case 2:
-                    //Load user boards 
-                    ObservableCollection<TBoard> following = new ObservableCollection<TBoard>();
-                    stackpanelfollowingloading.Visibility = Visibility.Visible;
-                    BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
-                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-                    Dictionary<string, string> response = await BoardService.getBoardsUserIsFollowing(userId);
-                    if (response.ContainsKey(Constants.SUCCESS))
-                    {
-                        JArray json = JArray.Parse(response[Constants.SUCCESS].ToString());
-                        if (json.Count > 0)
+                        StackPanelLoadingProfile.Visibility = Visibility.Visible;
+                        DetailsStackPanel.Visibility = Visibility.Collapsed;
+                        Dictionary<string, string> profile = await RequestUser.getUser(userId);
+                        if (profile.ContainsKey(Constants.SUCCESS))
                         {
-                            foreach (var item in json)
+                            JObject json = JObject.Parse(profile[Constants.SUCCESS]);
+                            TUserInfo userinfo = new TUserInfo()
                             {
-                                TBoard board = new TBoard()
-                                {
-                                    linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"],
-                                    id = (int)item["id"],
-                                    name = (string)item["name"],
-                                    desc = (string)item["description"]
-                                };
-                                following.Add(board);
-                                ListViewFollowing.ItemsSource = following;
-                                stackpanelfollowingloading.Visibility = Visibility.Collapsed;
-                            }
+                                id = (int)json["id"],
+                                linkSmall = (string)json["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)json["linkNormal"],
+                                username = (string)json["username"],
+                                firstName = (string)json["firstName"] == null ? "N/A" : (string)json["firstName"],
+                                lastName = (string)json["lastName"] == null ? "N/A" : (string)json["lastName"]
+
+                            };
+                            this.rootgrid.DataContext = userinfo;
+                            StackPanelLoadingProfile.Visibility = Visibility.Collapsed;
+                            DetailsStackPanel.Visibility = Visibility.Visible;
                         }
                         else
                         {
-                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                            stackpanelfollowingloading.Visibility = Visibility.Collapsed;
-                        }
 
-                    }
-                    else if (response.ContainsKey(Constants.PERMISSION_DENIED))
-                    {
-                        BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Visible;
-                        stackpanelfollowingloading.Visibility = Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        FollowingLoadingError.Visibility = Visibility.Visible;
-                        stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                        }
+                        isProfileLoaded = true;
                     }
                     break;
+                case 1:
+                    //Load user orgs 
+                    if (!areOrgsLoaded)
+                    {
+                        StackPanelLoadingOrgs.Visibility = Visibility.Visible;
+                        UnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
+                        StackPanelError.Visibility = Visibility.Collapsed;
+                        UserOrganisations.Clear();
+                        Dictionary<string, string> results = await OrgsService.getUserOrgs(userId);
+                        if (results != null)
+                        {
+
+                            if (results.ContainsKey(Constants.SUCCESS))
+                            {
+                                //We got our boards
+                                JArray orgs = JArray.Parse((results[Constants.SUCCESS].ToString()));
+                                if (orgs.Count != 0)
+                                {
+                                    //Get the boards 
+                                    for (int i = 0; i < orgs.Count; i++)
+                                    {
+                                        JObject org = JObject.Parse(orgs[i].ToString());
+                                        Organization item = new Organization();
+                                        item.Id = (int)org["id"];
+                                        item.Name = (string)org["name"];
+                                        item.Username = (string)org["username"];
+                                        item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)org["linkSmall"];
+                                        item.Description = (string)org["description"];
+                                        UserOrganisations.Add(item);
+                                    }
+                                    listViewOrgs.ItemsSource = UserOrganisations;
+                                    EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
+
+                                }
+                                else
+                                {
+                                    //Sorry we have no orgs yet
+                                    EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
+
+                                }
+                            }
+                            else if (results.ContainsKey(Constants.PERMISSION_DENIED))
+                            {
+                                //Permit denied 
+                                UnauthorizedPlaceHolder.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                //Something went wrong 
+                                StackPanelError.Visibility = Visibility.Visible;
+                            }
+                        }
+                        StackPanelLoadingOrgs.Visibility = Visibility.Collapsed;
+                        areOrgsLoaded = true;
+                    }
+                        break;
+                case 2:
+                    //Load user boards 
+                        if (!areFollowingLoaded)
+                        {
+
+
+                            ObservableCollection<TBoard> following = new ObservableCollection<TBoard>();
+                            stackpanelfollowingloading.Visibility = Visibility.Visible;
+                            BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                            Dictionary<string, string> response = await BoardService.getBoardsUserIsFollowing(userId);
+                            if (response.ContainsKey(Constants.SUCCESS))
+                            {
+                                JArray json = JArray.Parse(response[Constants.SUCCESS].ToString());
+                                if (json.Count > 0)
+                                {
+                                    foreach (var item in json)
+                                    {
+                                        TBoard board = new TBoard()
+                                        {
+                                            linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"],
+                                            id = (int)item["id"],
+                                            name = (string)item["name"],
+                                            desc = (string)item["description"]
+                                        };
+                                        following.Add(board);
+                                        ListViewFollowing.ItemsSource = following;
+                                        stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                                    }
+                                }
+                                else
+                                {
+                                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                                    stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                                }
+
+                            }
+                            else if (response.ContainsKey(Constants.PERMISSION_DENIED))
+                            {
+                                BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Visible;
+                                stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                            }
+                            else
+                            {
+                                FollowingLoadingError.Visibility = Visibility.Visible;
+                                stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                            }
+                            areFollowingLoaded = true;
+                        }
+                            break;
+                   
                 default:
                     break;
             }

@@ -23,14 +23,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
      
-        <Pivot Style="{StaticResource CustomPivot}"
+        <Pivot 
                Grid.Row="2"
+            Margin="4,12,4,4"
                Name="PivotProfile"
                SelectionChanged="Pivot_SelectionChanged"
                >
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="profile" Style="{StaticResource txtBlockPivotHeader}"/>
+                profile 
                 </PivotItem.Header>
                 <StackPanel Margin="19.5,4">
                     <FFImage:FFImage 
@@ -39,52 +40,53 @@
                         ErrorPlaceholder="/Assets/Images/placeholder_avatar.png"
                         Width="250"
                         Stretch="UniformToFill"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Center"
                         Height="250"
                            />
                     <Grid>
-                    <StackPanel VerticalAlignment="Center"
+                        <StackPanel VerticalAlignment="Center"
                                 Name="StackPanelLoadingProfile"
                                 Visibility="Collapsed"
                                 >
-                        <ProgressBar IsIndeterminate="True" Margin="12"/>
-                        <TextBlock Text="just a moment ...." Style="{StaticResource txtBlockWait}"
+                            <ProgressBar IsIndeterminate="True" Margin="12"/>
+                            <TextBlock Text="just a moment ...." Style="{StaticResource txtBlockWait}"
                                    HorizontalAlignment="Center"
                                    />
-
-                    
-                    </StackPanel>
-                        <StackPanel>
-                            
                         </StackPanel>
-                        
                     </Grid>
                     <StackPanel 
-                        Visibility="Collapsed"
-                        Name="DetailsStackPanel">
-                    <TextBlock Text="username" 
+                        Visibility="Visible"
+                        Name="DetailsStackPanel"
+                        
+                        >
+                    <TextBlock Text="username"
+                               HorizontalAlignment="Center"
                                Style="{StaticResource TitleTextBlockStyle}"
                                Foreground="Black"
                                
                                />
                     <TextBlock Text="{Binding username}" 
+                               HorizontalAlignment="Center"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource BodyTextBlockStyle}"
                                Margin="12,4"
                                />
                     <TextBlock Text="first name" Style="{StaticResource TitleTextBlockStyle}"
                                Foreground="Black"
+                               HorizontalAlignment="Center"
                                />
                     <TextBlock Text="{Binding lastName}" 
+                               HorizontalAlignment="Center"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource BodyTextBlockStyle}"
                                Margin="12,4"
                                />
                         <TextBlock Text="last name" Style="{StaticResource TitleTextBlockStyle}"
                                Foreground="Black"
-                               
+                               HorizontalAlignment="Center"
                                />
-                        <TextBlock Text="{Binding lastName}" 
+                        <TextBlock Text="{Binding lastName}"
+                                   HorizontalAlignment="Center"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource BodyTextBlockStyle}"
                                Margin="12,4"
@@ -94,7 +96,7 @@
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Text="organisations" Style="{StaticResource txtBlockPivotHeader}"/>
+                    organisations
                 </PivotItem.Header>
                 <Grid Width="{Binding ActualWidth , ElementName=PivotItemBoards}">
                     <StackPanel 
@@ -169,7 +171,7 @@
             </PivotItem>
             <PivotItem Name="PivotItemBoards">
                 <PivotItem.Header>
-                    <TextBlock Text="following" Style="{StaticResource txtBlockPivotHeader}"/>
+                following  
                 </PivotItem.Header>
                 <Grid Width="{Binding ActualWidth, ElementName=PivotItemBoards}">
                     <StackPanel 
@@ -236,49 +238,55 @@
                                    />
                     </StackPanel>
                     <ListView
+                        Margin="19.5,4"
                         SelectionChanged="ListViewFollowing_SelectionChanged"
                         Name="ListViewFollowing">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid 
-              Height="70"
-              Style="{StaticResource GridListViewItemTemplate}">
+                                <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <FFImage:FFImage
-                                        Grid.RowSpan="2"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        Margin="8,12,0,28"
-                                        Height="50"
-                                        Width="50"
-                                        Source="{Binding linkSmall}"
-                                        >
+                                    <FFImage:FFImage 
+                Margin="0,8,0,0"
+                Height="50"
+                Source="{Binding linkSmall}"
+                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                Width="50"
+                VerticalAlignment="Center"
+                Grid.RowSpan="2"
+               >
                                     </FFImage:FFImage>
                                     <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Margin="8,10,8,6"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
+                       Margin="12,4,12,0"
+                       Foreground="Black"
+                       FontSize="24"
+                       VerticalAlignment="Top"
+                       Style="{StaticResource ListViewItemTextBlockStyle}"
                        Text="{Binding name}" />
                                     <TextBlock Grid.Row="1"
-                       Grid.Column="1"
-                       Margin="8,0,14,0"
-                       Style="{StaticResource txtBlockListViewDesc}"
-                       Text="{Binding desc}" />
+                       Grid.Column="2"
+                       Margin="12,0,4,4"
+                       VerticalAlignment="Top"
+                       Foreground="Black"
+                       Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                       Text="{Binding desc}"
+                       TextTrimming="WordEllipsis"
+                       TextWrapping="NoWrap" />
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
               
-            </PivotItem>
-            
+            </PivotItem>     
         </Pivot>
     </Grid>
 </Page>
