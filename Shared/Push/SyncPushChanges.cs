@@ -6,7 +6,6 @@ using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
-using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.TilesAndActionCenter;
@@ -34,8 +33,6 @@ namespace Shared.Push
                 {
                     results =  await GetNewData.disectUserDetails(userdata , inbackground);
                 }
-                int count = await TNotificationHelper.unreadNotifications();
-                Settings.add(Constants.NOTIFICATION_COUNT, count);
                 return results;
                    
             }

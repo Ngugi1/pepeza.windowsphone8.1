@@ -10,6 +10,7 @@
       xmlns:pageHeader="using:Pepeza.CustomControls"
       xmlns:coding4Fun="using:Coding4Fun.Toolkit.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      Loaded="Page_Loaded"
       RequestedTheme="Light"
       mc:Ignorable="d">
     <Page.Resources>
@@ -91,11 +92,10 @@
                                Text="loging in, just a moment" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical"
-                           
-                            Grid.Row="1"
                             VerticalAlignment="Bottom"
+                            Grid.Row="1"
                             Margin="12">
-                    <TextBlock Text="Login with facebook ?" 
+                    <TextBlock Text="You prefer google or facebook?" 
                                Typography.Capitals="Normal"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource txtBlockDisplay}"
@@ -104,9 +104,9 @@
                     
                     <Button 
                         Click="LoginWithGoogle"
-                        Visibility="Collapsed"
                         HorizontalAlignment="Center"
                         BorderBrush="Transparent" 
+                        Visibility="Visible"
                         BorderThickness="2"
                         Width="{Binding ActualWidth, ElementName=btnLoginWithFacebook}">
                         <StackPanel Orientation="Horizontal"
