@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using FFImageLoading;
+using FFImageLoading.Cache;
+using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
@@ -67,25 +69,44 @@ namespace Pepeza.Views.Boards
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected  override void OnNavigatedTo(NavigationEventArgs e)
+        protected  async override void OnNavigatedTo(NavigationEventArgs e)
         {
+           
             if (e.Parameter != null)
             {
                 boardId = (int)e.Parameter;
-                Settings.add(Constants.BOARD_ID_TEMP, boardId);
-                PivotParent.SelectedIndex = 1;
-                
+                Settings.add(Constants.BOARD_ID_TEMP, boardId); 
             }
             else
             {
                 //Was back Navigation
             }
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
         }
         public async Task getBoardDetailsAsync(int boardId)
         {
+            int numberofRequests = 0;
             //Determine whether to load board details locally or online
             TBoard localBoard = await BoardHelper.getBoard(boardId);
-            int numberofRequests = 0;
+            if (localBoard != null)
+            {
+                rootGrid.DataContext = localBoard;
+                //We now say we are not fetching 
+                localBoard.singleFollowerOrMany = "followers";
+                rootGrid.Visibility = Visibility.Visible;
+                boardAvatar = await AvatarHelper.get(localBoard.avatarId);
+                if (boardAvatar != null)
+                {
+                    localBoard.linkNormal = boardAvatar.linkNormal;
+                }
+                else
+                {
+                    ImageMask.Visibility = Visibility.Visible;
+                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                }
+                isFetchingDetails(false);
+                rootGrid.DataContext = localBoard;
+            }
             // Get the board followers 
             Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
             if (followersCountResults.ContainsKey(Constants.SUCCESS))
@@ -95,13 +116,7 @@ namespace Pepeza.Views.Boards
                 numberofRequests = (int)follower_result["noOfRequests"];
             }
             if (localBoard != null)
-            {            
-                //We now say we are not fetching 
-                localBoard.singleFollowerOrMany = "followers";
-                rootGrid.Visibility = Visibility.Visible;
-                rootGrid.DataContext = localBoard;
-                isFetchingDetails(false);
-                
+            {                            
                 localBoard.noOfFollowRequests = numberofRequests;
                 if (localBoard.followRestriction == "request") HyperLinkBtnRequests.Visibility = Visibility.Visible;
                 await assignRoles(localBoard);
@@ -112,16 +127,6 @@ namespace Pepeza.Views.Boards
                 }
                 localBoard.singleFollowerOrMany = localBoard.noOfFollowers > 1 ? "Followers" : "Follower";
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
-                boardAvatar = await AvatarHelper.getPosterAvatar(localBoard.id);
-                if (boardAvatar != null)
-                {
-                    localBoard.linkNormal = boardAvatar.linkNormal;
-                }
-                else
-                {
-                    ImageMask.Visibility = Visibility.Visible;
-                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-                }
                 if (following != null)
                 {
                     if(following.accepted==1 || following.accepted == 0)
@@ -147,17 +152,18 @@ namespace Pepeza.Views.Boards
                     }
                     
                 }
-                rootGrid.DataContext = localBoard;
+                //rootGrid.DataContext = localBoard;
                 isBoardFetched = true;
-                if(localBoard!=null)
-                {
-                    if(localBoard.ownerId == (int)Settings.getValue(Constants.USERID))
-                    {
-                        btnFollow.Visibility = Visibility.Collapsed;
-                    }
+                //Allow one to follow their own board 
+                //if(localBoard!=null)
+                //{
+                //    if(localBoard.ownerId == (int)Settings.getValue(Constants.USERID))
+                //    {
+                //        btnFollow.Visibility = Visibility.Collapsed;
+                //    }
 
                    
-                }
+                //}
 
             }
             else
@@ -348,15 +354,14 @@ namespace Pepeza.Views.Boards
             {
                 case 0:
                     //if data is not loaded, laod
-                    if (!isBoardFetched)
-                    {
+                    
                         stackPanelLoading.Visibility = Visibility.Visible;
                         AppBtnAddNotice.Visibility = Visibility.Collapsed;
                         AppBtnEdit.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
                         ContentRoot.Opacity = 0.7;
                         await getBoardDetailsAsync(boardId);
-                    }
+                   
                    
                     break;
                 case 1:
@@ -510,7 +515,7 @@ namespace Pepeza.Views.Boards
                                                 dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                                 dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                             };
-                                            var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
+                                            var localAvatar = await AvatarHelper.get(avatar.id);
                                             //Update local database if they are collaborators 
                                             if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)rootGrid.DataContext).orgID) != null)
                                             {
@@ -525,6 +530,7 @@ namespace Pepeza.Views.Boards
                                             }
                                             await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
                                             ToastStatus.Message = (string)avatarObject["message"];
+                                             
                                         }
                                         catch
                                         {

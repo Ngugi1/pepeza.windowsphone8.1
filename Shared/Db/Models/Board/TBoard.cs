@@ -13,7 +13,14 @@ namespace Pepeza.Db.Models.Board
         [PrimaryKey]
         public int id { get; set; }
         public int avatarId { get; set; }
-        public string boardVisibility { get; set; }
+        private string _boardVisibility;
+
+        public string boardVisibility
+        {
+            get { return _boardVisibility; }
+            set { _boardVisibility = value; onPropertyChanged("boardVisibility"); }
+        }
+        
         public int orgID { get; set; }
         private string _name;
         public string name
@@ -45,12 +52,47 @@ namespace Pepeza.Db.Models.Board
             get { return _noOfFollowers; }
             set { _noOfFollowers = value;  onPropertyChanged("noOfFollowers"); }
         }
+        private string _singleOrMany;
+
         [Ignore]
-        public string singleFollowerOrMany { get; set; }
-        public int noOfFollowRequests { get; set; }
-        public string followRestriction { get; set; }
-        public string linkSmall { get; set; }
-        public string linkNormal { get; set; }
+        public string singleFollowerOrMany
+        {
+            get { return _singleOrMany; }
+            set { _singleOrMany = value; onPropertyChanged("singleFollowerOrMany"); }
+        }
+
+        private int _noOfFollowRequests;
+
+        public int noOfFollowRequests
+        {
+            get { return _noOfFollowRequests; }
+            set { _noOfFollowRequests = value; onPropertyChanged("noOfFollowRequests"); }
+        }
+
+        private string _followRestriction;
+
+        public string followRestriction
+        {
+            get { return _followRestriction; }
+            set { _followRestriction = value; onPropertyChanged("followRestriction"); }
+        }
+
+        private string _linkSmall;
+
+        public string linkSmall
+        {
+            get { return _linkSmall; }
+            set { _linkSmall = value; onPropertyChanged("linkSmall"); }
+        }
+
+        private string _linkNormal;
+
+        public string linkNormal
+        {
+            get { return _linkNormal; }
+            set { _linkNormal = value; onPropertyChanged("linkNormal"); }
+        }
+        
 
     }
 }

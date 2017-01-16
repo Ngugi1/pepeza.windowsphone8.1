@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using FFImageLoading;
+using FFImageLoading.Cache;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
@@ -69,7 +71,7 @@ namespace Pepeza.Views.Orgs
         /// This parameter is typically used to configure the page.</param>
         protected  override void OnNavigatedTo(NavigationEventArgs e)
         {
-            OrgPivot.SelectedIndex = 1;
+           // OrgPivot.SelectedIndex = 1;
             if (e.Parameter != null)
             {
                 if (e.Parameter.GetType() == typeof(Organization))
@@ -133,7 +135,7 @@ namespace Pepeza.Views.Orgs
            
             if (localOrg!=null)
             {
-                TAvatar local = await AvatarHelper.getPosterAvatar(localOrg.avatarId);
+                TAvatar local = await AvatarHelper.get(localOrg.avatarId);
                 if (local != null && local.linkNormal != null)
                 {
                     localOrg.linkNormal = local.linkNormal;
@@ -193,7 +195,7 @@ namespace Pepeza.Views.Orgs
         {
 
             var localOrg = await OrgHelper.get(OrgID);
-            TAvatar localOrgAvatar = await AvatarHelper.getPosterAvatar(localOrg.avatarId);
+            TAvatar localOrgAvatar = await AvatarHelper.get(localOrg.avatarId);
             if (localOrgAvatar != null)
             {
                 localOrg.linkNormal = localOrgAvatar.linkNormal;
@@ -537,7 +539,7 @@ namespace Pepeza.Views.Orgs
                                         dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                         dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
-                                    var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
                                     //Update local database if they are collaborators 
                                     if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), OrgID) != null)
                                     {
@@ -553,6 +555,7 @@ namespace Pepeza.Views.Orgs
 
                                     rectangleProfilePic.Source = cropped;
                                     await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_org + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                    await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
                                     ToastStatus.Message = (string)avatarObject["message"];
                                 }
                                 catch

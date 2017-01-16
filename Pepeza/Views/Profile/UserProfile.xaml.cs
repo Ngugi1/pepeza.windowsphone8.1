@@ -62,7 +62,7 @@ namespace Pepeza.Views.Profile
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
             TUserInfo currentUser = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
             ComboVisibility.ItemsSource = comboSource;
             #region
@@ -74,7 +74,7 @@ namespace Pepeza.Views.Profile
                     userId = (int)e.Parameter;
                     int localUserId = (int)Settings.getValue(Constants.USERID);
                     // TODO :: We had an exception here after being added to an organisation get the data from the sqlilte database
-                    data = await getUserProfile(userId);
+                    data = await getUserProfile(userId ,localUserId);
                     //Get the user avatar 
                     data.username = "@" + data.username;
 
@@ -192,11 +192,10 @@ namespace Pepeza.Views.Profile
             appBarBtnEditDetails.Icon = new SymbolIcon(Symbol.Accept);
             txtBoxFirstName.Focus(Windows.UI.Xaml.FocusState.Keyboard);
         }
-        private async Task<ProfileData> getUserProfile(int userId)
+        private async Task<ProfileData> getUserProfile(int userId , int localUserId)
         {
             ProfileData toReturn = null;
             var connection = DbHelper.DbConnectionAsync();
-            int localUserId = (int)Settings.getValue(Constants.USERID);
             if (localUserId != userId)
             {
                 //Disabe editing capabilities 
@@ -229,7 +228,7 @@ namespace Pepeza.Views.Profile
                 if (info != null) // We must be local 
                 {
                     TEmail emailInfo = await connection.GetAsync<TEmail>(info.emailId);
-                    TAvatar userAvatar = await AvatarHelper.getPosterAvatar(info.avatarId);
+                    TAvatar userAvatar = await AvatarHelper.get(info.avatarId);
                     avatarId = info.avatarId;
                     Debug.WriteLine(emailInfo.email);
                     toReturn = new ProfileData()
@@ -345,7 +344,7 @@ namespace Pepeza.Views.Profile
                                         dateCreated = (long)avatarObject["avatar"]["dateCreated"],
                                         dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
                                     };
-                                    var localAvatar = await AvatarHelper.getPosterAvatar(avatar.id);
+                                    var localAvatar = await AvatarHelper.get(avatar.id);
                                         if (localAvatar != null)
                                         {
                                             await AvatarHelper.update(avatar);

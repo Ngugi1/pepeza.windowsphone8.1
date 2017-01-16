@@ -252,7 +252,7 @@ namespace Pepeza.Views
                         Person p = new Person();
                         p.username = (string)row["username"];
                         p.id = (int)row["id"];
-                        p.linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg";
+                        p.linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"];
                         p.firstname = (string)row["firstName"];
                         p.lastname = (string)row["lastName"];
                         p.fullname = p.firstname + " " + p.lastname;
@@ -331,7 +331,7 @@ namespace Pepeza.Views
                                 searchedBoard.id = (int)board["id"];
                                 searchedBoard.name = (string)board["name"];
                                 searchedBoard.score = (double)board["score"];
-                                searchedBoard.linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg";
+                                searchedBoard.linkSmall = (string)board["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)board["linkSmall"];
                                 boardSource.Add(searchedBoard);
                             
                             }
@@ -380,7 +380,7 @@ namespace Pepeza.Views
                          Id = (int)row["id"],
                          Name = (string)row["name"],
                          Score = (double)row["score"],
-                         linkSmall = "http://localhost:8000/files/avatars/AVATAR-S-2.jpg",
+                         linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"],
                          Username =(string)row["username"]
                     };
                     orgSource.Add(org);

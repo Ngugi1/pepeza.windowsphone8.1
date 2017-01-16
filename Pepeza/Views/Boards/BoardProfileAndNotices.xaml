@@ -27,11 +27,12 @@
         <Grid Grid.Row="1">
             <Pivot SelectionChanged="Pivot_SelectionChanged"
                    Name="PivotParent"
-                   Style="{StaticResource CustomPivot}">
+                   Margin="4,8,4,4"
+                   >
                
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="profile" />
+                    profile   
                     </PivotItem.Header>
                     <ScrollViewer>
                         <Grid Name="rootGrid">
@@ -55,6 +56,7 @@
 
                                             <Image Width="250" Height="250"
                                                    Name="ImageMask"
+                                                   Visibility="Visible"
                                                    Tapped="rectangleProfilePic_Tapped"
                                                    Source="/Assets/Images/placeholder_avatar.jpg"/>
                                             <Toast:Toastinet 
@@ -112,7 +114,7 @@
                                                         <Paragraph>
                                                             <Bold>
                                                                 <Underline>
-                                                                    <Run Text="{Binding singleFollowerOrMany}"/>
+                                                                    <Run Text="{Binding singleFollowerOrMany , Mode=TwoWay}"/>
                                                                 </Underline>
                                                             </Bold>
                                                         </Paragraph>
@@ -137,6 +139,7 @@
                                                     <RichTextBlock 
                                                         FontSize="22"
                                                         Margin="4"
+                                                        IsTextSelectionEnabled="False"
                                                         Foreground="{ThemeResource PhoneAccentBrush}"
                                                         >
                                                         <Paragraph>
@@ -185,7 +188,7 @@
                                                    HorizontalAlignment="Center"
                                                    ScrollViewer.VerticalScrollMode="Auto"
                                                    Style="{StaticResource txtBlockDisplay}"
-                                                   Text="{Binding desc}"
+                                                   Text="{Binding desc , Mode=TwoWay}"
                                                    
                                                    Margin="12,4"
                                                    TextWrapping="Wrap" />
@@ -203,7 +206,7 @@
                 </PivotItem>
                 <PivotItem Name="PivotItemNotices">
                     <PivotItem.Header>
-                        <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="notices" />
+                    notices 
                     </PivotItem.Header>
                     <Grid>
                         <StackPanel 

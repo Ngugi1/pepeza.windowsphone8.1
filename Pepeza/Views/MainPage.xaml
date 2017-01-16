@@ -227,6 +227,10 @@
                                             LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
                                             Margin="8,12,0,28"
                                             Height="50"
+                                            RetryDelay="5"
+                                            CacheDuration="2"
+                                            CacheType="Memory"
+                                            FadeAnimationEnabled="True"
                                             Width="50"
                                             Source="{Binding linkSmall}"
                                             >

@@ -23,14 +23,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Pivot Name="OrgPivot"
+               Margin="4,8,4,4"
                Grid.RowSpan="2"
-               Margin="0"
                SelectedIndex="0"
                SelectionChanged="OrgPivot_SelectionChanged"
-               Style="{StaticResource CustomPivot}">
+               >
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="profile" />
+                profile
                 </PivotItem.Header>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -126,7 +126,7 @@
             </PivotItem>
             <PivotItem Margin="19.5,0">
                 <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="boards" />
+                boards  
                 </PivotItem.Header>
                 <Grid>
                     <StackPanel 
@@ -168,7 +168,7 @@
                                         VerticalAlignment="Center"
                                         Grid.RowSpan="2"
                                         Height="50"
-                                        Source="/Assets/Images/placeholder_avatar.jpg"
+                                        Source="{Binding linkSmall}"
                                         LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
                                         ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
                                         Width="50"
@@ -207,7 +207,7 @@
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
-                    <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="collaborators" />
+                collaborators  
                 </PivotItem.Header>
                 <Grid>
                     <StackPanel 
@@ -261,8 +261,10 @@
 
                                     <FFImage:FFImage Width="50" 
                                                      Margin="19,0,0,0"
-                                                     Source="/Assets/Images/placeholder_s_avatar.png"
                                                      Grid.RowSpan="2"
+                                                     Source="{Binding linkSmall}"
+                                                     LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                                     ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
                                                      Height="50">
 
                                     </FFImage:FFImage>

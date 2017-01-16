@@ -1,4 +1,6 @@
 ﻿using Coding4Fun.Toolkit.Controls;
+using FFImageLoading;
+using FFImageLoading.Cache;
 using Microsoft.AdMediator.WindowsPhone81;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
@@ -123,7 +125,7 @@ namespace Pepeza
                    
             }
 
-            
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);            
         }
 
         private  async void updateNotificationCount()
@@ -451,7 +453,8 @@ namespace Pepeza
             var checkbox = sender as CheckBox;
             List<TFollowing> following = await FollowingHelper.getAll();
             List<TBoard> followingBoards = new List<TBoard>();
-            var boardsclone = boards;
+            List<TBoard> managingBoards = new List<TBoard>();
+            ObservableCollection<TBoard> boardsclone = new ObservableCollection<TBoard>(boards);
                
             if (checkbox.Name == "CheckBoxFollowing")
             {
@@ -483,8 +486,10 @@ namespace Pepeza
                     EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                     txtBlockContent.Text = "You aren't following any boards.";
                 }
-               
-                ListViewBoards.ItemsSource = followingBoards;
+              
+               ListViewBoards.ItemsSource = followingBoards;
+             
+              
             }
             else
             {
@@ -497,11 +502,12 @@ namespace Pepeza
                         foreach (var item in following)
                         {
                             var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
-                            if (board != null) boards.Remove(board); // This will leave the boards you only manage
+                            if (board != null) boardsclone.Remove(board); // This will leave the boards you only manage
                         }
-                        if (boards.Count == 0)
+                        if (boardsclone.Count == 0)
                         {
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        ListViewBoards.ItemsSource = boardsclone;
                         txtBlockContent.Text = "You don't manage any boards.";
                         }
                     }
@@ -516,7 +522,6 @@ namespace Pepeza
 
         private void CheckBoxManaging_Unchecked(object sender, RoutedEventArgs e)
         {
-         
             ListViewBoards.ItemsSource = boards;
             if (boards.Count == 0)
             {
