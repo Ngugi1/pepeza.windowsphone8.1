@@ -144,7 +144,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 
             if (rootFrame.Content == null)
             {
-                rootFrame.Navigate(typeof(LoginPage));
+                rootFrame.Navigate(typeof(MainPage));
             }
 
             var continuationEventArgs = e as IContinuationActivatedEventArgs;
@@ -270,7 +270,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
                 // configuring the new page by passing required information as a navigation
                 // parameter
                
-                if (!rootFrame.Navigate(typeof(LoginPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -285,7 +285,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
             }
             else
             {
-                frame.Navigate(typeof(LoginPage), e.Arguments);
+                frame.Navigate(typeof(MainPage), e.Arguments);
             }
             //Deal with the statusbar
             updateStatusBar();

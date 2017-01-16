@@ -75,10 +75,6 @@ namespace Pepeza.Views
                 }
                 
             }
-            if (!settings.Values.ContainsKey(DbConstants.DB_CREATED))
-            {
-                await DbHelper.createDB();
-            }
         }
 
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
@@ -126,16 +122,6 @@ namespace Pepeza.Views
             return new Pepeza.Server.ServerModels.Login() { username = textBoxUsername.Text.Trim(), 
                 password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID};
         }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (settings.Values.ContainsKey(Constants.APITOKEN))
-            {
-                this.Frame.Navigate(typeof(MainPage));
-            }
-        }
-
         private void hylResetPassword_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ResetPasswordPage));

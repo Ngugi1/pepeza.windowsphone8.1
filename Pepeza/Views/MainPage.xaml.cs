@@ -14,10 +14,12 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
+using Pepeza.Views.Signup;
 using Pepeza.Views.UserNotifications;
 using Pepeza.Views.ViewHelpers;
 using QKit.JumpList;
@@ -72,6 +74,14 @@ namespace Pepeza
         /// This parameter is typically used to configure the page.</param> 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey(Constants.APITOKEN))
+            {
+                if (!(bool)Settings.getValue(Constants.ISUSERNAMESET))
+                {
+                    this.Frame.Navigate(typeof(AddUsername));
+                }
+            }
             //Clear the backstack 
             this.Frame.BackStack.Clear();
             //Count the number of notifications 
@@ -200,8 +210,17 @@ namespace Pepeza
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
             {
-                updateNotificationCount();
+                
                 loadNotices();
+                await loadBoards();
+                await loadOrgs();
+
+                //Load notification count from the isolated storage 
+                var count = Settings.getValue(Constants.NOTIFICATION_COUNT);
+                if (count != null)
+                {
+                    txtBlockNotificationsCount.Text = ((int)count).ToString();
+                }
             }
             //Prevent background agent from being invoked 
         }
