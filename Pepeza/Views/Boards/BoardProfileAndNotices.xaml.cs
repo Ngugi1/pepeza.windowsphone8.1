@@ -55,7 +55,7 @@ namespace Pepeza.Views.Boards
     {
         TBoard boardFetched = null;
         int boardId;
-        bool isBoardFetched = false;
+        
         CoreApplicationView view = CoreApplication.GetCurrentView();
         JObject follower_result = null;
         TAvatar boardAvatar = null;
@@ -104,8 +104,8 @@ namespace Pepeza.Views.Boards
                     ImageMask.Visibility = Visibility.Visible;
                     PBProfilePicUpdating.Visibility = Visibility.Collapsed;
                 }
-                isFetchingDetails(false);
                 rootGrid.DataContext = localBoard;
+                isFetchingDetails(false);
             }
             // Get the board followers 
             Dictionary<string, string> followersCountResults = await BoardService.getboardFollowers(boardId);
@@ -153,7 +153,6 @@ namespace Pepeza.Views.Boards
                     
                 }
                 //rootGrid.DataContext = localBoard;
-                isBoardFetched = true;
                 //Allow one to follow their own board 
                 //if(localBoard!=null)
                 //{
@@ -223,7 +222,6 @@ namespace Pepeza.Views.Boards
                     }
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
-                    isBoardFetched = true;
                     if (boardFetched.followRestriction == "request")
                     {
                         btnFollow.Visibility = Visibility.Visible;
@@ -421,17 +419,17 @@ namespace Pepeza.Views.Boards
                     if (collaborator.role == Constants.EDITOR)
                     {
                         AppBtnEdit.Visibility = Visibility.Collapsed;
-                        btnFollow.Visibility = Visibility.Visible;
+                       
                     }
                     else if (collaborator.role == Constants.ADMIN)
                     {
                         AppBtnEdit.Visibility = Visibility.Visible;
-                        btnFollow.Visibility = Visibility.Visible;
+                       
                     }
                     else if (collaborator.role == Constants.OWNER)
                     {
                         AppBtnEdit.Visibility = Visibility.Visible;
-                        btnFollow.Visibility = Visibility.Collapsed;
+                       
                     }
                     else
                     {
