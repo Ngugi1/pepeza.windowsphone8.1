@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
 using System;
@@ -40,6 +41,12 @@ namespace Pepeza.Views.Orgs
             if (e.Parameter != null)
             {
                  collaborator = e.Parameter as Pepeza.Views.Orgs.OrgProfileAndBoards.Collaborator;
+                 if (collaborator.userId == (int)Settings.getValue(Constants.USERID))
+                 {
+                     BtnActivation.IsEnabled = false;
+                     EditSymbol.IsTapEnabled = false;
+                     AppBtnSave.IsEnabled = false;
+                 }
                  if (collaborator.active == "Active")
                  {
                      BtnActivation.Content = "Deactivate";
@@ -143,12 +150,14 @@ namespace Pepeza.Views.Orgs
             ProgressRingUpdating.Visibility = Visibility.Collapsed;
         }
 
-        private void AppBtnEdit_Click(object sender, TappedRoutedEventArgs e)
+        private void EditSymbol_Tapped(object sender, TappedRoutedEventArgs e)
         {
             CommandBarActions.Visibility = Visibility.Visible;
             AppBtnSave.Visibility = Visibility.Visible;
             ComboRole.Visibility = Visibility.Visible;
             txtBlockRole.Visibility = Visibility.Collapsed;
         }
+
+       
     }
 }

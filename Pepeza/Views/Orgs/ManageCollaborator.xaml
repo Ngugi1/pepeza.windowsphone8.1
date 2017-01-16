@@ -41,17 +41,21 @@
                        FontWeight="SemiBold"
                        Foreground="Black"
                        HorizontalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal"
+            	HorizontalAlignment="Center" Margin="142,0,143,0">
                     <TextBlock Text="Role"
-                               VerticalAlignment="Bottom"
-                       HorizontalAlignment="Center"
-                       Style="{StaticResource txtBlockListViewDesc}"/>
-                    <Viewbox Height="30" Width="30">
+                		VerticalAlignment="Bottom"
+                		HorizontalAlignment="Center"
+                		Style="{StaticResource txtBlockListViewDesc}"/>
+                    <Viewbox Height="30" 
+                		Margin="24,4,4,4"
+                		Width="30">
                         <SymbolIcon Symbol="Edit" 
-                                    Tapped="AppBtnEdit_Click"/>
+                                    Name="EditSymbol"
+                			Tapped="EditSymbol_Tapped"/>
                     </Viewbox>
                 </StackPanel>
-            <Grid>
+                <Grid>
                     <ComboBox 
                         Name="ComboRole"
                         BorderBrush="{ThemeResource PhoneAccentBrush}"
