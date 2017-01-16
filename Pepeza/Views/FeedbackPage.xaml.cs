@@ -88,7 +88,7 @@ namespace Pepeza.Views
             if (resulst.ContainsKey(Constants.SUCCESS))
             {
                 JObject json = JObject.Parse(resulst[Constants.SUCCESS]);
-                ToastStatus.Message = (string)json["message"];
+                ToastStatus.Message = (string)json["message"] + "\n Thanks for your feedback!";
             }
             else
             {
@@ -96,7 +96,6 @@ namespace Pepeza.Views
                 ToastStatus.Message = (string)resulst[Constants.ERROR];
             }
             StackPanelProgress.Visibility = Visibility.Collapsed;
-            this.Frame.GoBack();
         }
     }
 }

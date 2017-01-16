@@ -112,7 +112,9 @@
                       PlaceholderText="I like pepeza :-)"
                       Style="{StaticResource txtBoxStyle}"/>
         </StackPanel>
-        <toast:Toastinet Name="ToastStatus" Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
+        <toast:Toastinet Name="ToastStatus" 
+                         Duration="10"
+                         Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
     </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>
