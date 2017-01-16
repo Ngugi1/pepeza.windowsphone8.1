@@ -59,49 +59,50 @@
                  >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                <Grid 
+                    <Grid 
                     Width="{Binding ActualWidth, ElementName=ListViewBoardFollowers}"
                     Height="70">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <FFImage:FFImage
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <FFImage:FFImage
                                         Grid.RowSpan="2"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                        Source="{Binding linkSmall}"
+                                       Margin="12,0,12,0"
                                         LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        Margin="12,0,12,10"
-                                        Source="{Binding linkSmall, Mode=TwoWay}"
+                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
                                         VerticalAlignment="Bottom"
                                         Height="50"
                                         Width="50"
                                         >
-                    </FFImage:FFImage>
-                    <TextBlock Grid.Row="0"
+                        </FFImage:FFImage>
+                        <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Margin="8,10,8,6"
+                       Margin="8,4,8,0"
                        Style="{StaticResource txtBlockListViewItemHeader}"
-                       Text="{Binding userName , Mode=TwoWay}" />
-                    <TextBlock Grid.Row="1"
+                       Text="{Binding userName}" />
+                        <TextBlock Grid.Row="1"
                        Grid.Column="1"
-                       Margin="8,0,14,0"
+                       Margin="8,4,14,0"
                        Style="{StaticResource txtBlockListViewDesc}"
                        Text="{Binding FullName}"/>
-                    <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
+                        <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
                                Margin="12,0"
                                Grid.Column="2"
                                Style="{StaticResource BaseTextBlockStyle}"
                                VerticalAlignment="Bottom"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                />
-                </Grid>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
+           
         </ListView>
 
 

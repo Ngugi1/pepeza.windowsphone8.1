@@ -60,6 +60,7 @@ namespace Pepeza.Views.Boards
                             firstName = (string)item["firstName"],
                             lastName = (string)item["lastName"],
                             accepted = (bool)item["accepted"],
+                       
                             linkSmall = (string)item["linkSmall"] == null ? "/Assets/Images/placeholder_s_avatar.png" : (string)item["linkSmall"]
                         });
                         
