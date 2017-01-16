@@ -58,7 +58,10 @@ namespace Pepeza.Views.Boards
                                  username = (string)item["username"],
                                  firstName = (string)item["firstName"],
                                  lastName = (string)item["lastName"]
+                                
+                                 
                             };
+                            if ((string)item["linkSmall"] == null) request.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
                             request.fullname = request.firstName == null ? request.username : request.firstName + " " + request.lastName;
                             requestsource.Add(request);
                         }
@@ -134,6 +137,7 @@ namespace Pepeza.Views.Boards
     {
         public int userId { get; set; }
         public string username { get; set; }
+        public string linkSmall { get; set; }
         public string firstName  { get; set; }
         public string lastName { get; set; }
         public int id { get; set; }

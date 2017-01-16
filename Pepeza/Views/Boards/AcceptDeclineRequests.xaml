@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:toaster="using:Toastinet"
     RequestedTheme="Light"
+    xmlns:FFImage="using:FFImageLoading"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
@@ -24,7 +25,6 @@
         </Grid.RowDefinitions>
         <TextBlock Text="follow requests" 
                    Margin="20,0"
-                   Typography.Capitals="Unicase"
                    Style="{StaticResource txtBlockPageHeader}"
                    Foreground="Black"
                    />
@@ -64,12 +64,12 @@
                            Duration="4"
                            />
         <ListView Grid.Row="1"
-                  Margin="16,0"
+                  Margin="16,8"
                   Name="listviewRequests"
                   >
+           
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <!--<ListViewItem>-->
                     <Grid Margin="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -85,19 +85,21 @@
                                  Width="60"
                                  Height="60"
                                  >
-                            <Image Height="50"
-                                   Source="/Assets/Images/placeholder_s_avatar.png"
+                            <FFImage:FFImage Height="50"
+                                   Source="{Binding linkSmall}"
                                    Width="50"
-                           
-                                   />
+                                   LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                   ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                   FadeAnimationEnabled="True"
+                                       
+                                         />
                         </Viewbox>
                         <TextBlock Text="{Binding fullname}"
                                    VerticalAlignment="Top"
-                                   Margin="0.167,8,-0.5,0"
+                                   Margin="2,8,-0.5,0"
                                    Grid.ColumnSpan="2"
-                                   FontWeight="SemiBold"
                                    Foreground="Black"
-                                   Style="{StaticResource txtBlockDisplay}"
+                                   Style="{StaticResource BaseTextBlockStyle}"
                                    Grid.Column="1" Grid.RowSpan="2"/>
                         <Button Content="Accept"
                                 VerticalAlignment="Top"
@@ -105,28 +107,30 @@
                                 BorderBrush="Transparent"
                                 Background="{ThemeResource PhoneAccentBrush}"
                                 Grid.Row="1"
-                                Name="AcceptRequestButton"
+                                Name="AcceptRequestButton1"
                                 Click="BtnAcceptRequest"
                                 Padding="0"
+                                Margin="28,26,0,-0.5"
                                 Tag="{Binding}"
                                 Foreground="White"
-                                Grid.Column="1" Margin="0.167,22,0,0"
+                                Grid.Column="2" 
                                 />
                         <Button Content="Decline" 
-                                Name="DeclineRequestBtn"
+                                Name="DeclineRequestBtn2"
                                 Click="BtnDeclineRequest"
                                 Grid.Row="1"
                                 VerticalAlignment="Top"
                                 Padding="0"
-                                Margin="28,19,0,0"
+                            Margin="2,26,0,-1.333"
+                              
                                 Tag="{Binding}"
                                 Background="Silver"
                                 BorderBrush="Transparent"
-                                Grid.Column="2"/>
+                                Grid.Column="1"/>
                     </Grid>
-                    <!--</ListViewItem>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
+            
         </ListView>
     </Grid>
 </Page>
