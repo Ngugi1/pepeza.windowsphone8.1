@@ -35,6 +35,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Shared.Server.Requests;
+using Pepeza.Views.Signup;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -230,7 +231,34 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         /// <param name="e">Details about the launch request and process.</param>
         protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
+             Type pageToNavigate = null;
             await DbHelper.createDB();
+            //Determine which page to navigate to 
+            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (settings.Values.ContainsKey(Constants.APITOKEN))
+            {
+                if (settings.Values.ContainsKey(Constants.ISUSERNAMESET))
+                {
+                    bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
+                    if (isusernameSet)
+                    {
+                        pageToNavigate = typeof(MainPage);
+                    }
+                    else
+                    {
+                        pageToNavigate = typeof(AddUsername);
+                    }
+                }
+                else
+                {
+                    pageToNavigate = typeof(LoginPage);
+                }
+
+            }
+            else
+            {
+                pageToNavigate = typeof(LoginPage);
+            }
             Frame rootFrame = Window.Current.Content as Frame;
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -270,7 +298,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
                 // configuring the new page by passing required information as a navigation
                 // parameter
                
-                if (!rootFrame.Navigate(typeof(LoginPage), e.Arguments))
+                if (!rootFrame.Navigate(pageToNavigate, e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -285,7 +313,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
             }
             else
             {
-                frame.Navigate(typeof(LoginPage), e.Arguments);
+                frame.Navigate(pageToNavigate, e.Arguments);
             }
             //Deal with the statusbar
             updateStatusBar();
