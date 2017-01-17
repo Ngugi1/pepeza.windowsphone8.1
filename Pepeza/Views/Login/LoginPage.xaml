@@ -94,7 +94,7 @@
                             VerticalAlignment="Bottom"
                             Grid.Row="1"
                             Margin="12">
-                    <TextBlock Text="You prefer google or facebook?" 
+                    <TextBlock Text="Login with facebook ?" 
                                Typography.Capitals="Normal"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource txtBlockDisplay}"
@@ -102,14 +102,16 @@
                                />
                     
                     <Button 
+                        Visibility="Collapsed"
                         Click="LoginWithGoogle"
                         HorizontalAlignment="Center"
                         BorderBrush="Transparent" 
-                        Visibility="Visible"
+                        
                         BorderThickness="2"
                         Width="{Binding ActualWidth, ElementName=btnLoginWithFacebook}">
                         <StackPanel Orientation="Horizontal"
                                     Background="Blue"
+                                    
                                     HorizontalAlignment="Left" Width="246">
                             <Image
                                 Margin="4"
