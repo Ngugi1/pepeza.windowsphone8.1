@@ -30,6 +30,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -190,6 +191,7 @@ namespace Pepeza.Views.Account
                 {
                     if (results[Constants.SUCCESS] == 1)
                     {
+                        Settings.add(Constants.IS_GET_NEW_DATA_DONE, true);
                         if (isUserNameNull)
                         {
                             //Go to the main page
@@ -201,6 +203,10 @@ namespace Pepeza.Views.Account
                             this.Frame.Navigate(typeof(AddUsername));
                         }
                     }
+                    else
+                    {
+                        Settings.add(Constants.IS_GET_NEW_DATA_DONE, false);
+                    }
                     
                 }
                 else
@@ -208,13 +214,29 @@ namespace Pepeza.Views.Account
                     //TODO :: Show a retry button
                     ProgressRingReady.Visibility = Visibility.Collapsed;
                     commandBarReload.Visibility = Visibility.Visible;
+                    Settings.add(Constants.IS_GET_NEW_DATA_DONE, false);
                 }
             }
             else
             {
                 //TODO :: Show a retry button
                 ProgressRingReady.Visibility = Visibility.Collapsed;
+                //Redirect to login page 
+                string PEPEZA = "Pepeza";
+                await DbHelper.dropDatabase();
+                //Delete the Pepeza folder 
+                try
+                {
+                    var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                    await currentFolder.DeleteAsync();
+                }
+                catch
+                {
+                    //Igone the exception and continue
+                }
+                        
                 commandBarReload.Visibility = Visibility.Visible;
+                Settings.add(Constants.IS_GET_NEW_DATA_DONE, false);
                 txtBlockStatus.Text = userdata[Constants.ERROR];
             }
         }

@@ -87,21 +87,27 @@
                                     <TextBlock Text="{Binding title , Mode=TwoWay}" 
                                                Foreground="Black"
                                                Margin="0"
+                                               FontWeight="SemiBold"
                                                VerticalAlignment="Bottom"
-                                               Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                               Style="{StaticResource TitleTextBlockStyle}"/>
                                     <TextBlock  
                                         Grid.Row="1"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Text="{Binding board , Mode=TwoWay}"/>
+                                        Text="{Binding board , Mode=TwoWay}"
+                                        Style="{StaticResource BodyTextBlockStyle}"
+                                        Margin="0"
+                                        FontWeight="SemiBold"
+                                        />
                                     <RichTextBlock
                                         Grid.Row="2"
-                                               Margin="0"
-                                               TextWrapping="NoWrap"
+                                        Margin="4"
+                                        TextWrapping="NoWrap"
+                                               FontWeight="SemiBold"
                                                IsTextSelectionEnabled="False"
                                                Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
                                                FontSize="{StaticResource TextStyleMediumFontSize}"
                                                Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
-                                    <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
+                                    <TextBlock Text="{Binding date_created_display , Mode=TwoWay}"
                                                HorizontalAlignment="Left" 
                                                VerticalAlignment="Bottom"
                                                Grid.Column="1" />

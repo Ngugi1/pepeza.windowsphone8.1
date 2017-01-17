@@ -10,7 +10,6 @@
       xmlns:pageHeader="using:Pepeza.CustomControls"
       xmlns:coding4Fun="using:Coding4Fun.Toolkit.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-      Loaded="Page_Loaded"
       RequestedTheme="Light"
       mc:Ignorable="d">
     <Page.Resources>

@@ -14,6 +14,8 @@ namespace Pepeza.Db.Models.Notices
         public int noticeId { get; set; }
         [Ignore]
         public int attachmentId { get; set; }
+        [Ignore]
+        public string date_created_display { get; set; }
         public int boardId { get; set; }
         public int userId { get; set; }
         public string title { get; set; }

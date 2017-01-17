@@ -201,8 +201,6 @@ namespace Pepeza
             if (results != null)
             {
                 loadNotices();
-                await loadBoards();
-                await loadOrgs();
                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
             }
             //Prevent background agent from being invoked 

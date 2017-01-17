@@ -73,6 +73,7 @@ namespace Pepeza.Views.Notices
             if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))
             {
                 notice = e.Parameter as TNotice;
+                notice.date_created_display = DateTimeFormatter.UnixTimestampToDate(notice.dateCreated, false);
                 noticeId = notice.noticeId;
                 // Now do a sumission if we are connected to the internet
                 if (notice.hasAttachment==1)

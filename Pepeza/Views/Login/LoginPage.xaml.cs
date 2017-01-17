@@ -127,14 +127,7 @@ namespace Pepeza.Views
                 password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID};
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (settings.Values.ContainsKey(Constants.APITOKEN))
-            {
-                this.Frame.Navigate(typeof(MainPage));
-            }
-        }
+       
 
         private void hylResetPassword_Click(object sender, RoutedEventArgs e)
         {

@@ -4,6 +4,7 @@ using Pepeza.Db.Models.Notices;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Models.NoticeModels;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                         notice.isRead = item.isRead;
                         TBoard board =  await BoardHelper.getBoard(notice.boardId);
                         notice.board = board.name;
+                        notice.date_created_display = DateTimeFormatter.UnixTimestampToDate(notice.dateCreated);
                         if (notice.hasAttachment == 1)
                         {
                             var attacho = await AttachmentHelper.get(notice.noticeId);
@@ -62,6 +64,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                             }
                         }
                         notices.Add(notice);
+                  
                     }
                    notices.OrderByDescending<TNotice, long>(i => i.dateCreated);
                    notices.Reverse();
@@ -94,6 +97,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                         item.isRead = item.isRead;
                         TBoard board = await BoardHelper.getBoard(item.boardId);
                         item.board = board.name;
+                        item.date_created_display = DateTimeFormatter.UnixTimestampToDate(item.dateCreated);
                         if (item.hasAttachment == 1)
                         {
                             var attacho = await AttachmentHelper.get(noticeitem.noticeId);

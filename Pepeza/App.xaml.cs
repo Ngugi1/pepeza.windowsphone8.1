@@ -239,15 +239,26 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
             {
                 if (settings.Values.ContainsKey(Constants.ISUSERNAMESET))
                 {
-                    bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
-                    if (isusernameSet)
+                    var synced = Settings.getValue(Constants.IS_GET_NEW_DATA_DONE);
+                    if(synced!=null)
                     {
-                        pageToNavigate = typeof(MainPage);
-                    }
-                    else
+                        if((bool)synced)
+                        {
+                            bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
+                            if (isusernameSet)
+                            {
+                                pageToNavigate = typeof(MainPage);
+                            }
+                            else
+                            {
+                                pageToNavigate = typeof(AddUsername);
+                            }
+                        }
+                    }else
                     {
-                        pageToNavigate = typeof(AddUsername);
+                        pageToNavigate = typeof(LoginPage);
                     }
+                    
                 }
                 else
                 {

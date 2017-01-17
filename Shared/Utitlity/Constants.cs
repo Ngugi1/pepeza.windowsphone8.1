@@ -18,7 +18,7 @@ namespace Pepeza.Utitlity
         public static string PRIVATE_BOARD { get { return "private"; } }
         public static string APITOKEN { get { return "X-API-TOKEN"; }  }
         public static string ISUSERNAMESET { get { return "ISUSERNAMESET"; } }
-        public static string IS_GET_NEW_DATA_DONE { get; set; }
+        public static string IS_GET_NEW_DATA_DONE { get { return "IS_GET_NEW_DATA_DONE"; } }
         public static int PUSH_ID { get { return 2; } }
         public static string REQUEST_NOT_COMPELETED { get { return "Oops , we could not process your request.Please try again later!"; } }
         public static string UNKNOWNERROR { get { return "Oops! Something went wrong.\n Try again later"; } }

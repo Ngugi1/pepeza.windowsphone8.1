@@ -255,8 +255,8 @@
                                         Style="{StaticResource BodyRichTextBlockStyle}"
                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
-                                        
-                                        <TextBlock Text="{Binding dateCreated , Mode=TwoWay}"
+
+                                        <TextBlock Text="{Binding date_created_display , Mode=TwoWay}"
                                     HorizontalAlignment="Left" 
                                     VerticalAlignment="Bottom"
                                      Grid.Column="1" />
