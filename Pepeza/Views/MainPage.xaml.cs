@@ -200,8 +200,10 @@ namespace Pepeza
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
             {
-                updateNotificationCount();
                 loadNotices();
+                await loadBoards();
+                await loadOrgs();
+                txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
             }
             //Prevent background agent from being invoked 
         }
