@@ -26,7 +26,10 @@ namespace Pepeza.ViewModels.Commands
         {
 
         }
-        
+
+
+
+        public event EventHandler CanExecuteChanged;
     }
 }
 
