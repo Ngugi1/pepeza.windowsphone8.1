@@ -79,6 +79,7 @@ namespace Pepeza.Views.Orgs
                 });
                     if (result.ContainsKey(Constants.SUCCESS))
                     {
+                        Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATEORG);
                         try
                         { //Board created successfully  , save and navigate away 
                             JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);

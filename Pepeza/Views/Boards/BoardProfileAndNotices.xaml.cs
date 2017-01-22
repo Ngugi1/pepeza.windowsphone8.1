@@ -247,6 +247,7 @@ namespace Pepeza.Views.Boards
             Dictionary<string, string> results = await BoardService.followBoard(boardParam.id);
             if (results.ContainsKey(Constants.SUCCESS))
             {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.FOLLOW);
                 //We have followed the board
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 TFollowing following = new TFollowing();

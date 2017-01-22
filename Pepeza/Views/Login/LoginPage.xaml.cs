@@ -115,6 +115,8 @@ namespace Pepeza.Views
                 }
                
                 StackPanelLogging.Visibility = Visibility.Collapsed;
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.NORMALLOGIN);
+
             }
             
         }
@@ -196,6 +198,8 @@ namespace Pepeza.Views
                             {
                             //We posted successfully 
                                 this.Frame.Navigate(typeof(SetUpPage), results);
+                                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SOCIALLOGIN);
+
                             }
                             else
                             {

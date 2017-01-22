@@ -269,6 +269,7 @@ namespace Pepeza
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
         }
         //TODO :: Reload the notices
         public async static void reloadNotices()

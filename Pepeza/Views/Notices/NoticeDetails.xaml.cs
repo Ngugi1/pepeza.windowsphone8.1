@@ -68,6 +68,7 @@ namespace Pepeza.Views.Notices
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.VIEWNOTICE);
             StackPanelDetails.Visibility = Visibility.Collapsed;
             StackPanelLoading.Visibility = Visibility.Visible;
             if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))

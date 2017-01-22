@@ -92,6 +92,8 @@ namespace Pepeza.Views
             }
             user.ShowProgressRing = false;
             user.CanUserSignUp = true;
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.NORMALCREATEaCCOUNT);
+
         }
 
         private void showTextBlock(string message, User user)

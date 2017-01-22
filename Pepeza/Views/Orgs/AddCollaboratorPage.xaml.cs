@@ -153,6 +153,7 @@ namespace Pepeza.Views.Orgs
                 {
                     await CollaboratorHelper.add(collaborator);
                 }
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.ADDCOLLABORATOR);
                 ToastStatus.Message = "Collaborator added successfully";
                 popUpAddCollaborator.IsOpen = false;
 

@@ -63,6 +63,7 @@ namespace Pepeza.Views.Configurations
             {
                 if(config.page == null)
                 {
+                    
                     //Confirm whether the user wants to continue
                     MessageDialog dialog = new MessageDialog("All your data will be wiped.\nDo you want to proceed?", "Logout");
                     dialog.Commands.Add(new UICommand() { Label = "OK", Id = 0  });
@@ -95,7 +96,7 @@ namespace Pepeza.Views.Configurations
                         {
                             //Igone the exception and continue
                         }
-                        
+                        Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.LOGOUT); 
                         this.Frame.Navigate(typeof(LoginPage));
                         }else
                         {

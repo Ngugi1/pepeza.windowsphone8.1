@@ -96,6 +96,8 @@ namespace Pepeza.Views
                 ToastStatus.Message = (string)resulst[Constants.ERROR];
             }
             StackPanelProgress.Visibility = Visibility.Collapsed;
+            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.FEEDBACKSENT);
+            
         }
     }
 }

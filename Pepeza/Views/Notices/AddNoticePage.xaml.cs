@@ -134,6 +134,7 @@ namespace Pepeza.Views.Notices
                     showErrorToast("Invalid description!");
                 }
                 StackPanelLoading.Visibility = Visibility.Collapsed;
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATENOTICE);
                     
         }
 
@@ -154,6 +155,7 @@ namespace Pepeza.Views.Notices
                  results= await NoticeService.postItem(toPost, file);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
+                    Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.ATTACHFILE);
                     JObject jobject = JObject.Parse(results[Constants.SUCCESS]);
                     //Get the FileNotice details
                     TNotice fileNotice = new TNotice()

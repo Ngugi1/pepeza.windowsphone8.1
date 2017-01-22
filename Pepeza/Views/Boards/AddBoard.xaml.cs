@@ -75,6 +75,7 @@ namespace Pepeza.Views.Boards
                     {
                         //Update local database
                         insertBoardToDb(results, board);
+                        Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATEBOARD);
                         this.Frame.Navigate(typeof(OrgProfileAndBoards) , orgId);
                     }
                     else
