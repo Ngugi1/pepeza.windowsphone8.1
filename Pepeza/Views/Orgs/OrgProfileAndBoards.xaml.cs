@@ -117,7 +117,7 @@ namespace Pepeza.Views.Orgs
                 ImageMask.IsTapEnabled = false;
             }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
@@ -348,7 +348,7 @@ namespace Pepeza.Views.Orgs
                     
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 //await new MessageDialog(Constants.UNKNOWNERROR).ShowAsync();
             }

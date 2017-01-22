@@ -24,7 +24,7 @@ namespace Shared.Db.DbHelpers
                 }
                 return notification;
             }
-            catch(InvalidOperationException ex)
+            catch(InvalidOperationException)
             {
                 return null;
             }
@@ -42,7 +42,7 @@ namespace Shared.Db.DbHelpers
                 }
                 return notification;
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
                 return null;
             }

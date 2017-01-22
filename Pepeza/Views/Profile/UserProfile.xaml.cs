@@ -62,67 +62,73 @@ namespace Pepeza.Views.Profile
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
-            TUserInfo currentUser = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
-            ComboVisibility.ItemsSource = comboSource;
-            #region
-            if (e.Parameter != null)
+            try
             {
-                
-                if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
+                TUserInfo currentUser = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
+                ComboVisibility.ItemsSource = comboSource;
+                #region
+                if (e.Parameter != null)
                 {
-                    userId = (int)e.Parameter;
-                    int localUserId = (int)Settings.getValue(Constants.USERID);
-                    // TODO :: We had an exception here after being added to an organisation get the data from the sqlilte database
-                    data = await getUserProfile(userId ,localUserId);
-                    //Get the user avatar 
-                    data.username = "@" + data.username;
 
-                    this.grid.DataContext = data;
-                    if (userId == localUserId)
+                    if (e.Parameter != null && e.Parameter.GetType() == typeof(int))
                     {
-                        if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
+                        userId = (int)e.Parameter;
+                        int localUserId = (int)Settings.getValue(Constants.USERID);
+                        // TODO :: We had an exception here after being added to an organisation get the data from the sqlilte database
+                        data = await getUserProfile(userId, localUserId);
+                        //Get the user avatar 
+                        if (data != null) data.username = "@" + data.username;
+                        this.grid.DataContext = data;
+                        if (userId == localUserId)
                         {
-                            setToUpdate();
+                            if (!string.IsNullOrWhiteSpace(data.fname) && !string.IsNullOrWhiteSpace(data.lname))
+                            {
+                                setToUpdate();
+                                stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
+                                txtBlockFullName.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                setIconToEdit();
+                                stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                                stackPanelAddFirstLastName.Visibility = Visibility.Visible;
+                            }
+                            if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
+                            {
+                                //Show edit icon
+                                setIconToEdit();
+                                txtBlockFullName.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                //show update Icon
+                                setToUpdate();
+                                txtBlockFullName.Visibility = Visibility.Collapsed;
+                            }
+                        }
+                        else
+                        {
+                            CommandBaEdit.Visibility = Visibility.Collapsed;
+                            rectProfilePic.IsTapEnabled = false;
                             stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
-                            txtBlockFullName.Visibility = Visibility.Visible;
                         }
-                        else
+                        if (string.IsNullOrWhiteSpace(data.fullname))
                         {
-                            setIconToEdit();
-                            stackPanelAddFirstLastName.Visibility = Visibility.Visible;
-                            stackPanelAddFirstLastName.Visibility = Visibility.Visible;
-                        }
-                        if (stackPanelAddFirstLastName.Visibility == Visibility.Collapsed)
-                        {
-                            //Show edit icon
-                            setIconToEdit();
-                            txtBlockFullName.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            //show update Icon
-                            setToUpdate();
                             txtBlockFullName.Visibility = Visibility.Collapsed;
                         }
-                    }
-                    else
-                    {
-                        CommandBaEdit.Visibility = Visibility.Collapsed;
-                        rectProfilePic.IsTapEnabled = false;
-                        stackPanelAddFirstLastName.Visibility = Visibility.Collapsed;
-                    }
-                    if (string.IsNullOrWhiteSpace(data.fullname))
-                    {
-                        txtBlockFullName.Visibility = Visibility.Collapsed;
-                    }
-                    
 
-     
+
+
+                    }
                 }
+                #endregion  
+        
             }
-            #endregion  
-        }
+            catch (Exception)
+            {
+               
+            }
+           }
         void rectangleProfilePic_Finish(object sender, FFImageLoading.Args.FinishEventArgs e)
         {
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;

@@ -19,7 +19,7 @@ namespace Pepeza.ViewModels.Commands
             return true;
         }
 
-        public event EventHandler CanExecuteChanged;
+       // public event EventHandler CanExecuteChanged;
 
         public void Execute(object parameter)
         {

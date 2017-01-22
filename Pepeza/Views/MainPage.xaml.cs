@@ -56,7 +56,7 @@ namespace Pepeza
         public static ObservableCollection<TOrgInfo> orgs { get; set; }
         public static ObservableCollection<TBoard> following{ get; set; }
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
-        bool isSelected = false;
+        bool isSelected = false, isInBackground = false;
         AdMediatorControl control = new AdMediatorControl();
         public MainPage()
         {
@@ -200,7 +200,8 @@ namespace Pepeza
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
             {
-                loadNotices();
+                isInBackground =true;
+                pivotMainPage.SelectedIndex = pivotMainPage.SelectedIndex;
                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
             }
             //Prevent background agent from being invoked 
@@ -287,9 +288,33 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(BoardProfileAndNotices),board.id);
             }
         }
-        private void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int selectedIndex = (sender as Pivot).SelectedIndex;
+            switch (selectedIndex)
+	{
+                case 0:
+                    if(isInBackground)
+                    {
+                        loadNotices();
+                    }
+                    break;
+                case 1: 
+                    if(isInBackground)
+                    {
+                       await  loadBoards();
+                    }
+                    break;
+                case 2 :
+                    if(isInBackground)
+                    {
+                        await loadOrgs();
+                    }
+                    break;
+                default:
+                break;
+	}
+            isInBackground = false;
             if (selectedIndex == 2)
             {
                 AppBtnAdd.Visibility = Visibility.Visible;

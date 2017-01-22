@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pepeza", "Pepeza\Pepeza.csproj", "{901F210C-71BB-4316-8656-1491205A3DB4}"
 EndProject
@@ -47,6 +47,7 @@ Global
 		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|Any CPU.Build.0 = Release|Any CPU
 		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|ARM.ActiveCfg = Release|ARM
 		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|ARM.Build.0 = Release|ARM
+		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|ARM.Deploy.0 = Release|ARM
 		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|x86.ActiveCfg = Release|x86
 		{815C1DE4-C75F-4ABE-BA76-67FF441E9898}.Release|x86.Build.0 = Release|x86
 		{F749F62D-B444-4962-91C3-9C868D798DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

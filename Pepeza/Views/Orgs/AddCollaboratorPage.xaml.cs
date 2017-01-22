@@ -33,7 +33,7 @@ namespace Pepeza.Views.Orgs
     {
         Person selectedPerson = null;
         string role;
-        int userId, orgId;
+        int  orgId;
         string onDeviceRole;
         ObservableCollection<Person> listAdmins = new ObservableCollection<Person>();
         public AddCollaboratorPage()

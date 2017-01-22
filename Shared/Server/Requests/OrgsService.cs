@@ -307,7 +307,7 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
-                }catch(Exception ex)
+                }catch(Exception)
                 {
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }

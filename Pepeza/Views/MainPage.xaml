@@ -187,9 +187,9 @@
                             Name="CheckBoxManaging"
                             Unchecked="CheckBoxManaging_Unchecked"
                                      Checked="RadioButton_Checked"
-                                     BorderThickness="2" Content="Managing"/>
-
-                        <CheckBox 
+                                     BorderThickness="2" Content="Managing" Width="128"/>
+                            <RadioButton Style="{StaticResource RadioButtonStyle1}" />
+                            <CheckBox 
                             Name="CheckBoxFollowing"
                               Checked="RadioButton_Checked"
                             Unchecked="CheckBoxManaging_Unchecked"

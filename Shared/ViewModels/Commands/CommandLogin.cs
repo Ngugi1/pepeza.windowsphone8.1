@@ -13,7 +13,7 @@ namespace Pepeza.ViewModels.Commands
 {
    public class CommandLogin : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        //public event EventHandler CanExecuteChanged;
         ViewModelLogin vmlogin = null;
         public CommandLogin(ViewModelLogin vmlogin)
         {

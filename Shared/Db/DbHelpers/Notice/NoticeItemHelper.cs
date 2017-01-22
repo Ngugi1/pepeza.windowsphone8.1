@@ -35,7 +35,7 @@ namespace Shared.Db.DbHelpers.Notice
                    
                     return info;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 return null;
                 }
@@ -53,7 +53,7 @@ namespace Shared.Db.DbHelpers.Notice
 
                 return info.FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
