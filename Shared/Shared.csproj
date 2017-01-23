@@ -171,6 +171,7 @@
     <Compile Include="Utitlity\DateTimeFormatter.cs" />
     <Compile Include="Utitlity\FilePickerHelper.cs" />
     <Compile Include="Utitlity\LocalUserHelper.cs" />
+    <Compile Include="Utitlity\LogoutUser.cs" />
     <Compile Include="Utitlity\MessagePromptHelpers.cs" />
     <Compile Include="Utitlity\PageStateConstants.cs" />
     <Compile Include="Validation\OrgValidation.cs" />
@@ -200,14 +201,6 @@
     </Reference>
     <Reference Include="Facebook">
       <HintPath>..\packages\Facebook.7.0.6\lib\portable-win81+wpa81\Facebook.dll</HintPath>
-    </Reference>
-    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.8\lib\portable-netcore45+wpa81\FFImageLoading.dll</HintPath>
-    </Reference>
-    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.1.8\lib\portable-netcore45+wpa81\FFImageLoading.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.Build.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.Tasks.dll</HintPath>

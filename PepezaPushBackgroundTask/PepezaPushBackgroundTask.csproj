@@ -98,14 +98,6 @@
     <Reference Include="Coding4Fun.Toolkit.Controls">
       <HintPath>..\packages\Coding4Fun.Toolkit.Controls.2.1.8\lib\wpa81\Coding4Fun.Toolkit.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.2.5\lib\portable-netcore45+wpa81\FFImageLoading.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xamarin.FFImageLoading.2.2.5\lib\portable-netcore45+wpa81\FFImageLoading.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Bcl.Build.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.Tasks.dll</HintPath>
     </Reference>
