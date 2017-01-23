@@ -86,11 +86,11 @@ namespace Pepeza.Views.Boards
         public async Task getBoardDetailsAsync(int boardId)
         {
             int numberofRequests = 0;
+            isFetchingDetails(true);
             //Determine whether to load board details locally or online
             TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
-                rootGrid.DataContext = localBoard;
                 //We now say we are not fetching 
                 localBoard.singleFollowerOrMany = "followers";
                 rootGrid.Visibility = Visibility.Visible;
@@ -104,7 +104,7 @@ namespace Pepeza.Views.Boards
                     ImageMask.Visibility = Visibility.Visible;
                     PBProfilePicUpdating.Visibility = Visibility.Collapsed;
                 }
-                rootGrid.DataContext = localBoard;
+                this.rootGrid.DataContext = localBoard;
                 isFetchingDetails(false);
             }
             // Get the board followers 
@@ -158,7 +158,8 @@ namespace Pepeza.Views.Boards
                     }
                     
                 }
-                //rootGrid.DataContext = localBoard;
+
+                rootGrid.DataContext = localBoard;
                 //Allow one to follow their own board 
                 //if(localBoard!=null)
                 //{

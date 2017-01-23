@@ -88,7 +88,7 @@ namespace Pepeza.Views.Profile
                         }
                         else
                         {
-
+                            txtBlockProfileError.Text = profile[Constants.ERROR];
                         }
                         isProfileLoaded = true;
                     }

@@ -59,6 +59,7 @@ namespace Pepeza.Views.Orgs
         public string role { get; set; }
         Organization org = null;
         CoreApplicationView view = CoreApplication.GetCurrentView();
+        bool isProfileLoaded = false, areBoardsLoaded = false, areCollaboratorsLoaded = false;
         public OrgProfileAndBoards()
         {
             this.InitializeComponent();
@@ -146,6 +147,7 @@ namespace Pepeza.Views.Orgs
                     PBProfilePicUpdating.Visibility = Visibility.Collapsed;
                 }
                 RootGrid.DataContext = localOrg;
+                isProfileLoaded = true;
             }
             else
             {
@@ -153,6 +155,7 @@ namespace Pepeza.Views.Orgs
                 Dictionary<string, string> results = await OrgsService.getOrg(orgID);
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
+                    txtBlockProfileErrors.Visibility = Visibility.Collapsed;
                     JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                     TOrgInfo info = new TOrgInfo()
                     {
@@ -179,19 +182,22 @@ namespace Pepeza.Views.Orgs
                         ImageMask.Visibility = Visibility.Visible;
                     }
                     RootGrid.DataContext = info;
+                    txtBlockProfileErrors.Visibility = Visibility.Collapsed;
+                    isProfileLoaded = true;
                 }
                 else if (results.ContainsKey(Constants.UNAUTHORIZED))
                 {
                     //Show a popup message 
                     App.displayMessageDialog(Constants.UNAUTHORIZED);
                     this.Frame.Navigate(typeof(LoginPage));
+
                 }
                 else
                 {
                     //There was an error , throw a toast
                     SCVOrgProfile.Opacity = 1;
-                    
-                    toastErros.Message = results[Constants.ERROR];
+                    txtBlockProfileErrors.Text = results[Constants.ERROR];
+                    txtBlockProfileErrors.Visibility = Visibility.Visible;
                 }
             }
 
@@ -218,26 +224,31 @@ namespace Pepeza.Views.Orgs
             //{
             //    if (item.linkSmall == null) item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
             //}
-            foreach (var item in boards)
+            if (boards != null)
             {
-                var avatar = await AvatarHelper.get(item.avatarId);
-                if (avatar != null)
+                foreach (var item in boards)
                 {
-                    item.linkSmall = avatar.linkSmall == null ? Constants.LINK_SMALL_PLACEHOLDER : avatar.linkSmall;
+                    var avatar = await AvatarHelper.get(item.avatarId);
+                    if (avatar != null)
+                    {
+                        item.linkSmall = avatar.linkSmall == null ? Constants.LINK_SMALL_PLACEHOLDER : avatar.linkSmall;
+                    }
+                    else
+                    {
+                        item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                    }
+                }
+                if (boards.Count == 0)
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
                 }
+                areBoardsLoaded = true;
             }
-            if (boards.Count == 0)
-            {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-            }
+            
             ListViewOrgBoards.ItemsSource = boards;
         }
         private async void OrgPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -245,45 +256,53 @@ namespace Pepeza.Views.Orgs
             //check if data is loaded
             switch ((sender as Pivot).SelectedIndex)
             {
+                   
                 case  0:
                     if (OrgID != 0)
                     {
-                        await getOrgDetails(OrgID);
-                        hideCommandBar(false);
-                        //load profile
-                        await getUserRole();
-                        AppBtnAdd.Visibility = Visibility.Collapsed;
-                        if (role != null)
+                        if (!isProfileLoaded)
                         {
-                            if (role.Equals(Constants.EDITOR))
+
+                            await getOrgDetails(OrgID);
+                            hideCommandBar(false);
+                            //load profile
+                            await getUserRole();
+                            AppBtnAdd.Visibility = Visibility.Collapsed;
+                            if (role != null)
                             {
-                                AppBtnEdit.Visibility = Visibility.Collapsed;
-                                AppBtnAnalytics.Visibility = Visibility.Visible;
-                            }
-                            else if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
-                            {
-                                AppBtnEdit.Visibility = Visibility.Visible;
-                                AppBtnAnalytics.Visibility = Visibility.Visible;
+                                if (role.Equals(Constants.EDITOR))
+                                {
+                                    AppBtnEdit.Visibility = Visibility.Collapsed;
+                                    AppBtnAnalytics.Visibility = Visibility.Visible;
+                                }
+                                else if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
+                                {
+                                    AppBtnEdit.Visibility = Visibility.Visible;
+                                    AppBtnAnalytics.Visibility = Visibility.Visible;
+                                }
+                                else
+                                {
+                                    hideCommandBar(true);
+                                }
                             }
                             else
                             {
-                                hideCommandBar(true);
+                                hideCommandBar();
                             }
+
+
                         }
                         else
                         {
-                            hideCommandBar();
+                            return;
                         }
-
-
-                    }
-                    else
-                    {
-                        return;
                     }
                     break;
                 case 1:
                     //load boards
+                    if (!areBoardsLoaded)
+                    {
+                        StackPanelLoading.Visibility = Visibility.Visible;
                     await getUserRole();
                     hideCommandBar(false);
                     AppBtnEdit.Visibility = Visibility.Collapsed;
@@ -311,38 +330,46 @@ namespace Pepeza.Views.Orgs
                      boards.Clear();
                      ListViewOrgBoards.ItemsSource = boards;
                      await fetchOrgBoards(OrgID);
+                     StackPanelLoading.Visibility = Visibility.Collapsed;
+                    }
                     break;
                 case 2:
                     //Load org collaborators 
                     //Get user role first in this organisation 
-                    AppBtnAnalytics.Visibility = Visibility.Collapsed;
-                    AppBtnEdit.Visibility = Visibility.Collapsed;
-                    AppBtnAdd.Label = "add collaborator";
-                    if (role != null)
+                    if (!areCollaboratorsLoaded)
                     {
 
-                        if (role.Equals(Constants.EDITOR))
+                        AppBtnAnalytics.Visibility = Visibility.Collapsed;
+                        AppBtnEdit.Visibility = Visibility.Collapsed;
+                        AppBtnAdd.Label = "add collaborator";
+                        if (role != null)
                         {
-                            loadOrgCollaborators(OrgID);
-                            hideCommandBar();
-                        }
-                        else if (role == Constants.OWNER || role == Constants.ADMIN)
-                        {
-                            hideCommandBar(false);
-                            loadOrgCollaborators(OrgID);
-                            AppBtnAdd.Visibility = Visibility.Visible;
+
+                            if (role.Equals(Constants.EDITOR))
+                            {
+                                loadOrgCollaborators(OrgID);
+                                hideCommandBar();
+                            }
+                            else if (role == Constants.OWNER || role == Constants.ADMIN)
+                            {
+                                hideCommandBar(false);
+                                loadOrgCollaborators(OrgID);
+                                AppBtnAdd.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                hideCommandBar();
+                                txtBlockProfileErrors.Visibility = Visibility.Collapsed;
+                            }
                         }
                         else
                         {
                             hideCommandBar();
+                            StackPanelPermissionDenied.Visibility = Visibility.Visible;
+                            txtBlockProfileErrors.Visibility = Visibility.Collapsed;
+                            stackPanelLoadCollaborators.Visibility = Visibility.Collapsed;
                         }
                     }
-                    else
-                    {
-                        hideCommandBar();
-                        StackPanelPermissionDenied.Visibility = Visibility.Visible;
-                    }
-                    
                     break;
                 default:
                     break;
@@ -353,6 +380,7 @@ namespace Pepeza.Views.Orgs
         {
             try
             {
+                txtBlockError.Visibility = Visibility.Collapsed;
                 stackPanelLoadCollaborators.Visibility = Visibility.Visible;
                 Dictionary<string, string> results = await OrgsService.requestCollaborators(id);
                 if (results.ContainsKey(Constants.SUCCESS))
@@ -368,13 +396,16 @@ namespace Pepeza.Views.Orgs
                 else
                 {
                     //Show an error message
-                    await new MessageDialog(results[Constants.ERROR].ToString()).ShowAsync();
+                    txtBlockError.Text = results[Constants.ERROR].ToString();
+                    txtBlockError.Visibility = Visibility.Visible;
+
                     
                 }
             }
             catch (Exception )
             {
-                //await new MessageDialog(Constants.UNKNOWNERROR).ShowAsync();
+                txtBlockError.Text = Constants.UNKNOWNERROR;
+                txtBlockError.Visibility = Visibility.Visible;
             }
             finally
             {
@@ -415,9 +446,10 @@ namespace Pepeza.Views.Orgs
                             boards.Add(new TBoard()
                             {
                                 id = (int)board["id"],
-                                linkSmall = (string)board["linkSmall"],
+                                linkSmall = (string)board["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)board["linkSmall"],
                                 name = (string)board["name"],
                                 orgID = orgId,
+                                desc = (string)board["description"]
                             });
                         }
                         if (boards.Count == 0)
@@ -436,6 +468,7 @@ namespace Pepeza.Views.Orgs
                         //No boards boy
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                     }
+                    areBoardsLoaded = true;
                 }
                 else if (orgBoards.ContainsKey(Constants.UNAUTHORIZED))
                 {
@@ -446,7 +479,7 @@ namespace Pepeza.Views.Orgs
                 else
                 {
                     //something went wrong , try again later
-                    toastErrorsInBoards.Message = orgBoards[Constants.ERROR];
+                    tztBlockBoardError.Text = orgBoards[Constants.ERROR].ToString();
                     return false;
                 }
             }
@@ -494,7 +527,7 @@ namespace Pepeza.Views.Orgs
             TOrgInfo org = RootGrid.DataContext as TOrgInfo;
             if (org.description == null)
             {
-                toastErros.Message = Constants.PERMISSION_DENIED;
+                txtBlockProfileErrors.Text = Constants.PERMISSION_DENIED;
             }
             else
             {
@@ -654,22 +687,31 @@ namespace Pepeza.Views.Orgs
             {
                 //Retrieve all the collaborators
                 JArray collaborators = JArray.Parse((string)toProcess[Constants.SUCCESS]);
-                foreach (var collaborator in collaborators)
+                if (collaborators.Count > 0)
                 {
-                    Collaborator colabo = new Collaborator();
-                    colabo.id = (int)collaborator["id"];
-                    colabo.role = (string)collaborator["role"];
-                    colabo.active = (int)collaborator["active"] == 1 ? "Active" : "Deactivated";
-                    colabo.orgId = (int)collaborator["organizationId"];
-                    colabo.userId = (int)collaborator["userId"];
-                    colabo.onDeviceRole = role;
-                    colabo.username = (string)collaborator["username"];
-                    colabo.name = (string)collaborator["firstName"] + " " + (string)collaborator["lastName"];
-                    colabo.linkSmall = (string)collaborator["linkSmall"] == null ? "/Assets/Images/placeholder_s_avatar.png" : (string)collaborator["linkSmall"];
-                    colabo.linkNormal = (string)collaborator["linkNormal"] == null ? "/Assets/Images/placeholder_avatar.jpg" : (string)collaborator["linkNormal"];
-                    orgcollaborators.Add(colabo);
+                    foreach (var collaborator in collaborators)
+                    {
+                        Collaborator colabo = new Collaborator();
+                        colabo.id = (int)collaborator["id"];
+                        colabo.role = (string)collaborator["role"];
+                        colabo.active = (int)collaborator["active"] == 1 ? "Active" : "Deactivated";
+                        colabo.orgId = (int)collaborator["organizationId"];
+                        colabo.userId = (int)collaborator["userId"];
+                        colabo.onDeviceRole = role;
+                        colabo.username = (string)collaborator["username"];
+                        colabo.name = (string)collaborator["firstName"] + " " + (string)collaborator["lastName"];
+                        colabo.linkSmall = (string)collaborator["linkSmall"] == null ? "/Assets/Images/placeholder_s_avatar.png" : (string)collaborator["linkSmall"];
+                        colabo.linkNormal = (string)collaborator["linkNormal"] == null ? "/Assets/Images/placeholder_avatar.jpg" : (string)collaborator["linkNormal"];
+                        orgcollaborators.Add(colabo);
+                    }
                 }
+                else
+                {
+                    EmptyCollaboratorPlaceHolder.Visibility = Visibility.Visible;
+                }
+                
                 ListViewCollaborators.ItemsSource = orgcollaborators;
+                areCollaboratorsLoaded = true;
             }
             else
             {

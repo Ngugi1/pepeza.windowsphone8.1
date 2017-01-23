@@ -218,6 +218,7 @@ namespace Pepeza.Views.Orgs
         private void SymbolCancel_tapped(object sender, TappedRoutedEventArgs e)
         {
             popUpAddCollaborator.IsOpen = false;
+            RootGrid.Opacity = 1;
         }
     }
 }

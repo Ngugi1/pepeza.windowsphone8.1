@@ -13,7 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>    
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
     <Grid>
@@ -70,7 +70,6 @@
             </Pivot>
             <TextBlock Name="txtBlockWhat"
                        Grid.Row="1"
-                       Margin="8"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="28"
@@ -78,11 +77,19 @@
                        Foreground="{ThemeResource PhoneAccentBrush}"
                        Style="{ThemeResource ListViewItemTextBlockStyle}"
                        TextAlignment="Center"
-                       TextWrapping="Wrap" />
-            <ProgressRing Name="ProgressRingSearch"
-                          Grid.Row="1"
-                          Style="{StaticResource PRstyle}"
-                          Visibility="Collapsed" />
+                       TextWrapping="Wrap" 
+                        >
+            </TextBlock>
+            <ProgressBar
+                VerticalAlignment="Top"
+                Foreground="{StaticResource PhoneAccentBrush}"
+                Name="ProgressRingSearch"
+                Grid.Row="1"
+                IsEnabled="True"
+                IsIndeterminate="True"
+                Margin="12,32"
+               FontWeight="SemiBold"
+               Visibility="Collapsed"  />
         </Grid>
     </Grid>
 </Page>

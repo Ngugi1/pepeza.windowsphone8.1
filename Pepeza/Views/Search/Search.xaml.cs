@@ -115,6 +115,7 @@ namespace Pepeza.Views
         private void txtBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             isRequested = false;
+
            //Clear previous search results 
             clearPreviousResults();
             //Call the method from the server 

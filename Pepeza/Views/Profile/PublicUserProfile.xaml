@@ -36,8 +36,8 @@
                 <StackPanel Margin="19.5,4">
                     <FFImage:FFImage 
                         Source="{Binding linkSmall , Mode=TwoWay}"
-                        LoadingPlaceholder="/Assets/Images/placeholder_avatar.png"
-                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.png"
+                        LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
                         Width="250"
                         Stretch="UniformToFill"
                         HorizontalAlignment="Center"
@@ -53,6 +53,15 @@
                                    HorizontalAlignment="Center"
                                    />
                         </StackPanel>
+                        <TextBlock 
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        Name="txtBlockProfileError"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               FontWeight="SemiBold"
+                               />
                     </Grid>
                     <StackPanel 
                         Visibility="Visible"
@@ -256,8 +265,8 @@
                 Margin="0,8,0,0"
                 Height="50"
                 Source="{Binding linkSmall}"
-                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
                 Width="50"
                 VerticalAlignment="Center"
                 Grid.RowSpan="2"

@@ -116,11 +116,14 @@
                         </Grid>
                     </ScrollViewer>
 
-                    <toast:Toastinet Name="toastErros"
+                    <TextBlock Name="txtBlockProfileErrors"
                                      Grid.Row="1"
+                                     Visibility="Collapsed"
                                      Height="Auto"
-                                     VerticalAlignment="Bottom"
-                                     Style="{StaticResource ToastStyle}"
+                                     VerticalAlignment="Center"
+                                     Foreground="{StaticResource PhoneAccentBrush}"
+                                     HorizontalAlignment="Center"
+                                     Style="{StaticResource txtBlockDisplay}"
                                      TextWrapping="WrapWholeWords" />
                 </Grid>
             </PivotItem>
@@ -201,10 +204,15 @@
                                    Style="{StaticResource txtBlockWait}"
                                    Text="fetching boards..." />
                     </StackPanel>
-                    <toast:Toastinet Name="toastErrorsInBoards"
+                    <TextBlock 
+                        Name="tztBlockBoardError"
+                        Visibility="Collapsed"
                                      Height="Auto"
+                        Foreground="{StaticResource PhoneAccentBrush}"
                                      VerticalAlignment="Center"
-                                     Style="{StaticResource ToastStyle}"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Center"
+                                     Style="{StaticResource txtBlockDisplay}"
                                      TextWrapping="WrapWholeWords" />
                 </Grid>
             </PivotItem>
@@ -242,6 +250,34 @@
                             
                             />
                     </StackPanel>
+                    <StackPanel VerticalAlignment="Center" 
+                                Name="EmptyCollaboratorPlaceHolder"
+                                Visibility="Collapsed">
+                        <Viewbox Height="100" Width="100">
+                            <SymbolIcon Symbol="List" 
+                                        Foreground="{ThemeResource PhoneAccentBrush}"/>
+                        </Viewbox>
+                        <TextBlock 
+                            TextLineBounds="Full"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Foreground="Black"
+                            
+                            Typography.Capitals="Unicase"
+                            Text="There are no collaborators to display."
+                            
+                            />
+                    </StackPanel>
+                    <TextBlock 
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center"
+                        Name="txtBlockError"
+                        HorizontalAlignment="Center"
+                               Style="{StaticResource txtBlockDisplay}"
+                               Foreground="{ThemeResource PhoneAccentBrush}"
+                               FontWeight="SemiBold"
+                               />
                     <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
