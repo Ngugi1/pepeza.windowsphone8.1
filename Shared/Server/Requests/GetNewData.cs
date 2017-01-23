@@ -186,11 +186,7 @@ namespace Pepeza.Server.Requests
                             notice_poster.visibility = (string)poster["visibility"];
                             notice_poster.password = (string)poster["password"];
                             notice_poster.dateDeleted = (long)poster["dateDeleted"];
-                            notice_poster.active = (int)poster["active"];
-                            if (poster["dateDeactivated"].Type != JTokenType.Null) notice_poster.dateDeactivated = (long)poster["dateDeactivated"];
-                           
-
-                        
+                            
                         if (await NoticePosterHelper.get(notice_poster.id) != null)
                         {
                             await DBHelperBase.update(notice_poster);

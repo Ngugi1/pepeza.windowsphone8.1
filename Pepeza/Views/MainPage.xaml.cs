@@ -207,7 +207,10 @@ namespace Pepeza
             if (results != null)
             {
                 isInBackground =true;
-                pivotMainPage.SelectedIndex = pivotMainPage.SelectedIndex;
+               
+                loadNotices();
+                await loadBoards();
+                await loadOrgs();
                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
             }
             //Prevent background agent from being invoked 

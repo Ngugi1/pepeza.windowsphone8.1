@@ -206,18 +206,6 @@ namespace Pepeza.Server.Requests
                         //save API Token to Isolated Strorage
                         results.Add(Constants.APITOKEN, jobject);
                     }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        bool result = await LogoutUser.forceLogout();
-                        if (result)
-                        {
-                            results.Add(Constants.UNAUTHORIZED, result.ToString());
-                        }
-                        else
-                        {
-                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
-                        }
-                    }
                     else
                     {
                         
