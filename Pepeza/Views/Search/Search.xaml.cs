@@ -267,6 +267,12 @@ namespace Pepeza.Views
                     personSource.Clear();
                 }
             }
+            else if (searchResults.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else if (searchResults.ContainsKey(Constants.ERROR))
             {
                 //Display the error
@@ -345,6 +351,12 @@ namespace Pepeza.Views
                         }
                    
                 }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //We had some errors
@@ -392,6 +404,12 @@ namespace Pepeza.Views
                    NoResults();
                    orgSource.Clear();
                }
+            }
+            else if (result.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
             }
             else
             {

@@ -521,6 +521,7 @@
                        Height="50"
                        Source="{Binding linkSmall}"
                        Width="50"
+                       RetryCount="5"
                        >
                 
                       </FFImage:FFImage>
@@ -536,25 +537,7 @@
                        Text="{Binding desc}"/>
         </Grid>
     </DataTemplate>
-    <DataTemplate x:Key="ListViewFollowersDataTemplate">
-        <Grid Margin="12,4" Height="50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <FFImage:FFImage Width="50"
-                                     Source="{Binding linkSmall, Mode=TwoWay}"
-                                     Height="50">
-
-            </FFImage:FFImage>
-            <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
-                               Margin="12,8,0,0"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Text="{Binding title, Mode=TwoWay}"/>
-        </Grid>
-    </DataTemplate>
-   
+    
     <DataTemplate x:Key="ListViewSearchUserTemplate">
         <Grid>
             <Grid.RowDefinitions>
@@ -569,11 +552,12 @@
                 Margin="0,8,0,0"
                 Height="50"
                 Source="{Binding linkSmall}"
-                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
                 Width="50"
                 VerticalAlignment="Bottom"
                 Grid.RowSpan="2"
+                RetryCount="5"
                >
                 </FFImage:FFImage>
             <TextBlock Grid.Row="0"
@@ -609,9 +593,9 @@
                 Margin="0,8,0,0"
                 Grid.RowSpan="1"
                 Height="50"
-                Source="/Assets/Images/placeholder_avatar.jpg"
-                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                Source="{Binding linkSmall}"
+                LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
                 Width="50"
                 VerticalAlignment="Bottom"
                >
@@ -639,8 +623,8 @@
                 Margin="0,8,0,0"
                 Height="50"
                 Source="{Binding linkSmall}"
-                LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
+                ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.jpg"
                 Width="50"
                 VerticalAlignment="Bottom"
                 Grid.RowSpan="2"

@@ -57,6 +57,12 @@ namespace Pepeza.Views.Signup
                 await UserHelper.update(info);
                 this.Frame.Navigate(typeof(MainPage));
             }
+            else if (result.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else if(result.ContainsKey(Constants.ERROR))
             {
                 txtBlockIsUsernameValid.Text = result[Constants.ERROR];

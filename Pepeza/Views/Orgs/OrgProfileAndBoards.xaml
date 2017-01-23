@@ -154,40 +154,43 @@
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid 
+                                        Height="70"
+                                    Margin="0"
+                                        Style="{StaticResource GridListViewItemTemplate}">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <FFImage:FFImage 
-                                        Margin="0,8,0,0"
-                                        VerticalAlignment="Center"
-                                        Grid.RowSpan="2"
-                                        Height="50"
-                                        Source="{Binding linkSmall}"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                                        Width="50"
-                                        
-                                        >
+                                    <FFImage:FFImage
+                                            Grid.RowSpan="2"
+                                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            Margin="8,12,0,28"
+                                            Height="50"
+                                            RetryDelay="5"
+                                            CacheDuration="2"
+                                            CacheType="Memory"
+                                            FadeAnimationEnabled="True"
+                                            Width="50"
+                                            Source="{Binding linkSmall}"
+                                            >
                                     </FFImage:FFImage>
                                     <TextBlock Grid.Row="0"
-                                               Grid.Column="1"
-                                               Margin="8,2"
-                                               TextTrimming="WordEllipsis"
-                                               Foreground="Black"
-                                               Style="{StaticResource GroupHeaderTextBlockStyle}"
-                                               Text="{Binding name}" />
+                                                   Grid.Column="1"
+                                                   Margin="8,10,8,6"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"
+                                                   Text="{Binding name}" />
                                     <TextBlock Grid.Row="1"
-                                               Margin="8,2"
-                                               Grid.Column="1"
-                                               TextTrimming="CharacterEllipsis"
-                                               Text="{Binding desc, Mode=TwoWay}"
-                                               Style="{StaticResource ListViewItemSubheaderTextBlockStyle}"/>
+                                                   Grid.Column="1"
+                                                   Margin="8,0,14,0"
+                                                   Style="{StaticResource txtBlockListViewDesc}"
+                                                   Text="{Binding desc}" />
+
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

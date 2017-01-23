@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,18 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {

@@ -104,6 +104,12 @@ namespace Pepeza.Views.Orgs
                         txtBlockWhat.Text = Constants.NO_RESULTS;
                     }
                 }
+                else if (searchResults.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //We were not successfull
@@ -157,6 +163,12 @@ namespace Pepeza.Views.Orgs
                 ToastStatus.Message = "Collaborator added successfully";
                 popUpAddCollaborator.IsOpen = false;
 
+            }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
             }
             else
             {

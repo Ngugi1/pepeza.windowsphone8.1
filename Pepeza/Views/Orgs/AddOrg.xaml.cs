@@ -70,19 +70,19 @@ namespace Pepeza.Views.Orgs
                     OrgValidation.ValidateDescription(txtBoxOrgDesc.Text.Trim())&&!string.IsNullOrEmpty((string)ComboOrgTypes.SelectedItem))
                 {
 
-                    Dictionary<string, string> result = await OrgsService.createOrg(new Dictionary<string, string>()
+                    Dictionary<string, string> results = await OrgsService.createOrg(new Dictionary<string, string>()
                 {
                     {"username" , txtBoxUsername.Text.Trim()},
                     {"name", txtBoxOrgName.Text.Trim()},
                     {"description" , txtBoxOrgDesc.Text.Trim()},
                     {"category" , ComboOrgTypes.SelectedItem.ToString()}
                 });
-                    if (result.ContainsKey(Constants.SUCCESS))
+                    if (results.ContainsKey(Constants.SUCCESS))
                     {
                         Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATEORG);
                         try
                         { //Board created successfully  , save and navigate away 
-                            JObject orgInfo = JObject.Parse((string)result[Constants.SUCCESS]);
+                            JObject orgInfo = JObject.Parse((string)results[Constants.SUCCESS]);
 
                             //Organisation details
                             TOrgInfo toInsert = new TOrgInfo();
@@ -129,12 +129,18 @@ namespace Pepeza.Views.Orgs
                             TxtBlockCreateOrgStatus.Visibility = Visibility.Visible;
                         }
                     }
+                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                    {
+                        //Show a popup message 
+                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                     else
                     {
                         //There was an error , dispaly it.Stop all the animations and enable the button
                         model.CanCreateOrg = true;
                         model.IsProgressRingVisible = false;
-                        TxtBlockCreateOrgStatus.Text = result[Constants.ERROR];
+                        TxtBlockCreateOrgStatus.Text = results[Constants.ERROR];
                         TxtBlockCreateOrgStatus.Visibility = Visibility.Visible;
                     }
 

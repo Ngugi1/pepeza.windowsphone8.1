@@ -49,7 +49,7 @@ namespace Pepeza.ViewModels
                   
                };
             }
-            else
+            else //TODO :: LOGOUT USER IF WE GET 401
             {
 
             }

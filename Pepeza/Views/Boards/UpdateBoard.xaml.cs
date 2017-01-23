@@ -139,6 +139,12 @@ namespace Pepeza.Views.Boards
                 JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                 updateLocalDatabase(objResults , desc ,name , restriction,visibility);
             }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //We had some errors

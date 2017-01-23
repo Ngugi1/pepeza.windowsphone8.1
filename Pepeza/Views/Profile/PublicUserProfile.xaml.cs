@@ -80,6 +80,12 @@ namespace Pepeza.Views.Profile
                             StackPanelLoadingProfile.Visibility = Visibility.Collapsed;
                             DetailsStackPanel.Visibility = Visibility.Visible;
                         }
+                        else if (profile.ContainsKey(Constants.UNAUTHORIZED))
+                        {
+                            //Show a popup message 
+                            App.displayMessageDialog(Constants.UNAUTHORIZED);
+                            this.Frame.Navigate(typeof(LoginPage));
+                        }
                         else
                         {
 
@@ -127,6 +133,12 @@ namespace Pepeza.Views.Profile
                                     EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
 
                                 }
+                            }
+                            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                            {
+                                //Show a popup message 
+                                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                this.Frame.Navigate(typeof(LoginPage));
                             }
                             else if (results.ContainsKey(Constants.PERMISSION_DENIED))
                             {
@@ -179,6 +191,12 @@ namespace Pepeza.Views.Profile
                                     stackpanelfollowingloading.Visibility = Visibility.Collapsed;
                                 }
 
+                            }
+                            else if (response.ContainsKey(Constants.UNAUTHORIZED))
+                            {
+                                //Show a popup message 
+                                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                this.Frame.Navigate(typeof(LoginPage));
                             }
                             else if (response.ContainsKey(Constants.PERMISSION_DENIED))
                             {

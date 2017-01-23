@@ -5,6 +5,7 @@ using Pepeza.Utitlity;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Server.ServerModels.Notices;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,18 @@ namespace Pepeza.Server.Requests
                     {
                         var data = await response.Content.ReadAsStringAsync();
                         results.Add(Constants.SUCCESS, data);
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -79,6 +92,18 @@ namespace Pepeza.Server.Requests
                         {
                             results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                         }
+                        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            bool result = await LogoutUser.forceLogout();
+                            if (result)
+                            {
+                                results.Add(Constants.UNAUTHORIZED, result.ToString());
+                            }
+                            else
+                            {
+                                results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                            }
+                        }
                         else
                         {
                             results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -111,6 +136,18 @@ namespace Pepeza.Server.Requests
                     {
                         // We got a 200 OK
                         results.Add(Constants.SUCCESS , await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -146,6 +183,18 @@ namespace Pepeza.Server.Requests
                     {
                         // We got a 200 OK
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {

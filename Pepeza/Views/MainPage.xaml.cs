@@ -1,6 +1,7 @@
 ﻿using Coding4Fun.Toolkit.Controls;
 using FFImageLoading;
 using FFImageLoading.Cache;
+using Microsoft.AdMediator.Core.Models;
 using Microsoft.AdMediator.WindowsPhone81;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
@@ -14,6 +15,7 @@ using Pepeza.Models.Search_Models;
 using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views;
 using Pepeza.Views.Boards;
 using Pepeza.Views.Configurations;
 using Pepeza.Views.Notices;
@@ -63,6 +65,7 @@ namespace Pepeza
             this.InitializeComponent();
             //this.NavigationCacheMode = NavigationCacheMode.Required;
             current = this;
+           
         }
 
         /// <summary>
@@ -125,7 +128,10 @@ namespace Pepeza
                    
             }
 
-            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);            
+         await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
+           
+          
+
         }
 
         private  async void updateNotificationCount()
@@ -240,11 +246,8 @@ namespace Pepeza
             {
                 EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
             }
-            var orgAlphaGroup = JumpListHelper.ToAlphaGroups(orgs, t => t.name);
-            AlphaListOrgs.ReleaseItemsSource();
-            ListViewOrgs.ItemsSource = orgAlphaGroup;
-            AlphaListOrgs.ApplyItemsSource();
-            ListViewOrgs.SelectedItem = null;
+            
+            ListViewOrgs.ItemsSource = orgs;
             return true;
         }
         private async Task<bool> loadBoards()
@@ -259,11 +262,8 @@ namespace Pepeza
             {
                 EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
             }
-            var groupedBoards = JumpListHelper.ToAlphaGroups(boards, t => t.name);
-            QJumpList.ReleaseItemsSource();
-            ListViewBoards.ItemsSource = groupedBoards;
-            QJumpList.ApplyItemsSource();
-            ListViewBoards.SelectedItem = null;
+            
+            ListViewBoards.ItemsSource = boards;
             return true;
         }
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
@@ -291,39 +291,46 @@ namespace Pepeza
         }
         private async void pivotMainPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int selectedIndex = (sender as Pivot).SelectedIndex;
-            switch (selectedIndex)
-	{
-                case 0:
-                    if(isInBackground)
-                    {
-                        loadNotices();
-                    }
-                    break;
-                case 1: 
-                    if(isInBackground)
-                    {
-                       await  loadBoards();
-                    }
-                    break;
-                case 2 :
-                    if(isInBackground)
-                    {
-                        await loadOrgs();
-                    }
-                    break;
-                default:
-                break;
-	}
-            isInBackground = false;
-            if (selectedIndex == 2)
+            try
             {
-                AppBtnAdd.Visibility = Visibility.Visible;
-            }
-            else
+                int selectedIndex = (sender as Pivot).SelectedIndex;
+                switch (selectedIndex)
+                {
+                    case 0:
+                        if (isInBackground)
+                        {
+                            loadNotices();
+                        }
+                        break;
+                    case 1:
+                        if (isInBackground)
+                        {
+                            await loadBoards();
+                        }
+                        break;
+                    case 2:
+                        if (isInBackground)
+                        {
+                            await loadOrgs();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                isInBackground = false;
+                if (selectedIndex == 2)
+                {
+                    AppBtnAdd.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    AppBtnAdd.Visibility = Visibility.Collapsed;
+                }
+            }catch(Exception ex)
             {
-                AppBtnAdd.Visibility = Visibility.Collapsed;
+                string s = ex.Message;
             }
+           
       }    
         private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {   
@@ -366,6 +373,12 @@ namespace Pepeza
                 ListViewBoards.ItemsSource = boards;
                 ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
             }
+            else if (deleteResults.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //toast 
@@ -406,6 +419,12 @@ namespace Pepeza
                     ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
                     orgs.Remove(org);
                     ListViewOrgs.ItemsSource = orgs;
+                }
+                else if (delResults.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
                 }
                 else
                 {
@@ -458,7 +477,7 @@ namespace Pepeza
 
         private void AdMediatorControl_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
         {
-
+            string company = e.Error.Message + "  ===============  ";
         }
         
        

@@ -56,8 +56,8 @@ namespace Pepeza.Views.Account
         {
             isProgressRingVisible(true);
             txtBlockStatus.Text = "";
-            Dictionary<string, string> result = await RequestUser.deactivateUser();
-            if (result.ContainsKey(Constants.UPDATED))
+            Dictionary<string, string> results = await RequestUser.deactivateUser();
+            if (results.ContainsKey(Constants.UPDATED))
             {
                 if (await LocalUserHelper.clearLocalSettingsForUser())
                 {
@@ -65,13 +65,19 @@ namespace Pepeza.Views.Account
                 }
                 else
                 {
-                    txtBlockStatus.Text = result[Constants.ERROR];
+                    txtBlockStatus.Text = results[Constants.ERROR];
                 }
 
             }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
-                txtBlockStatus.Text = result[Constants.ERROR];
+                txtBlockStatus.Text = results[Constants.ERROR];
             }
             isProgressRingVisible(false);
         }

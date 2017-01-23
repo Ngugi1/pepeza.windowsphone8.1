@@ -180,6 +180,12 @@ namespace Pepeza.Views.Orgs
                     }
                     RootGrid.DataContext = info;
                 }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //There was an error , throw a toast
@@ -208,9 +214,21 @@ namespace Pepeza.Views.Orgs
         private async Task loadBoardsLocally()
         {    
             boards = new ObservableCollection<TBoard>(await BoardHelper.fetchAllOrgBoards(OrgID));
+            //foreach (var item in boards)
+            //{
+            //    if (item.linkSmall == null) item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+            //}
             foreach (var item in boards)
             {
-                if (item.linkSmall == null) item.linkSmall = "/Assets/Images/placeholder_s_avatar.png";
+                var avatar = await AvatarHelper.get(item.avatarId);
+                if (avatar != null)
+                {
+                    item.linkSmall = avatar.linkSmall == null ? Constants.LINK_SMALL_PLACEHOLDER : avatar.linkSmall;
+                }
+                else
+                {
+                    item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                }
             }
             if (boards.Count == 0)
             {
@@ -341,6 +359,12 @@ namespace Pepeza.Views.Orgs
                 {
                     processResults(results);
                 }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //Show an error message
@@ -412,6 +436,12 @@ namespace Pepeza.Views.Orgs
                         //No boards boy
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                     }
+                }
+                else if (orgBoards.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
                 }
                 else
                 {
@@ -566,6 +596,12 @@ namespace Pepeza.Views.Orgs
                                     //Throw a toast that the image failed
                                     return;
                                 }
+                            }
+                            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                            {
+                                //Show a popup message 
+                                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                this.Frame.Navigate(typeof(LoginPage));
                             }
                             else
                             {

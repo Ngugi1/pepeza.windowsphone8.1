@@ -78,6 +78,12 @@ namespace Pepeza.Views.Boards
                         Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATEBOARD);
                         this.Frame.Navigate(typeof(OrgProfileAndBoards) , orgId);
                     }
+                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                    {
+                        //Show a popup message 
+                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                     else
                     {
                         //Display errors 

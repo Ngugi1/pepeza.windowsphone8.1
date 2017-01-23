@@ -93,6 +93,12 @@ namespace Pepeza.Views.Orgs
                this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
                this.Frame.BackStack.Remove(this.Frame.BackStack.LastOrDefault());
             }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //There was an error , display it

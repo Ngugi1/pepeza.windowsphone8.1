@@ -73,7 +73,13 @@ namespace Pepeza.Views.Boards
                         //Show the empty list place holder
                         EmptyFollowRequestsPlaceHolder.Visibility = Visibility.Visible;
                     }
-                   }
+                }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else if(results.ContainsKey(Constants.ERROR))
                 {
                     toastErrors.Message = results[Constants.ERROR];
@@ -101,6 +107,12 @@ namespace Pepeza.Views.Boards
                 }
 
             }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //Not successfull
@@ -124,6 +136,12 @@ namespace Pepeza.Views.Boards
                     if (requestsource.Count == 0) EmptyFollowRequestsPlaceHolder.Visibility = Visibility.Visible;
                 }
 
+            }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
             }
             else
             {

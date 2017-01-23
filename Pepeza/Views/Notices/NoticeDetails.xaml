@@ -75,10 +75,10 @@
                            />
                 </StackPanel>
 
-                <TextBlock Text="{Binding date_created_display}" Style="{StaticResource ControlContextualInfoTextBlockStyle}"
+                <TextBlock Text="{Binding date_created_display}" 
+                           Style="{StaticResource ControlContextualInfoTextBlockStyle}"
                            HorizontalAlignment="Left"
                            Margin="12,4"
-                           
                            Foreground="Gray"
                            FontWeight="ExtraLight"
                            />

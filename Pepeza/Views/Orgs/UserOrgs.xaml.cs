@@ -103,6 +103,12 @@ namespace Pepeza.Views.Orgs
                             //Sorry we have no orgs yet
                         }
                     }
+                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                    {
+                        //Show a popup message 
+                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                     else
                     {
                         //Display the error

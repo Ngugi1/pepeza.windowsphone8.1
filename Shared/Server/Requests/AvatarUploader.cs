@@ -15,6 +15,7 @@ using Windows.Web.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Shared.Db.DbHelpers;
 using Newtonsoft.Json.Linq;
+using Shared.Utitlity;
 
 namespace Shared.Server.Requests
 {
@@ -45,6 +46,18 @@ namespace Shared.Server.Requests
                         if (response.IsSuccessStatusCode)
                         {
                             results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        }
+                        else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            bool result = await LogoutUser.forceLogout();
+                            if (result)
+                            {
+                                results.Add(Constants.UNAUTHORIZED, result.ToString());
+                            }
+                            else
+                            {
+                                results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                            }
                         }
                         else
                         {

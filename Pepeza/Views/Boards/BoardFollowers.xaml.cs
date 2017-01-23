@@ -72,6 +72,12 @@ namespace Pepeza.Views.Boards
                     EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
                 }
             }
+            else if (followers.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //We hit an error :TODO :: Show a toast  

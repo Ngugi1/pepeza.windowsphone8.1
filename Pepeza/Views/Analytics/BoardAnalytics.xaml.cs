@@ -167,7 +167,12 @@ namespace Pepeza.Views.Analytics
                     ReceivedPercentage.Text = nunerOfPeopleWhoRead[0].Percentage;
                     ReadNoticesChart.DataContext = read_per_hour;
                 }
-
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //Toast an error message  

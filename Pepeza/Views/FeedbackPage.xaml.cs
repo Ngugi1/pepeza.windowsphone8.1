@@ -90,6 +90,12 @@ namespace Pepeza.Views
                 JObject json = JObject.Parse(resulst[Constants.SUCCESS]);
                 ToastStatus.Message = (string)json["message"] + "\n Thanks for your feedback!";
             }
+            else if (resulst.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 

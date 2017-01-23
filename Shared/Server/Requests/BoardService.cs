@@ -1,8 +1,10 @@
 ﻿using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +29,18 @@ namespace Pepeza.Server.Requests
                     {
                         //Org created
                         results.Add(Constants.SUCCESS , await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -63,6 +77,18 @@ namespace Pepeza.Server.Requests
                         //Return data 
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         string content = await response.Content.ReadAsStringAsync();
@@ -94,6 +120,18 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -128,6 +166,18 @@ namespace Pepeza.Server.Requests
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
 
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -158,6 +208,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
 
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -190,6 +252,18 @@ namespace Pepeza.Server.Requests
                     {
                        
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -224,6 +298,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -255,6 +341,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -284,6 +382,18 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
@@ -315,6 +425,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         results.Add(Constants.SUCCESS, Constants.UNKNOWNERROR);
@@ -345,6 +467,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -373,6 +507,18 @@ namespace Pepeza.Server.Requests
                 {
                     results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    bool result = await LogoutUser.forceLogout();
+                    if (result)
+                    {
+                        results.Add(Constants.UNAUTHORIZED, result.ToString());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                    }
+                }
                 else
                 {
                     results.Add(Constants.ERROR, await response.Content.ReadAsStringAsync());
@@ -395,6 +541,18 @@ namespace Pepeza.Server.Requests
                 if (response.IsSuccessStatusCode)
                 {
                     results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    bool result = await LogoutUser.forceLogout();
+                    if (result)
+                    {
+                        results.Add(Constants.UNAUTHORIZED, result.ToString());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                    }
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
                 {

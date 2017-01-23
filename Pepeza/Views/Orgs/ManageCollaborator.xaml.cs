@@ -91,6 +91,12 @@ namespace Pepeza.Views.Orgs
                         ToastNetStatus.Message = "Update successfull";
 
                     }
+                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                    {
+                        //Show a popup message 
+                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                     else
                     {
                         ToastNetStatus.Message = results[Constants.ERROR];
@@ -121,6 +127,12 @@ namespace Pepeza.Views.Orgs
                 {
                     JObject feedback = JObject.Parse(results[Constants.SUCCESS]);
                     ToastNetStatus.Message = (string)feedback["message"];
+                }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
                 }
                 else if(results.ContainsKey(Constants.ERROR))
                 {

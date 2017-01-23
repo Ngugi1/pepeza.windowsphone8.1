@@ -118,6 +118,12 @@ namespace Pepeza.Views.Notices
                             }
 
                         }
+                        else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                        {
+                            //Show a popup message 
+                            App.displayMessageDialog(Constants.UNAUTHORIZED);
+                            this.Frame.Navigate(typeof(LoginPage));
+                        }
                         else
                         {
                             //show a toast that it failed
@@ -251,6 +257,12 @@ namespace Pepeza.Views.Notices
                            
                         }
                     }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     showErrorToast(results[Constants.ERROR]);

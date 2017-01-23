@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace Pepeza.Server.Requests
             //Get Http Client and add headers
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 response =  await client.PostAsJsonAsync(OrgsAddresses.CREATE_ORG, toCreate);
@@ -27,26 +28,38 @@ namespace Pepeza.Server.Requests
                 {
                     //Resource created 
                     string json = await response.Content.ReadAsStringAsync();
-                    responseContent.Add(Constants.SUCCESS, json);
+                    results.Add(Constants.SUCCESS, json);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    bool result = await LogoutUser.forceLogout();
+                    if (result)
+                    {
+                        results.Add(Constants.UNAUTHORIZED, result.ToString());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                    }
                 }
                 else
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("Error is here ==================> " + content);
-                    responseContent.Add(Constants.ERROR, content);
+                    results.Add(Constants.ERROR, content);
                 }
             }
             else
             {
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> updateOrg(Dictionary<string, string> toUpdate)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -55,11 +68,23 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         //Updated 
-                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
 
                 }
@@ -67,20 +92,20 @@ namespace Pepeza.Server.Requests
                 {
                     //Unknown error
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }
             else
             {
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> search(string keyword)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -89,32 +114,44 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         //Return the results 
-                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
 
             }
             else
             {
                 //No internet connectivity
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> getOrg(int orgId)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -123,34 +160,46 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         //Got the org 
-                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
                         //There was an error 
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
                 catch (HttpRequestException ex)
                 {
                     //Error
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }
             else
             {
                 //Not connected
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
             var x = response.Content.ReadAsStringAsync();
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> deleteOrg(int orgID)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -159,32 +208,44 @@ namespace Pepeza.Server.Requests
                     if (response.IsSuccessStatusCode)
                     {
                         //Deleted 
-                        responseContent.Add(Constants.SUCCESS, response.StatusCode.ToString());
+                        results.Add(Constants.SUCCESS, response.StatusCode.ToString());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
                         //Something went wrong 
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
                 catch(HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }
             else
             {
                 //No network connection
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> getOrgBoards(int orgID)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -194,32 +255,44 @@ namespace Pepeza.Server.Requests
                     {
                         //Got boards for the org 
                         string x = await response.Content.ReadAsStringAsync();
-                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
                         //Nothing here
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
                 catch(HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }
             else
             {
                 //Not connected 
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string, string>> getUserOrgs(int userId)
         {
             HttpClient client = getHttpClient(true);
             HttpResponseMessage response = null;
-            Dictionary<string, string> responseContent = new Dictionary<string, string>();
+            Dictionary<string, string> results = new Dictionary<string, string>();
             if (checkInternetConnection())
             {
                 try
@@ -229,51 +302,75 @@ namespace Pepeza.Server.Requests
                     {
                         //Got boards for the org 
                         string x = await response.Content.ReadAsStringAsync();
-                        responseContent.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else if(response.StatusCode == HttpStatusCode.Forbidden)
                     {
                         //Nothing here
-                        responseContent.Add(Constants.PERMISSION_DENIED, Constants.UNKNOWNERROR);
+                        results.Add(Constants.PERMISSION_DENIED, Constants.UNKNOWNERROR);
                     }
                     else
                     {
-                        responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                        results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
                 }
                 catch (HttpRequestException ex)
                 {
                     Debug.WriteLine(ex.Message);
-                    responseContent.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }
             }
             else
             {
                 //Not connected 
-                responseContent.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
             }
-            return responseContent;
+            return results;
         }
         public async static Task<Dictionary<string,string>> addCollaborator(Dictionary<string,string> toPost)
         {
             HttpClient client = getHttpClient(true);
-            HttpResponseMessage responseMessage = null;
+            HttpResponseMessage response = null;
             Dictionary<string, string> results = new Dictionary<string, string>(); 
             if (checkInternetConnection())
             {
                 try
                 {
 
-                    responseMessage = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS, toPost["orgId"]), new Dictionary<string, string>() { { "newCollaboratorUserId", toPost["newCollaboratorUserId"] } , {"role" , toPost["role"]} });
-                    if (responseMessage.IsSuccessStatusCode)
+                    response = await client.PostAsJsonAsync(string.Format(OrgsAddresses.ADD_GET_COLLABORATORS, toPost["orgId"]), new Dictionary<string, string>() { { "newCollaboratorUserId", toPost["newCollaboratorUserId"] }, { "role", toPost["role"] } });
+                    if (response.IsSuccessStatusCode)
                     {
                         //we added collaborators successfully
-                        results.Add(Constants.SUCCESS, await responseMessage.Content.ReadAsStringAsync());
+                        results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
                     }
                     else
                     {
                         //We hit a dead end 
-                        string s = await responseMessage.Content.ReadAsStringAsync();
+                        string s = await response.Content.ReadAsStringAsync();
                         Debug.WriteLine("===========================" + s);
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
@@ -303,6 +400,18 @@ namespace Pepeza.Server.Requests
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }  
                     else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
@@ -337,7 +446,20 @@ namespace Pepeza.Server.Requests
                     {
                         string s =await response.Content.ReadAsStringAsync();
                         results.Add(Constants.ERROR, Constants.PERMISSION_DENIED);
-                    }else
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        bool result = await LogoutUser.forceLogout();
+                        if (result)
+                        {
+                            results.Add(Constants.UNAUTHORIZED, result.ToString());
+                        }
+                        else
+                        {
+                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                        }
+                    }
+                    else
                     {
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                     }
@@ -365,6 +487,18 @@ namespace Pepeza.Server.Requests
                 {
                     //200 OK
                     results.Add(Constants.SUCCESS , await response.Content.ReadAsStringAsync());
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    bool result = await LogoutUser.forceLogout();
+                    if (result)
+                    {
+                        results.Add(Constants.UNAUTHORIZED, result.ToString());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                    }
                 }
                 else
                 {

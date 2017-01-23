@@ -115,6 +115,12 @@ namespace Pepeza.Views.Boards
                 follower_result = JObject.Parse(followersCountResults[Constants.SUCCESS]);
                 numberofRequests = (int)follower_result["noOfRequests"];
             }
+            else if (followersCountResults.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             if (localBoard != null)
             {                            
                 localBoard.noOfFollowRequests = numberofRequests;
@@ -228,6 +234,12 @@ namespace Pepeza.Views.Boards
                     }
                    
                 }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
                 else
                 {
                     //Show some error message 
@@ -296,6 +308,12 @@ namespace Pepeza.Views.Boards
                     btnFollow.Content = "Requested";
                 }
             }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
             else
             {
                 //Something went wrong 
@@ -320,6 +338,12 @@ namespace Pepeza.Views.Boards
                 toasterror.Message = (string)objResults["message"];
                 btnFollow.IsEnabled = true;
                 btnFollow.Content = "Follow";
+            }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
             }
             else
             {
@@ -544,6 +568,12 @@ namespace Pepeza.Views.Boards
 
 
 
+                                    }
+                                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                                    {
+                                        //Show a popup message 
+                                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                        this.Frame.Navigate(typeof(LoginPage));
                                     }
                                     else
                                     {

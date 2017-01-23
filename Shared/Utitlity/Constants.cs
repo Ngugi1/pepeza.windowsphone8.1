@@ -9,6 +9,7 @@ namespace Pepeza.Utitlity
     public class Constants
     {
         public static string IS_PUSH_TOKEN_SUBMITTED { get { return "IS_PUSH_TOKEN_SUBMITTED"; } }
+        public static string UNAUTHORIZED { get { return "You have been logged out. Please login again"; } }
         public static string NOTICE_SENT { get { return "NOTICE_SENT"; } }
         public static string NO_RESULTS { get{return "No results matched your query";}}
         public static string LINK_SMALL_PLACEHOLDER { get { return "/Assets/Images/placeholder_s_avatar.png"; } }

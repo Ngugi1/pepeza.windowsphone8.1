@@ -73,6 +73,12 @@ namespace Pepeza.Views
                         //Notify the user about the error
                         showTextBlock(results[Constants.ERROR], user);
                     }
+                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                    {
+                        //Show a popup message 
+                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                        this.Frame.Navigate(typeof(LoginPage));
+                    }
                     else if (results.ContainsKey(Constants.APITOKEN))
                     {
                         this.Frame.Navigate(typeof(SetUpPage), results);
