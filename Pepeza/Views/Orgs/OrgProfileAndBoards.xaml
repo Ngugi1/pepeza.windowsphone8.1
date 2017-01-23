@@ -220,6 +220,7 @@
                 <PivotItem.Header>
                 collaborators  
                 </PivotItem.Header>
+                <ScrollViewer VerticalScrollMode="Auto">
                 <Grid>
                     <StackPanel 
                         Visibility="Collapsed"
@@ -347,6 +348,7 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </Grid>
+                </ScrollViewer>
             </PivotItem>
         </Pivot>
     </Grid>

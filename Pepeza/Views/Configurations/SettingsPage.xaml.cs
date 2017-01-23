@@ -56,59 +56,18 @@ namespace Pepeza.Views.Configurations
             ListViewSettings.ItemsSource = configurations;
         }
 
-        private async void ListViewSettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private  void ListViewSettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Config config = (sender as ListView).SelectedItem as Config;
             if (config!=null)
             {
                 if(config.page == null)
                 {
-                    
+                    MessagePromptLogout.VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center;
+                    MessagePromptLogout.ActionPopUpButtons[1].Click += DeclineClicked;
+                    MessagePromptLogout.ActionPopUpButtons[0].Click+=AcceptLogout_clicked;
+                    MessagePromptLogout.Visibility = Visibility.Visible;
                     //Confirm whether the user wants to continue
-                    MessageDialog dialog = new MessageDialog("All your data will be wiped.\nDo you want to proceed?", "Logout");
-                    dialog.Commands.Add(new UICommand() { Label = "OK", Id = 0  });
-                    dialog.Commands.Add(new UICommand() { Label = "Cancel", Id = 1 });
-                    dialog.CancelCommandIndex = 0;
-                    dialog.DefaultCommandIndex = 1;
-                    var result =  await dialog.ShowAsync();
-                    //Exit if they dont want to 
-                    if ((int)result.Id == 1)
-                    {
-                        ListViewSettings.SelectedItem = null;
-                        return;
-                    }
-                    StackPanelInProgress.Visibility = Visibility.Visible;
-                    Dictionary<string, string> logout = await RequestUser.logout();
-                if (logout.ContainsKey(Constants.SUCCESS))
-                {
-                    if (await LocalUserHelper.clearLocalSettingsForUser())
-                    {
-                            //Redirect to login page 
-                        string PEPEZA = "Pepeza";
-                        await DbHelper.dropDatabase();
-                        //Delete the Pepeza folder 
-                        try
-                        {
-                            var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                            await currentFolder.DeleteAsync();
-                        }
-                        catch
-                        {
-                            //Igone the exception and continue
-                        }
-                        Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.LOGOUT); 
-                        this.Frame.Navigate(typeof(LoginPage));
-                        }else
-                        {
-                            ToasterError.Message = "Logout failed , you must force logout because your data is now corrupt";        
-                        }
-                }
-                else
-                {
-                    ToasterError.Message = logout[Constants.ERROR];
-                    Debug.WriteLine("Failed to logout!");
-                }
-                StackPanelInProgress.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -125,6 +84,52 @@ namespace Pepeza.Views.Configurations
                ListViewSettings.SelectedItem = null;
             }
             
+        }
+
+        private void DeclineClicked(object sender, RoutedEventArgs e)
+        {
+          //  throw new NotImplementedException();
+            ListViewSettings.SelectedItem = null;
+            MessagePromptLogout.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        private async void AcceptLogout_clicked(object sender, RoutedEventArgs e)
+        {
+            StackPanelInProgress.Visibility = Visibility.Visible;
+            MessagePromptLogout.Visibility = Visibility.Collapsed;
+            Dictionary<string, string> logout = await RequestUser.logout();
+            if (logout.ContainsKey(Constants.SUCCESS))
+            {
+                if (await LocalUserHelper.clearLocalSettingsForUser())
+                {
+                    //Redirect to login page 
+                    string PEPEZA = "Pepeza";
+                    await DbHelper.dropDatabase();
+                    //Delete the Pepeza folder 
+                    try
+                    {
+                        var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                        await currentFolder.DeleteAsync();
+                    }
+                    catch
+                    {
+                        //Igone the exception and continue
+                    }
+                    Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.LOGOUT);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
+                else
+                {
+                    ToasterError.Message = "Logout failed , you must force logout because your data is now corrupt";
+                }
+            }
+            else
+            {
+                ToasterError.Message = logout[Constants.ERROR];
+                Debug.WriteLine("Failed to logout!");
+            }
+            StackPanelInProgress.Visibility = Visibility.Collapsed;
         }
 
     }

@@ -29,17 +29,16 @@
             >
             <ListView.Header>
                 <TextBlock 
+                    Typography.Capitals="SmallCaps"
                     Margin="8,8,0,8"
                     Style="{StaticResource SubheaderTextBlockStyle}">
-                    Notifications
-
+                notifications
                 </TextBlock>
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid 
-                        Margin="8,8,0,8"
-                        Width="{Binding ActualWidth, ElementName=ListViewNotifications}"
+                        Margin="4"
                         >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

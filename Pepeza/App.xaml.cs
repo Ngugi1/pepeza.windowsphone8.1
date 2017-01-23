@@ -57,7 +57,11 @@ namespace Pepeza
         public  App()
         {
             this.InitializeComponent();
-            HockeyClient.Current.Configure("1637aba890764d5e8ec41d1b92812495", new TelemetryConfiguration() { EnableDiagnostics = true});
+            if (CheckInternet())
+            {
+                HockeyClient.Current.Configure("1637aba890764d5e8ec41d1b92812495", new TelemetryConfiguration() { EnableDiagnostics = true });
+            }
+            
 #if DEBUG
              ((HockeyClient)HockeyClient.Current).OnHockeySDKInternalException += (sender, args) =>
              {
@@ -76,17 +80,17 @@ namespace Pepeza
 
 void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
    {
-      //if (e != null)
-      //{
-      //   Exception exception = e.Exception;
-      //   string x = exception.ToString();
-      //   if (exception is NullReferenceException && exception.ToString().ToUpper().Contains("SOMA"))
-      //   {
-      //      Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
-      //      e.Handled = true;
-      //      return;
-      //   }
-      //}
+       if (e != null)
+       {
+           Exception exception = e.Exception;
+           string x = exception.ToString();
+           if (exception is NullReferenceException && exception.ToString().ToUpper().Contains("SOMA"))
+           {
+               Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
+               e.Handled = true;
+               return;
+           }
+       }
 
       // APP SPECIFIC HANDLING HERE
 
@@ -358,7 +362,6 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
             statusBar.ForegroundColor = Colors.White;
             statusBar.ProgressIndicator.ProgressValue = 0;
             await statusBar.ProgressIndicator.ShowAsync();
-            //statusBar.Showing += statusBar_Showing;
         }
         static void statusBar_Showing(Windows.UI.ViewManagement.StatusBar sender, object args)
         {

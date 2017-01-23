@@ -204,6 +204,7 @@ namespace Pepeza.Server.Requests
                 try
                 {
                     response = await client.GetAsync(string.Format(BoardAddresses.SEARCH, keyword));
+                    response.StatusCode = HttpStatusCode.Unauthorized;
                     if (response.IsSuccessStatusCode)
                     {
                         results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());

@@ -224,6 +224,7 @@ namespace Pepeza.Views.Account
                 //Redirect to login page 
                 string PEPEZA = "Pepeza";
                 await DbHelper.dropDatabase();
+                Settings.clearSettings();
                 //Delete the Pepeza folder 
                 try
                 {
@@ -238,6 +239,7 @@ namespace Pepeza.Views.Account
                 commandBarReload.Visibility = Visibility.Visible;
                 Settings.add(Constants.IS_GET_NEW_DATA_DONE, false);
                 txtBlockStatus.Text = userdata[Constants.ERROR];
+                this.Frame.GoBack();
             }
         }
     }

@@ -5,6 +5,7 @@
       xmlns:local="using:Pepeza.Views.Configurations"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toaster="using:Toastinet"
+      xmlns:ForFun="using:Coding4Fun.Toolkit.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
       mc:Ignorable="d">
@@ -40,6 +41,20 @@
                        Style="{StaticResource TitleTextBlockStyle}"
                        Text="just a moment..." />
         </StackPanel>
+        <ForFun:MessagePrompt 
+                                       Message="Are you sure you want to logout?"
+                                       Width="Auto"
+                                        Foreground="White"     
+                                        IsCancelVisible="True"
+                                        Height="Auto"
+                                       VerticalAlignment="Bottom"
+                                       Title="Logout"
+                                       Visibility="Collapsed"
+                                       Background="{ThemeResource PhoneAccentBrush}"
+                                       Overlay="{ThemeResource PhoneAccentBrush}"
+                                       Name="MessagePromptLogout"
+                                       />
+
         <toaster:Toastinet Name="ToasterError"
                            Margin="8"
                            Foreground="White"
