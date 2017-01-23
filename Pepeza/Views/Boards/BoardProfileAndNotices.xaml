@@ -50,7 +50,20 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Grid Name="GridContentHide" Opacity="0">
+                                <Grid Name="GridContentHide">
+                                    <StackPanel Name="stackPanelLoading"
+                                                VerticalAlignment="Center"
+                                                Visibility="Visible"
+                                                >
+                                        <ProgressBar  IsIndeterminate="True" IsEnabled="True"
+                                                      Foreground="{ThemeResource PhoneAccentBrush}"
+                                                      />
+                                        <TextBlock HorizontalAlignment="Center"
+                                                      
+                                                       Text="loading board details ..." 
+                                                  Foreground="Black"
+                                                   />
+                                    </StackPanel>
                                     <StackPanel>
                                         <Grid Grid.Row="0">
 
@@ -174,22 +187,20 @@
                                               VerticalScrollBarVisibility="Visible"
                                               VerticalScrollMode="Enabled">
                                     <Grid>
-                                        <StackPanel Name="stackPanelLoading"
+                                        <!--StackPanel Name="stackPanelLoading"
                                                     Grid.Row="1"
-                                                    
                                                     VerticalAlignment="Bottom">
                                             <ProgressBar Grid.Row="1" />
                                             <TextBlock HorizontalAlignment="Center"
                                                        Style="{StaticResource txtBlockWait}"
                                                        Text="loading board details ..." />
-                                        </StackPanel>
+                                        </StackPanel>-->
                                         <TextBlock Name="txtBlockDesc"
                                                    Grid.Row="2"
                                                    HorizontalAlignment="Center"
                                                    ScrollViewer.VerticalScrollMode="Auto"
                                                    Style="{StaticResource txtBlockDisplay}"
                                                    Text="{Binding desc , Mode=TwoWay}"
-                                                   
                                                    Margin="12,4"
                                                    TextWrapping="Wrap" />
                                     </Grid>

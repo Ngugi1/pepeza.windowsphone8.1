@@ -145,7 +145,7 @@ namespace Pepeza.Views.Account
                     {
                         if (!isUserNameNull)
                         {
-                            this.Frame.Navigate(typeof(MainPage) , results);
+                            this.Frame.Navigate(typeof(MainPage), -1); // Send this to indicate whether to show mail confrim or not 
                         }
                        
                     }
@@ -195,7 +195,7 @@ namespace Pepeza.Views.Account
                         if (isUserNameNull)
                         {
                             //Go to the main page
-                            this.Frame.Navigate(typeof(MainPage));
+                            this.Frame.Navigate(typeof(MainPage) , -1);
                         }
                         else
                         {

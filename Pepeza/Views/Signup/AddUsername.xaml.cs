@@ -55,7 +55,7 @@ namespace Pepeza.Views.Signup
                 TUserInfo info = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
                 info.username = username;
                 await UserHelper.update(info);
-                this.Frame.Navigate(typeof(MainPage));
+                this.Frame.Navigate(typeof(MainPage) , -1); //Indicate it is first time login/signup
             }
             else if (result.ContainsKey(Constants.UNAUTHORIZED))
             {

@@ -59,6 +59,7 @@ namespace Pepeza.Views.Boards
         CoreApplicationView view = CoreApplication.GetCurrentView();
         JObject follower_result = null;
         TAvatar boardAvatar = null;
+        bool isProfileLoaded = false, areNoticesLoaded = false;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
         public BoardProfileAndNotices()
         {
@@ -160,6 +161,7 @@ namespace Pepeza.Views.Boards
                 }
 
                 rootGrid.DataContext = localBoard;
+                isProfileLoaded = true;
                 //Allow one to follow their own board 
                 //if(localBoard!=null)
                 //{
@@ -229,6 +231,7 @@ namespace Pepeza.Views.Boards
                     }
                     boardFetched.singleFollowerOrMany = boardFetched.noOfFollowers > 1 ? "followers" : "follower";
                     rootGrid.DataContext = boardFetched;
+                    isProfileLoaded = true;
                     if (boardFetched.followRestriction == "request")
                     {
                         btnFollow.Visibility = Visibility.Visible;
@@ -371,6 +374,10 @@ namespace Pepeza.Views.Boards
                 stackPanelLoading.Visibility = Visibility.Collapsed;
                 ContentRoot.Opacity = 1;
             }
+            else
+            {
+                stackPanelLoading.Visibility = Visibility.Visible;
+            }
         }
         private  async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -378,23 +385,30 @@ namespace Pepeza.Views.Boards
             {
                 case 0:
                     //if data is not loaded, laod
-                    
+                    if (!isProfileLoaded)
+                    {
                         stackPanelLoading.Visibility = Visibility.Visible;
                         AppBtnAddNotice.Visibility = Visibility.Collapsed;
                         AppBtnEdit.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
                         ContentRoot.Opacity = 0.7;
                         await getBoardDetailsAsync(boardId);
+                    }
+                        
                    
                    
                     break;
                 case 1:
                     //Load notices if not loaded already
+                    if (!areNoticesLoaded)
+                    {
                         StackPanelLoadingNotices.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
                         AppBtnAddNotice.Visibility = Visibility.Visible;
                         AppBtnEdit.Visibility = Visibility.Collapsed;
                         AppBtnAnalytics.Visibility = Visibility.Collapsed;
+                    }
+                        
                     
                     break;
                 default :
@@ -418,6 +432,7 @@ namespace Pepeza.Views.Boards
 
 
                 ListViewNotices.ItemsSource = noticelist;
+                areNoticesLoaded = true;
             }
             catch
             {

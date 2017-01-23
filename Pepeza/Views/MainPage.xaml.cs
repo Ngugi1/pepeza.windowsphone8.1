@@ -63,7 +63,6 @@ namespace Pepeza
         public MainPage()
         {
             this.InitializeComponent();
-            //this.NavigationCacheMode = NavigationCacheMode.Required;
             current = this;
            
         }
@@ -75,8 +74,7 @@ namespace Pepeza
         /// This parameter is typically used to configure the page.</param> 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Clear the backstack 
-            this.Frame.BackStack.Clear();
+            
             //Count the number of notifications 
             updateNotificationCount();
             //Load data 
@@ -114,24 +112,35 @@ namespace Pepeza
                 }
             }
             //Check whether the email is confirmed 
-            var userIInfo = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
-            if (userIInfo != null)
+            if (e.Parameter != null)
             {
-                TEmail emailInfo = await EmailHelper.getEmail(userIInfo.emailId);
-                if (emailInfo!=null)
+                if (e.Parameter.GetType() == typeof(int) && (int)e.Parameter == -1 && e.NavigationMode == NavigationMode.New)//Signifies login/signup
                 {
-                    if (emailInfo.verified == 0)
+                    var userIInfo = await UserHelper.getUserInfo((int)Settings.getValue(Constants.USERID));
+                    if (userIInfo != null)
                     {
-                        ToastConfirmEmail.Message  = "Please confirm your email address with us to stop seeing this message.";
+                        TEmail emailInfo = await EmailHelper.getEmail(userIInfo.emailId);
+                        if (emailInfo != null)
+                        {
+                            if (emailInfo.verified == 0)
+                            {
+                                MessagePromptConfirmEmail.ActionPopUpButtons[0].Click += MainPage_Click;
+                                MessagePromptConfirmEmail.Visibility = Visibility.Visible;
+                            }
+                        }
+
                     }
                 }
-                   
             }
-
-         await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
+            //Clear the backstack 
+            this.Frame.BackStack.Clear();
            
-          
+         await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
+        }
 
+        void MainPage_Click(object sender, RoutedEventArgs e)
+        {
+            MessagePromptConfirmEmail.Visibility = Visibility.Collapsed;
         }
 
         private  async void updateNotificationCount()

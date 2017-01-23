@@ -140,12 +140,17 @@
                         VerticalAlignment="Bottom"
                         AdMediatorError="AdMediatorControl_AdMediatorError"
                         Name="NoticesTabAd"/>
-                    <toaster:Toastinet Duration="10" 
-                                       Style="{StaticResource ToastStyle}"
-                                       VerticalAlignment="Bottom"
+                    <ForFun:MessagePrompt 
+                                       Message="We sent you an email with confirmation link. Click on the link to confirm your email"
                                        Width="Auto"
-                                       Height="Auto"
-                                       Name="ToastConfirmEmail"
+                                        Foreground="White"              
+                                        Height="Auto"
+                                       VerticalAlignment="Bottom"
+                                       Title="Email Confirmation"
+                                       Visibility="Collapsed"
+                                       Background="{ThemeResource PhoneAccentBrush}"
+                                       Overlay="{ThemeResource PhoneAccentBrush}"
+                                       Name="MessagePromptConfirmEmail"
                                        />
 
                 </Grid>
