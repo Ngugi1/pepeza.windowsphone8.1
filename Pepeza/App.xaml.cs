@@ -143,6 +143,7 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 
         protected async  override void OnActivated(IActivatedEventArgs e)
         {
+            Settings.remove(Constants.IS_PUSH_TOKEN_SUBMITTED);
             base.OnActivated(e);
             updateStatusBar();
             _continuationManager = new ContinuationManager();
