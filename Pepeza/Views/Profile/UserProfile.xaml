@@ -67,6 +67,15 @@
                 </Grid>
                 
                 <StackPanel>
+                    <TextBlock  Text="Profile update failed, try again later "
+                            Style="{StaticResource txtBlockError}"
+                            Name="txtBlockError"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Center"
+                            />
+                    <ProgressBar 
+                    Margin="12,0"
+                    Name="ProgressBarProfileUpdating" Visibility="Collapsed"/>
                     <TextBlock Style="{StaticResource BodyTextBlockStyle}"
                                Text="{Binding fullname, Mode=TwoWay}"
                                Margin="24,4"
@@ -127,16 +136,7 @@
                                />
                     </StackPanel>
                 </StackPanel>
-                <ProgressBar 
-                    Margin="12,0"
-                    Name="ProgressBarProfileUpdating" Visibility="Collapsed"/>
-                <TextBlock  Text="Profile update failed, try again later "
-                            Style="{StaticResource txtBlockError}"
-                            Name="txtBlockError"
-                            Visibility="Collapsed"
-                            HorizontalAlignment="Center"
-                            />
-                <StackPanel Name="stackPanelAddFirstLastName"
+               <StackPanel Name="stackPanelAddFirstLastName"
                             Width="{Binding ActualWidth,
                                             ElementName=relativePanel}"
                             HorizontalAlignment="Left"

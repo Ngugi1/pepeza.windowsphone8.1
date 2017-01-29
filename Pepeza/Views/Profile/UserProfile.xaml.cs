@@ -312,7 +312,8 @@ namespace Pepeza.Views.Profile
        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
 
-            txtBlockError.Visibility = Visibility.Collapsed; 
+            txtBlockError.Visibility = Visibility.Collapsed;
+            PBProfilePicUpdating.Visibility = Visibility.Visible;
             //Get the photo and navigate to the photo editing page
             FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
             if (args != null)
@@ -327,7 +328,7 @@ namespace Pepeza.Views.Profile
                     if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
                     {
                         var cropped = FilePickerHelper.centerCropImage(bitmap);
-                        var originalSource = rectProfilePic.Source ;
+                        var originalSource = rectProfilePic.Image.Source ;
                         rectProfilePic.Image.Source = cropped;
                         PBProfilePicUpdating.Visibility = Visibility.Visible;
                         try
@@ -337,7 +338,7 @@ namespace Pepeza.Views.Profile
                             var file = await AvatarUploader.WriteableBitmapToStorageFile(cropped,
                                 Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
                                 Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
-                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, userId, "board", ((ProfileData)grid.DataContext).avatarId);
+                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, userId, "user", ((ProfileData)grid.DataContext).avatarId);
                             if (results.ContainsKey(Constants.SUCCESS))
                             {
                                 try
@@ -370,7 +371,7 @@ namespace Pepeza.Views.Profile
                                 catch
                                 {
                                     txtBlockError.Text = "upload failed";
-                                    rectProfilePic.Source = originalSource;
+                                    rectProfilePic.Image.Source = originalSource;
                                     txtBlockError.Visibility = Visibility.Visible;          
                                     //Throw a toast that the image failed
                                     return;
@@ -381,7 +382,7 @@ namespace Pepeza.Views.Profile
                             {
                                 //Restore previous image
                                 txtBlockError.Text = results[Constants.ERROR];
-                                rectProfilePic.Source = originalSource;
+                                rectProfilePic.Image.Source = originalSource;
                                 txtBlockError.Visibility = Visibility.Visible;          
 
                                 //if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;

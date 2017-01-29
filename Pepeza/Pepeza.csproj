@@ -103,9 +103,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage2.xaml.cs">
-      <DependentUpon>BlankPage2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Common\ContinuationManager.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
@@ -251,10 +248,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BlankPage2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="CustomControls\PageHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
