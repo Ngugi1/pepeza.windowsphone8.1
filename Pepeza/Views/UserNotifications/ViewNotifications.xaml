@@ -27,6 +27,11 @@
             Name="ListViewNotifications"
             SelectionChanged="ListViewNotifications_SelectionChanged"
             >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.Header>
                 <TextBlock 
                     Typography.Capitals="SmallCaps"
@@ -52,12 +57,12 @@
                         <TextBlock Text="{Binding title}"
                                    Foreground="Black"
                                    Style="{StaticResource BodyTextBlockStyle}"
-                                   FontWeight="SemiBold"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Bottom"
                                    Grid.Row="0"
-                                   FontSize="{StaticResource TextStyleExtraLargeFontSize}"
                                    Grid.Column="1"
                                    Grid.ColumnSpan="2"
-                                   Margin="4"
+                                   Margin="0"
                                    />
                         <FFImage:FFImage 
                             Margin="4"

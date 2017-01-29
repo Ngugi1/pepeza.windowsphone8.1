@@ -210,7 +210,6 @@ namespace Pepeza
         }
          async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            args.Cancel = true;
             //Init update from the server
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
@@ -223,6 +222,7 @@ namespace Pepeza
                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
             }
             //Prevent background agent from being invoked 
+            args.Cancel = true;
         }
         private async void loadNotices()
         {

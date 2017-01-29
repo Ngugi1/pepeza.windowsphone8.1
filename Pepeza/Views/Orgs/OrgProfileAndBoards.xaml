@@ -155,6 +155,11 @@
                     <ListView Name="ListViewOrgBoards"
                               
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" >
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid 
@@ -282,12 +287,16 @@
                     <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
-
-                        <ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid
                                     Margin="0,8"
-                                    Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
+                                    >
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -353,21 +362,24 @@
         </Pivot>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar Name="CommandBarActions">
+        <CommandBar Name="CommandBarActions" Visibility="Collapsed">
             <AppBarButton Name="AppBtnEdit"
                           Click="EditProfilleClick"
                           Icon="Edit"
+                          Visibility="Collapsed"
                           Label="edit" />
             
             <AppBarButton 
                           Name="AppBtnAnalytics"
                           Click="AppBtinAnalytics_clicked"
                           Label="Analytics"
+                Visibility="Collapsed"
                           Icon="ThreeBars"
                 >
                
             </AppBarButton>
             <AppBarButton Icon="Add" 
+                          Visibility="Collapsed"
                           Click="AppBtnAdd_Click"
                           Name="AppBtnAdd"
                           Label="add board"/>

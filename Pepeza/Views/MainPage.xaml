@@ -70,10 +70,15 @@
                     <ListView Margin="19.5,0,8,0"
                               SelectionChanged="ListViewNotices_SelectionChanged"
                               Name="ListViewNotices">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,8" 
-                                      Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
+                                     >
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -209,6 +214,11 @@
                     <ListView Name="ListViewBoards"
                               Grid.Row="1"
                               SelectionChanged="ListViewBoards_SelectionChanged">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid 
@@ -304,6 +314,11 @@
                     </StackPanel>
                     <ListView Name="ListViewOrgs"
                               SelectionChanged="ListViewOrgs_SelectionChanged">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Name="OrgGrid"

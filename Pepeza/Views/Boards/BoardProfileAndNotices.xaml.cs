@@ -106,26 +106,28 @@ namespace Pepeza.Views.Boards
                 {
                     if(following.accepted==1)
                     {
-                        btnFollow.Content = "Unfollow";
+                        btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
                     }else if(following.accepted == 0)
                     {
-                        btnFollow.Content = "Follow";
+                        btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                         btnFollow.IsEnabled = true;
                     }
                     else if (following.accepted ==2)
                     {
-                        btnFollow.Content = "Request sent";
+                        btnFollow.Content =Constants.BOARD_CONTENT_REQUESTED;
                         btnFollow.IsEnabled = false;
                     }
 
                 }
                 else
                 {
-                   btnFollow.Content = "Follow";
+                   btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                     btnFollow.IsEnabled = true;
                 }
                  isProfileLoaded = true;
                  await assignRoles(localBoard);
+                 await loadFollowers(boardId);
+               
             }   
             else
             {
@@ -170,28 +172,27 @@ namespace Pepeza.Views.Boards
                         
                         if (followerItem.accepted ==1)
                         {
-                            btnFollow.Content = "Unfollow";
+                            btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
                             
                             btnFollow.IsEnabled = true;
                             followerItem.dateAccepted = (long)objResults["follower_item"]["dateAccepted"];
                         }
                         else if (followerItem.accepted == 0)
                         {
-                            btnFollow.Content = "Follow";
-                          
+                            btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                             btnFollow.IsEnabled = true;
                         }
                         
                         else if(followerItem.accepted ==2)
                         {
-                            btnFollow.Content = "Request Sent";
+                            btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
                             btnFollow.IsEnabled = false;
                            
                         }
 
                     }else
                     {
-                        btnFollow.Content = "Follow";
+                        btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                     }
                    
                     isProfileLoaded = true;
@@ -256,13 +257,16 @@ namespace Pepeza.Views.Boards
                 if (following.accepted == 1)
                 {
                     (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (GridBoardProfile.DataContext as TBoard).noOfFollowers + 1;
-                    btnFollow.Content = "Unfollow";
+                    btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
                     btnFollow.IsEnabled = true;
                 }
                 else
                 {
-                    btnFollow.Content = "Requested";
+                    btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
                 }
+
+                //Load the followers again 
+                await loadFollowers(boardId);
             }
             else if (results.ContainsKey(Constants.UNAUTHORIZED))
             {
@@ -291,11 +295,14 @@ namespace Pepeza.Views.Boards
                     if (localFollower != null)
                     {
                         await FollowingHelper.delete(localFollower);
-                        await BoardHelper.delete(boardUnfollow);
-                        (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (this.GridBoardProfile.DataContext as TBoard).noOfFollowers - 1;
+                        if ((this.GridBoardProfile.DataContext as TBoard).noOfFollowers > 0)
+                        {
+                            (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (this.GridBoardProfile.DataContext as TBoard).noOfFollowers - 1;
+                        }
                     }
                     btnFollow.IsEnabled = true;
-                    btnFollow.Content = "Follow";
+                    btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
+                    await loadFollowers(boardId);
                 }
                 else if (results.ContainsKey(Constants.UNAUTHORIZED))
                 {
@@ -327,9 +334,6 @@ namespace Pepeza.Views.Boards
                     if (!areFollowersLoaded)
                     {
                         await loadFollowers(boardId);
-                    }else
-                    {
-                        await assignRoles((TBoard)GridBoardProfile.DataContext);
                     }
                    
                         
@@ -341,9 +345,6 @@ namespace Pepeza.Views.Boards
                     {
                         StackPanelNoticesLoading.Visibility = Visibility.Visible;
                         loadBoardNotices(boardId);
-                    }else
-                    {
-                         await assignRoles((TBoard)GridBoardProfile.DataContext);
                     }
                     break;
                 default :
@@ -416,7 +417,7 @@ namespace Pepeza.Views.Boards
         }
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BoardFollowers) , boardId);
+            this.Frame.Navigate(typeof(AcceptDeclineRequests),boardId);
         }
         private void ImageBoardAvatarTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -549,25 +550,6 @@ namespace Pepeza.Views.Boards
         {
             this.Frame.Navigate(typeof(AcceptDeclineRequests), boardId);
         }
-        private async void bthFollowChecked(object sender, RoutedEventArgs e)
-        {
-            TBoard board = GridBoardProfile.DataContext as TBoard;
-            if (board!=null)
-            {
-                await followBoard(board);
-            }
-           
-           
-        }
-        private async void btnFollowUnchecked(object sender, RoutedEventArgs e)
-        {
-            TBoard board = GridBoardProfile.DataContext as TBoard;
-            if (board != null)
-            {
-                await unfollowBoard(board);
-            }
-            
-        }
         private void ReloadNotices(object sender, RoutedEventArgs e)
         {
             loadBoardNotices(boardId);
@@ -584,8 +566,17 @@ namespace Pepeza.Views.Boards
                     //Unpack the boards
                     JObject jsonObject = JObject.Parse(followers[Constants.SUCCESS].ToString());
                     JArray jArray = JArray.Parse(jsonObject["followers"].ToString());
+                    int followRequests = (int)jsonObject["noOfRequests"];
+                    if (followRequests > 0)
+                    {
+                        txtBlockFollowRequest.Text = string.Format("You have {0} follow requests", followRequests);
+                        StackPanelFollowRequests.Visibility = Visibility.Visible;
+                    }
+                   
+                    
                     if (jArray.Count > 0)
                     {
+                        EmptyFollowersPlaceHolder.Visibility = Visibility.Collapsed;
                         foreach (var item in jArray)
                         {
                             boardFollowers.Add(new Follower()
@@ -599,11 +590,23 @@ namespace Pepeza.Views.Boards
                             });
 
                         }
+                        ListViewBoardFollowers.ItemsSource = null;
                         ListViewBoardFollowers.ItemsSource = boardFollowers;
-                        
+                        TBoard board = (TBoard)GridBoardProfile.DataContext;
+                        if (boardFollowers != null)
+                        {
+                            board.noOfFollowers = boardFollowers.Count;
+                        }
+                        GridBoardProfile.DataContext = board;
                     }
                     else
                     {
+                        TBoard board = (TBoard)GridBoardProfile.DataContext;
+                        if (boardFollowers != null)
+                        {
+                            board.noOfFollowers = 0;
+                        }
+                        GridBoardProfile.DataContext = board;
                         EmptyFollowersPlaceHolder.Visibility = Visibility.Visible;
                     }
                     areFollowersLoaded = true;
@@ -655,6 +658,21 @@ namespace Pepeza.Views.Boards
                 RichTextBlockDesc.TextWrapping = TextWrapping.NoWrap;
                 HyperlinkExpand.Content = "view more";
 
+            }
+        }
+        private async void bthFollowClicked(object sender, RoutedEventArgs e)
+        {
+            TBoard board = GridBoardProfile.DataContext as TBoard;
+            if (board != null)
+            {
+                if (btnFollow.Content.ToString().Contains(Constants.BOARD_CONTENT_UNFOLLOW))
+                {
+                    await unfollowBoard(board);
+                }
+                else if (btnFollow.Content.ToString().Contains(Constants.BOARD_CONTENT_FOLLOW))
+                {
+                    await followBoard(board);
+                }
             }
         }
     }

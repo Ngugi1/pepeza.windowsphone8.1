@@ -21,203 +21,218 @@
             <converter1:IntToAttachment x:Key="IntToAttachment"/>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="2">
-            <Pivot SelectedIndex="0" SelectionChanged="Pivot_SelectionChanged">
-                <PivotItem Name="PivotItemNotices">
-                    <PivotItem.Header>
-                        <TextBlock Style="{StaticResource txtBlockPivotHeader}">
+    <ScrollViewer VerticalScrollMode="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="2">
+                <Pivot SelectedIndex="0" SelectionChanged="Pivot_SelectionChanged">
+                    <PivotItem Name="PivotItemNotices">
+                        <PivotItem.Header>
+                            <TextBlock Style="{StaticResource txtBlockPivotHeader}">
                                    notices
-                        </TextBlock>
-                    </PivotItem.Header>
-                    <Grid>
-                        
-                        <StackPanel 
+                            </TextBlock>
+                        </PivotItem.Header>
+                        <Grid>
+
+                            <StackPanel 
                             Name="EmptyNoticesPlaceHolder"
                             Visibility="Collapsed"
                             VerticalAlignment="Center">
 
-                            <Viewbox Width="100" Height="100">
-                                <SymbolIcon  
+                                <Viewbox Width="100" Height="100">
+                                    <SymbolIcon  
                                     Foreground="{ThemeResource PhoneAccentBrush}"
                                     Symbol="Read"/>
-                            </Viewbox>
-                            <TextBlock Text="No notices to show here"
+                                </Viewbox>
+                                <TextBlock Text="No notices to show here"
                                        HorizontalAlignment="Center"
                                        TextLineBounds="Full"
                                        Style="{StaticResource TitleTextBlockStyle}"
                                        Foreground="Black"
                                        Typography.Capitals="Unicase"
                                        />
-                        </StackPanel>
-                        <StackPanel 
+                            </StackPanel>
+                            <StackPanel 
                             Visibility="Collapsed"
                             Name="StackPanelNoticeFailed"
                             VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
                                        Style="{StaticResource txtBlockError}"
                                        />
-                            <Button 
+                                <Button 
                                 Click="ReloadNotices"
                                 HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Retry" Margin="8,4"/>
-                                    <SymbolIcon Symbol="RepeatAll"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Name="StackPanelNoticesLoading"
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Retry" Margin="8,4"/>
+                                        <SymbolIcon Symbol="RepeatAll"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Name="StackPanelNoticesLoading"
                                     VerticalAlignment="Center">
-                            <ProgressBar Margin="12" />
-                            <TextBlock HorizontalAlignment="Center"
+                                <ProgressBar Margin="12" />
+                                <TextBlock HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource txtBlockWait}"
                                        Text="Loading notices ..." />
-                        </StackPanel>
-                        <ListView Margin="19.5,0"
+                            </StackPanel>
+                            <ListView Margin="19.5,0"
                                   SelectionChanged="ListViewNotices_SelectionChanged"
                                   Name="ListViewNotices">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,4" 
-                                          Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,4" 
+                                          >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
 
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding title , Mode=TwoWay}" 
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding title , Mode=TwoWay}" 
                                                    Foreground="Black"
                                                    Margin="0"
                                                    VerticalAlignment="Bottom"
                                                    Style="{StaticResource txtBlockListViewItemHeader}"/>
-                                        <RichTextBlock Grid.Row="1"
+                                            <RichTextBlock Grid.Row="1"
                                                        Margin="0"
                                                        IsTextSelectionEnabled="False"
                                                        Style="{StaticResource BodyRichTextBlockStyle}"
                                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
 
-                                        <TextBlock Text="{Binding date_created_display , Mode=TwoWay}"
+                                            <TextBlock Text="{Binding date_created_display , Mode=TwoWay}"
                                                    HorizontalAlignment="Left" 
                                                    VerticalAlignment="Bottom"
                                                    Grid.Column="1" />
-                                        <SymbolIcon Symbol="Attach" 
+                                            <SymbolIcon Symbol="Attach" 
                                                     HorizontalAlignment="Right"
                                                     Grid.RowSpan="2"
                                                     Visibility="{Binding hasAttachment , Converter={StaticResource IntToAttachment}}"
                                                     Grid.Row="1" Grid.Column="1"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                </PivotItem>
-                <PivotItem>
-                    <PivotItem.Header>
-                        <TextBlock Text="followers" Style="{StaticResource txtBlockPivotHeader}"/>
-                    </PivotItem.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <StackPanel Name="StackPanelLoadingFollowers"
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </PivotItem>
+                    <PivotItem>
+                        <PivotItem.Header>
+                            <TextBlock Text="followers" Style="{StaticResource txtBlockPivotHeader}"/>
+                        </PivotItem.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Name="StackPanelLoadingFollowers"
                                     VerticalAlignment="Center"
                                     Grid.Row="1"
                                     >
-                            <ProgressBar Margin="12" />
-                            <TextBlock HorizontalAlignment="Center"
+                                <ProgressBar Margin="12" />
+                                <TextBlock HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Style="{StaticResource txtBlockWait}"
                                        Text="Loading followers ..." />
-                        </StackPanel>
-                        <StackPanel 
+                            </StackPanel>
+                            <StackPanel 
                             Name="EmptyFollowersPlaceHolder"
                             Visibility="Collapsed"
                             Grid.Row="1"
                             VerticalAlignment="Center">
 
-                            <Viewbox Width="100" Height="100">
-                                <SymbolIcon  
+                                <Viewbox Width="100" Height="100">
+                                    <SymbolIcon  
                                     Foreground="{ThemeResource PhoneAccentBrush}"
                                     Symbol="People"/>
-                            </Viewbox>
-                            <TextBlock Text="No followers found"
+                                </Viewbox>
+                                <TextBlock Text="No followers found"
                                        HorizontalAlignment="Center"
                                        TextLineBounds="Full"
                                        Style="{StaticResource TitleTextBlockStyle}"
                                        Foreground="Black"
                                        Typography.Capitals="Unicase"
                                        />
-                        </StackPanel>
-                        <StackPanel 
+                            </StackPanel>
+                            <StackPanel 
                             Grid.Row="1"
                             Visibility="Collapsed"
                             Name="StackPanelFollowerFailed"
                             VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
                                        Style="{StaticResource txtBlockError}"
                                        />
-                            <Button 
+                                <Button 
                                 Click="ReloadFollowers"
                                 HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Retry" Margin="8,4"/>
-                                    <SymbolIcon Symbol="RepeatAll"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel 
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Retry" Margin="8,4"/>
+                                        <SymbolIcon Symbol="RepeatAll"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel 
                             Visibility="Collapsed"
+                            Margin="19.5,8"
+                            Grid.Row="0"
                             Name="StackPanelFollowRequests">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="follow requests" 
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="follow requests" 
+                                           TextWrapping="Wrap"
                                            Name="txtBlockFollowRequest"
                                            VerticalAlignment="Center"
-                                           Style="{StaticResource FlyoutPickerTitleTextBlockStyle}"/>
-                                <Button Grid.Column="1" 
+                                           Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <Button Grid.Column="1" 
+                                        Background="{ThemeResource PhoneAccentBrush}"
+                                        Foreground="White"
                                         VerticalAlignment="Bottom"
                                         Click="btnViewFollowers_Click"
                                         Content="view requests"
                                         HorizontalAlignment="Right"
                                         />
-                            </Grid>
-                        </StackPanel>
-                        <ListView Name="ListViewBoardFollowers"
+                                </Grid>
+                            </StackPanel>
+                            <ListView Name="ListViewBoardFollowers"
                                   Grid.Row="1"
                                   Margin="4"
                                   SelectionChanged="ListViewBoardFollowers_SelectionChanged"
                                   >
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid 
-                                        Width="{Binding ActualWidth, ElementName=ListViewBoardFollowers}"
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid 
                                         Height="70" >
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <FFImage:FFImage
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <FFImage:FFImage
                                             Grid.RowSpan="2"
                                             Source="{Binding linkSmall}"
                                             Margin="12,0,12,0"
@@ -227,56 +242,56 @@
                                             Height="50"
                                             Width="50"
                                             >
-                                        </FFImage:FFImage>
-                                        <TextBlock Grid.Row="0"
+                                            </FFImage:FFImage>
+                                            <TextBlock Grid.Row="0"
                                                    Grid.Column="1"
                                                    Margin="8,4,8,0"
                                                    Style="{StaticResource txtBlockListViewItemHeader}"
                                                    Text="{Binding userName}" />
-                                        <TextBlock Grid.Row="1"
+                                            <TextBlock Grid.Row="1"
                                                    Grid.Column="1"
                                                    Margin="8,4,14,0"
                                                    Style="{StaticResource txtBlockListViewDesc}"
                                                    Text="{Binding FullName}"/>
-                                        <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
+                                            <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
                                                    Margin="12,0"
                                                    Grid.Column="2"
                                                    Style="{StaticResource BaseTextBlockStyle}"
                                                    VerticalAlignment="Bottom"
                                                    Foreground="{ThemeResource PhoneAccentBrush}"
                                                    />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                </PivotItem>
-            </Pivot>
-        </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </PivotItem>
+                </Pivot>
+            </Grid>
 
-        <TextBlock 
+            <TextBlock 
             Margin="19.5,12,0,12"
             Style="{StaticResource BaseTextBlockStyle}"
             Text="board profile"
             Typography.Capitals="SmallCaps"
                 VerticalAlignment="Bottom"
                 />
-        <Grid
+            <Grid
             Grid.Row="1"
             Name="GridBoardProfile">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel  Grid.RowSpan="4">
-                <FFImage:FFImage 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel  Grid.RowSpan="4">
+                    <FFImage:FFImage 
                    Height="120"
                     VerticalAlignment="Bottom"
                    Name="ImageBoardAvatar"
@@ -289,46 +304,46 @@
                    RetryCount="5"
                    Margin="19.5,0"
                    />
-                <ProgressBar Margin="4" Visibility="Collapsed" Name="PBProfilePicUpdating"/>
-            </StackPanel>
-            <TextBlock Text="{Binding name, Mode=TwoWay}"
+                    <ProgressBar Margin="4" Visibility="Collapsed" Name="PBProfilePicUpdating"/>
+                </StackPanel>
+                <TextBlock Text="{Binding name, Mode=TwoWay}"
                        Grid.Column="1"
                        Margin="4"
                        Style="{StaticResource BaseTextBlockStyle}"
                        VerticalAlignment="Top"
                        />
-            <Grid Grid.Row="1"
+                <Grid Grid.Row="1"
                   Margin="0"
                   Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
 
-                <SymbolIcon Symbol="People" 
+                    <SymbolIcon Symbol="People" 
                             Width="30"
                             Height="20"/>
 
-                <TextBlock Grid.Column="1" 
+                    <TextBlock Grid.Column="1" 
                            Style="{StaticResource txtBlockDisplay}"
                            VerticalAlignment="Center"
                            Margin="4,0"
+                           Text="{Binding noOfFollowers, Mode=TwoWay}"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            FontWeight="SemiBold"
-                           Text="{Binding noOfFollowers, Mode=TwoWay}"/>
-            </Grid>
-            <ToggleButton Grid.Column="1"
+                          />
+                </Grid>
+                <Button Grid.Column="1"
                           Background="{ThemeResource PhoneAccentBrush}"
                           Name="btnFollow"
                           VerticalAlignment="Bottom"
-                          Checked="bthFollowChecked"
+                          
                           Foreground="White"
-                          Unchecked="btnFollowUnchecked"
-                          Content="Follow"
+                          Click="bthFollowClicked"
                           Grid.Row="2"
                           IsEnabled="True"/>
-            <RichTextBlock 
+                <RichTextBlock 
                 Grid.Row="3" 
                 Grid.ColumnSpan="2"
                 Margin="19.5,8"
@@ -338,27 +353,29 @@
                 
                 TextWrapping="NoWrap"
                 Style="{StaticResource BaseRichTextBlockStyle}"
+                FontSize="{StaticResource TextStyleLargeFontSize}"
                 TextTrimming="CharacterEllipsis"
                 >
-                <Paragraph>
-                    <Run Text="{Binding desc, Mode=TwoWay}"></Run>
-                </Paragraph>
-            </RichTextBlock>
-            <StackPanel 
+                    <Paragraph>
+                        <Run Text="{Binding desc, Mode=TwoWay}"></Run>
+                    </Paragraph>
+                </RichTextBlock>
+                <StackPanel 
                         Grid.Row="4"
                         Orientation="Horizontal"
                         Grid.Column="2"
                         HorizontalAlignment="Right"
                         >
-                <HyperlinkButton 
+                    <HyperlinkButton 
                     Click="HyperLinkViewMore"
                     Margin="12,0"
                     Name="HyperlinkExpand"
                     Style="{StaticResource hlbtnStyle}">view more</HyperlinkButton>
-            </StackPanel>
-        </Grid>
+                </StackPanel>
+            </Grid>
 
-    </Grid>
+        </Grid>
+    </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarOperations"
                     Visibility="Collapsed"
