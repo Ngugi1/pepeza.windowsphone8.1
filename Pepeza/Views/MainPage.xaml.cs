@@ -360,7 +360,7 @@ namespace Pepeza
 
             if (org != null && isSelected == true)
             {
-                this.Frame.Navigate(typeof(OrgProfileAndBoards), new Organization(){ Id = org.id});
+                this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
             }
         }
         private void Grid_Holding(object sender, HoldingRoutedEventArgs e)

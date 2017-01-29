@@ -32,7 +32,9 @@
                 <Pivot SelectedIndex="0" SelectionChanged="Pivot_SelectionChanged">
                     <PivotItem Name="PivotItemNotices">
                         <PivotItem.Header>
-                            <TextBlock Style="{StaticResource txtBlockPivotHeader}">
+                            <TextBlock 
+                                FontWeight="SemiBold"
+                                Style="{StaticResource txtBlockPivotHeader}">
                                    notices
                             </TextBlock>
                         </PivotItem.Header>
@@ -131,7 +133,9 @@
                     </PivotItem>
                     <PivotItem>
                         <PivotItem.Header>
-                            <TextBlock Text="followers" Style="{StaticResource txtBlockPivotHeader}"/>
+                            <TextBlock 
+                                FontWeight="SemiBold"
+                                Text="followers" Style="{StaticResource txtBlockPivotHeader}"/>
                         </PivotItem.Header>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -350,8 +354,7 @@
                 Name="RichTextBlockDesc"
                 Grid.Column="0"
                 MaxLines="3"
-                
-                TextWrapping="NoWrap"
+                TextWrapping="Wrap"
                 Style="{StaticResource BaseRichTextBlockStyle}"
                 FontSize="{StaticResource TextStyleLargeFontSize}"
                 TextTrimming="CharacterEllipsis"

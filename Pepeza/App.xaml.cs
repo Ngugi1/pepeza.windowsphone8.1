@@ -76,9 +76,7 @@ namespace Pepeza
             UnhandledException += App_UnhandledException;
         }
         // In App.xaml.cs file, register with the UnhandledException event handler.
-
-
-void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
    {
        if (e != null)
        {
@@ -140,7 +138,6 @@ void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
             return connectionProfile != null && connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
              
         }
-
         protected async  override void OnActivated(IActivatedEventArgs e)
         {
             Settings.remove(Constants.IS_PUSH_TOKEN_SUBMITTED);

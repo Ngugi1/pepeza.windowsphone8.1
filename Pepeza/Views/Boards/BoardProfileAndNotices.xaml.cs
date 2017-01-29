@@ -56,6 +56,7 @@ namespace Pepeza.Views.Boards
     {
         TBoard boardFetched = null;
         int boardId;
+        bool hasRole = false;
         
         CoreApplicationView view = CoreApplication.GetCurrentView();
         TAvatar boardAvatar = null;
@@ -330,7 +331,7 @@ namespace Pepeza.Views.Boards
             {
                 case 1:
                     //if data is not loaded, laod
-                    CommandBarOperations.Visibility = Visibility.Collapsed;
+                    if (hasRole) CommandBarOperations.Visibility = Visibility.Collapsed;
                     if (!areFollowersLoaded)
                     {
                         await loadFollowers(boardId);
@@ -392,6 +393,7 @@ namespace Pepeza.Views.Boards
                 {
                     if (collaborator.role == Constants.EDITOR || collaborator.role == Constants.ADMIN ||collaborator.role == Constants.OWNER)
                     {
+                        hasRole = true;
                         AppBtnEdit.Visibility = Visibility.Visible;
                         AppBtnAddNotice.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
@@ -400,18 +402,21 @@ namespace Pepeza.Views.Boards
                     else
                     {
                         CommandBarOperations.Visibility = Visibility.Collapsed;
+                        hasRole = false;
                     }
                 }
                 else
                 {
                     ImageBoardAvatar.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
+                    hasRole = false;
                 }
                 #endregion
             }
             else
             {
                 CommandBarOperations.Visibility = Visibility.Collapsed;
+                hasRole = false;
             }
            
         }

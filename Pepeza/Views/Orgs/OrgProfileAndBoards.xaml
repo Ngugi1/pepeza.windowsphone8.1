@@ -5,6 +5,7 @@
       xmlns:local="using:Pepeza.Views.Orgs"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toast="using:Toastinet"
+      xmlns:common="using:Pepeza.Common"
       xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
@@ -17,119 +18,114 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Name="RootGrid">
+    <ScrollViewer VerticalScrollMode="Auto">
+        <Grid Name="RootGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+            <TextBlock 
+            Margin="19.5,0,0,0"
+            Style="{StaticResource BaseTextBlockStyle}"
+            Text="organisation profile"
+            Typography.Capitals="SmallCaps"
+                VerticalAlignment="Top"
+                />
+            <Grid
+            Grid.Row="1"
+            Margin="19.5"
+            Name="GridBoardProfile">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+               
+            <StackPanel  Grid.RowSpan="3">
+                <FFImage:FFImage 
+                   Height="100"
+                    VerticalAlignment="Bottom"
+                   Name="ImageBoardAvatar"
+                   Tapped="ImageBoardAvatarTapped"
+                    RetryCount="5"
+                    FadeAnimationEnabled="True"
+                    ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    Source="{Binding linkNormal, Mode=TwoWay}"
+                   Stretch="UniformToFill"
+                   Width="100"
+                   />
+                <ProgressBar Margin="4" Visibility="Collapsed" 
+                             Name="PBProfilePicUpdating"/>
+            </StackPanel>
+            <TextBlock Text="{Binding  name , Mode=TwoWay}"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       Margin="4"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       VerticalAlignment="Top"
+                       />
+           
+                <TextBlock Grid.Column="1"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="2"
+                           Style="{StaticResource txtBlockDisplay}"
+                           VerticalAlignment="Center"
+                           Margin="4,0"
+                           Text="{Binding category, Mode=TwoWay}"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           FontWeight="SemiBold"
+                          />
+           
+           
+            <RichTextBlock 
+                Grid.Row="3" 
+                Grid.ColumnSpan="2"
+                Name="RichTextBlockDesc"
+                Grid.Column="0"
+                MaxLines="3"
+                common:Properties.Html="{Binding description, Mode=TwoWay}"
+                TextWrapping="Wrap"
+                Style="{StaticResource BaseRichTextBlockStyle}"
+                FontSize="{StaticResource TextStyleLargeFontSize}"
+                TextTrimming="CharacterEllipsis"
+                >
+                
+            </RichTextBlock>
+            <StackPanel 
+                        Grid.Row="4"
+                        Orientation="Horizontal"
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        >
+                <HyperlinkButton 
+                    Click="HyperLinkViewMore"
+                    Margin="12,0"
+                    Name="HyperlinkExpand"
+                    Style="{StaticResource hlbtnStyle}">view more</HyperlinkButton>
+            </StackPanel>
+        </Grid>
         <Pivot Name="OrgPivot"
-               Margin="4,8,4,4"
-               Grid.RowSpan="2"
+               Grid.Row="2"
                SelectedIndex="0"
                SelectionChanged="OrgPivot_SelectionChanged"
                >
-            <PivotItem>
-                <PivotItem.Header>
-                profile
-                </PivotItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions />
-                
-                    <ScrollViewer Name="SCVOrgProfile"
-                                  Grid.Row="1"
-                                  Opacity="0"
-                                  VerticalScrollBarVisibility="Auto">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Row="0"> 
-                                
-                                <Image Width="250" Height="250"
-                                       Name="ImageMask"
-                                       Tapped="rectangleProfilePic_Tapped"
-                                       Source="/Assets/Images/placeholder_avatar.jpg"/>
-                                <toast:Toastinet 
-                                    AnimationType="LeftToLeft" 
-                                    Background="{ThemeResource PhoneAccentBrush}"
-                                    HorizontalAlignment="Center"
-                                    Width="250"
-                                    TextWrapping="WrapWholeWords"
-                                    Name="ToastStatus"
-                                    VerticalAlignment="Bottom"
-                                    Style="{StaticResource ToastStyle}"
-                                    />
-                                <Image Height="250" Width="250" 
-                                       Name="rectangleProfilePic"
-                                       Stretch="None"
-                                       Tapped="rectangleProfilePic_Tapped" >
-                                    <Image.Source>
-                                        <BitmapImage
-                                            x:Name="profPic"
-                                            ImageOpened="BitmapImage_ImageOpened"
-                                            ImageFailed="BitmapImage_ImageFailed"
-                                            UriSource="{Binding linkNormal , Mode=TwoWay}" 
-                                            CreateOptions="None"/>
-                                    </Image.Source>
-                                </Image>
-                                <ProgressBar IsIndeterminate="True" 
-                                             Width="250" 
-                                             Name="PBProfilePicUpdating" 
-                                             Visibility="Collapsed"
-                                             VerticalAlignment="Bottom"/>
-                            </Grid>
-                            <StackPanel Grid.Row="1">
-                                <TextBlock 
-                                    Margin="0,12"
-                                    Style="{StaticResource txtBlockStyleProfileOwner}"
-                                    Text="{Binding name}"
-                                    TextWrapping="WrapWholeWords" />
-                                <TextBlock Style="{StaticResource txtBlockDisplay}"
-                                           Text="{Binding category, Mode=TwoWay}"
-                                           HorizontalAlignment="Center"
-                                           />
-                            </StackPanel>
-                            <TextBlock Grid.Row="3"
-                                       Margin="16,8"
-                                       HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockDisplay}"
-                                       Text="{Binding description}" />
-                            <StackPanel Name="StackPanelGetOrgDetails"
-                                        Grid.Row="5"
-                                        HorizontalAlignment="Center">
-                                <ProgressBar Grid.Row="4" Margin="12" />
-                                <TextBlock Style="{StaticResource txtBlockWait}" Text="Just a moment ..." />
-                            </StackPanel>
-                        </Grid>
-                    </ScrollViewer>
-
-                    <TextBlock Name="txtBlockProfileErrors"
-                                     Grid.Row="1"
-                                     Visibility="Collapsed"
-                                     Height="Auto"
-                                     VerticalAlignment="Center"
-                                     Foreground="{StaticResource PhoneAccentBrush}"
-                                     HorizontalAlignment="Center"
-                                     Style="{StaticResource txtBlockDisplay}"
-                                     TextWrapping="WrapWholeWords" />
-                </Grid>
-            </PivotItem>
+           
             <PivotItem Margin="19.5,0">
                 <PivotItem.Header>
-                boards  
+                    <TextBlock 
+                        FontWeight="SemiBold"
+                        Style="{StaticResource txtBlockPivotHeader}">
+                        boards
+                    </TextBlock>
                 </PivotItem.Header>
                 <Grid>
                     <StackPanel 
@@ -155,11 +151,6 @@
                     <ListView Name="ListViewOrgBoards"
                               
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" >
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid 
@@ -223,7 +214,12 @@
             </PivotItem>
             <PivotItem>
                 <PivotItem.Header>
-                collaborators  
+                    <TextBlock 
+                                FontWeight="SemiBold"
+                        
+                        Style="{StaticResource txtBlockPivotHeader}">
+                        collaborators
+                    </TextBlock>
                 </PivotItem.Header>
                 <ScrollViewer VerticalScrollMode="Auto">
                 <Grid>
@@ -287,16 +283,12 @@
                     <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
+
+                        <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid
                                     Margin="0,8"
-                                    >
+                                    Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -361,6 +353,7 @@
             </PivotItem>
         </Pivot>
     </Grid>
+    </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarActions" Visibility="Collapsed">
             <AppBarButton Name="AppBtnEdit"
@@ -371,12 +364,11 @@
             
             <AppBarButton 
                           Name="AppBtnAnalytics"
-                          Click="AppBtinAnalytics_clicked"
-                          Label="Analytics"
                 Visibility="Collapsed"
-                          Icon="ThreeBars"
-                >
-               
+                          Click="AppBtinAnalytics_clicked"
+                Icon="ThreeBars"
+                          Label="Analytics">
+                
             </AppBarButton>
             <AppBarButton Icon="Add" 
                           Visibility="Collapsed"
