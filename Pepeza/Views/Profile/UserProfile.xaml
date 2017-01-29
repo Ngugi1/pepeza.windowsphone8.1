@@ -6,6 +6,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
+      xmlns:FFImage="using:FFImageLoading"
       xmlns:Toast="using:Toastinet"
       mc:Ignorable="d">
 
@@ -28,109 +29,113 @@
         <!--  Header section  -->
         <StackPanel Grid.Row="0" Orientation="Vertical">
             <TextBlock 
-                Style="{StaticResource txtBlockPageHeader}" Text="profile" />
-
+                Typography.Capitals="SmallCaps"
+                Margin="24,24,0,0"
+                Style="{StaticResource BaseTextBlockStyle}" Text="user profile" />
         </StackPanel>
         <!--  Page contents  -->
         <ScrollViewer Grid.Row="1" Height="Auto">
             <StackPanel x:Name="relativePanel" Grid.Row="1">
-                <StackPanel Name="relativePanelProfPic" Height="Auto">
-                    <Grid>
-                    <Image Height="250" 
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel 
+                        Grid.RowSpan="4"
+                        VerticalAlignment="Bottom"
+                        Grid.Column="0">
+                    <FFImage:FFImage Height="150"
+                           Margin="24,4"
+                           Source="{Binding profilePicPath, Mode=TwoWay}"
+                           LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                     ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                   RetryCount="5"
                            Name="rectProfilePic"
-                           Width="250" 
+                           Width="150"    
                            Tapped="rectangleProfilePic_Tapped" >
-                        <Image.Source>
-                            <BitmapImage
-                                x:Name="profPic"
-                                ImageOpened="BitmapImage_ImageOpened"
-                                ImageFailed="BitmapImage_ImageFailed"
-                                UriSource="{Binding profilePicPath , Mode=TwoWay}" 
-                                CreateOptions="None"/>
-                        </Image.Source>
-                    </Image>
-                        <Image Width="250" Height="250"
-                               Name="ImageMask"
-                               Source="/Assets/Images/placeholder_avatar.jpg"
-                               Tapped="ImageMask_Tapped"
-                               />
-                        <Toast:Toastinet 
-                            TextWrapping="Wrap"
-                            AnimationType="LeftToLeft" 
-                            HorizontalAlignment="Center"
-                            Width="350"
-                            Duration="3"
-                            Tapped="ToastStatus_Tapped"
-                            Height="70"
-                            TextHAlignment="Center"
-                            Name="ToastStatus"
-                            VerticalAlignment="Bottom"
-                         Style="{StaticResource ToastStyle}"
-                         />
-                    </Grid>
-
-                    <ProgressBar IsIndeterminate="True" 
-                                 Width="250" 
-                                 Visibility="Collapsed"
-                                 Name="PBProfilePicUpdating"/>
-                    <TextBlock Style="{StaticResource txtBlockStyleProfileOwner}"
-                               Text="{Binding fullname}"
-                               Margin="2"
+                    </FFImage:FFImage>
+                        <ProgressBar Name="PBProfilePicUpdating" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Grid>
+                
+                <StackPanel>
+                    <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                               Text="{Binding fullname, Mode=TwoWay}"
+                               Margin="24,4"
+                               FontWeight="SemiBold"
+                               Grid.Column="1"
+                               VerticalAlignment="Bottom"
+                               Grid.Row="0"
+                               HorizontalAlignment="Left"
                                Name="txtBlockFullName"
                                Visibility="Visible" />
-                    <TextBlock Style="{StaticResource txtBlockDisplay}"
+                    <StackPanel 
+                        Margin="24,4"
+                        VerticalAlignment="Center"
+                         Grid.Column="1"
+                          Grid.Row="1"
+                        Orientation="Horizontal">
+                        <SymbolIcon Symbol="ContactInfo"
+                                    Height="20"
+                                   />
+                        <TextBlock Name="txtBlockAccount"
+                                       HorizontalAlignment="Center"
+                                       Style="{StaticResource BodyTextBlockStyle}"
+                                   Margin="8,0"
+                                       Text="{Binding username, Mode=TwoWay}" />
+
+                    </StackPanel>
+                    <StackPanel Grid.Row="2"
+                                Margin="24,4"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal"
+                                Grid.Column="1"
+                                >
+                        <SymbolIcon 
+                            Height="30"
+                            Symbol="World"/>
+                        <TextBlock Style="{StaticResource BaseTextBlockStyle}"
                                HorizontalAlignment="Center"
-                               Text="{Binding visibility}"
+                               Text="{Binding visibility , Mode=TwoWay}"
+                                   Margin="4"
                                Name="txtBlockVisibility"
                                />
-                    <StackPanel Name="StackPanelDetailsDisplay">
-                        <StackPanel Name="stackPanelDisplayUsername"
-                                    Margin="24,4"
-                                    HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                            <StackPanel>
-                            <TextBlock Name="txtBlockAccount"
-                                       HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockListViewDesc}"
-                                       Text="Username" />
-
-                            <TextBlock Name="txtBlockUsername"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Bottom"
-                                       Foreground="Black"
-                                       Style="{StaticResource txtBlockDisplay}"
-                                       Text="{Binding username}" />
-                            </StackPanel>
-                        </StackPanel>
-
-
-                        <StackPanel 
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Orientation="Vertical">
-                            <TextBlock 
-                                       VerticalAlignment="Bottom"
-                                HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockListViewDesc}"
-                                       Text="Email" />
-                            <TextBlock Name="txtblockEmail"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Foreground="Black"
-                                       Style="{StaticResource txtBlockListViewDesc}"
-                                       Text="{Binding email}" />
-                        </StackPanel>
-                        <StackPanel Name="StackPanelUpdatingProfile"
-                            Margin="4"
-                            VerticalAlignment="Center"
-                            Visibility="Collapsed">
-                            <ProgressBar Margin="12,8" />
-                            <TextBlock HorizontalAlignment="Center"
-                               Style="{StaticResource txtBlockWait}"
-                               Text="updating profile ..." />
-                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3"
+                                Margin="24,4"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal"
+                                Grid.Column="1"
+                                >
+                        <SymbolIcon 
+                            Height="30"
+                            Symbol="Mail"/>
+                        <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                               HorizontalAlignment="Center"
+                               Text="{Binding email, Mode=TwoWay}"
+                                   TextWrapping="Wrap"
+                                   Margin="4"
+                               Name="txtBlockEmail"
+                               />
                     </StackPanel>
                 </StackPanel>
+                <ProgressBar 
+                    Margin="12,0"
+                    Name="ProgressBarProfileUpdating" Visibility="Collapsed"/>
+                <TextBlock  Text="Profile update failed, try again later "
+                            Style="{StaticResource txtBlockError}"
+                            Name="txtBlockError"
+                            Visibility="Collapsed"
+                            HorizontalAlignment="Center"
+                            />
                 <StackPanel Name="stackPanelAddFirstLastName"
                             Width="{Binding ActualWidth,
                                             ElementName=relativePanel}"

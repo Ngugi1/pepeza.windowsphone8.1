@@ -22,90 +22,90 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-     
+        <TextBlock Text="public user profile"
+                   Style="{StaticResource BaseTextBlockStyle}"
+                   Typography.Capitals="SmallCaps"
+                   Margin="19.5,8"
+                   />
+        <Grid
+            Grid.Row="1"
+             Margin="19.5"
+            Name="GridBoardProfile">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.RowSpan="3">
+                <FFImage:FFImage 
+                   Height="120"
+                    VerticalAlignment="Bottom"
+                   Name="ImageBoardAvatar"
+                   Tapped="ImageBoardAvatarTapped"
+                    RetryCount="5"
+                    FadeAnimationEnabled="True"
+                    ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    Source="{Binding linkSmall, Mode=TwoWay}"
+                   Stretch="UniformToFill"
+                   Width="120"
+                   />
+                <ProgressBar Margin="4" 
+                             Visibility="Collapsed" 
+                             Name="PBProfilePicUpdating"/>
+            </StackPanel>
+            <TextBlock Grid.Column="1"
+                       Grid.Row="1"
+                       Margin="12,0"
+                       VerticalAlignment="Center"
+                       Text="{Binding firstName, Mode=TwoWay}"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       />
+            <Grid Grid.Row="2"
+                  Margin="0"
+                  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <SymbolIcon Symbol="Contact" 
+                                Width="30"
+                            Margin="4"
+                                Height="20"/>
+
+                <TextBlock Grid.Column="1" 
+                           Style="{StaticResource txtBlockDisplay}"
+                           VerticalAlignment="Center"
+                           Margin="4,0"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           FontWeight="SemiBold"
+                           Text="{Binding username, Mode=TwoWay}"/>
+            </Grid>
+           
+
+          
+           
+        </Grid>
         <Pivot 
+            Style="{StaticResource CustomPivotSearch}"
                Grid.Row="2"
             Margin="4,12,4,4"
                Name="PivotProfile"
                SelectionChanged="Pivot_SelectionChanged"
                >
+          
             <PivotItem>
                 <PivotItem.Header>
-                profile 
-                </PivotItem.Header>
-                <StackPanel Margin="19.5,4">
-                    <FFImage:FFImage 
-                        Source="{Binding linkSmall , Mode=TwoWay}"
-                        LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                        ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                        Width="250"
-                        Stretch="UniformToFill"
-                        HorizontalAlignment="Center"
-                        Height="250"
-                           />
-                    <Grid>
-                        <StackPanel VerticalAlignment="Center"
-                                Name="StackPanelLoadingProfile"
-                                Visibility="Collapsed"
-                                >
-                            <ProgressBar IsIndeterminate="True" Margin="12"/>
-                            <TextBlock Text="just a moment ...." Style="{StaticResource txtBlockWait}"
-                                   HorizontalAlignment="Center"
-                                   />
-                        </StackPanel>
-                        <TextBlock 
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                        Name="txtBlockProfileError"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
+                    <TextBlock Style="{StaticResource txtBlockPivotHeader}"
                                FontWeight="SemiBold"
+                               Text="organisations"
                                />
-                    </Grid>
-                    <StackPanel 
-                        Visibility="Visible"
-                        Name="DetailsStackPanel"
-                        
-                        >
-                    <TextBlock Text="username"
-                               HorizontalAlignment="Center"
-                               Style="{StaticResource TitleTextBlockStyle}"
-                               Foreground="Black"
-                               
-                               />
-                    <TextBlock Text="{Binding username}" 
-                               HorizontalAlignment="Center"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Margin="12,4"
-                               />
-                    <TextBlock Text="first name" Style="{StaticResource TitleTextBlockStyle}"
-                               Foreground="Black"
-                               HorizontalAlignment="Center"
-                               />
-                    <TextBlock Text="{Binding lastName}" 
-                               HorizontalAlignment="Center"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Margin="12,4"
-                               />
-                        <TextBlock Text="last name" Style="{StaticResource TitleTextBlockStyle}"
-                               Foreground="Black"
-                               HorizontalAlignment="Center"
-                               />
-                        <TextBlock Text="{Binding lastName}"
-                                   HorizontalAlignment="Center"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               Style="{StaticResource BodyTextBlockStyle}"
-                               Margin="12,4"
-                               />
-                    </StackPanel>
-                </StackPanel>
-            </PivotItem>
-            <PivotItem>
-                <PivotItem.Header>
-                    organisations
                 </PivotItem.Header>
                 <Grid Width="{Binding ActualWidth , ElementName=PivotItemBoards}">
                     <StackPanel 
@@ -180,7 +180,11 @@
             </PivotItem>
             <PivotItem Name="PivotItemBoards">
                 <PivotItem.Header>
-                following  
+                    <TextBlock Style="{StaticResource txtBlockPivotHeader}"
+                               FontWeight="SemiBold"
+                               >
+                        following
+                    </TextBlock>
                 </PivotItem.Header>
                 <Grid Width="{Binding ActualWidth, ElementName=PivotItemBoards}">
                     <StackPanel 

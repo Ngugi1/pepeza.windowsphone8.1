@@ -139,10 +139,11 @@ namespace Pepeza.Views.Profile
             string fname = txtBoxFirstName.Text.Trim();
             if (appBarBtnEditDetails.Label.Equals("update") && !string.IsNullOrEmpty(ComboVisibility.SelectedItem.ToString()))
             {
+                ProgressBarProfileUpdating.Visibility = Visibility.Visible;
                 if (txtBoxFirstName.Text.Any(char.IsLetterOrDigit)&&txtBoxLastName.Text.Any(char.IsLetterOrDigit))
                 {
-                    StackPanelUpdatingProfile.Visibility = Visibility.Visible;
-
+                    //StackPanelUpdatingProfile.Visibility = Visibility.Visible;
+                    txtBlockError.Visibility = Visibility.Collapsed;
                     Dictionary<string, string> results = await
                         RequestUser.updateUserProfile(new Dictionary<string, string>() 
                         { {"firstName" , fname}, 
@@ -150,7 +151,8 @@ namespace Pepeza.Views.Profile
                     if (results.ContainsKey(Constants.ERROR))
                     {
                         //show toast that something went wrong
-                        ToastStatus.Message = results[Constants.ERROR];   
+                        txtBlockError.Text = results[Constants.ERROR];
+                        txtBlockError.Visibility = Visibility.Visible;
                     }
                     else if (results.ContainsKey(Constants.UPDATED))
                     {
@@ -167,9 +169,10 @@ namespace Pepeza.Views.Profile
                 }
                 else
                 {
-                    ToastStatus.Message = "Firstname and lastname can only contain letters and digits";
+                    txtBlockError.Text = "Firstname and lastname can only contain letters and digits";
+                    txtBlockError.Visibility = Visibility.Visible;
                 }
-                StackPanelUpdatingProfile.Visibility = Visibility.Collapsed;
+                //StackPanelUpdatingProfile.Visibility = Visibility.Collapsed;
             }
             else if (appBarBtnEditDetails.Label.Equals("edit"))
             {
@@ -178,6 +181,8 @@ namespace Pepeza.Views.Profile
                 setToUpdate();
               
             }
+            ProgressBarProfileUpdating.Visibility = Visibility.Collapsed;
+
 
         }
         private void updateUI()
@@ -206,7 +211,7 @@ namespace Pepeza.Views.Profile
             {
                 //Disabe editing capabilities 
                 CommandBaEdit.Visibility = Visibility.Collapsed;
-                ImageMask.IsTapEnabled = rectProfilePic.IsTapEnabled = false;
+                //ImageMask.IsTapEnabled = rectProfilePic.IsTapEnabled = false;
                 rectProfilePic.IsTapEnabled = false;
                 //Get the profile from the server 
                 Dictionary<string, string> results = await RequestUser.getUser(userId);
@@ -225,7 +230,7 @@ namespace Pepeza.Views.Profile
                 }
                 else
                 {
-                    ToastStatus.Message = results[Constants.ERROR];
+                    txtBlockError.Text = results[Constants.ERROR];
                 }
             }
             else
@@ -243,10 +248,11 @@ namespace Pepeza.Views.Profile
                         visibility = info.visibility,
                         fname = info.firstName,
                         lname = info.lastName,
-                        profilePicPath = userAvatar.linkNormal,
+                        profilePicPath = userAvatar.linkNormal==null?Constants.LINK_NORMAL_PLACEHOLDER: userAvatar.linkNormal,
                         username = info.username,
                         avatarId = info.avatarId
                     };
+                    
                 }
             }    
             return toReturn;
@@ -305,7 +311,8 @@ namespace Pepeza.Views.Profile
         }
        async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
-            bool wasAvatarEmpty = false;
+
+            txtBlockError.Visibility = Visibility.Collapsed; 
             //Get the photo and navigate to the photo editing page
             FileOpenPickerContinuationEventArgs filesArgs = args as FileOpenPickerContinuationEventArgs;
             if (args != null)
@@ -320,13 +327,8 @@ namespace Pepeza.Views.Profile
                     if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
                     {
                         var cropped = FilePickerHelper.centerCropImage(bitmap);
-                        var originalSource = rectProfilePic.Source == null ? ImageMask.Source : rectProfilePic.Source;
-                        rectProfilePic.Source = cropped;
-                        if (ImageMask.Visibility == Visibility.Visible)
-                        {
-                            wasAvatarEmpty = true;
-                            ImageMask.Visibility = Visibility.Collapsed;
-                        }
+                        var originalSource = rectProfilePic.Source ;
+                        rectProfilePic.Image.Source = cropped;
                         PBProfilePicUpdating.Visibility = Visibility.Visible;
                         try
                         {
@@ -361,15 +363,15 @@ namespace Pepeza.Views.Profile
                                         }
                                     
 
-                                    rectProfilePic.Source = cropped;
+                                    rectProfilePic.Image.Source = cropped;
+                                    txtBlockError.Visibility = Visibility.Collapsed;
                                     await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
-                                    ToastStatus.Message = (string)avatarObject["message"];
                                 }
                                 catch
                                 {
-                                    ToastStatus.Message = "upload failed";
+                                    txtBlockError.Text = "upload failed";
                                     rectProfilePic.Source = originalSource;
-                                    if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
+                                    txtBlockError.Visibility = Visibility.Visible;          
                                     //Throw a toast that the image failed
                                     return;
                                 }
@@ -378,9 +380,11 @@ namespace Pepeza.Views.Profile
                             else
                             {
                                 //Restore previous image
-                                ToastStatus.Message = results[Constants.ERROR];
+                                txtBlockError.Text = results[Constants.ERROR];
                                 rectProfilePic.Source = originalSource;
-                                if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
+                                txtBlockError.Visibility = Visibility.Visible;          
+
+                                //if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                             }
                             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
@@ -388,7 +392,8 @@ namespace Pepeza.Views.Profile
                         catch (Exception ex)
                         {
                             string x = ex.StackTrace;
-                            if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
+                            txtBlockError.Visibility = Visibility.Visible;          
+
                         }
                         
                         view.Activated -= view_Activated;// Unsubscribe from this event 
@@ -398,34 +403,12 @@ namespace Pepeza.Views.Profile
             }
 
         }
-        private void BitmapImage_ImageOpened(object sender, RoutedEventArgs e)
-        {
-            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-            ImageMask.Visibility = Visibility.Collapsed;
-        }
-        private void BitmapImage_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            ImageMask.Visibility = Visibility.Visible;
-            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-        }
-
-        private void ImageMask_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
-            view.Activated+=view_Activated;
-        }
         private void rectangleProfilePic_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             view.Activated += view_Activated;
         }
-
-        private void ToastStatus_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            ToastStatus.Duration = 0;
-            ToastStatus.Message = "";
-        }
-        
+       
        
        
     }

@@ -43,27 +43,14 @@ namespace Pepeza.Views.Profile
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null)
             {
                 userId = (int)e.Parameter;
-            }
-        }
-
-        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (PivotProfile.SelectedIndex)
-            {
-                
-                case  0:
-                    //Load user profile 
-                    if (!isProfileLoaded)
-                    {
-
-                        StackPanelLoadingProfile.Visibility = Visibility.Visible;
-                        DetailsStackPanel.Visibility = Visibility.Collapsed;
-                        Dictionary<string, string> profile = await RequestUser.getUser(userId);
+                try
+                {
+                     Dictionary<string, string> profile = await RequestUser.getUser(userId);
                         if (profile.ContainsKey(Constants.SUCCESS))
                         {
                             JObject json = JObject.Parse(profile[Constants.SUCCESS]);
@@ -76,9 +63,8 @@ namespace Pepeza.Views.Profile
                                 lastName = (string)json["lastName"] == null ? "N/A" : (string)json["lastName"]
 
                             };
+                            userinfo.firstName = userinfo.firstName + " " + userinfo.lastName;
                             this.rootgrid.DataContext = userinfo;
-                            StackPanelLoadingProfile.Visibility = Visibility.Collapsed;
-                            DetailsStackPanel.Visibility = Visibility.Visible;
                         }
                         else if (profile.ContainsKey(Constants.UNAUTHORIZED))
                         {
@@ -86,15 +72,22 @@ namespace Pepeza.Views.Profile
                             App.displayMessageDialog(Constants.UNAUTHORIZED);
                             this.Frame.Navigate(typeof(LoginPage));
                         }
-                        else
-                        {
-                            txtBlockProfileError.Text = profile[Constants.ERROR];
-                        }
                         isProfileLoaded = true;
-                    }
-                    break;
-                case 1:
-                    //Load user orgs 
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+        }
+
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (PivotProfile.SelectedIndex)
+            {
+                
+                case  0:
+                    //Load user profile 
                     if (!areOrgsLoaded)
                     {
                         StackPanelLoadingOrgs.Visibility = Visibility.Visible;
@@ -154,64 +147,62 @@ namespace Pepeza.Views.Profile
                         StackPanelLoadingOrgs.Visibility = Visibility.Collapsed;
                         areOrgsLoaded = true;
                     }
-                        break;
-                case 2:
-                    //Load user boards 
-                        if (!areFollowingLoaded)
+                    break;
+                case 1:
+                    //Load user orgs 
+                    if (!areFollowingLoaded)
+                    {
+                        ObservableCollection<TBoard> following = new ObservableCollection<TBoard>();
+                        stackpanelfollowingloading.Visibility = Visibility.Visible;
+                        BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                        Dictionary<string, string> response = await BoardService.getBoardsUserIsFollowing(userId);
+                        if (response.ContainsKey(Constants.SUCCESS))
                         {
-
-
-                            ObservableCollection<TBoard> following = new ObservableCollection<TBoard>();
-                            stackpanelfollowingloading.Visibility = Visibility.Visible;
-                            BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
-                            EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-                            Dictionary<string, string> response = await BoardService.getBoardsUserIsFollowing(userId);
-                            if (response.ContainsKey(Constants.SUCCESS))
+                            JArray json = JArray.Parse(response[Constants.SUCCESS].ToString());
+                            if (json.Count > 0)
                             {
-                                JArray json = JArray.Parse(response[Constants.SUCCESS].ToString());
-                                if (json.Count > 0)
+                                foreach (var item in json)
                                 {
-                                    foreach (var item in json)
+                                    TBoard board = new TBoard()
                                     {
-                                        TBoard board = new TBoard()
-                                        {
-                                            linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"],
-                                            id = (int)item["id"],
-                                            name = (string)item["name"],
-                                            desc = (string)item["description"]
-                                        };
-                                        following.Add(board);
-                                        ListViewFollowing.ItemsSource = following;
-                                        stackpanelfollowingloading.Visibility = Visibility.Collapsed;
-                                    }
-                                }
-                                else
-                                {
-                                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                                        linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"],
+                                        id = (int)item["id"],
+                                        name = (string)item["name"],
+                                        desc = (string)item["description"]
+                                    };
+                                    following.Add(board);
+                                    ListViewFollowing.ItemsSource = following;
                                     stackpanelfollowingloading.Visibility = Visibility.Collapsed;
                                 }
-
-                            }
-                            else if (response.ContainsKey(Constants.UNAUTHORIZED))
-                            {
-                                //Show a popup message 
-                                App.displayMessageDialog(Constants.UNAUTHORIZED);
-                                this.Frame.Navigate(typeof(LoginPage));
-                            }
-                            else if (response.ContainsKey(Constants.PERMISSION_DENIED))
-                            {
-                                BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Visible;
-                                stackpanelfollowingloading.Visibility = Visibility.Collapsed;
                             }
                             else
                             {
-                                FollowingLoadingError.Visibility = Visibility.Visible;
+                                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                                 stackpanelfollowingloading.Visibility = Visibility.Collapsed;
                             }
-                            areFollowingLoaded = true;
+
                         }
-                            break;
+                        else if (response.ContainsKey(Constants.UNAUTHORIZED))
+                        {
+                            //Show a popup message 
+                            App.displayMessageDialog(Constants.UNAUTHORIZED);
+                            this.Frame.Navigate(typeof(LoginPage));
+                        }
+                        else if (response.ContainsKey(Constants.PERMISSION_DENIED))
+                        {
+                            BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Visible;
+                            stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            FollowingLoadingError.Visibility = Visibility.Visible;
+                            stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                        }
+                        areFollowingLoaded = true;
+                    }
                    
+                        break;
                 default:
                     break;
             }
@@ -231,6 +222,11 @@ namespace Pepeza.Views.Profile
                 this.Frame.Navigate(typeof(BoardProfileAndNotices), board.id);
             }
             return;
+        }
+
+        private void ImageBoardAvatarTapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }
