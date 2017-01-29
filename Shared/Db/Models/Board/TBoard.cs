@@ -92,7 +92,7 @@ namespace Pepeza.Db.Models.Board
             get { return _linkNormal; }
             set { _linkNormal = value; onPropertyChanged("linkNormal"); }
         }
-        
+
 
     }
 }

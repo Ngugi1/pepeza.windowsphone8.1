@@ -1,225 +1,42 @@
-﻿<Page x:Class="Pepeza.Views.Boards.BoardProfileAndNotices"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:Toast="using:Toastinet"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:Pepeza.Views.Boards"
-      xmlns:Converter="using:Pepeza"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-      RequestedTheme="Light"
-      xmlns:connvert="using:Pepeza.Views.Boards"
-      xmlns:Common="using:Pepeza.Common"
-      mc:Ignorable="d">
+﻿<Page
+    x:Class="Pepeza.Views.Boards.BoardProfileAndNotices"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pepeza"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Common="using:Pepeza.Common"
+    xmlns:converter1="using:Pepeza"
+    xmlns:converter="using:Pepeza.Views.Boards"
+    xmlns:FFImage="using:FFImageLoading"
+    RequestedTheme="Light"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/Styles.xaml" />
+                <ResourceDictionary Source="/Styles/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Converter:IntToAttachment x:Key="IntToAttachment"/>
+            <converter:BoolToFollowStatus x:Key="boolToText"/>
+            <converter1:IntToAttachment x:Key="IntToAttachment"/>
         </ResourceDictionary>
-       
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Pivot SelectionChanged="Pivot_SelectionChanged"
-                   Name="PivotParent"
-                   Margin="4,8,4,4"
-                   >
-               
-                <PivotItem>
-                    <PivotItem.Header>
-                    profile   
-                    </PivotItem.Header>
-                    <ScrollViewer>
-                        <Grid Name="rootGrid">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid x:Name="ContentRoot"
-                                  Grid.Row="1"
-                                  Margin="0"
-                                  Opacity="0.6">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid Name="GridContentHide">
-                                    <StackPanel Name="stackPanelLoading"
-                                                VerticalAlignment="Center"
-                                                Visibility="Visible"
-                                                >
-                                        <ProgressBar  IsIndeterminate="True" IsEnabled="True"
-                                                      Foreground="{ThemeResource PhoneAccentBrush}"
-                                                      />
-                                        <TextBlock HorizontalAlignment="Center"
-                                                      
-                                                       Text="loading board details ..." 
-                                                  Foreground="Black"
-                                                   />
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <Grid Grid.Row="0">
-
-                                            <Image Width="250" Height="250"
-                                                   Name="ImageMask"
-                                                   Visibility="Visible"
-                                                   Tapped="rectangleProfilePic_Tapped"
-                                                   Source="/Assets/Images/placeholder_avatar.jpg"/>
-                                            <Toast:Toastinet 
-                                                AnimationType="LeftToLeft" 
-                                                Background="{ThemeResource PhoneAccentBrush}"
-                                                HorizontalAlignment="Center"
-                                                Width="250"
-                                                TextWrapping="WrapWholeWords"
-                                                Name="ToastStatus"
-                                                VerticalAlignment="Bottom"
-                                                Style="{StaticResource ToastStyle}"
-                                                />
-                                            <Image Height="250" Width="250"
-                                                   Name="rectProfilePic"
-                                                   Stretch="None"
-                                                   Tapped="rectangleProfilePic_Tapped" >
-                                                <Image.Source>
-                                                    <BitmapImage
-                                                        x:Name="profPic"
-                                                        ImageOpened="BitmapImage_ImageOpened"
-                                                        ImageFailed="BitmapImage_ImageFailed"
-                                                        UriSource="{Binding linkNormal , Mode=TwoWay}" 
-                                                        CreateOptions="None"/>
-                                                </Image.Source>
-                                            </Image>
-                                            <ProgressBar IsIndeterminate="True" 
-                                                         Width="250" 
-                                                         Name="PBProfilePicUpdating" 
-                                                         Visibility="Collapsed"
-                                                         VerticalAlignment="Bottom"/>
-                                        </Grid>
-                                        <TextBlock Name="txtBlockName"
-                                                   Grid.Row="2"
-                                                   Margin="18,8"
-                                                   Foreground="Black"
-                                                   Style="{StaticResource txtBlockStyleProfileOwner}"
-                                                   Text="{Binding name}" />
-                                        <HyperlinkButton Name="btnViewFollowers"
-                                                         HorizontalAlignment="Center"
-                                                         IsTapEnabled="True"
-                                                         Click="btnViewFollowers_Click"
-                                                         Foreground="{ThemeResource PhoneAccentBrush}">
-                                            <HyperlinkButton.Content>
-                                                <StackPanel Margin="0"
-                                                            HorizontalAlignment="Center"
-                                                            Orientation="Horizontal">
-                                                    <TextBlock Margin="0"
-                                                               
-                                                               Text="{Binding noOfFollowers , Mode=TwoWay , FallbackValue=_}"
-                                                               Typography.NumeralStyle="Normal" />
-                                                    <RichTextBlock Margin="12,0"
-                                                                   FontSize="22"
-                                                                   IsTextSelectionEnabled="False"
-                                                                   Typography.Capitals="AllSmallCaps" >
-                                                        <Paragraph>
-                                                            <Bold>
-                                                                <Underline>
-                                                                    <Run Text="{Binding singleFollowerOrMany , Mode=TwoWay}"/>
-                                                                </Underline>
-                                                            </Bold>
-                                                        </Paragraph>
-                                                    </RichTextBlock>
-                                                    <SymbolIcon Symbol="View" 
-                                                                Height="30" 
-                                                                Width="40"/>
-                                                </StackPanel>
-                                            </HyperlinkButton.Content>
-                                        </HyperlinkButton>
-                                        <HyperlinkButton  
-                                            Foreground="{ThemeResource PhoneAccentBrush}"
-                                            Click="HyperlinkButton_Click"
-                                            Name="HyperLinkBtnRequests" 
-                                            Visibility="Collapsed"
-                                            HorizontalAlignment="Center">
-                                            <HyperlinkButton.Content>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding noOfFollowRequests, Mode=TwoWay , FallbackValue=_}" 
-                                                               Margin="4"
-                                                               Foreground="{ThemeResource PhoneAccentBrush}"/>
-                                                    <RichTextBlock 
-                                                        FontSize="22"
-                                                        Margin="4"
-                                                        IsTextSelectionEnabled="False"
-                                                        Foreground="{ThemeResource PhoneAccentBrush}"
-                                                        >
-                                                        <Paragraph>
-                                                            <Underline>
-                                                                <Bold>
-                                                                    Follow Requests
-                                                                </Bold>
-                                                            </Underline>
-                                                        </Paragraph>
-                                                    </RichTextBlock>
-                                                    <SymbolIcon Symbol="Flag"
-                                                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                                                Margin="4,0"
-                                                                Height="30" Width="40"/>
-                                                
-                                                </StackPanel>
-                                            </HyperlinkButton.Content>
-                                        </HyperlinkButton>
-                                        <Button Name="btnFollow"
-                                                Margin="16,0"
-                                                Foreground="White"
-                                                Background="{ThemeResource PhoneAccentBrush}"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Bottom"
-                                                Click="btnFollow_Click"
-                                                IsEnabled="True" />
-                                    </StackPanel>
-                                </Grid>
-
-                                <ScrollViewer Grid.Row="1"
-                                              VerticalContentAlignment="Top"
-                                              VerticalScrollBarVisibility="Visible"
-                                              VerticalScrollMode="Enabled">
-                                    <Grid>
-                                        <!--StackPanel Name="stackPanelLoading"
-                                                    Grid.Row="1"
-                                                    VerticalAlignment="Bottom">
-                                            <ProgressBar Grid.Row="1" />
-                                            <TextBlock HorizontalAlignment="Center"
-                                                       Style="{StaticResource txtBlockWait}"
-                                                       Text="loading board details ..." />
-                                        </StackPanel>-->
-                                        <TextBlock Name="txtBlockDesc"
-                                                   Grid.Row="2"
-                                                   HorizontalAlignment="Center"
-                                                   ScrollViewer.VerticalScrollMode="Auto"
-                                                   Style="{StaticResource txtBlockDisplay}"
-                                                   Text="{Binding desc , Mode=TwoWay}"
-                                                   Margin="12,4"
-                                                   TextWrapping="Wrap" />
-                                    </Grid>
-                                </ScrollViewer>
-                            </Grid>
-
-                            <Toast:Toastinet Name="toasterror"
-                                             Grid.Row="1"
-                                             Style="{StaticResource ToastStyle}"
-                                             TextWrapping="WrapWholeWords"
-                                             Visibility="Collapsed" />
-                        </Grid>
-                    </ScrollViewer>
-                </PivotItem>
+        <Grid Grid.Row="2">
+            <Pivot SelectedIndex="0" SelectionChanged="Pivot_SelectionChanged">
                 <PivotItem Name="PivotItemNotices">
                     <PivotItem.Header>
-                    notices 
+                        <TextBlock Style="{StaticResource txtBlockPivotHeader}">
+                                   notices
+                        </TextBlock>
                     </PivotItem.Header>
                     <Grid>
+                        
                         <StackPanel 
                             Name="EmptyNoticesPlaceHolder"
                             Visibility="Collapsed"
@@ -238,13 +55,37 @@
                                        Typography.Capitals="Unicase"
                                        />
                         </StackPanel>
-                        <ListView Margin="24,0,8,0"
-                          SelectionChanged="ListViewNotices_SelectionChanged"
-                          Name="ListViewNotices">
+                        <StackPanel 
+                            Visibility="Collapsed"
+                            Name="StackPanelNoticeFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                       Style="{StaticResource txtBlockError}"
+                                       />
+                            <Button 
+                                Click="ReloadNotices"
+                                HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Name="StackPanelNoticesLoading"
+                                    VerticalAlignment="Center">
+                            <ProgressBar Margin="12" />
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource txtBlockWait}"
+                                       Text="Loading notices ..." />
+                        </StackPanel>
+                        <ListView Margin="19.5,0"
+                                  SelectionChanged="ListViewNotices_SelectionChanged"
+                                  Name="ListViewNotices">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Margin="0,4" 
-                                  Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
+                                          Width="{Binding ActualWidth,ElementName=ListViewNotices}" >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -256,58 +97,291 @@
 
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding title , Mode=TwoWay}" 
-                                        Foreground="Black"
-                                        Margin="0"
-                                        VerticalAlignment="Bottom"
-                                        Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                                   Foreground="Black"
+                                                   Margin="0"
+                                                   VerticalAlignment="Bottom"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"/>
                                         <RichTextBlock Grid.Row="1"
-                                        Margin="0"
-                                        IsTextSelectionEnabled="False"
-                                        Style="{StaticResource BodyRichTextBlockStyle}"
-                                       FontSize="{StaticResource TextStyleMediumFontSize}"
-                                       Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
+                                                       Margin="0"
+                                                       IsTextSelectionEnabled="False"
+                                                       Style="{StaticResource BodyRichTextBlockStyle}"
+                                                       FontSize="{StaticResource TextStyleMediumFontSize}"
+                                                       Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
 
                                         <TextBlock Text="{Binding date_created_display , Mode=TwoWay}"
-                                    HorizontalAlignment="Left" 
-                                    VerticalAlignment="Bottom"
-                                     Grid.Column="1" />
+                                                   HorizontalAlignment="Left" 
+                                                   VerticalAlignment="Bottom"
+                                                   Grid.Column="1" />
                                         <SymbolIcon Symbol="Attach" 
-                                        HorizontalAlignment="Right"
-                                        Grid.RowSpan="2"
-                                        Visibility="{Binding hasAttachment , Converter={StaticResource IntToAttachment}}"
-                                        Grid.Row="1" Grid.Column="1"/>
+                                                    HorizontalAlignment="Right"
+                                                    Grid.RowSpan="2"
+                                                    Visibility="{Binding hasAttachment , Converter={StaticResource IntToAttachment}}"
+                                                    Grid.Row="1" Grid.Column="1"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                        <StackPanel Name="StackPanelLoadingNotices"
+                    </Grid>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Text="followers" Style="{StaticResource txtBlockPivotHeader}"/>
+                    </PivotItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Name="StackPanelLoadingFollowers"
                                     VerticalAlignment="Center"
-                                    Visibility="Collapsed">
+                                    Grid.Row="1"
+                                    >
                             <ProgressBar Margin="12" />
                             <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
                                        Style="{StaticResource txtBlockWait}"
-                                       Text="fetching notices..." />
+                                       Text="Loading followers ..." />
                         </StackPanel>
+                        <StackPanel 
+                            Name="EmptyFollowersPlaceHolder"
+                            Visibility="Collapsed"
+                            Grid.Row="1"
+                            VerticalAlignment="Center">
+
+                            <Viewbox Width="100" Height="100">
+                                <SymbolIcon  
+                                    Foreground="{ThemeResource PhoneAccentBrush}"
+                                    Symbol="People"/>
+                            </Viewbox>
+                            <TextBlock Text="No followers found"
+                                       HorizontalAlignment="Center"
+                                       TextLineBounds="Full"
+                                       Style="{StaticResource TitleTextBlockStyle}"
+                                       Foreground="Black"
+                                       Typography.Capitals="Unicase"
+                                       />
+                        </StackPanel>
+                        <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelFollowerFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                       Style="{StaticResource txtBlockError}"
+                                       />
+                            <Button 
+                                Click="ReloadFollowers"
+                                HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel 
+                            Visibility="Collapsed"
+                            Name="StackPanelFollowRequests">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="follow requests" 
+                                           Name="txtBlockFollowRequest"
+                                           VerticalAlignment="Center"
+                                           Style="{StaticResource FlyoutPickerTitleTextBlockStyle}"/>
+                                <Button Grid.Column="1" 
+                                        VerticalAlignment="Bottom"
+                                        Click="btnViewFollowers_Click"
+                                        Content="view requests"
+                                        HorizontalAlignment="Right"
+                                        />
+                            </Grid>
+                        </StackPanel>
+                        <ListView Name="ListViewBoardFollowers"
+                                  Grid.Row="1"
+                                  Margin="4"
+                                  SelectionChanged="ListViewBoardFollowers_SelectionChanged"
+                                  >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid 
+                                        Width="{Binding ActualWidth, ElementName=ListViewBoardFollowers}"
+                                        Height="70" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FFImage:FFImage
+                                            Grid.RowSpan="2"
+                                            Source="{Binding linkSmall}"
+                                            Margin="12,0,12,0"
+                                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            VerticalAlignment="Bottom"
+                                            Height="50"
+                                            Width="50"
+                                            >
+                                        </FFImage:FFImage>
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.Column="1"
+                                                   Margin="8,4,8,0"
+                                                   Style="{StaticResource txtBlockListViewItemHeader}"
+                                                   Text="{Binding userName}" />
+                                        <TextBlock Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Margin="8,4,14,0"
+                                                   Style="{StaticResource txtBlockListViewDesc}"
+                                                   Text="{Binding FullName}"/>
+                                        <TextBlock Text="{Binding accepted , Converter={StaticResource boolToText}}"
+                                                   Margin="12,0"
+                                                   Grid.Column="2"
+                                                   Style="{StaticResource BaseTextBlockStyle}"
+                                                   VerticalAlignment="Bottom"
+                                                   Foreground="{ThemeResource PhoneAccentBrush}"
+                                                   />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
                 </PivotItem>
             </Pivot>
         </Grid>
+
+        <TextBlock 
+            Margin="19.5,12,0,12"
+            Style="{StaticResource BaseTextBlockStyle}"
+            Text="board profile"
+            Typography.Capitals="SmallCaps"
+                VerticalAlignment="Bottom"
+                />
+        <Grid
+            Grid.Row="1"
+            Name="GridBoardProfile">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.RowSpan="4">
+                <FFImage:FFImage 
+                   Height="120"
+                    VerticalAlignment="Bottom"
+                   Name="ImageBoardAvatar"
+                   Tapped="ImageBoardAvatarTapped"
+                   LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    Source="{Binding linkNormal , Mode=TwoWay}"
+                    ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                   Stretch="UniformToFill"
+                   Width="120"
+                   RetryCount="5"
+                   Margin="19.5,0"
+                   />
+                <ProgressBar Margin="4" Visibility="Collapsed" Name="PBProfilePicUpdating"/>
+            </StackPanel>
+            <TextBlock Text="{Binding name, Mode=TwoWay}"
+                       Grid.Column="1"
+                       Margin="4"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       VerticalAlignment="Top"
+                       />
+            <Grid Grid.Row="1"
+                  Margin="0"
+                  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <SymbolIcon Symbol="People" 
+                            Width="30"
+                            Height="20"/>
+
+                <TextBlock Grid.Column="1" 
+                           Style="{StaticResource txtBlockDisplay}"
+                           VerticalAlignment="Center"
+                           Margin="4,0"
+                           Foreground="{ThemeResource PhoneAccentBrush}"
+                           FontWeight="SemiBold"
+                           Text="{Binding noOfFollowers, Mode=TwoWay}"/>
+            </Grid>
+            <ToggleButton Grid.Column="1"
+                          Background="{ThemeResource PhoneAccentBrush}"
+                          Name="btnFollow"
+                          VerticalAlignment="Bottom"
+                          Checked="bthFollowChecked"
+                          Foreground="White"
+                          Unchecked="btnFollowUnchecked"
+                          Content="Follow"
+                          Grid.Row="2"
+                          IsEnabled="True"/>
+            <RichTextBlock 
+                Grid.Row="3" 
+                Grid.ColumnSpan="2"
+                Margin="19.5,8"
+                Name="RichTextBlockDesc"
+                Grid.Column="0"
+                MaxLines="3"
+                
+                TextWrapping="NoWrap"
+                Style="{StaticResource BaseRichTextBlockStyle}"
+                TextTrimming="CharacterEllipsis"
+                >
+                <Paragraph>
+                    <Run Text="{Binding desc, Mode=TwoWay}"></Run>
+                </Paragraph>
+            </RichTextBlock>
+            <StackPanel 
+                        Grid.Row="4"
+                        Orientation="Horizontal"
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        >
+                <HyperlinkButton 
+                    Click="HyperLinkViewMore"
+                    Margin="12,0"
+                    Name="HyperlinkExpand"
+                    Style="{StaticResource hlbtnStyle}">view more</HyperlinkButton>
+            </StackPanel>
+        </Grid>
+
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar Name="CommandBarOperations">
-            <AppBarButton Icon="Comment" 
+        <CommandBar Name="CommandBarOperations"
+                    Visibility="Collapsed"
+                    >
+            <AppBarButton 
                           Name="AppBtnAnalytics"
+                          Visibility="Collapsed"
+                            Icon="ThreeBars"
                           Click="AppBarButton_BoardAnalytics_click"
-                          Label="Statistics"/>
+                          Label="Analytics">
+              
+                   
+            </AppBarButton>
             <AppBarButton Name="AppBtnEdit"
                           Visibility="Collapsed"
                           Click="AppBarButton_Click"
                           Icon="Edit"
                           Label="edit" />
-          
+
             <AppBarButton Icon="Add" 
                           Click="AppBtnAddNotice_Click"
                           Name="AppBtnAddNotice"
+                         Visibility="Collapsed"
                           Label="new notice"/>
         </CommandBar>
     </Page.BottomAppBar>

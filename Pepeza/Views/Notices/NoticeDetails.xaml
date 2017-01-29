@@ -151,9 +151,11 @@
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarControls" Visibility="Collapsed">
-            <AppBarButton Icon="Comment" 
+            <AppBarButton  
+                Icon="ThreeBars"
                           Click="AppBarButton_Click"
-                          Label="Analytics"/>
+                          Label="Analytics">
+            </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

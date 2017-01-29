@@ -34,19 +34,21 @@ namespace Pepeza.Views.Boards
             this.InitializeComponent();
         }
         int orgId;
-        string followRestriction;
+
+        string followRestriction , roleInOrg;
         string boardVisibility;
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Load all the organisatios
+            //Load all the organisations
             if (e.Parameter != null)
             {
                 orgId = (int)e.Parameter;
+                
             }
             
         }
@@ -127,12 +129,10 @@ namespace Pepeza.Views.Boards
                 toInsert.followRestriction = followRestriction;
                 toInsert.dateUpdated = (long)board["dateUpdated"];
                 toInsert.dateCreated = (long)board["dateCreated"];
-                toInsert.avatarId = avatar.id;
-       
-                    
-                await BoardHelper.addBoard(toInsert);
+                toInsert.avatarId = avatar.id; 
+               await BoardHelper.addBoard(toInsert);
                 await AvatarHelper.add(avatar);
-                
+                this.Frame.Navigate(typeof(BoardProfileAndNotices), toInsert.id);
             }
             catch (Exception ex)
             {

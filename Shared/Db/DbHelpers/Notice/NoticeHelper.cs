@@ -93,7 +93,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                     foreach (var item in board_notices)
                     {
                         //Get the respective notices 
-                        TNoticeItem noticeitem = await NoticeItemHelper.get(item.noticeId);
+                        TNoticeItem noticeitem = await NoticeItemHelper.getByNoticeId(item.noticeId);
                         item.isRead = item.isRead;
                         TBoard board = await BoardHelper.getBoard(item.boardId);
                         item.board = board.name;

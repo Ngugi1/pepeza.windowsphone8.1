@@ -18,7 +18,7 @@ namespace Pepeza.Db.DbHelpers.Board
                 SQLiteAsyncConnection connection = DbHelper.DbConnectionAsync();
                 if (connection != null)
                 {
-                    List<TFollowing> tfollow = await connection.QueryAsync<TFollowing>("SELECT * FROM TFollowing WHERE Id=? LIMIT 1", boardId);
+                    List<TFollowing> tfollow = await connection.QueryAsync<TFollowing>("SELECT * FROM TFollowing WHERE boardId=? LIMIT 1", boardId);
                     if (tfollow.Count > 0) following = true;
                     else
                     {

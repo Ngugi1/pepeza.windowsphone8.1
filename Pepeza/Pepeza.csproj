@@ -103,6 +103,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BlankPage2.xaml.cs">
+      <DependentUpon>BlankPage2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\ContinuationManager.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
@@ -128,9 +131,6 @@
     </Compile>
     <Compile Include="Views\Analytics\OrgAnalytics.xaml.cs">
       <DependentUpon>OrgAnalytics.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BlankPage1.xaml.cs">
-      <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Boards\AcceptDeclineRequests.xaml.cs">
       <DependentUpon>AcceptDeclineRequests.xaml</DependentUpon>
@@ -216,6 +216,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\BadgeLogo.scale-240.png" />
+    <Content Include="Assets\Images\ana.png" />
+    <Content Include="Assets\Images\analytics .png" />
     <Content Include="Assets\Images\attach.png" />
     <Content Include="Assets\Images\clip.png" />
     <Content Include="Assets\Images\facebook.png" />
@@ -249,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="BlankPage2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CustomControls\PageHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -275,10 +281,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Analytics\OrgAnalytics.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

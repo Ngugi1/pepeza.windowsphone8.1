@@ -120,22 +120,16 @@ namespace Pepeza.Views
             }
             
         }
-
-
         private  Pepeza.Server.ServerModels.Login getData()
         {
 
             return new Pepeza.Server.ServerModels.Login() { username = textBoxUsername.Text.Trim(), 
                 password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID};
         }
-
-       
-
         private void hylResetPassword_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ResetPasswordPage));
         }
-
         private void LoginWithGoogle(object sender, RoutedEventArgs e)
         {
             txtBlockError.Visibility = Visibility.Collapsed;
@@ -150,7 +144,6 @@ namespace Pepeza.Views
                 new MessageDialog("Something went wrong"+ex.Message);
             }
         }
-
         public async void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
         {
             StackPanelLogging.Visibility = Visibility.Visible;
@@ -229,7 +222,6 @@ namespace Pepeza.Views
 
             }
         }
-
         private void LoginWithFacebook(object sender, RoutedEventArgs e)
         {
             txtBlockError.Visibility = Visibility.Collapsed;

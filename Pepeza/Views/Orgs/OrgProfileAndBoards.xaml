@@ -359,10 +359,14 @@
                           Icon="Edit"
                           Label="edit" />
             
-            <AppBarButton Icon="FourBars" 
+            <AppBarButton 
                           Name="AppBtnAnalytics"
                           Click="AppBtinAnalytics_clicked"
-                          Label="Analytics"/>
+                          Label="Analytics"
+                          Icon="ThreeBars"
+                >
+               
+            </AppBarButton>
             <AppBarButton Icon="Add" 
                           Click="AppBtnAdd_Click"
                           Name="AppBtnAdd"

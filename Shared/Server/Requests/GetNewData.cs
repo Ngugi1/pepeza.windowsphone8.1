@@ -245,7 +245,7 @@ namespace Pepeza.Server.Requests
                         if (item["dateDeclined"].Type != JTokenType.Null) followeitem.dateDeclined = (long)item["dateDeclined"];
                         if (item["dateUpdated"].Type != JTokenType.Null) followeitem.dateUpdated = (long)item["dateUpdated"];
                         if (item["dateAccepted"].Type != JTokenType.Null) followeitem.dateAccepted = (long)item["dateAccepted"];
-                        if (await FollowingHelper.getFollowingBoard(followeitem.id))
+                        if (await FollowingHelper.get(followeitem.id)!=null)
                         {
                             await FollowingHelper.update(followeitem);
                         }
