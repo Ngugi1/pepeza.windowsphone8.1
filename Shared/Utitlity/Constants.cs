@@ -56,7 +56,7 @@ namespace Pepeza.Utitlity
         public static string BOARD_CONTENT_REQUESTED { get { return "Request sent"; } }
         public static string APP_VERSION { get { return Package.Current.Id.Version.Major.ToString() + "." + 
             Package.Current.Id.Version.Minor.ToString() +"."+Package.Current.Id.Version.Build.ToString()+ 
-            "." + Package.Current.Id.Version.Revision.ToString(); } }
+            "." + Package.Current.Id.Version.Revision.ToString();} }
         public static string NOTIFICATION_COUNT { get { return "count"; } }
         public static string UNREAD_NOTIFICATIONS { get { return "UNREAD_NOTIFICATIONS"; } }
     }

@@ -20,12 +20,15 @@
     <Grid>
         <ScrollViewer Height="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <StackPanel Margin="12">
-                    <TextBlock Margin="12,2"
-                               Style="{StaticResource txtBlockPageHeader}"
-                               Text="settings" />
+                <StackPanel>
+                    <TextBlock Margin="24,4"
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               Text="application settings"
+                               Typography.Capitals="SmallCaps"
+                               />
                 </StackPanel>
                 <ListView Name="ListViewSettings"
+                          Margin="0"
                           ItemTemplate="{StaticResource ListSettings}"
                           SelectionChanged="ListViewSettings_SelectionChanged" />
 

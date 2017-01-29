@@ -446,6 +446,8 @@
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">
             <CommandBar.SecondaryCommands>
+                <AppBarButton Label="send feedback" Click="sendfeedback_click"/>
+                <AppBarButton Label="Rate us" Click="rateAppClicked"/>
                 <AppBarButton Click="AppBtnSettings_Click" Label="settings" />
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>

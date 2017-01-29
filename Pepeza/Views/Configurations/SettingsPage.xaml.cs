@@ -39,9 +39,7 @@ namespace Pepeza.Views.Configurations
             {
                 new Config(){name="Profile" , desc ="View or edit your profile" , page = typeof(Views.Profile.UserProfile)},
                 new Config(){name="Deactivate Account" , desc="Deactivating your account will suspend your account" , page=typeof(DeactivateAccount)},
-                new Config(){name="Send Feedback" , desc ="Talk to us" , page = typeof(FeedbackPage)},
                 new Config(){name="Logout" , desc="Logging out will have all application data to be cleared" , page=null}
-                
             };
             
         }

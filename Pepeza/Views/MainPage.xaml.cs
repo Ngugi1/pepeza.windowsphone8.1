@@ -34,7 +34,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel.Store;
 using Windows.Networking.PushNotifications;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -590,6 +592,16 @@ namespace Pepeza
                 EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
                 txtBlockContent.Text = "All boards will appear here.";
             }
+        }
+
+        private void sendfeedback_click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(FeedbackPage));
+        }
+
+        private async void rateAppClicked(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
        
 
