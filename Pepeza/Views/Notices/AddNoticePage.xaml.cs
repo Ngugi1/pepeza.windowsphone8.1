@@ -8,6 +8,7 @@ using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
+using Pepeza.Server.Utility;
 using Pepeza.Utitlity;
 using Pepeza.Validation;
 using Pepeza.Views.Boards;
@@ -19,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Storage;
@@ -85,8 +87,8 @@ namespace Pepeza.Views.Notices
                     };
                     if (file != null)
                     {
-                        postAttachmentNotice(toPost);
-                        this.Frame.Navigate(typeof(BoardProfileAndNotices), boardID);// Pass a parameter that is only 
+                        await postAttachmentNotice(toPost);
+                        //this.Frame.Navigate(typeof(BoardProfileAndNotices), boardID);// Pass a parameter that is only 
                         return;
                     }
                     //Check if attachment is empty 
@@ -144,7 +146,7 @@ namespace Pepeza.Views.Notices
                     
         }
 
-        private async void postAttachmentNotice(Dictionary<string, string> content)
+        private async Task postAttachmentNotice(Dictionary<string, string> content)
         {
             
             //Create a new file notice 
@@ -182,6 +184,7 @@ namespace Pepeza.Views.Notices
                         type = (string)jobject["attachment"]["type"],
                         noticeId = (int)jobject["id"],
                         dateCreated = (long)jobject["attachment"]["dateCreated"],
+                        link = string.Format(NoticeAddresses.LINK_FORMAT, (int)jobject["id"])
                     };
 
                     if (jobject["attachment"]["dateUpdated"] != null) attachment.dateUpdated = (long)jobject["attachment"]["dateUpdated"];
@@ -199,7 +202,7 @@ namespace Pepeza.Views.Notices
                         tfile.link = (string)jobject["file"]["link"];
                        tfile.mimeType = (string)jobject["file"]["mime_type"];
                         tfile.dateCreated = (long)jobject["file"]["dateCreated"];
-                     
+                     tfile.link = string.Format(NoticeAddresses.LINK_FORMAT,(int)jobject["file"]["id"]);
                     
                     var fileNameParts = tfile.fileName.Split('.');
                     int elements = fileNameParts.Length;
