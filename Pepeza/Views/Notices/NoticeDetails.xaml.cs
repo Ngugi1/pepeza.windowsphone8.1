@@ -48,11 +48,11 @@ namespace Pepeza.Views.Notices
     /// </summary>
     public sealed partial class NoticeDetails : Page
     {
-        string PEPEZA = "Pepeza";
         string fileName;
         private List<DownloadOperation> activeDownloads = new List<DownloadOperation>();
         private CancellationTokenSource cts;
         TFile file = new TFile();
+        StorageFile storageFile = null;
         TNotice notice = null;
         string noticeTitle;
         int noticeId;
@@ -79,8 +79,7 @@ namespace Pepeza.Views.Notices
                 // Now do a sumission if we are connected to the internet
                 if (notice.hasAttachment==1)
                 {
-                    StackPanelDownload.Visibility = Visibility.Visible;
-                   
+                    StackPanelDownload.Visibility = Visibility.Visible;  
                    //Check if the file is downloaded
                     try
                     {
@@ -88,28 +87,50 @@ namespace Pepeza.Views.Notices
                         if (file!=null)
                         {
                             file.fileTypeAndSize = "(" + file.mimeType + " ," + ByteSizeLib.ByteSize.FromBytes(file.size) + ")";
-                            if (await folderExists(PEPEZA))
+                            if (await folderExists(Constants.PEPEZA))
                             {
-                                var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                                fileName = file.uniqueFileName;
-                                var localFile = await folder.GetFileAsync(fileName);
-                                if (localFile != null)
+                                var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                                if (await fileExists(file.uniqueFileName))
                                 {
-                                    HyperLinkOpen.Visibility = Visibility.Visible;
-                                    HLBDownloadAttachment.Visibility = Visibility.Collapsed;
+                                    fileName = file.uniqueFileName;
+                                    var localFile = await folder.GetFileAsync(fileName);
+                                    if (localFile != null)
+                                    {
+                                        storageFile = localFile;
+                                        StackPanelDownload.Visibility = Visibility.Visible;
+                                        HyperLinkOpen.Visibility = Visibility.Visible;
+                                        HLBDownloadAttachment.Visibility = Visibility.Collapsed;
+                                    }
+                                    else
+                                    {
+                                        storageFile = null;
+                                        StackPanelDownload.Visibility = Visibility.Visible;
+                                        HyperLinkOpen.Visibility = Visibility.Collapsed;
+                                        HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                    }
                                 }
                                 else
                                 {
-                                    HyperLinkOpen.Visibility = Visibility.Collapsed;
+                                    //We do not have such file, we need to redownload it.
+                                    StackPanelDownload.Visibility = Visibility.Visible;
                                     HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                    HyperLinkOpen.Visibility = Visibility.Collapsed;
                                 }
+                               
                             }
                             else
                             {
-                                HLBDownloadAttachment.Visibility = Visibility.Visible;
+                              //Folder does not exist 
+                              StackPanelDownload.Visibility = Visibility.Visible;
+                              HLBDownloadAttachment.Visibility = Visibility.Visible;
                               HyperLinkOpen.Visibility = Visibility.Collapsed;
-
                             }
+                        }
+                        else
+                        {
+                            StackPanelDownload.Visibility = Visibility.Visible;
+                            HyperLinkOpen.Visibility = Visibility.Collapsed;
+                            HLBDownloadAttachment.Visibility = Visibility.Visible;
                         }
                        
                        
@@ -120,13 +141,13 @@ namespace Pepeza.Views.Notices
                         HyperLinkOpen.Visibility = Visibility.Collapsed;
                         HLBDownloadAttachment.Visibility = Visibility.Visible;
                        
-                    }
-                    StackPanelDownload.Visibility = Visibility.Visible;
+                    } 
                     this.StackPanelDownload.DataContext = file;
                     assignRoles(notice.boardId);
                 }
                 else
                 {
+                    assignRoles(notice.boardId);
                     StackPanelDownload.Visibility = Visibility.Collapsed;
                 }
                 if (string.IsNullOrWhiteSpace(notice.board))
@@ -272,11 +293,8 @@ namespace Pepeza.Views.Notices
             TBoard notice_board = await BoardHelper.getBoard(boardId);
             if (notice_board != null)
             {
-                TOrgInfo notice_org = await OrgHelper.get(notice_board.orgID);
-                if (notice_org != null)
-                {
                     //Get the role 
-                    TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), notice_org.id);
+                    TCollaborator collaborator = await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), notice_board.orgID);
                     if (collaborator != null)
                     {
                         if (collaborator.role == Constants.EDITOR || collaborator.role == Constants.ADMIN || collaborator.role == Constants.OWNER)
@@ -284,7 +302,11 @@ namespace Pepeza.Views.Notices
                             CommandBarControls.Visibility = Visibility.Visible;
                         }
                     }
-                }
+            }
+            else
+            {
+                CommandBarControls.Visibility = Visibility.Collapsed;
+
             }
            
            
@@ -322,49 +344,49 @@ namespace Pepeza.Views.Notices
                 string destinationUri = file.uniqueFileName;
                 //Create the destination folder
                 StorageFolder destinationFolder = null;
-                StorageFile storageFile = null;
-                if (!await folderExists(PEPEZA))
+                if (!await folderExists(Constants.PEPEZA))
                 {
                     //Create the folder 
-                    destinationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(PEPEZA);
+                    destinationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(Constants.PEPEZA);
                 }
                 else
                 {
-                    destinationFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                    destinationFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
                 }
                 if (!await fileExists(file.uniqueFileName))
                 {
                     storageFile = await destinationFolder.CreateFileAsync(file.uniqueFileName);
+                     #endregion
+                    #region Background Downloader
+                    BackgroundDownloader downloader = new BackgroundDownloader();
+                    if (storageFile != null)
+                    {
+                        downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                        DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                        downloadOperation.Priority = BackgroundTransferPriority.High;
+                        //Now handle the download 
+                        await handleDownloadAsync(downloadOperation, true);
+                    }
+                    else
+                    {
+                        storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                        downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                        DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                        downloadOperation.Priority = BackgroundTransferPriority.High;
+                        //Now handle the download 
+                        await handleDownloadAsync(downloadOperation, true);
+                    }
+                    #endregion
                 }
                 else
                 {
                     storageFile = await destinationFolder.GetFileAsync(file.uniqueFileName);
                     HyperLinkOpen.Visibility = Visibility.Visible;
-                    StackPanelDownload.Visibility = Visibility.Collapsed;
+                    StackPanelDownload.Visibility = Visibility.Visible;
                     return;
                 }
                
-                #endregion
-                #region Background Downloader
-                BackgroundDownloader downloader = new BackgroundDownloader();
-                if (storageFile != null)
-                {
-                    downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
-                    DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
-                    downloadOperation.Priority = BackgroundTransferPriority.High;
-                    //Now handle the download 
-                    await handleDownloadAsync(downloadOperation, true);
-                }
-                else 
-                {
-                    storageFile = await destinationFolder.CreateFileAsync(destinationUri);
-                    downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
-                    DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
-                    downloadOperation.Priority = BackgroundTransferPriority.High;
-                    //Now handle the download 
-                    await handleDownloadAsync(downloadOperation, true);
-                }
-                #endregion
+               
             }
             else
             {
@@ -394,7 +416,7 @@ namespace Pepeza.Views.Notices
         {
             try
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
                 await folder.GetFileAsync(fileName);
                 return true;
             }
@@ -441,6 +463,7 @@ namespace Pepeza.Views.Notices
                 {
                     HLBDownloadAttachment.Visibility = Visibility.Collapsed;
                     HyperLinkOpen.Visibility = Visibility.Visible;
+                    var storage = storageFile;
                 }
             }
             else
@@ -467,18 +490,29 @@ namespace Pepeza.Views.Notices
             //Launch the file 
             try
             {
-                var currentFolder  = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
-                StorageFile file = await currentFolder.GetFileAsync(fileName);
-                await Launcher.LaunchFileAsync(file);
+                if (storageFile != null)
+                {
+                    await Launcher.LaunchFileAsync(storageFile);
+                }
+                else
+                {
+                    var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                    StorageFile sfile = await currentFolder.GetFileAsync(fileName);
+                    await Launcher.LaunchFileAsync(sfile);
+                }
+                
+               
             }
             catch
             {
+                StackPanelDownload.Visibility = Visibility.Visible;
                 HyperLinkOpen.Visibility = Visibility.Collapsed;
+                txtBlockDownload.Text = "download attachment";
+                SymbolOperation.Symbol = Symbol.Download;
                 HLBDownloadAttachment.Visibility = Visibility.Visible;
                 new MessageDialog("File could not be located. Redownload the file").ShowAsync();
             }
         }
-
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
 

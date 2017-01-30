@@ -38,6 +38,7 @@ using Windows.ApplicationModel.Store;
 using Windows.Networking.PushNotifications;
 using Windows.System;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -212,16 +213,23 @@ namespace Pepeza
         }
          async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
+           
             //Init update from the server
             Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
             if (results != null)
             {
                 isInBackground =true;
-               
-                loadNotices();
-                await loadBoards();
-                await loadOrgs();
-                txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+               async () =>
+                {
+             // Your UI update code goes here!
+                 loadNotices();
+                 await loadBoards();
+                 await loadOrgs();
+                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+            }
+ );
+                
             }
             //Prevent background agent from being invoked 
             args.Cancel = true;
@@ -603,8 +611,6 @@ namespace Pepeza
         {
             await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
-       
-
     }
     public class IntToAttachment : IValueConverter
     {

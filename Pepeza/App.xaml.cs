@@ -82,10 +82,14 @@ namespace Pepeza
        {
            Exception exception = e.Exception;
            string x = exception.ToString();
-           if (exception is NullReferenceException && exception.ToString().ToUpper().Contains("SOMA"))
+           if (exception is NullReferenceException)
            {
-               Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
-               e.Handled = true;
+               if (exception.ToString().ToUpper().Contains("SOMA"))
+               {
+                   Debug.WriteLine("Handled Smaato null reference exception {0}", exception);
+                   e.Handled = true;
+                   return;
+               }
                return;
            }
        }

@@ -8,6 +8,7 @@ namespace Pepeza.Utitlity
 {
     public class Constants
     {
+        public static string PEPEZA { get { return "pepeza"; } }
         public static string IS_PUSH_TOKEN_SUBMITTED { get { return "IS_PUSH_TOKEN_SUBMITTED"; } }
         public static string UNAUTHORIZED { get { return "You have been logged out. Please login again"; } }
         public static string NOTICE_SENT { get { return "NOTICE_SENT"; } }

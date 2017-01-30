@@ -109,7 +109,7 @@ namespace Pepeza.Views.Notices
                                     dateUpdated = (long)obj["dateUpdated"],
                                    
                                 });
-                                this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);// Pass a parameter that is only 
+                                this.Frame.Navigate(typeof(MainPage) , boardID);// Pass a parameter that is only 
                                 
                             }
                             catch
@@ -190,17 +190,17 @@ namespace Pepeza.Views.Notices
 
                     //Getting the file Item 
 
-                    TFile tfile = new TFile()
-                    {
-                        id = (int)jobject["file"]["id"],
-                        attachmentId = (int)jobject["file"]["attachmentId"],
-                        size = (long)jobject["file"]["fileSize"],
-                        fileName = (string)jobject["file"]["fileName"],
-                        link = (string)jobject["file"]["link"],
-                        mimeType = (string)jobject["file"]["mime_type"],
-                        dateCreated = (long)jobject["file"]["dateCreated"],
-                        uniqueFileName =  string.Format(@"{0}.{1}", Guid.NewGuid())
-                    };
+                    TFile tfile = new TFile();
+
+                    tfile.id = (int)jobject["file"]["id"];
+                        tfile.attachmentId = (int)jobject["file"]["attachmentId"];
+                        tfile.size = (long)jobject["file"]["fileSize"];
+                        tfile.fileName = (string)jobject["file"]["fileName"];
+                        tfile.link = (string)jobject["file"]["link"];
+                       tfile.mimeType = (string)jobject["file"]["mime_type"];
+                        tfile.dateCreated = (long)jobject["file"]["dateCreated"];
+                     
+                    
                     var fileNameParts = tfile.fileName.Split('.');
                     int elements = fileNameParts.Length;
                     tfile.uniqueFileName = string.Format(@"{0}.{1}", Guid.NewGuid(), fileNameParts[elements - 1]);
@@ -277,7 +277,7 @@ namespace Pepeza.Views.Notices
                
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
-            this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);
+            this.Frame.Navigate(typeof(MainPage) );
         }
         private void showErrorToast(string message)
         {
