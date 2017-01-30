@@ -11,6 +11,7 @@ using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Pepeza.Views.Configurations;
 using Pepeza.Views.Signup;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
@@ -83,7 +84,7 @@ namespace Pepeza.Views.Account
             userInfo.firstName = (string)profileInfo["firstName"];
             userInfo.lastName = (string)profileInfo["lastName"];
             userInfo.username = (string)profileInfo["username"];
-            if (userInfo.username != null) { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); } else { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); }
+            if (userInfo.username != null) { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); } else { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); }
             userInfo.avatarId = (int)avatar["id"];
             if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = (long)profileInfo["dateUpdated"];
             userInfo.dateCreated = (long)profileInfo["dateCreated"];
@@ -112,7 +113,7 @@ namespace Pepeza.Views.Account
                 await AvatarHelper.add(userAvatar);
                 await UserHelper.add(userInfo);
                 //Now get all user data 
-                getData();
+               await getData();
             }
             catch(Exception)
             {
@@ -179,7 +180,7 @@ namespace Pepeza.Views.Account
            
 
         }
-        private async void getData()
+        private async Task getData()
         {
             //Now get all user data 
             Dictionary<string, string> userdata = await GetNewData.getNewData();
@@ -192,10 +193,10 @@ namespace Pepeza.Views.Account
                     if (results[Constants.SUCCESS] == 1)
                     {
                         Settings.add(Constants.IS_GET_NEW_DATA_DONE, true);
-                        if (isUserNameNull)
+                        if (!isUserNameNull)
                         {
                             //Go to the main page
-                            this.Frame.Navigate(typeof(MainPage) , -1);
+                            this.Frame.Navigate(typeof(MainPage), -1);
                         }
                         else
                         {

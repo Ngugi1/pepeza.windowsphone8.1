@@ -107,7 +107,7 @@ namespace Pepeza.Views
                 }
                 else if (results.ContainsKey(Constants.LOG_FAILED))
                 {
-                    txtBlockLoginStaus.Text = results[Constants.INVALIDCREDENTIALS];
+                    txtBlockLoginStaus.Text = results[Constants.LOG_FAILED];
                     txtBlockLoginStaus.Visibility = Visibility.Visible;
 
                 }

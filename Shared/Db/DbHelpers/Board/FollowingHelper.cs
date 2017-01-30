@@ -26,7 +26,7 @@ namespace Pepeza.Db.DbHelpers.Board
                     }
                 }
             }
-            catch(InvalidOperationException ex)
+            catch(InvalidOperationException)
             {
                 following = false;
             }

@@ -36,6 +36,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Shared.Server.Requests;
 using Pepeza.Views.Signup;
+using Pepeza.Views.Configurations;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -254,7 +255,7 @@ namespace Pepeza
                         if((bool)synced)
                         {
                             bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
-                            if (isusernameSet)
+                            if (isusernameSet == false)
                             {
                                 pageToNavigate = typeof(MainPage);
                             }

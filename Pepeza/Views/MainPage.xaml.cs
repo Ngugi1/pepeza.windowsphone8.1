@@ -1,7 +1,6 @@
 ﻿using Coding4Fun.Toolkit.Controls;
 using FFImageLoading;
 using FFImageLoading.Cache;
-using Microsoft.AdMediator.Core.Models;
 using Microsoft.AdMediator.WindowsPhone81;
 using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.DbHelpers.Notice;
@@ -11,7 +10,6 @@ using Pepeza.Db.Models.Notices;
 using Pepeza.Db.Models.Orgs;
 using Pepeza.Db.Models.Users;
 using Pepeza.IsolatedSettings;
-using Pepeza.Models.Search_Models;
 using Pepeza.Server.Push;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
@@ -22,9 +20,9 @@ using Pepeza.Views.Notices;
 using Pepeza.Views.Orgs;
 using Pepeza.Views.UserNotifications;
 using Pepeza.Views.ViewHelpers;
-using QKit.JumpList;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
+using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
 using Shared.Push;
 using Shared.Utitlity;
@@ -284,6 +282,7 @@ namespace Pepeza
             }
             
             ListViewBoards.ItemsSource = boards;
+            RadioButtonAll.IsChecked = true;
             return true;
         }
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
@@ -506,79 +505,8 @@ namespace Pepeza
         {
             string company = e.SdkEventArgs + "  ===============  "+e.Name ;
         }
-        private async void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            ProgressBarFiltering.Visibility = Visibility.Visible;
-            var checkbox = sender as CheckBox;
-            List<TFollowing> following = await FollowingHelper.getAll();
-            List<TBoard> followingBoards = new List<TBoard>();
-            List<TBoard> managingBoards = new List<TBoard>();
-            ObservableCollection<TBoard> boardsclone = new ObservableCollection<TBoard>(boards);
-               
-            if (checkbox.Name == "CheckBoxFollowing")
-            {
-                //Load the following only
-               CheckBoxManaging.IsChecked = false;
-               if (following != null)
-                {
-                    if (following.Count > 0)
-                    {
-                        foreach (var item in following)
-                        {
-
-                            var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
-                            if (board != null)
-                            {
-                                followingBoards.Add(board);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                        txtBlockContent.Text = "You aren't following any boards.";
-                    }
-                    
-                }
-                else
-                {
-                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                    txtBlockContent.Text = "You aren't following any boards.";
-                }
-              
-               ListViewBoards.ItemsSource = followingBoards;
-             
-              
-            }
-            else
-            {
-                //Load managing 
-                CheckBoxFollowing.IsChecked = false;
-                if (following != null)
-                {
-                    if (following.Count > 0)
-                    {
-                        foreach (var item in following)
-                        {
-                            var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
-                            if (board != null) boardsclone.Remove(board); // This will leave the boards you only manage
-                        }
-                        if (boardsclone.Count == 0)
-                        {
-                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                        ListViewBoards.ItemsSource = boardsclone;
-                        txtBlockContent.Text = "You don't manage any boards.";
-                        }
-                    }
-                   
-                    
-                }
-               
-            }
-            ProgressBarFiltering.Visibility = Visibility.Collapsed;
-
-        }
-        private void CheckBoxManaging_Unchecked(object sender, RoutedEventArgs e)
+       
+        private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
         {
             ListViewBoards.ItemsSource = boards;
             if (boards.Count == 0)
@@ -599,6 +527,75 @@ namespace Pepeza
         private async void rateAppClicked(object sender, RoutedEventArgs e)
         {
             await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
+        }
+
+        private async void CheckBoxManaging_Checked(object sender, RoutedEventArgs e)
+        {
+            List<TFollowing> following = await FollowingHelper.getAll();
+            List<TBoard> managingBoards = new List<TBoard>();
+            ObservableCollection<TBoard> boardsclone = new ObservableCollection<TBoard>(boards);
+               
+            if (following != null)
+            {
+                if (following.Count > 0)
+                {
+                    foreach (var item in following)
+                    {
+                        var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
+                        if (board != null) boardsclone.Remove(board); // This will leave the boards you only manage
+                    }
+                    if (boardsclone.Count == 0)
+                    {
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        ListViewBoards.ItemsSource = boardsclone;
+                        txtBlockContent.Text = "You don't manage any boards.";
+                    }
+                    else
+                    {
+                        ListViewBoards.ItemsSource = boardsclone;
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
+        }
+        private async void CheckBoxFollowing_Checked(object sender, RoutedEventArgs e)
+        {
+            List<TBoard> tfollowing = new List<TBoard>();
+            List<TFollowing> following = await FollowingHelper.getAll();
+            if (following != null)
+            {
+                if (following.Count > 0)
+                {
+                    foreach (var item in following)
+                    {
+                        TBoard tboard = await BoardHelper.getBoard(item.boardId);
+                        if (tboard.linkSmall == null) { tboard.linkSmall = Constants.LINK_SMALL_PLACEHOLDER; }
+                        tfollowing.Add(tboard);
+                    }
+                    foreach (var item in tfollowing)
+                    {
+                        TAvatar boardAvatar = await AvatarHelper.get(item.avatarId);
+                        if (boardAvatar != null)
+                        {
+                            if (boardAvatar.linkSmall != null)
+                            {
+                                item.linkSmall = boardAvatar.linkSmall;
+                            }
+                            else
+                            {
+                                item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                            }
+                        }
+                    }
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                    ListViewBoards.ItemsSource = tfollowing;
+                }
+                else
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    txtBlockContent.Text = "You haven't followed any boards yet";
+                }
+            }
         }
     }
     public class IntToAttachment : IValueConverter

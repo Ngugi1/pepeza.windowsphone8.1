@@ -1,7 +1,9 @@
-﻿<Page xmlns:WindowsPhone81="using:Microsoft.AdMediator.WindowsPhone81"  xmlns:UI="using:Microsoft.Advertising.Mobile.UI"  x:Class="Pepeza.MainPage"
+﻿<Page 
+    xmlns:WindowsPhone81="using:Microsoft.AdMediator.WindowsPhone81"  
+      xmlns:UI="using:Microsoft.Advertising.Mobile.UI"  
+      x:Class="Pepeza.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:Jumper="using:QKit"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:Pepeza"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -27,7 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-       
+
         <toaster:Toastinet Name="ToastSuccessFailure"
                            Grid.Row="1"
                            Height="40"
@@ -39,7 +41,7 @@
                Margin="4"
                Grid.Row="1"
                SelectionChanged="pivotMainPage_SelectionChanged">
-            
+
             <PivotItem 
                 Header="notices"
                 Margin="{StaticResource PivotItemMargin}">
@@ -63,10 +65,6 @@
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
-                    
-                        
-                  
-                    
                     <ListView Margin="19.5,0,8,0"
                               SelectionChanged="ListViewNotices_SelectionChanged"
                               Name="ListViewNotices">
@@ -77,8 +75,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,8" 
-                                     >
+                                <Grid Margin="0,8">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -162,20 +159,62 @@
             <PivotItem
                 Header="boards"
                 Margin="{StaticResource PivotItemMargin}">
-                
                 <Grid>
-                   
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <Grid Margin="19.5,4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <ProgressBar Name="ProgressBarFiltering" 
+                                     IsIndeterminate="True"
+                                     Visibility="Collapsed"
+                                     Grid.ColumnSpan="3"
+                                     VerticalAlignment="Top"
+                                     />
+                        <RadioButton Checked="checkBoxAll_Checked"
+                                         Grid.Row="1"
+                                     Name="RadioButtonAll"
+                                         MaxWidth="50"
+                                         Content="All"
+                                        Grid.Column="0"
+                                         />
+                        <RadioButton
+                               MinWidth="50"
+                            HorizontalAlignment="Right"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Name="CheckBoxManaging"
+                                Checked="CheckBoxManaging_Checked"
+                                BorderThickness="2" 
+                                Content="Managing" Margin="0,0,5.667,0"
+                                />
+                        <RadioButton
+                            HorizontalAlignment="Center"
+                            Grid.Column="2"
+                                Grid.Row="1"
+                               MinWidth="50"
+                                Name="CheckBoxFollowing"
+                                Checked="CheckBoxFollowing_Checked"
+                                Content="Following" Margin="28.333,0,-2.833,0" 
+                            />
+                    </Grid>
                     <StackPanel 
                         Grid.Row="1"
                         Name="EmptyBoardsPlaceHolder"
                         Visibility="Collapsed"
                         VerticalAlignment="Center">
 
-                        <Viewbox Width="100" Height="100">
+                        <Viewbox Width="100" 
+                                 Height="100">
                             <SymbolIcon  Symbol="OtherUser"
                                          Foreground="{ThemeResource PhoneAccentBrush}"
                                
@@ -189,26 +228,6 @@
                                    Foreground="Black"
                                    Typography.Capitals="Unicase"
                                    />
-                    </StackPanel>
-                    <StackPanel 
-                        Margin="19.5,0,8,0"
-                        >
-                        <ProgressBar Name="ProgressBarFiltering" 
-                                     IsIndeterminate="True"
-                                     Visibility="Collapsed"
-                                     />
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox  
-                                Name="CheckBoxManaging"
-                                Unchecked="CheckBoxManaging_Unchecked"
-                                Checked="RadioButton_Checked"
-                                BorderThickness="2" Content="Managing" Width="128"/>
-                            <CheckBox 
-                                Name="CheckBoxFollowing"
-                                Checked="RadioButton_Checked"
-                                Unchecked="CheckBoxManaging_Unchecked"
-                                Content="Following" BorderThickness="2"/>
-                        </StackPanel>
                     </StackPanel>
                     <ListView Name="ListViewBoards"
                               Grid.Row="1"
@@ -291,7 +310,7 @@
             <PivotItem 
                 Header="organisations"
                 Margin="{StaticResource PivotItemMargin}">
-               
+
                 <Grid>
                     <StackPanel
                         Name="EmptyOrgsPlaceHolder"
@@ -378,49 +397,9 @@
                         VerticalAlignment="Bottom"
                         AdMediatorError="AdMediatorControl_AdMediatorError"
                         Name="OrgTabAd"/>
-                 
+
                 </Grid>
             </PivotItem>
-            <!--<PivotItem Margin="{StaticResource PivotItemMargin}">
-                 <PivotItem.Header>
-                 <TextBlock Style="{StaticResource txtBlockPivotHeader}" Text="following" />
-                 
-                 </PivotItem.Header>
-                 
-                 
-                 
-            -->
-            <!--  Alpha jumplist for Following Pivot  -->
-            <!--
-                 <Grid>
-                 <StackPanel 
-                 Name="EmptyFollowersPlaceHolder"
-                 Visibility="Collapsed"
-                 VerticalAlignment="Center">
-                 
-                 <Viewbox Width="100" Height="100">
-                 <SymbolIcon  
-                 Foreground="{ThemeResource PhoneAccentBrush}"
-                 Symbol="SolidStar"/>
-                 </Viewbox>
-                 <TextBlock Text="All boards you follow will appear here"
-                 TextLineBounds="Full"
-                 TextAlignment="Center"
-                 Style="{StaticResource TitleTextBlockStyle}"
-                 Foreground="Black"
-                 Typography.Capitals="Unicase"
-                 />
-                 </StackPanel>
-                 
-                 <Jumper:AlphaJumpList Name="AlphaListFollowing">
-                 <ListView Name="ListViewFollowing"
-                 ItemTemplate="{StaticResource ListViewFollowingDataTemplate}"
-                 SelectionChanged="ListViewFollowing_SelectionChanged" />
-                 </Jumper:AlphaJumpList>
-                 </Grid>-->
-            <!--
-                 
-                 </PivotItem>-->
         </Pivot>
         <StackPanel 
             Tapped="StackPanelViewNotifications_Tapped"
@@ -440,7 +419,7 @@
                 Foreground="{ThemeResource PhoneAccentBrush}"
                 VerticalAlignment="Top"/>
         </StackPanel>
-            
+
     </Grid>
     <Page.BottomAppBar>
         <CommandBar x:Name="BottomCommandBar">
