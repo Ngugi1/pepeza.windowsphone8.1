@@ -112,6 +112,7 @@
                                         <RichTextBlock Grid.Row="1"
                                                        Margin="0"
                                                        IsTextSelectionEnabled="False"
+                                                       MaxLines="5"
                                                        Style="{StaticResource BodyRichTextBlockStyle}"
                                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"/>

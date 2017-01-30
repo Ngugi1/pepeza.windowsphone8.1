@@ -82,7 +82,6 @@ namespace Pepeza
             updateNotificationCount();
             //Load data 
             isSelected = false;
-           //Load notices 
             loadNotices();
             //Load boards
             await loadBoards();
@@ -140,12 +139,10 @@ namespace Pepeza
            
          await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
         }
-
         void MainPage_Click(object sender, RoutedEventArgs e)
         {
             MessagePromptConfirmEmail.Visibility = Visibility.Collapsed;
         }
-
         private  async void updateNotificationCount()
         {
             int count = await TNotificationHelper.unreadNotifications();
@@ -212,27 +209,28 @@ namespace Pepeza
             return isRegistered;
         }
          async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
-        {
-           
+         {
+            args.Cancel = true;   
             //Init update from the server
-            Dictionary<string,int> results =  await SyncPushChanges.initUpdate();
-            if (results != null)
-            {
-                isInBackground =true;
-                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-               async () =>
-                {
-             // Your UI update code goes here!
-                 loadNotices();
-                 await loadBoards();
-                 await loadOrgs();
-                 txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
-            }
- );
-                
-            }
+               // Your UI update code goes here!
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,async
+() =>
+{
+    // Your UI update code goes here!
+    Dictionary<string, int> results = await SyncPushChanges.initUpdate();
+    if (results != null)
+    {
+        isInBackground = true;
+        loadNotices();
+        await loadBoards();
+        await loadOrgs();
+        txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+    }
+}
+);
+               
             //Prevent background agent from being invoked 
-            args.Cancel = true;
+              
         }
         private async void loadNotices()
         {
@@ -316,8 +314,10 @@ namespace Pepeza
             try
             {
                 int selectedIndex = (sender as Pivot).SelectedIndex;
+                updateNotificationCount();
                 switch (selectedIndex)
                 {
+                        
                     case 0:
                         if (isInBackground)
                         {
@@ -467,12 +467,10 @@ namespace Pepeza
         {
             //showFlyOutMenu(sender, e);
         }
-
         private void AppBtnSettings_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SettingsPage));
         }
-
         private async void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TNotice notice = (sender as ListView).SelectedItem as TNotice;
@@ -496,24 +494,18 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
         }
-
         private void AdMediatorControl_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
         {
             string company = e.Error.Message + "  ===============  ";
         }
-        
-       
-
         private void StackPanelViewNotifications_Tapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ViewNotifications));
         }
-
         private void OrgTabAd_AdMediatorFilled(object sender, Microsoft.AdMediator.Core.Events.AdSdkEventArgs e)
         {
             string company = e.SdkEventArgs + "  ===============  "+e.Name ;
         }
-
         private async void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             ProgressBarFiltering.Visibility = Visibility.Visible;
@@ -586,7 +578,6 @@ namespace Pepeza
             ProgressBarFiltering.Visibility = Visibility.Collapsed;
 
         }
-
         private void CheckBoxManaging_Unchecked(object sender, RoutedEventArgs e)
         {
             ListViewBoards.ItemsSource = boards;
@@ -601,12 +592,10 @@ namespace Pepeza
                 txtBlockContent.Text = "All boards will appear here.";
             }
         }
-
         private void sendfeedback_click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(FeedbackPage));
         }
-
         private async void rateAppClicked(object sender, RoutedEventArgs e)
         {
             await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));

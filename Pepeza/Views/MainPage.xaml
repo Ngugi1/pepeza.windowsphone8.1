@@ -106,21 +106,20 @@
                                     <RichTextBlock
                                         Grid.Row="2"
                                         TextAlignment="Justify"
-                                        MaxLines="2"
-                                        TextWrapping="NoWrap"
+                                        MaxLines="5"
+                                        TextWrapping="Wrap"
                                         TextTrimming="CharacterEllipsis"
                                         Style="{StaticResource BodyRichTextBlockStyle}"
                                         IsTextSelectionEnabled="False"
+                                        FontSize="{StaticResource TextStyleMediumFontSize}"
                                         Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
                                         Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
                                     <TextBlock 
                                         Text="{Binding date_created_display}" 
-                                        Style="{StaticResource ControlContextualInfoTextBlockStyle}"
                                         HorizontalAlignment="Left"
                                         Margin="4"
                                         VerticalAlignment="Bottom"
                                         Grid.Column="1"
-                                        FontWeight="Normal"
                                         />
                                     <SymbolIcon Symbol="Attach" 
                                                 HorizontalAlignment="Right"

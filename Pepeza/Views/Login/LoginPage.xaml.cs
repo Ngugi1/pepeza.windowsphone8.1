@@ -80,12 +80,10 @@ namespace Pepeza.Views
                 await DbHelper.createDB();
             }
         }
-
         private void hypBtnSignUp_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SignUpPage));
         }
-
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             //just make a request provided fields are not empty 
@@ -109,7 +107,7 @@ namespace Pepeza.Views
                 }
                 else if (results.ContainsKey(Constants.LOG_FAILED))
                 {
-                    txtBlockLoginStaus.Text = Constants.INVALIDCREDENTIALS;
+                    txtBlockLoginStaus.Text = results[Constants.INVALIDCREDENTIALS];
                     txtBlockLoginStaus.Visibility = Visibility.Visible;
 
                 }

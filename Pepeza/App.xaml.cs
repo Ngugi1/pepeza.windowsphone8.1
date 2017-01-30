@@ -345,9 +345,17 @@ namespace Pepeza
                 this.DebugSettings.EnableFrameRateCounter = false;
             }
 #endif
+            try
+            {
+                await HockeyClient.Current.SendCrashesAsync(true);
+                await HockeyClient.Current.CheckForAppUpdateAsync();
+            }
+            catch
+            {
 
-            await HockeyClient.Current.SendCrashesAsync(true);
-            await HockeyClient.Current.CheckForAppUpdateAsync();
+            }
+
+            
             
          
         }

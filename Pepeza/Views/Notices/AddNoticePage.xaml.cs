@@ -145,7 +145,6 @@ namespace Pepeza.Views.Notices
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.CREATENOTICE);
                     
         }
-
         private async Task postAttachmentNotice(Dictionary<string, string> content)
         {
             
@@ -286,7 +285,6 @@ namespace Pepeza.Views.Notices
         {
             toastError.Message = message;
         }
-       
         private async void View_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
             if (args != null)
@@ -326,7 +324,6 @@ namespace Pepeza.Views.Notices
                 }
             }
         }
-     
         private void ApBtnAttachment_Click(object sender, RoutedEventArgs e)
         {
             view.Activated += View_Activated;
@@ -336,20 +333,16 @@ namespace Pepeza.Views.Notices
             filePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
             filePicker.ViewMode = PickerViewMode.Thumbnail;
             filePicker.PickSingleFileAndContinue();
-            
-         
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.GoBack();
         }
-
         private void SymbolIcon_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             file = null;
             GridAttachment.Visibility = Visibility.Collapsed;
         }
-
         private  void RichEditBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
            
