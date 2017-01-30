@@ -131,7 +131,7 @@ namespace Pepeza.Views.Boards
                 toInsert.dateCreated = (long)board["dateCreated"];
                 toInsert.avatarId = avatar.id; 
                await BoardHelper.addBoard(toInsert);
-                await AvatarHelper.add(avatar);
+               await AvatarHelper.add(avatar);
                 this.Frame.Navigate(typeof(BoardProfileAndNotices), toInsert.id);
             }
             catch (Exception ex)

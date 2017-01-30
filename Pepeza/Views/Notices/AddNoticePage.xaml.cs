@@ -48,7 +48,6 @@ namespace Pepeza.Views.Notices
         {
             this.InitializeComponent();
         }
-
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -67,8 +66,6 @@ namespace Pepeza.Views.Notices
             }
        
         }
-
-       
         private async void AppBarButton_Send(object sender, RoutedEventArgs e)
         {
             string title, desc;
@@ -111,7 +108,8 @@ namespace Pepeza.Views.Notices
                                     dateUpdated = (long)obj["dateUpdated"],
                                    
                                 });
-                                this.Frame.Navigate(typeof(MainPage) , boardID);// Pass a parameter that is only 
+                                this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);
+                                // Pass a parameter that is only 
                                 
                             }
                             catch

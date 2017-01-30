@@ -87,7 +87,9 @@
                             Visibility="Collapsed"
                             Background="{ThemeResource CommandBarBackgroundThemeBrush}"
                             Name="GridAttachment">
-                    <Grid Margin="12" Background="{ThemeResource CommandBarBackgroundThemeBrush}">
+                    <Grid Margin="12" 
+                          
+                         >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -98,8 +100,13 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <SymbolIcon Grid.RowSpan="2" 
+                        <Viewbox Grid.RowSpan="2" 
+                                 Width="50"
+                                 Height="50"
+                                 >
+                        <SymbolIcon 
                                     Symbol="Page"/>
+                        </Viewbox>
                         <TextBlock Grid.Row="0" 
                                    Margin="8,0"
                                    TextWrapping="NoWrap"
@@ -120,13 +127,18 @@
                                    Grid.Column="1" FontSize="14"
                                    
                                    />
-                        <SymbolIcon Symbol="Delete"
+                        <Viewbox Grid.RowSpan="2"
+                                 Grid.Column="2"
+                                 Height="50"
+                                 Width="50"
+                                 >
+                        <SymbolIcon 
+                            Symbol="Delete"
                                     Tapped="SymbolIcon_Tapped"  
                                       VerticalAlignment="Center"
                                       Foreground="Black"
-                                      Grid.RowSpan="2"
-                                      Grid.Column="2"/>
-
+                                      />
+                        </Viewbox>
 
                     </Grid>
                 </StackPanel>
@@ -135,6 +147,7 @@
         <toast:Toastinet Name="toastError"
                          Grid.Row="1"
                          Height="Auto"
+                         Visibility="Visible"
                          Margin="16"
                          VerticalAlignment="Center"
                          Style="{StaticResource ToastStyle}"

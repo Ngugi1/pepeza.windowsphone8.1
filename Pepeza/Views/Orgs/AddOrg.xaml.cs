@@ -120,7 +120,7 @@ namespace Pepeza.Views.Orgs
                             await Db.DbHelpers.OrgHelper.add(toInsert);
                             await CollaboratorHelper.add(orgCollaborator);
                             await AvatarHelper.add(orgAvatar);
-                            this.Frame.GoBack();
+                            this.Frame.Navigate(typeof(OrgProfileAndBoards) ,toInsert.id);
                         }
                         catch (SQLiteException ex)
                         {
