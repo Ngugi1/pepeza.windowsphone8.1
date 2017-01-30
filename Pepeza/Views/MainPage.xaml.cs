@@ -569,7 +569,7 @@ namespace Pepeza
                     foreach (var item in following)
                     {
                         TBoard tboard = await BoardHelper.getBoard(item.boardId);
-                        if (tboard.linkSmall == null) { tboard.linkSmall = Constants.LINK_SMALL_PLACEHOLDER; }
+                        if (tboard.linkSmall == null) { tboard.linkSmall = Constants.EMPTY_BOARD_PLACEHOLDER_ICON; }
                         tfollowing.Add(tboard);
                     }
                     foreach (var item in tfollowing)
@@ -583,7 +583,7 @@ namespace Pepeza
                             }
                             else
                             {
-                                item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                                item.linkSmall = Constants.EMPTY_BOARD_PLACEHOLDER_ICON;
                             }
                         }
                     }

@@ -57,8 +57,8 @@
                    Tapped="ImageBoardAvatarTapped"
                     RetryCount="5"
                     FadeAnimationEnabled="True"
-                    ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                    LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                    ErrorPlaceholder="/Assets/Images/placeholder_org_avatar.jpg"
+                    LoadingPlaceholder="/Assets/Images/placeholder_org_avatar.jpg"
                     Source="{Binding linkNormal, Mode=TwoWay}"
                    Stretch="UniformToFill"
                    Width="100"
@@ -167,8 +167,8 @@
                                     </Grid.ColumnDefinitions>
                                     <FFImage:FFImage
                                             Grid.RowSpan="2"
-                                            ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                            LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                            ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
+                                            LoadingPlaceholder="/Assets/Images/placeholder_board_avatar.png"
                                             Margin="8,12,0,28"
                                             Height="50"
                                             RetryDelay="5"
@@ -304,8 +304,8 @@
                                                      Margin="19,0,0,0"
                                                      Grid.RowSpan="2"
                                                      Source="{Binding linkSmall}"
-                                                     LoadingPlaceholder="/Assets/Images/placeholder_avatar.jpg"
-                                                     ErrorPlaceholder="/Assets/Images/placeholder_avatar.jpg"
+                                                     LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
+                                                     ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
                                                      Height="50">
 
                                     </FFImage:FFImage>

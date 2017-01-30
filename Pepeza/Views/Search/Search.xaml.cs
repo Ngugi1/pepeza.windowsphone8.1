@@ -253,7 +253,7 @@ namespace Pepeza.Views
                         Person p = new Person();
                         p.username = (string)row["username"];
                         p.id = (int)row["id"];
-                        p.linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"];
+                        p.linkSmall = (string)row["linkSmall"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)row["linkSmall"];
                         p.firstname = (string)row["firstName"];
                         p.lastname = (string)row["lastName"];
                         p.fullname = p.firstname + " " + p.lastname;
@@ -338,7 +338,7 @@ namespace Pepeza.Views
                                 searchedBoard.id = (int)board["id"];
                                 searchedBoard.name = (string)board["name"];
                                 searchedBoard.score = (double)board["score"];
-                                searchedBoard.linkSmall = (string)board["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)board["linkSmall"];
+                                searchedBoard.linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"];
                                 boardSource.Add(searchedBoard);
                             
                             }
@@ -393,7 +393,7 @@ namespace Pepeza.Views
                          Id = (int)row["id"],
                          Name = (string)row["name"],
                          Score = (double)row["score"],
-                         linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"],
+                         linkSmall = (string)row["linkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)row["linkSmall"],
                          Username =(string)row["username"]
                     };
                     orgSource.Add(org);

@@ -57,7 +57,7 @@ namespace Pepeza.Views.Profile
                             TUserInfo userinfo = new TUserInfo()
                             {
                                 id = (int)json["id"],
-                                linkSmall = (string)json["linkNormal"] == null ? Constants.LINK_NORMAL_PLACEHOLDER : (string)json["linkNormal"],
+                                linkSmall = (string)json["linkNormal"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)json["linkNormal"],
                                 username = (string)json["username"],
                                 firstName = (string)json["firstName"] == null ? "N/A" : (string)json["firstName"],
                                 lastName = (string)json["lastName"] == null ? "N/A" : (string)json["lastName"]
@@ -112,7 +112,7 @@ namespace Pepeza.Views.Profile
                                         item.Id = (int)org["id"];
                                         item.Name = (string)org["name"];
                                         item.Username = (string)org["username"];
-                                        item.linkSmall = (string)org["linkNormal"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)org["linkSmall"];
+                                        item.linkSmall = (string)org["linkNormal"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)org["linkSmall"];
                                         item.Description = (string)org["description"];
                                         UserOrganisations.Add(item);
                                     }
@@ -166,7 +166,7 @@ namespace Pepeza.Views.Profile
                                 {
                                     TBoard board = new TBoard()
                                     {
-                                        linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"],
+                                        linkSmall = (string)item["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)item["linkSmall"],
                                         id = (int)item["id"],
                                         name = (string)item["name"],
                                         desc = (string)item["description"]

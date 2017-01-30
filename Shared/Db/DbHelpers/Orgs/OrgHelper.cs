@@ -47,13 +47,13 @@ namespace Pepeza.Db.DbHelpers
                         var avatar = await AvatarHelper.get(org.avatarId);
                         if (avatar != null)
                         {
-                            org.linkSmall = avatar.linkSmall == null ? Constants.LINK_SMALL_PLACEHOLDER : avatar.linkSmall;
-                            org.linkNormal = avatar.linkNormal == null ? Constants.LINK_NORMAL_PLACEHOLDER : avatar.linkNormal;
+                            org.linkSmall = avatar.linkSmall == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : avatar.linkSmall;
+                            org.linkNormal = avatar.linkNormal == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : avatar.linkNormal;
                         }
                         else
                         {
-                            org.linkSmall = Constants.LINK_NORMAL_PLACEHOLDER;
-                            org.linkNormal = Constants.LINK_NORMAL_PLACEHOLDER;
+                            org.linkSmall = Constants.EMPTY_ORG_PLACEHOLDER_ICON;
+                            org.linkNormal = Constants.EMPTY_ORG_PLACEHOLDER_ICON;
                         }
 
                     }

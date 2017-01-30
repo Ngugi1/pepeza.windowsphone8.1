@@ -98,7 +98,7 @@ namespace Pepeza.Views.Boards
                 boardAvatar = await AvatarHelper.get(localBoard.avatarId);
                 if (boardAvatar != null)
                 {
-                    localBoard.linkNormal = boardAvatar.linkNormal == null ? Constants.LINK_NORMAL_PLACEHOLDER : boardAvatar.linkNormal;
+                    localBoard.linkNormal = boardAvatar.linkNormal == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : boardAvatar.linkNormal;
                 }
 
                 this.GridBoardProfile.DataContext = localBoard;
@@ -591,7 +591,7 @@ namespace Pepeza.Views.Boards
                                 firstName = (string)item["firstName"],
                                 lastName = (string)item["lastName"],
                                 accepted = (bool)item["accepted"],
-                                linkSmall = (string)item["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)item["linkSmall"]
+                                linkSmall = (string)item["linkSmall"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)item["linkSmall"]
                             });
 
                         }

@@ -213,11 +213,11 @@ namespace Pepeza.Views.Orgs
                     var avatar = await AvatarHelper.get(item.avatarId);
                     if (avatar != null)
                     {
-                        item.linkSmall = avatar.linkSmall == null ? Constants.LINK_SMALL_PLACEHOLDER : avatar.linkSmall;
+                        item.linkSmall = avatar.linkSmall == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : avatar.linkSmall;
                     }
                     else
                     {
-                        item.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                        item.linkSmall = Constants.EMPTY_BOARD_PLACEHOLDER_ICON;
                     }
                 }
                 if (boards.Count == 0)
@@ -405,7 +405,7 @@ namespace Pepeza.Views.Orgs
                             boards.Add(new TBoard()
                             {
                                 id = (int)board["id"],
-                                linkSmall = (string)board["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)board["linkSmall"],
+                                linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"],
                                 name = (string)board["name"],
                                 orgID = orgId,
                                 desc = (string)board["description"]

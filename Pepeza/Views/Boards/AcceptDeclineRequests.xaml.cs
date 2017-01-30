@@ -61,7 +61,7 @@ namespace Pepeza.Views.Boards
                                 
                                  
                             };
-                            if ((string)item["linkSmall"] == null) request.linkSmall = Constants.LINK_SMALL_PLACEHOLDER;
+                            if ((string)item["linkSmall"] == null) request.linkSmall = Constants.EMPTY_USER_PLACEHOLDER_ICON;
                             request.fullname = request.firstName == null ? request.username : request.firstName + " " + request.lastName;
                             requestsource.Add(request);
                         }

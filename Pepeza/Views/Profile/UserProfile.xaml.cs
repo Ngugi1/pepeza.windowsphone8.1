@@ -248,7 +248,7 @@ namespace Pepeza.Views.Profile
                         visibility = info.visibility,
                         fname = info.firstName,
                         lname = info.lastName,
-                        profilePicPath = userAvatar.linkNormal==null?Constants.LINK_NORMAL_PLACEHOLDER: userAvatar.linkNormal,
+                        profilePicPath = userAvatar.linkNormal==null?Constants.EMPTY_USER_PLACEHOLDER_ICON: userAvatar.linkNormal,
                         username = info.username,
                         avatarId = info.avatarId
                     };

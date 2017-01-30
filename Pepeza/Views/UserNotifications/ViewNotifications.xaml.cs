@@ -111,8 +111,8 @@ namespace Pepeza.Views.UserNotifications
                                 dis1.isRead = item.isRead;
                                 dis1.type = item.type;
                                 JObject newfollower = JObject.Parse(item.meta);
-                                dis1.linkLeft = (string)newfollower["userLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)newfollower["userLinkSmall"];
-                                dis1.linkRight = (string)newfollower["boardLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)newfollower["boardLinkSmall"];
+                                dis1.linkLeft = (string)newfollower["userLinkSmall"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)newfollower["userLinkSmall"];
+                                dis1.linkRight = (string)newfollower["boardLinkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)newfollower["boardLinkSmall"];
                                 dis1.userId = (int)newfollower["userId"];
                                 dis1.boardId = (int)newfollower["boardId"];
                                 displays.Add(dis1);
@@ -125,8 +125,8 @@ namespace Pepeza.Views.UserNotifications
                                 dis3.content = item.content;
                                 dis3.type = item.type;
                                 JObject newboardrequest = JObject.Parse(item.meta);
-                                dis3.linkLeft = (string)newboardrequest["userLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)newboardrequest["userLinkSmall"];
-                                dis3.linkRight = (string)newboardrequest["boardLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)newboardrequest["boardLinkSmall"];
+                                dis3.linkLeft = (string)newboardrequest["userLinkSmall"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)newboardrequest["userLinkSmall"];
+                                dis3.linkRight = (string)newboardrequest["boardLinkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)newboardrequest["boardLinkSmall"];
                                 dis3.userId = (int)newboardrequest["userId"];
                                 dis3.boardId = (int)newboardrequest["boardId"];
                                 displays.Add(dis3);
@@ -138,7 +138,7 @@ namespace Pepeza.Views.UserNotifications
                                 dis4.isRead = item.isRead;
                                 dis4.type = item.type;
                                 JObject requestaccepted = JObject.Parse(item.meta);
-                                dis4.linkLeft = (string)requestaccepted["boardLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)requestaccepted["boardLinkSmall"];
+                                dis4.linkLeft = (string)requestaccepted["boardLinkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)requestaccepted["boardLinkSmall"];
                                 dis4.boardId = (int)requestaccepted["boardId"];
                                 displays.Add(dis4);
                                 break;
@@ -149,7 +149,7 @@ namespace Pepeza.Views.UserNotifications
                                 dis5.type = item.type;
                                 dis5.title = item.title;
                                 JObject addedtoorg = JObject.Parse(item.meta);
-                                dis5.linkLeft = (string)addedtoorg["orgLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)addedtoorg["orgLinkSmall"];
+                                dis5.linkLeft = (string)addedtoorg["orgLinkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)addedtoorg["orgLinkSmall"];
                                 dis5.orgId = (int)addedtoorg["orgId"];
                                 displays.Add(dis5);
                                 break;
@@ -160,7 +160,7 @@ namespace Pepeza.Views.UserNotifications
                                 dis6.title = item.title;
                                 dis6.type = item.type;
                                 JObject collabostatuschanged = JObject.Parse(item.meta);
-                                dis6.linkLeft = (string)collabostatuschanged["orgLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)collabostatuschanged["orgLinkSmall"];
+                                dis6.linkLeft = (string)collabostatuschanged["orgLinkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)collabostatuschanged["orgLinkSmall"];
                                 dis6.orgId = (int)collabostatuschanged["orgId"];
                                 displays.Add(dis6);
                                 break;
@@ -171,7 +171,7 @@ namespace Pepeza.Views.UserNotifications
                                 dis7.type = item.type;
                                 dis7.title = item.title;
                                 JObject rolechanged = JObject.Parse(item.meta);
-                                dis7.linkLeft = (string)rolechanged["orgLinkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)rolechanged["orgLinkSmall"];
+                                dis7.linkLeft = (string)rolechanged["orgLinkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)rolechanged["orgLinkSmall"];
                                 dis7.orgId = (int)rolechanged["orgId"];
                                 displays.Add(dis7);
                                 break;

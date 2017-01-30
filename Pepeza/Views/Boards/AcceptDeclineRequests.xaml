@@ -88,8 +88,8 @@
                             <FFImage:FFImage Height="50"
                                    Source="{Binding linkSmall}"
                                    Width="50"
-                                   LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                   ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                   LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.png"
+                                   ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.png"
                                    FadeAnimationEnabled="True"
                                        
                                          />

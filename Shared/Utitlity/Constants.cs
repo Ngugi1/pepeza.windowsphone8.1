@@ -13,8 +13,9 @@ namespace Pepeza.Utitlity
         public static string UNAUTHORIZED { get { return "You have been logged out. Please login again"; } }
         public static string NOTICE_SENT { get { return "NOTICE_SENT"; } }
         public static string NO_RESULTS { get{return "No results matched your query";}}
-        public static string LINK_SMALL_PLACEHOLDER { get { return "/Assets/Images/placeholder_s_avatar.png"; } }
-        public static string LINK_NORMAL_PLACEHOLDER { get { return "/Assets/Images/placeholder_avatar.jpg"; } }
+        public static string EMPTY_USER_PLACEHOLDER_ICON { get { return "/Assets/Images/placeholder_user_avatar.png"; } }
+        public static string EMPTY_BOARD_PLACEHOLDER_ICON { get { return "/Assets/Images/placeholder_board_avatar.png"; } }
+        public static string EMPTY_ORG_PLACEHOLDER_ICON { get { return "/Assets/Images/placeholder_org_avatar.png"; } }
         public static string REQUEST_BOARD { get { return "request"; } }
         public static string PUBLIC_BOARD { get { return "public"; } }
         public static string PRIVATE_BOARD { get { return "private"; } }

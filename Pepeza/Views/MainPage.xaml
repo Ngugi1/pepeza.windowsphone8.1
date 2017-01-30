@@ -265,8 +265,8 @@
                                     </FlyoutBase.AttachedFlyout>
                                     <FFImage:FFImage
                                         Grid.RowSpan="2"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png"
+                                        ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_board_avatar.png"
                                         Margin="8,12,0,28"
                                         Height="50"
                                         RetryDelay="5"
@@ -366,8 +366,8 @@
                                         Height="50"
                                         Width="50"
                                         Grid.RowSpan="2"
-                                        ErrorPlaceholder="/Assets/Images/placeholder_s_avatar.png"
-                                        LoadingPlaceholder="/Assets/Images/placeholder_s_avatar.png" 
+                                        ErrorPlaceholder="/Assets/Images/placeholder_org_avatar.png"
+                                        LoadingPlaceholder="/Assets/Images/placeholder_org_avatar.png" 
                                         Margin="0,8,0,0"
                                         Source="{Binding linkSmall}">
                                     </FFImage:FFImage>

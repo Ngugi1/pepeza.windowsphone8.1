@@ -88,7 +88,7 @@ namespace Pepeza.Views.Orgs
                             JObject row = JObject.Parse(jArray[i].ToString());
                             Person p = new Person();
                             p.username = (string)row["username"];
-                            p.linkSmall = (string)row["linkSmall"] == null ? Constants.LINK_SMALL_PLACEHOLDER : (string)row["linkSmall"];
+                            p.linkSmall = (string)row["linkSmall"] == null ? Constants.EMPTY_USER_PLACEHOLDER_ICON : (string)row["linkSmall"];
                             p.id = (int)row["id"];
                             p.firstname = (string)row["firstName"];
                             p.lastname = (string)row["lastName"];
