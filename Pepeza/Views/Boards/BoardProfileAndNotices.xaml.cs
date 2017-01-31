@@ -556,6 +556,7 @@ namespace Pepeza.Views.Boards
         }
         private void ReloadNotices(object sender, RoutedEventArgs e)
         {
+            StackPanelNoticeFailed.Visibility = Visibility.Collapsed; 
             loadBoardNotices(boardId);
         }
         private async Task loadFollowers(int boardId)
@@ -648,6 +649,7 @@ namespace Pepeza.Views.Boards
         }
         private async void ReloadFollowers(object sender, RoutedEventArgs e)
         {
+            StackPanelFollowerFailed.Visibility = Visibility.Collapsed;
             await loadFollowers(boardId);
         }
         private void ListViewBoardFollowers_SelectionChanged(object sender, SelectionChangedEventArgs e)
