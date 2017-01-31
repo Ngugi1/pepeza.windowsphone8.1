@@ -326,6 +326,15 @@ namespace Pepeza.Views.Boards
         {
             switch ((sender as Pivot).SelectedIndex)
             {
+                case 0:
+                    //Load notices if not loaded already
+                    if (hasRole)CommandBarOperations.Visibility = Visibility.Visible;
+                    if (!areNoticesLoaded)
+                    {
+                        StackPanelNoticesLoading.Visibility = Visibility.Visible;
+                        loadBoardNotices(boardId);
+                    }
+                    break;
                 case 1:
                     //if data is not loaded, laod
                     if (hasRole) CommandBarOperations.Visibility = Visibility.Collapsed;
@@ -336,15 +345,7 @@ namespace Pepeza.Views.Boards
                    
                         
                     break;
-                case 0:
-                    //Load notices if not loaded already
-                    CommandBarOperations.Visibility = Visibility.Visible;
-                    if (!areNoticesLoaded)
-                    {
-                        StackPanelNoticesLoading.Visibility = Visibility.Visible;
-                        loadBoardNotices(boardId);
-                    }
-                    break;
+                
                 default :
                     break;
             }
@@ -401,6 +402,7 @@ namespace Pepeza.Views.Boards
                         CommandBarOperations.Visibility = Visibility.Collapsed;
                         hasRole = false;
                     }
+                   
                 }
                 else
                 {
@@ -561,7 +563,11 @@ namespace Pepeza.Views.Boards
             ObservableCollection<Follower> boardFollowers = new ObservableCollection<Follower>();
             try
             {
-                StackPanelLoadingFollowers.Visibility = Visibility.Visible;
+               
+                if (hasRole)
+                {
+                    StackPanelLoadingFollowers.Visibility = Visibility.Visible;
+                }
                 Dictionary<string, string> followers = await BoardService.getboardFollowers(boardId);
                 if (followers.ContainsKey(Constants.SUCCESS))
                 {
@@ -595,14 +601,18 @@ namespace Pepeza.Views.Boards
                         ListViewBoardFollowers.ItemsSource = null;
                         ListViewBoardFollowers.ItemsSource = boardFollowers;
                         TBoard board = (TBoard)GridBoardProfile.DataContext;
+
                         if (boardFollowers != null)
                         {
                             board.noOfFollowers = boardFollowers.Count;
                         }
                         GridBoardProfile.DataContext = board;
+                        txtBlockNoOfFollowers.Visibility = Visibility.Visible;
+
                     }
                     else
                     {
+                        txtBlockNoOfFollowers.Visibility = Visibility.Collapsed;
                         TBoard board = (TBoard)GridBoardProfile.DataContext;
                         if (boardFollowers != null)
                         {
@@ -623,6 +633,7 @@ namespace Pepeza.Views.Boards
                 {
                     //We hit an error :TODO :: Show a toast  
                     StackPanelFollowerFailed.Visibility = Visibility.Visible;
+                    txtBlockNoOfFollowers.Visibility = Visibility.Collapsed;
                    
                 }
                 StackPanelLoadingFollowers.Visibility = Visibility.Collapsed;
@@ -630,6 +641,8 @@ namespace Pepeza.Views.Boards
             catch
             {
                 StackPanelFollowerFailed.Visibility = Visibility.Visible;
+                txtBlockNoOfFollowers.Visibility = Visibility.Collapsed;
+
             }
            
         }

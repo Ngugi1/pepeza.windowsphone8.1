@@ -172,23 +172,7 @@
                                        Typography.Capitals="Unicase"
                                        />
                         </StackPanel>
-                        <StackPanel 
-                            Grid.Row="1"
-                            Visibility="Collapsed"
-                            Name="StackPanelFollowerFailed"
-                            VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockError}"
-                                       />
-                            <Button 
-                                Click="ReloadFollowers"
-                                HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Retry" Margin="8,4"/>
-                                    <SymbolIcon Symbol="RepeatAll"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
+                       
                         <StackPanel 
                             Visibility="Collapsed"
                             Margin="19.5,8"
@@ -213,6 +197,23 @@
                                         HorizontalAlignment="Right"
                                         />
                             </Grid>
+                        </StackPanel>
+                        <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelFollowerFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                       Style="{StaticResource txtBlockError}"
+                                       />
+                            <Button 
+                                Click="ReloadFollowers"
+                                HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                         <ListView Name="ListViewBoardFollowers"
                                   Grid.Row="1"
@@ -334,6 +335,7 @@
                            Style="{StaticResource txtBlockDisplay}"
                            VerticalAlignment="Center"
                            Margin="4,0"
+                           Name="txtBlockNoOfFollowers"
                            Text="{Binding noOfFollowers, Mode=TwoWay}"
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            FontWeight="SemiBold"
