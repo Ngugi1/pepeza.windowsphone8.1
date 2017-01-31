@@ -159,7 +159,7 @@ namespace Pepeza.Views.Orgs
                 {
                     PBProfilePicUpdating.Visibility = Visibility.Collapsed;
                 }
-                RootGrid.DataContext = localOrg;
+                this.RootGrid.DataContext = localOrg;
                 isProfileLoaded = true;
             }
             else

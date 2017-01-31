@@ -306,7 +306,7 @@
                     ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.jpg"
                    Stretch="UniformToFill"
                    Width="120"
-                   RetryCount="5"
+                   RetryDelay="5"
                    Margin="19.5,0"
                    />
                 <ProgressBar Margin="4" Visibility="Collapsed" Name="PBProfilePicUpdating"/>

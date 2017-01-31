@@ -18,21 +18,21 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <ScrollViewer VerticalScrollMode="Auto">
-        <Grid Name="RootGrid">
+
+    <Grid Name="RootGrid">
         <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-            <TextBlock 
+        <TextBlock 
             Margin="19.5,0,0,0"
             Style="{StaticResource BaseTextBlockStyle}"
             Text="organisation profile"
             Typography.Capitals="SmallCaps"
                 VerticalAlignment="Top"
                 />
-            <Grid
+        <Grid
             Grid.Row="1"
             Margin="19.5"
             Name="GridBoardProfile">
@@ -42,20 +42,20 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                
+
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-               
+
             <StackPanel  Grid.RowSpan="3">
                 <FFImage:FFImage 
                    Height="100"
                     VerticalAlignment="Bottom"
                    Name="ImageBoardAvatar"
                    Tapped="ImageBoardAvatarTapped"
-                    RetryCount="5"
+                    RetryDelay="5"
                     FadeAnimationEnabled="True"
                     ErrorPlaceholder="/Assets/Images/placeholder_org_avatar.jpg"
                     LoadingPlaceholder="/Assets/Images/placeholder_org_avatar.jpg"
@@ -73,8 +73,8 @@
                        Style="{StaticResource BaseTextBlockStyle}"
                        VerticalAlignment="Top"
                        />
-           
-                <TextBlock Grid.Column="1"
+
+            <TextBlock Grid.Column="1"
                            Grid.Row="2"
                            Grid.ColumnSpan="2"
                            Style="{StaticResource txtBlockDisplay}"
@@ -84,8 +84,8 @@
                            Foreground="{ThemeResource PhoneAccentBrush}"
                            FontWeight="SemiBold"
                           />
-           
-           
+
+
             <RichTextBlock 
                 Grid.Row="3" 
                 Grid.ColumnSpan="2"
@@ -98,7 +98,7 @@
                 FontSize="{StaticResource TextStyleLargeFontSize}"
                 TextTrimming="CharacterEllipsis"
                 >
-                
+
             </RichTextBlock>
             <StackPanel 
                         Grid.Row="4"
@@ -118,7 +118,7 @@
                SelectedIndex="0"
                SelectionChanged="OrgPivot_SelectionChanged"
                >
-           
+
             <PivotItem Margin="19.5,0">
                 <PivotItem.Header>
                     <TextBlock 
@@ -222,24 +222,24 @@
                     </TextBlock>
                 </PivotItem.Header>
                 <ScrollViewer VerticalScrollMode="Auto">
-                <Grid>
-                    <StackPanel 
+                    <Grid>
+                        <StackPanel 
                         Visibility="Collapsed"
                         VerticalAlignment="Center"
                         Name="stackPanelLoadCollaborators">
-                        <ProgressBar Margin="12"/>
-                        <TextBlock Style="{StaticResource txtBlockWait}"
+                            <ProgressBar Margin="12"/>
+                            <TextBlock Style="{StaticResource txtBlockWait}"
                                    
                                    Text="Just a moment , fetching collaborators"
                                    HorizontalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel VerticalAlignment="Center" 
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center" 
                                 Name="StackPanelPermissionDenied"
                                 Visibility="Collapsed">
-                        <Viewbox Height="100" Width="100">
-                            <SymbolIcon Symbol="Admin" Foreground="{ThemeResource PhoneAccentBrush}"/>
-                        </Viewbox>
-                        <TextBlock 
+                            <Viewbox Height="100" Width="100">
+                                <SymbolIcon Symbol="Admin" Foreground="{ThemeResource PhoneAccentBrush}"/>
+                            </Viewbox>
+                            <TextBlock 
                             TextLineBounds="Full"
                             TextAlignment="Center"
                             HorizontalAlignment="Center"
@@ -251,15 +251,15 @@
                             You must be a collaborator to access this content"
                             
                             />
-                    </StackPanel>
-                    <StackPanel VerticalAlignment="Center" 
+                        </StackPanel>
+                        <StackPanel VerticalAlignment="Center" 
                                 Name="EmptyCollaboratorPlaceHolder"
                                 Visibility="Collapsed">
-                        <Viewbox Height="100" Width="100">
-                            <SymbolIcon Symbol="List" 
+                            <Viewbox Height="100" Width="100">
+                                <SymbolIcon Symbol="List" 
                                         Foreground="{ThemeResource PhoneAccentBrush}"/>
-                        </Viewbox>
-                        <TextBlock 
+                            </Viewbox>
+                            <TextBlock 
                             TextLineBounds="Full"
                             TextAlignment="Center"
                             HorizontalAlignment="Center"
@@ -270,8 +270,8 @@
                             Text="There are no collaborators to display."
                             
                             />
-                    </StackPanel>
-                    <TextBlock 
+                        </StackPanel>
+                        <TextBlock 
                         Visibility="Collapsed"
                         VerticalAlignment="Center"
                         Name="txtBlockError"
@@ -280,27 +280,27 @@
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                FontWeight="SemiBold"
                                />
-                    <ListView Name="ListViewCollaborators"
+                        <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid
                                     Margin="0,8"
                                     Width="{Binding ActualWidth, ElementName=ListViewCollaborators}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
 
-                                    </Grid.ColumnDefinitions>
+                                        </Grid.ColumnDefinitions>
 
-                                    <FFImage:FFImage Width="50" 
+                                        <FFImage:FFImage Width="50" 
                                                      Margin="19,0,0,0"
                                                      Stretch="UniformToFill"
                                                      Grid.RowSpan="2"
@@ -309,8 +309,8 @@
                                                      ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
                                                      Height="50">
 
-                                    </FFImage:FFImage>
-                                    <TextBlock
+                                        </FFImage:FFImage>
+                                        <TextBlock
                                         Grid.Row="0"
                                         Margin="16,4"
                                         TextLineBounds="Tight"
@@ -320,7 +320,7 @@
                                         Text="{Binding username , Mode=TwoWay}"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="NoWrap" />
-                                    <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="1"
                                                Grid.Column="1"
                                                Margin="16,4"
                                                VerticalAlignment="Bottom"
@@ -329,7 +329,7 @@
                                                Text="{Binding name, Mode=TwoWay}"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="NoWrap" />
-                                    <TextBlock 
+                                        <TextBlock 
                                         Foreground="{ThemeResource PhoneAccentBrush}"
                                         Grid.Row="0"
                                         Margin="0,0,8,0"
@@ -341,20 +341,19 @@
                                         Text="{Binding role , Mode=TwoWay}"
                                         VerticalAlignment="Bottom"
                                         />
-                                    <TextBlock Grid.Row="1" Grid.Column="2"
+                                        <TextBlock Grid.Row="1" Grid.Column="2"
                                                Text="{Binding active}"
                                                />
 
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </ScrollViewer>
             </PivotItem>
         </Pivot>
     </Grid>
-    </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarActions" Visibility="Collapsed">
             <AppBarButton Name="AppBtnEdit"
