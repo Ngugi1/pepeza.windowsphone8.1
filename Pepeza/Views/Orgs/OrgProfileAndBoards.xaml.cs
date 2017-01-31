@@ -60,6 +60,7 @@ namespace Pepeza.Views.Orgs
         string role;
         Organization org = null;
         CoreApplicationView view = CoreApplication.GetCurrentView();
+        Type toNavigateTo = null;
         bool isProfileLoaded = false, areBoardsLoaded = false, areCollaboratorsLoaded = false;
         public OrgProfileAndBoards()
         {
@@ -243,6 +244,7 @@ namespace Pepeza.Views.Orgs
             {
                    
                 case  0:
+                    toNavigateTo = typeof(AddBoard);
                     StackPanelLoading.Visibility = Visibility.Visible;
                         if (!areBoardsLoaded)
                         {
@@ -272,6 +274,7 @@ namespace Pepeza.Views.Orgs
                     break;
                 case 1:
                     //load boards
+                    toNavigateTo = typeof(AddCollaboratorPage);
                     if (!areCollaboratorsLoaded)
                     {
                     StackPanelLoading.Visibility = Visibility.Visible;
@@ -702,12 +705,12 @@ namespace Pepeza.Views.Orgs
         }
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (OrgPivot.SelectedIndex == 1)
+            if (OrgPivot.SelectedIndex == 0)
             {
                 //Go to add board
                 this.Frame.Navigate(typeof(AddBoard) , OrgID);
             }
-            else if(OrgPivot.SelectedIndex == 2)
+            else if(OrgPivot.SelectedIndex == 1)
             {
                 //Go to add collaborator
                 this.Frame.Navigate(typeof(AddCollaboratorPage),OrgID);
