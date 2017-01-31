@@ -221,11 +221,6 @@
     <Content Include="Assets\Images\ic_mood_confused.png" />
     <Content Include="Assets\Images\ic_mood_sad.png" />
     <Content Include="Assets\Images\ic_mood_smile.png" />
-    <Content Include="Assets\Images\OnBoarding\screen1.png" />
-    <Content Include="Assets\Images\OnBoarding\screen2.png" />
-    <Content Include="Assets\Images\OnBoarding\screen3.png" />
-    <Content Include="Assets\Images\OnBoarding\screen4.png" />
-    <Content Include="Assets\Images\OnBoarding\screen5.png" />
     <Content Include="Assets\Images\placeholder_board_avatar.png" />
     <Content Include="Assets\Images\placeholder_org_avatar.png" />
     <Content Include="Assets\Images\placeholder_user_avatar.png" />

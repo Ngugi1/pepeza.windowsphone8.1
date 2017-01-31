@@ -62,6 +62,7 @@ namespace Pepeza.Views.Account
         /// This parameter is typically used to configure the page.</param>
         protected  async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Settings.add(Constants.SET_UP_COMPLETE, false);
             //Get all the user info and save it to the database
             if(e.Parameter!=null)
             {
@@ -197,11 +198,13 @@ namespace Pepeza.Views.Account
                         {
                             //Go to the main page
                             this.Frame.Navigate(typeof(MainPage), -1);
+                            Settings.add(Constants.SET_UP_COMPLETE, true);
                         }
                         else
                         {
                             //Tell user to set up their username 
                             this.Frame.Navigate(typeof(AddUsername));
+                            Settings.add(Constants.SET_UP_COMPLETE, true);
                         }
                     }
                     else

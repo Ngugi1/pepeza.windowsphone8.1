@@ -90,16 +90,29 @@ namespace Pepeza.Views.Notices
                             if (await folderExists(Constants.PEPEZA))
                             {
                                 var folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                               
                                 if (await fileExists(file.uniqueFileName))
                                 {
                                     fileName = file.uniqueFileName;
                                     var localFile = await folder.GetFileAsync(fileName);
                                     if (localFile != null)
                                     {
-                                        storageFile = localFile;
-                                        StackPanelDownload.Visibility = Visibility.Visible;
-                                        HyperLinkOpen.Visibility = Visibility.Visible;
-                                        HLBDownloadAttachment.Visibility = Visibility.Collapsed;
+                                        var fileproperties = await localFile.GetBasicPropertiesAsync();
+                                        if (fileproperties.Size != 0)
+                                        {
+                                            storageFile = localFile;
+                                            StackPanelDownload.Visibility = Visibility.Visible;
+                                            HyperLinkOpen.Visibility = Visibility.Visible;
+                                            HLBDownloadAttachment.Visibility = Visibility.Collapsed;
+                                        }
+                                        else
+                                        {
+                                            storageFile = null;
+                                            StackPanelDownload.Visibility = Visibility.Visible;
+                                            HyperLinkOpen.Visibility = Visibility.Collapsed;
+                                            HLBDownloadAttachment.Visibility = Visibility.Visible;
+                                        }
+                                        
                                     }
                                     else
                                     {
@@ -311,7 +324,7 @@ namespace Pepeza.Views.Notices
            
            
         }
-        private void HLBDownloadAttachment_Click(object sender, RoutedEventArgs e)
+        private async void HLBDownloadAttachment_Click(object sender, RoutedEventArgs e)
         {
             //We need to download the file
             if (SymbolOperation.Symbol == Symbol.Cancel)
@@ -323,6 +336,24 @@ namespace Pepeza.Views.Notices
                 cts = new CancellationTokenSource();
                 activeDownloads = new List<DownloadOperation>();
                 displayProgress("",true);
+                if (storageFile != null)
+                {
+                    try
+                    {
+                        StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                        if (!string.IsNullOrEmpty(fileName))
+                        {
+                            var file = await folder.GetFileAsync(fileName);
+                            await file.DeleteAsync();
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                   
+                }
+                
             }
             else
             {
@@ -332,10 +363,13 @@ namespace Pepeza.Views.Notices
         }
         private  async void StartDownload(TFile file)
         {
+            
             Network network = new Network();
 
             if (network.HasInternetConnection)
             {
+                txtBlockDownload.Text = "downloading attachment... 0%";
+                SymbolOperation.Symbol = Symbol.Cancel;
                 #region Create Destination Folder and file
                 //Create a root destination folder
                 //Create a download URI
@@ -357,7 +391,7 @@ namespace Pepeza.Views.Notices
                 {
                     storageFile = await destinationFolder.CreateFileAsync(file.uniqueFileName);
                      #endregion
-                    #region Background Downloader
+                #region Background Downloader
                     BackgroundDownloader downloader = new BackgroundDownloader();
                     if (storageFile != null)
                     {
@@ -458,8 +492,8 @@ namespace Pepeza.Views.Notices
             if (download.Progress.BytesReceived > 0)
             {
                 percentage = (double)(download.Progress.BytesReceived * 100) / (double)download.Progress.TotalBytesToReceive;
-                displayProgress(string.Format("downloading ... {0}%", percentage));
-                if (percentage == 100)
+                displayProgress(string.Format("downloading attachment... {0}%", percentage));
+                if (percentage ==100)
                 {
                     HLBDownloadAttachment.Visibility = Visibility.Collapsed;
                     HyperLinkOpen.Visibility = Visibility.Visible;
@@ -468,7 +502,7 @@ namespace Pepeza.Views.Notices
             }
             else
             {
-                displayProgress(string.Format("downloading ... {0}%", percentage));
+                displayProgress(string.Format("downloading attachment ... {0}%", percentage));
             }
         }
         private void displayProgress(string status , bool canceled = false)
@@ -480,7 +514,7 @@ namespace Pepeza.Views.Notices
             }
             else
             {
-                txtBlockDownload.Text = "download";
+                txtBlockDownload.Text = "download attachment";
                 SymbolOperation.Symbol = Symbol.Download;
             }
            

@@ -59,22 +59,31 @@ namespace Pepeza.Views
 
             this.Frame.BackStack.Clear();
             var settings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (settings.Values.ContainsKey(Constants.APITOKEN))
+            if(!settings.Values.ContainsKey(Constants.SET_UP_COMPLETE))
             {
-                if (settings.Values.ContainsKey(Constants.ISUSERNAMESET))
+                if (settings.Values.ContainsKey(Constants.APITOKEN))
                 {
-                    bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
-                    if (isusernameSet)
+                    if (settings.Values.ContainsKey(Constants.ISUSERNAMESET))
                     {
-                        this.Frame.Navigate(typeof(MainPage));
+                        bool isusernameSet = (bool)Settings.getValue(Constants.ISUSERNAMESET);
+                        if (isusernameSet)
+                        {
+                            this.Frame.Navigate(typeof(MainPage));
+                        }
+                        else
+                        {
+                            this.Frame.Navigate(typeof(AddUsername));
+                        }
                     }
-                    else
-                    {
-                        this.Frame.Navigate(typeof(AddUsername));
-                    }
+
                 }
-                
             }
+            else
+            {
+                await DbHelper.dropDatabase();
+                Settings.clearSettings();
+            }
+            
             if (!settings.Values.ContainsKey(DbConstants.DB_CREATED))
             {
                 await DbHelper.createDB();
@@ -86,6 +95,7 @@ namespace Pepeza.Views
         }
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            AppBtnLogin.IsEnabled = false;
             //just make a request provided fields are not empty 
             if (!txtBoxPassword.Password.Equals("") && !textBoxUsername.Text.Equals(""))
             {
@@ -114,6 +124,7 @@ namespace Pepeza.Views
                
                 StackPanelLogging.Visibility = Visibility.Collapsed;
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.NORMALLOGIN);
+                AppBtnLogin.IsEnabled = true;
 
             }
             
@@ -148,6 +159,7 @@ namespace Pepeza.Views
             //TODO continue here 
             if (args.WebAuthenticationResult != null)
             {
+                AppBtnLogin.IsEnabled = false;
                 string token="", providerName="", pushId = Constants.PUSH_ID.ToString();
                 //TODO Enable the loading bar and disable all other buttons 
                 //Get the access token and save it 
@@ -219,6 +231,8 @@ namespace Pepeza.Views
                 }
 
             }
+            AppBtnLogin.IsEnabled = true;
+
         }
         private void LoginWithFacebook(object sender, RoutedEventArgs e)
         {

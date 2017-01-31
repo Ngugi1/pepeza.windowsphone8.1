@@ -93,6 +93,7 @@
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Bottom"
                             Grid.Row="1"
+                            Visibility="Collapsed"
                             Margin="12">
                     <TextBlock Text="Login with facebook ?" 
                                Typography.Capitals="Normal"
@@ -168,6 +169,7 @@
         <CommandBar>
             <AppBarButton Click="btnLogin_Click"
                           Icon="Accept"
+                          Name="AppBtnLogin"
                           Label="Login" />
         </CommandBar>
     </Page.BottomAppBar>

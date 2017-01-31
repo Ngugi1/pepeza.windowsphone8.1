@@ -54,7 +54,7 @@ namespace Pepeza.Views
         //Now make the request to the server
         private async void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
-
+            btnSignUp.IsEnabled = false;
             User user = rootGrid.DataContext as User;
             if (user.CanUserSignUp)
             {
@@ -98,6 +98,7 @@ namespace Pepeza.Views
             }
             user.ShowProgressRing = false;
             user.CanUserSignUp = true;
+            btnSignUp.IsEnabled = false;
             Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.NORMALCREATEaCCOUNT);
 
         }
