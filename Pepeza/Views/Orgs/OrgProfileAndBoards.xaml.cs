@@ -82,6 +82,8 @@ namespace Pepeza.Views.Orgs
                     OrgID = org.Id;
                     Settings.add(Constants.ORG_ID_TEMP, OrgID);
                     this.GridBoardProfile.DataContext = org;
+                    await getOrgDetails(OrgID);
+                   
                 }
                 else if (e.Parameter.GetType() == typeof(int))
                 {
@@ -90,6 +92,7 @@ namespace Pepeza.Views.Orgs
                 }
                 else if (e.Parameter.GetType() == typeof(TOrgInfo))
                 {
+                    OrgID = ((TOrgInfo)e.Parameter).id;
                     this.GridBoardProfile.DataContext = (TOrgInfo)e.Parameter;
                 } 
                 
@@ -180,14 +183,14 @@ namespace Pepeza.Views.Orgs
                     TAvatar orgAvatar = new TAvatar()
                     {
                          id = (int)objResults["avatar"]["id"],
-                         linkNormal = (string)objResults["avatar"]["linkNormal"],
-                         linkSmall = (string)objResults["avatar"]["linkSmall"],
+                         linkNormal = (string)objResults["avatar"]["linkNormal"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkNormal"],
+                         linkSmall = (string)objResults["avatar"]["linkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkSmall"],
                          dateCreated = (long)objResults["avatar"]["dateUpdated"],
                          dateUpdated = (long)objResults["avatar"]["dateUpdated"]
                     };
                     info.linkNormal = orgAvatar.linkNormal;
                     
-                    RootGrid.DataContext = info;
+                    this.RootGrid.DataContext = info;
                     isProfileLoaded = true;
                 }
                 else if (results.ContainsKey(Constants.UNAUTHORIZED))
@@ -387,7 +390,8 @@ namespace Pepeza.Views.Orgs
         {
             //start the progress bar
             fetchingBoards(true);
-            if (await OrgHelper.get(orgId) != null)
+            var org = await OrgHelper.get(orgId);
+            if (org!=null)
             {
                 await loadBoardsLocally();
             }
@@ -453,7 +457,6 @@ namespace Pepeza.Views.Orgs
                      this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices),board.id);
                 };     
          }
-        
         private void fetchingBoards(bool isFetching)
         {
             if (isFetching)

@@ -81,10 +81,7 @@ namespace Pepeza.Views.Boards
                 //Get the board details 
                 await getBoardDetailsAsync(boardId);
             }
-            else
-            {
-                //Was back Navigation
-            }
+           
             await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
         }
         public async Task getBoardDetailsAsync(int boardId)
@@ -154,8 +151,8 @@ namespace Pepeza.Views.Boards
                         boardAvatar = new TAvatar()
                         {
                             id = (int)objResults["avatar"]["id"],
-                            linkNormal = (string)objResults["avatar"]["linkNormal"],
-                            linkSmall = (string)objResults["avatar"]["linkSmall"]
+                            linkNormal = (string)objResults["avatar"]["linkNormal"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkNormal"],
+                            linkSmall = (string)objResults["avatar"]["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkSmall"]
                         };
                         boardFetched.avatarId = boardAvatar.id;
                     }

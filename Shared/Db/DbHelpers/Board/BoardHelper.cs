@@ -49,7 +49,7 @@ namespace Pepeza.Db.DbHelpers.Board
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
-                boards = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE orgID=?",orgId);
+                boards = await connection.QueryAsync<TBoard>("SELECT * FROM TBoard WHERE orgID=?", orgId);
             }
 
             return boards;
