@@ -343,6 +343,7 @@ namespace Pepeza.Views.Orgs
         }
         private async  void loadOrgCollaborators(int id)
         {
+            StackPanelCollaboratorsFailed.Visibility = Visibility.Collapsed;
             try
             {
                 txtBlockError.Visibility = Visibility.Collapsed;
@@ -351,6 +352,7 @@ namespace Pepeza.Views.Orgs
                 if (results.ContainsKey(Constants.SUCCESS))
                 {
                     processResults(results);
+                    
                 }
                 else if (results.ContainsKey(Constants.UNAUTHORIZED))
                 {
@@ -364,13 +366,13 @@ namespace Pepeza.Views.Orgs
                     txtBlockError.Text = results[Constants.ERROR].ToString();
                     txtBlockError.Visibility = Visibility.Visible;
 
+                    StackPanelCollaboratorsFailed.Visibility = Visibility.Visible;
                     
                 }
             }
             catch (Exception )
             {
-                txtBlockError.Text = Constants.UNKNOWNERROR;
-                txtBlockError.Visibility = Visibility.Visible;
+                StackPanelCollaboratorsFailed.Visibility = Visibility.Visible;
             }
             finally
             {
@@ -391,6 +393,7 @@ namespace Pepeza.Views.Orgs
         }
         private async Task<bool> fetchOrgBoards(int orgId)
         {
+            StackPanelBoardsFailed.Visibility = Visibility.Collapsed;
             //start the progress bar
             fetchingBoards(true);
             var org = await OrgHelper.get(orgId);
@@ -445,7 +448,7 @@ namespace Pepeza.Views.Orgs
                 else
                 {
                     //something went wrong , try again later
-                    tztBlockBoardError.Text = orgBoards[Constants.ERROR].ToString();
+                    StackPanelBoardsFailed.Visibility = Visibility.Visible;
                     return false;
                 }
             }
@@ -633,11 +636,12 @@ namespace Pepeza.Views.Orgs
                 
                 ListViewCollaborators.ItemsSource = orgcollaborators;
                 areCollaboratorsLoaded = true;
+
             }
             else
             {
                 //Throw an error
-                App.displayMessageDialog(toProcess[Constants.ERROR]);
+                StackPanelCollaboratorsFailed.Visibility = Visibility.Visible;
             }
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
@@ -746,6 +750,16 @@ namespace Pepeza.Views.Orgs
         {
             FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
             view.Activated += view_Activated;
+        }
+
+        private async void ReloadBoards(object sender, RoutedEventArgs e)
+        {
+            await fetchOrgBoards(OrgID);
+        }
+
+        private async void ReloadCollaborators(object sender, RoutedEventArgs e)
+        {
+            await loadOrgCollaborators(OrgID);
         }
     }
     

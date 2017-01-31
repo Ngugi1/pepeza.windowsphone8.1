@@ -200,16 +200,27 @@
                                    Style="{StaticResource txtBlockWait}"
                                    Text="fetching boards..." />
                     </StackPanel>
-                    <TextBlock 
-                        Name="tztBlockBoardError"
-                        Visibility="Collapsed"
-                                     Height="Auto"
-                        Foreground="{StaticResource PhoneAccentBrush}"
-                                     VerticalAlignment="Center"
-                        FontWeight="Medium"
-                        HorizontalAlignment="Center"
-                                     Style="{StaticResource txtBlockDisplay}"
-                                     TextWrapping="WrapWholeWords" />
+                    <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelBoardsFailed"
+                            VerticalAlignment="Center">
+                        <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                       Style="{StaticResource txtBlockError}"
+                                       />
+                        <Button 
+                                Background="{ThemeResource PhoneAccentBrush}"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Click="ReloadBoards"
+                                HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Retry" Margin="8,4"/>
+                                <SymbolIcon Symbol="RepeatAll"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
                 </Grid>
             </PivotItem>
             <PivotItem>
@@ -280,6 +291,7 @@
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                FontWeight="SemiBold"
                                />
+                    
                         <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
@@ -349,6 +361,26 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelCollaboratorsFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
+                                       Style="{StaticResource txtBlockError}"
+                                       />
+                            <Button 
+                                Background="{ThemeResource PhoneAccentBrush}"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Click="ReloadCollaborators"
+                                HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </ScrollViewer>
             </PivotItem>
