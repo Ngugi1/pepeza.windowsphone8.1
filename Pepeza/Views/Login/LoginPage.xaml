@@ -93,7 +93,7 @@
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Bottom"
                             Grid.Row="1"
-                            Visibility="Collapsed"
+                            Visibility="Visible"
                             Margin="12">
                     <TextBlock Text="Login with facebook ?" 
                                Typography.Capitals="Normal"
@@ -129,7 +129,8 @@
                         </StackPanel>
                     </Button>
                     <Button 
-                        Click="LoginWithFacebook"   
+                        Click="LoginWithFacebook"  
+                        Visibility="Visible"
                         HorizontalAlignment="Center" 
                         Name="btnLoginWithFacebook"
                         BorderBrush="Transparent"
