@@ -80,6 +80,9 @@
                            Margin="12,4"
                            FontWeight="Normal"
                            />
+                <Rectangle  Fill="{ThemeResource PhoneAccentBrush}" Height="3"
+                            Margin="12,8"
+                            />
                 <StackPanel Name="StackPanelDownload" 
                             Visibility="Visible">
                     <Viewbox Height="80" 

@@ -42,30 +42,26 @@ namespace Pepeza.Views
         }
         private void StackPanelSmile(object sender, TappedRoutedEventArgs e)
         {
-            FrownStackPanel.Visibility = ConfuseStackPanel.Visibility = Visibility.Collapsed;
-            AcceptSmile.Visibility = Visibility.Visible;
+            RectangleAnnoyed.Visibility = RectangleConfused.Visibility = Visibility.Collapsed;
             mood = "happy";
+            RectangelHappy.Visibility = Visibility.Visible;
+
         }
 
         private void StackPanel_Confused(object sender, TappedRoutedEventArgs e)
         {
-            SmileStackPanel.Visibility = FrownStackPanel.Visibility = Visibility.Collapsed;
+            RectangelHappy.Visibility = RectangleAnnoyed.Visibility = Visibility.Collapsed;
             mood = "confused";
-            AcceptConfused.Visibility = Visibility.Visible;
+            RectangleConfused.Visibility = Visibility.Visible;
+           
         }
 
         private void StackPanelFrown(object sender, TappedRoutedEventArgs e)
         {
             mood = "annoyed";
-            SmileStackPanel.Visibility = ConfuseStackPanel.Visibility = Visibility.Collapsed;
-            AcceptFrown.Visibility = Visibility.Visible;
-        }
-
-        private void Viewbox_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            mood = "";
-            SmileStackPanel.Visibility = ConfuseStackPanel.Visibility = FrownStackPanel.Visibility = Visibility.Visible;
-            AcceptFrown.Visibility = AcceptSmile.Visibility = AcceptFrown.Visibility = Visibility.Collapsed;
+            RectangleConfused.Visibility = RectangelHappy.Visibility = Visibility.Collapsed;
+            RectangleAnnoyed.Visibility = Visibility.Visible;
+           
         }
 
         private async void SendFeedBackClicked(object sender, RoutedEventArgs e)

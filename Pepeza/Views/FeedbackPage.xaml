@@ -23,12 +23,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBlock Text="Talk to us" 
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <toast:Toastinet Name="ToastStatus" 
+                         Duration="10"
+                         Visibility="Collapsed"
+                         Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
+            <TextBlock Text="Give feedback" 
                    Style="{StaticResource txtBlockPageHeader}"
                    Foreground="Black"
                    />
@@ -38,90 +40,82 @@
                        HorizontalAlignment="Center"
                        />
         </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
         <StackPanel 
             Tapped="StackPanelSmile"
             Grid.Row="2"
+            Grid.Column="0"
             Name="SmileStackPanel"
-            Margin="12,4"
-            Orientation="Horizontal">
+            Orientation="Vertical">
             <Image Width="50" 
                    Source="/Assets/Images/ic_mood_smile.png"
                    Height="50">
                 
             </Image>
-            <TextBlock Text="Send us a smile" 
-                       Margin="12"
-                       Style="{StaticResource BaseTextBlockStyle}" VerticalAlignment="Bottom"/>
-            <SymbolIcon 
-                Name="AcceptSmile"
-                Visibility="Collapsed"
-                Symbol="Accept">
-
-            </SymbolIcon>
-        </StackPanel >
-        <StackPanel Grid.Row="3"
+                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" 
+                               HorizontalAlignment="Center"
+                               Text="Happy" />
+                    <Rectangle Height="5" 
+                               Name="RectangelHappy"
+                               Visibility="Collapsed"
+                               Fill="{ThemeResource PhoneAccentBrush}"/>
+                </StackPanel >
+        <StackPanel 
+            Grid.Column="1"
                     Name="ConfuseStackPanel"
                     Tapped="StackPanel_Confused"
-                    Margin="12,4"
-                    Orientation="Horizontal">
+                  
+                   >
             <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_confused.png"/>
-            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="Send us a confuse" VerticalAlignment="Bottom" Margin="12"/>
-            <SymbolIcon 
-                Name="AcceptConfused"
-                Visibility="Collapsed"
-                Symbol="Accept">
+            <TextBlock 
+                HorizontalAlignment="Center"
+                Style="{StaticResource BaseTextBlockStyle}" Text="Confused"/>
+                    <Rectangle Height="5" 
+                               Name="RectangleConfused"
+                               Fill="{ThemeResource PhoneAccentBrush}"/>
 
-            </SymbolIcon>
+                   
         </StackPanel>
         <StackPanel 
+            Grid.Column="2"
             Tapped="StackPanelFrown"
             Grid.Row="4"
             Name="FrownStackPanel"
-                    Margin="12,4"
-                    Orientation="Horizontal">
+                    Orientation="Vertical">
             <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_sad.png"/>
-            <TextBlock Style="{StaticResource BaseTextBlockStyle}" Text="Send us a frown" VerticalAlignment="Bottom" Margin="12"/>
-            <SymbolIcon Symbol="Accept" 
-                         Name="AcceptFrown"
-                        Visibility="Collapsed"/>
-        </StackPanel>
-        <StackPanel Grid.Row="6">
-            <StackPanel Orientation="Horizontal">
-            <TextBlock Text="I changed my mind , switch the mood"
-                       Margin="12,0,0,0"
-                       Style="{StaticResource BaseTextBlockStyle}"
-                       VerticalAlignment="Center"
-                       />
-                <Viewbox Height="50" 
-                         Tapped="Viewbox_Tapped"
-                         Width="50">
-                    <SymbolIcon 
-               
-                Visibility="Visible"
-                Symbol="Switch">
-
-            </SymbolIcon>
-                </Viewbox>
-
-            </StackPanel>
+            <TextBlock 
+                HorizontalAlignment="Center"
+                Style="{StaticResource BaseTextBlockStyle}" Text="Annoyed"
+                VerticalAlignment="Center"/>
+                    <Rectangle Height="5"
+                               Visibility="Collapsed"
+                               Name="RectangleAnnoyed"
+                               Fill="{ThemeResource PhoneAccentBrush}"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Grid.Row="6">
             <TextBox  
-                      Margin="12,4"
+                Grid.Row="3"
+                      Margin="12,24"
                       Name="txtBoxFeedBack"
                       Foreground="Black"
                       Header="Tell us why you feel this way?"
                       PlaceholderText="I like pepeza :-)"
                       Style="{StaticResource txtBoxStyle}"/>
         </StackPanel>
-        <toast:Toastinet Name="ToastStatus" 
-                         Duration="10"
-                         Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
+       
     </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Comment" 
                           Click="SendFeedBackClicked"
-                          Label="feedback"/>
+                          Label="comment"/>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

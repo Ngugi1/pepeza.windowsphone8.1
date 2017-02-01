@@ -65,6 +65,7 @@ namespace Pepeza.Views.Profile
                             };
                             userinfo.firstName = userinfo.firstName + " " + userinfo.lastName;
                             this.rootgrid.DataContext = userinfo;
+                            isProfileLoaded = true;
                         }
                         else if (profile.ContainsKey(Constants.UNAUTHORIZED))
                         {
@@ -72,7 +73,7 @@ namespace Pepeza.Views.Profile
                             App.displayMessageDialog(Constants.UNAUTHORIZED);
                             this.Frame.Navigate(typeof(LoginPage));
                         }
-                        isProfileLoaded = true;
+                        
                 }
                 catch (Exception)
                 {
@@ -90,9 +91,10 @@ namespace Pepeza.Views.Profile
                     //Load user profile 
                     if (!areOrgsLoaded)
                     {
+                        areOrgsLoaded = false;
                         StackPanelLoadingOrgs.Visibility = Visibility.Visible;
+                        StackPanelOrgsFailed.Visibility = Visibility.Collapsed;
                         UnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
-                        StackPanelError.Visibility = Visibility.Collapsed;
                         UserOrganisations.Clear();
                         Dictionary<string, string> results = await OrgsService.getUserOrgs(userId);
                         if (results != null)
@@ -116,6 +118,7 @@ namespace Pepeza.Views.Profile
                                         item.Description = (string)org["description"];
                                         UserOrganisations.Add(item);
                                     }
+                                    areOrgsLoaded = true;
                                     listViewOrgs.ItemsSource = UserOrganisations;
                                     EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
 
@@ -126,6 +129,7 @@ namespace Pepeza.Views.Profile
                                     EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
 
                                 }
+                               
                             }
                             else if (results.ContainsKey(Constants.UNAUTHORIZED))
                             {
@@ -141,17 +145,22 @@ namespace Pepeza.Views.Profile
                             else
                             {
                                 //Something went wrong 
-                                StackPanelError.Visibility = Visibility.Visible;
+                                StackPanelOrgsFailed.Visibility = Visibility.Visible;
                             }
                         }
+                        else
+                        {
+                            StackPanelOrgsFailed.Visibility = Visibility.Visible;
+                        }
                         StackPanelLoadingOrgs.Visibility = Visibility.Collapsed;
-                        areOrgsLoaded = true;
                     }
                     break;
                 case 1:
                     //Load user orgs 
                     if (!areFollowingLoaded)
                     {
+                        areFollowingLoaded = false;
+                        StackPanelFollowersFailed.Visibility = Visibility.Collapsed;
                         ObservableCollection<TBoard> following = new ObservableCollection<TBoard>();
                         stackpanelfollowingloading.Visibility = Visibility.Visible;
                         BoardsUnauthorizedPlaceHolder.Visibility = Visibility.Collapsed;
@@ -182,6 +191,7 @@ namespace Pepeza.Views.Profile
                                 stackpanelfollowingloading.Visibility = Visibility.Collapsed;
                             }
 
+                            areFollowingLoaded = true;
                         }
                         else if (response.ContainsKey(Constants.UNAUTHORIZED))
                         {
@@ -196,13 +206,11 @@ namespace Pepeza.Views.Profile
                         }
                         else
                         {
-                            FollowingLoadingError.Visibility = Visibility.Visible;
-                            stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                            StackPanelFollowersFailed.Visibility = Visibility.Visible;
                         }
-                        areFollowingLoaded = true;
                     }
-                   
-                        break;
+                    stackpanelfollowingloading.Visibility = Visibility.Collapsed;
+                   break;
                 default:
                     break;
             }
@@ -223,10 +231,16 @@ namespace Pepeza.Views.Profile
             }
             return;
         }
-
-        private void ImageBoardAvatarTapped(object sender, TappedRoutedEventArgs e)
+        private void ReloadFollowers(object sender, RoutedEventArgs e)
         {
+            StackPanelFollowersFailed.Visibility = Visibility.Collapsed;
+            PivotProfile.SelectedIndex = 1;
+        }
 
+        private void ReloadOrgs(object sender, RoutedEventArgs e)
+        {
+            StackPanelOrgsFailed.Visibility = Visibility.Collapsed;
+            PivotProfile.SelectedIndex = 0; 
         }
     }
 }

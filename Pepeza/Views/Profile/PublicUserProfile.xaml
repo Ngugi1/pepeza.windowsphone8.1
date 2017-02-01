@@ -45,7 +45,6 @@
                    Height="120"
                     VerticalAlignment="Bottom"
                    Name="ImageBoardAvatar"
-                   Tapped="ImageBoardAvatarTapped"
                     RetryDelay="5"
                     FadeAnimationEnabled="True"
                     ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
@@ -95,7 +94,8 @@
         <Pivot 
             Style="{StaticResource CustomPivotSearch}"
                Grid.Row="2"
-            Margin="4,12,4,4"
+               Margin="4,12,4,4"
+            SelectedIndex="0"
                Name="PivotProfile"
                SelectionChanged="Pivot_SelectionChanged"
                >
@@ -144,26 +144,8 @@
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
-                    <StackPanel 
-                        Name="StackPanelError"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
-
-                        <Viewbox Width="100" Height="100">
-                            <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="Cancel"/>
-                        </Viewbox>
-                        <TextBlock Text="Something went wrong , try again later ..."
-                                   HorizontalAlignment="Center"
-                                   TextLineBounds="Full"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
                     <StackPanel Name="StackPanelLoadingOrgs"
-                                Visibility="Collapsed"
+                                Visibility="Visible"
                                 VerticalAlignment="Center"
                                 >
                         <ProgressBar IsIndeterminate="True" Margin="12"/>
@@ -171,11 +153,30 @@
                                    HorizontalAlignment="Center"
                                    />
                     </StackPanel>
+
                     <ListView 
                         SelectionChanged="listViewOrgs_SelectionChanged"
                         Margin="19.5,4"
                         Name="listViewOrgs" ItemTemplate="{StaticResource ListViewSearchOrgs}">
                     </ListView>
+                    <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelOrgsFailed"
+                            VerticalAlignment="Center">
+                        <TextBlock 
+                                       Style="{StaticResource TextBlockRetry}"
+                                       />
+                        <Button 
+                               
+                                Click="ReloadOrgs"
+                                Style="{StaticResource RetryButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Retry" Margin="8,4"/>
+                                <SymbolIcon Symbol="RepeatAll"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </PivotItem>
             <PivotItem Name="PivotItemBoards">
@@ -225,31 +226,15 @@
                     </StackPanel>
                     <StackPanel VerticalAlignment="Center"
                                 Name="stackpanelfollowingloading"
-                                Visibility="Collapsed"
+                                Visibility="Visible"
                                 >
                         <ProgressBar IsIndeterminate="True" Margin="12"/>
-                        <TextBlock Text="just a moment ...." Style="{StaticResource txtBlockWait}"
+                        <TextBlock Text="just a moment ...." 
+                                   Style="{StaticResource txtBlockWait}"
                                    HorizontalAlignment="Center"
                                    />
                     </StackPanel>
-                    <StackPanel 
-                        Name="FollowingLoadingError"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
-
-                        <Viewbox Width="100" Height="100">
-                            <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="Cancel"/>
-                        </Viewbox>
-                        <TextBlock Text="Something went wrong , try again later."
-                                   HorizontalAlignment="Center"
-                                   TextLineBounds="Full"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
+                
                     <ListView
                         Margin="19.5,4"
                         SelectionChanged="ListViewFollowing_SelectionChanged"
@@ -297,6 +282,24 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+                    <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelFollowersFailed"
+                            VerticalAlignment="Center">
+                        <TextBlock
+                                       Style="{StaticResource TextBlockRetry}"
+                                       />
+                        <Button 
+                               Style="{StaticResource RetryButton}"
+                                Click="ReloadFollowers"
+                                >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Retry" Margin="8,4"/>
+                                <SymbolIcon Symbol="RepeatAll"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
               
             </PivotItem>     

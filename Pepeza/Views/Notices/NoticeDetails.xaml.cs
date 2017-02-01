@@ -152,6 +152,7 @@ namespace Pepeza.Views.Notices
                     {
                         //File is not downloaded yet 
                         HyperLinkOpen.Visibility = Visibility.Collapsed;
+                        StackPanelDownload.Visibility = Visibility.Visible;
                         HLBDownloadAttachment.Visibility = Visibility.Visible;
                        
                     } 
@@ -186,7 +187,6 @@ namespace Pepeza.Views.Notices
                 this.RootGrid.DataContext = notice;
                 noticeTitle = notice.title;
                 await NoticeService.submitReadNoticeItems();
-
             }
             #region Remote notice 
             //else if(e.Parameter!=null && e.Parameter.GetType() == typeof(int))
@@ -329,13 +329,16 @@ namespace Pepeza.Views.Notices
             //We need to download the file
             if (SymbolOperation.Symbol == Symbol.Cancel)
             {
+                displayProgress("", true);
                 //Cancel download
                 cts.Cancel();
+                SymbolOperation.Symbol = Symbol.Download;
+                HyperLinkOpen.Visibility = Visibility.Collapsed;
                 cts.Dispose();
                 // Re-create the CancellationTokenSource and activeDownloads for future downloads.
                 cts = new CancellationTokenSource();
                 activeDownloads = new List<DownloadOperation>();
-                displayProgress("",true);
+               
                 if (storageFile != null)
                 {
                     try
@@ -353,6 +356,8 @@ namespace Pepeza.Views.Notices
                     }
                    
                 }
+                HyperLinkOpen.Visibility = Visibility.Collapsed;
+                HLBDownloadAttachment.Visibility = Visibility.Visible;
                 
             }
             else
@@ -415,9 +420,37 @@ namespace Pepeza.Views.Notices
                 else
                 {
                     storageFile = await destinationFolder.GetFileAsync(file.uniqueFileName);
-                    HyperLinkOpen.Visibility = Visibility.Visible;
-                    StackPanelDownload.Visibility = Visibility.Visible;
-                    return;
+                    var props =  await storageFile.GetBasicPropertiesAsync();
+                    if (props.Size > 0)
+                    {
+                        HyperLinkOpen.Visibility = Visibility.Visible;
+                        StackPanelDownload.Visibility = Visibility.Visible;
+                        return;
+                    }
+                    else
+                    {
+                        #region Background Downloader
+                        BackgroundDownloader downloader = new BackgroundDownloader();
+                        if (storageFile != null)
+                        {
+                            downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                            DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                            downloadOperation.Priority = BackgroundTransferPriority.High;
+                            //Now handle the download 
+                            await handleDownloadAsync(downloadOperation, true);
+                        }
+                        else
+                        {
+                            storageFile = await destinationFolder.CreateFileAsync(destinationUri);
+                            downloader.SetRequestHeader(Constants.APITOKEN, (string)Settings.getValue(Constants.APITOKEN));
+                            DownloadOperation downloadOperation = downloader.CreateDownload(source, storageFile);
+                            downloadOperation.Priority = BackgroundTransferPriority.High;
+                            //Now handle the download 
+                            await handleDownloadAsync(downloadOperation, true);
+                        }
+                        #endregion
+                    }
+                   
                 }
                
                

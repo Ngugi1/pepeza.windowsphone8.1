@@ -92,14 +92,21 @@
                                                FontWeight="SemiBold"
                                                VerticalAlignment="Bottom"
                                                Style="{StaticResource txtBlockListViewItemHeader}"/>
-                                    <TextBlock  
-                                        Grid.Row="1"
-                                        FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Text="{Binding board , Mode=TwoWay}"
-                                        Style="{StaticResource SubheaderTextBlockStyle}"
+                                    <RichTextBlock 
+                                         Grid.Row="1"
                                         Margin="0"
                                         FontWeight="Thin"
-                                        />
+                                        IsTextSelectionEnabled="True"
+                                        Style="{StaticResource BaseRichTextBlockStyle}"
+                                        FontSize="{ThemeResource TextStyleLargeFontSize}"
+                                        >
+                                        <Paragraph>
+                                            <Underline>
+                                                <Run Foreground="Black" FontWeight="SemiBold" Text="{Binding board, Mode=TwoWay}"/>
+                                            </Underline>
+
+                                        </Paragraph>
+                                    </RichTextBlock>
                                     <RichTextBlock
                                         Grid.Row="2"
                                         TextAlignment="Justify"

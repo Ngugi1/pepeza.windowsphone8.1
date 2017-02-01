@@ -54,10 +54,9 @@ namespace Pepeza.Views.Boards
     /// </summary>
     public sealed partial class BoardProfileAndNotices : Page
     {
-        TBoard boardFetched = null;
+        TBoard boardFetched = null , rolesBoard = null;
         int boardId;
         bool hasRole = false;
-        
         CoreApplicationView view = CoreApplication.GetCurrentView();
         TAvatar boardAvatar = null;
         bool isProfileLoaded = false, areNoticesLoaded = false , areFollowersLoaded = false;
@@ -91,6 +90,7 @@ namespace Pepeza.Views.Boards
             TBoard localBoard = await BoardHelper.getBoard(boardId);
             if (localBoard != null)
             {
+                rolesBoard = localBoard;
                 //We now say we are not fetching 
                 boardAvatar = await AvatarHelper.get(localBoard.avatarId);
                 if (boardAvatar != null)
@@ -123,7 +123,7 @@ namespace Pepeza.Views.Boards
                     btnFollow.IsEnabled = true;
                 }
                  isProfileLoaded = true;
-                 await assignRoles(localBoard);
+                 await assignRoles(localBoard, PivotBoard.SelectedIndex);
                  await loadFollowers(boardId);
                
             }   
@@ -194,6 +194,7 @@ namespace Pepeza.Views.Boards
                     }
                    
                     isProfileLoaded = true;
+                    rolesBoard = boardFetched;
                     this.GridBoardProfile.DataContext = boardFetched;
                 }
                 else if (results.ContainsKey(Constants.UNAUTHORIZED))
@@ -202,7 +203,7 @@ namespace Pepeza.Views.Boards
                     App.displayMessageDialog(Constants.UNAUTHORIZED);
                     this.Frame.Navigate(typeof(LoginPage));
                 } 
-                await assignRoles(boardFetched);  
+                await assignRoles(boardFetched, PivotBoard.SelectedIndex);  
             }
         }
         public async Task followBoard(TBoard boardParam)
@@ -328,7 +329,7 @@ namespace Pepeza.Views.Boards
             {
                 case 0:
                     //Load notices if not loaded already
-                    if (hasRole)CommandBarOperations.Visibility = Visibility.Visible;
+                    await assignRoles(rolesBoard, PivotBoard.SelectedIndex);
                     if (!areNoticesLoaded)
                     {
                         StackPanelNoticesLoading.Visibility = Visibility.Visible;
@@ -337,7 +338,8 @@ namespace Pepeza.Views.Boards
                     break;
                 case 1:
                     //if data is not loaded, laod
-                    if (hasRole) CommandBarOperations.Visibility = Visibility.Collapsed;
+                    this.BottomAppBar.Visibility = Visibility.Collapsed;
+                    await assignRoles(rolesBoard, PivotBoard.SelectedIndex);
                     if (!areFollowersLoaded)
                     {
                         await loadFollowers(boardId);
@@ -381,26 +383,39 @@ namespace Pepeza.Views.Boards
             var board = this.GridBoardProfile.DataContext;
             this.Frame.Navigate(typeof(UpdateBoard), board);
         }
-        private async Task assignRoles(TBoard board)
+        private async Task assignRoles(TBoard board , int selectedIndex)
         {
+            hasRole = false;
+
             if (board != null)
             {
                 TCollaborator collaborator = await CollaboratorHelper.getRole((int)(Settings.getValue(Constants.USERID)), board.orgID);
                 #region check collaboration
                 if (collaborator!=null)
                 {
-                    if (collaborator.role == Constants.EDITOR || collaborator.role == Constants.ADMIN ||collaborator.role == Constants.OWNER)
+                    hasRole = true;
+                    if ((collaborator.role == Constants.ADMIN ||collaborator.role == Constants.OWNER))
                     {
                         hasRole = true;
                         AppBtnEdit.Visibility = Visibility.Visible;
                         AppBtnAddNotice.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
-                        CommandBarOperations.Visibility = Visibility.Visible;                       
+                        CommandBarOperations.Visibility = Visibility.Visible;
+                    }
+                    else if (collaborator.role == Constants.EDITOR)
+                    {
+                        AppBtnEdit.Visibility = Visibility.Collapsed;
+                        AppBtnAddNotice.Visibility = Visibility.Visible;
+                        AppBtnAnalytics.Visibility = Visibility.Visible;
+                        CommandBarOperations.Visibility = Visibility.Visible;
+ 
+                       
                     }
                     else
                     {
+                        ImageBoardAvatar.IsTapEnabled = false;
                         CommandBarOperations.Visibility = Visibility.Collapsed;
-                        hasRole = false;
+
                     }
                    
                 }
@@ -408,14 +423,16 @@ namespace Pepeza.Views.Boards
                 {
                     ImageBoardAvatar.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
-                    hasRole = false;
+                }
+                if (selectedIndex == 1)
+                {
+                    this.BottomAppBar.Visibility = Visibility.Collapsed;
                 }
                 #endregion
             }
             else
             {
                 CommandBarOperations.Visibility = Visibility.Collapsed;
-                hasRole = false;
             }
            
         }
@@ -435,7 +452,7 @@ namespace Pepeza.Views.Boards
             if (args != null)
             {
                 if (filesArgs.Files.Count == 0) return;
-
+                PBProfilePicUpdating.Visibility = Visibility.Visible;
                 StorageFile choosenFile = filesArgs.Files[0];// Get the first file 
                 //Get the bitmap to determine whether to continue or not 
                 if (choosenFile != null)
@@ -449,7 +466,6 @@ namespace Pepeza.Views.Boards
                             //Here we resume to upload the image 
                             if (bitmap != null)
                             {
-                                PBProfilePicUpdating.Visibility = Visibility.Visible;
                                try
                                 {
 
@@ -527,6 +543,7 @@ namespace Pepeza.Views.Boards
                     }
 
                 }
+            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
         }
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -561,14 +578,12 @@ namespace Pepeza.Views.Boards
         }
         private async Task loadFollowers(int boardId)
         {
+            StackPanelLoadingFollowers.Visibility = Visibility.Visible;
+            StackPanelNoticeFailed.Visibility = Visibility.Collapsed; 
+            StackPanelFollowerFailed.Visibility = Visibility.Collapsed;
             ObservableCollection<Follower> boardFollowers = new ObservableCollection<Follower>();
             try
             {
-               
-                if (hasRole)
-                {
-                    StackPanelLoadingFollowers.Visibility = Visibility.Visible;
-                }
                 Dictionary<string, string> followers = await BoardService.getboardFollowers(boardId);
                 if (followers.ContainsKey(Constants.SUCCESS))
                 {
@@ -578,8 +593,12 @@ namespace Pepeza.Views.Boards
                     int followRequests = (int)jsonObject["noOfRequests"];
                     if (followRequests > 0)
                     {
+                        if (hasRole) StackPanelFollowRequests.Visibility = Visibility.Visible;
                         txtBlockFollowRequest.Text = string.Format("You have {0} follow requests", followRequests);
-                        StackPanelFollowRequests.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                       StackPanelFollowRequests.Visibility = Visibility.Collapsed;
                     }
                    
                     

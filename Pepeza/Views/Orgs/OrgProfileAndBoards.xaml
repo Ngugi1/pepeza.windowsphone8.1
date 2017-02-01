@@ -63,7 +63,8 @@
                    Stretch="UniformToFill"
                    Width="100"
                    />
-                <ProgressBar Margin="4" Visibility="Collapsed" 
+                <ProgressBar Margin="4" 
+                             Visibility="Collapsed" 
                              Name="PBProfilePicUpdating"/>
             </StackPanel>
             <TextBlock Text="{Binding  name , Mode=TwoWay}"
@@ -148,8 +149,7 @@
                                    Typography.Capitals="Unicase"
                                    />
                     </StackPanel>
-                    <ListView Name="ListViewOrgBoards"
-                              
+                    <ListView Name="ListViewOrgBoards"     
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -194,7 +194,9 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <StackPanel Name="StackPanelLoading" VerticalAlignment="Center">
+                    <StackPanel Name="StackPanelLoading"
+                                Visibility="Collapsed"
+                                VerticalAlignment="Center">
                         <ProgressBar Margin="12" />
                         <TextBlock HorizontalAlignment="Center"
                                    Style="{StaticResource txtBlockWait}"
@@ -205,15 +207,12 @@
                             Visibility="Collapsed"
                             Name="StackPanelBoardsFailed"
                             VerticalAlignment="Center">
-                        <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockError}"
+                        <TextBlock Style="{StaticResource TextBlockRetry}"
                                        />
                         <Button 
-                                Background="{ThemeResource PhoneAccentBrush}"
-                                Foreground="White"
-                                BorderThickness="0"
+                          Style="{StaticResource RetryButton}"
                                 Click="ReloadBoards"
-                                HorizontalAlignment="Center">
+                                >
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Retry" Margin="8,4"/>
                                 <SymbolIcon Symbol="RepeatAll"/>
@@ -240,7 +239,6 @@
                         Name="stackPanelLoadCollaborators">
                             <ProgressBar Margin="12"/>
                             <TextBlock Style="{StaticResource txtBlockWait}"
-                                   
                                    Text="Just a moment , fetching collaborators"
                                    HorizontalAlignment="Center"/>
                         </StackPanel>
@@ -282,16 +280,6 @@
                             
                             />
                         </StackPanel>
-                        <TextBlock 
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center"
-                        Name="txtBlockError"
-                        HorizontalAlignment="Center"
-                               Style="{StaticResource txtBlockDisplay}"
-                               Foreground="{ThemeResource PhoneAccentBrush}"
-                               FontWeight="SemiBold"
-                               />
-                    
                         <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
@@ -366,15 +354,12 @@
                             Visibility="Collapsed"
                             Name="StackPanelCollaboratorsFailed"
                             VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockError}"
+                            <TextBlock 
+                                       Style="{StaticResource TextBlockRetry}"
                                        />
                             <Button 
-                                Background="{ThemeResource PhoneAccentBrush}"
-                                Foreground="White"
-                                BorderThickness="0"
-                                Click="ReloadCollaborators"
-                                HorizontalAlignment="Center">
+                               Style="{StaticResource RetryButton}"
+                                Click="ReloadCollaborators">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Retry" Margin="8,4"/>
                                     <SymbolIcon Symbol="RepeatAll"/>
@@ -387,7 +372,8 @@
         </Pivot>
     </Grid>
     <Page.BottomAppBar>
-        <CommandBar Name="CommandBarActions" Visibility="Collapsed">
+        <CommandBar Name="CommandBarActions" 
+                    Visibility="Collapsed">
             <AppBarButton Name="AppBtnEdit"
                           Click="EditProfilleClick"
                           Icon="Edit"

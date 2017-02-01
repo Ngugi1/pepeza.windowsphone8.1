@@ -29,7 +29,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="2">
-            <Pivot SelectedIndex="0" SelectionChanged="Pivot_SelectionChanged">
+            <Pivot SelectedIndex="0" 
+                   Name="PivotBoard"
+                   SelectionChanged="Pivot_SelectionChanged">
                 <PivotItem Name="PivotItemNotices">
                     <PivotItem.Header>
                         <TextBlock 
@@ -58,22 +60,7 @@
                                        Typography.Capitals="Unicase"
                                        />
                         </StackPanel>
-                        <StackPanel 
-                            Visibility="Collapsed"
-                            Name="StackPanelNoticeFailed"
-                            VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockError}"
-                                       />
-                            <Button 
-                                Click="ReloadNotices"
-                                HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Retry" Margin="8,4"/>
-                                    <SymbolIcon Symbol="RepeatAll"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
+                     
                         <StackPanel Name="StackPanelNoticesLoading"
                                     VerticalAlignment="Center">
                             <ProgressBar Margin="12" />
@@ -130,6 +117,23 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <StackPanel 
+                            Visibility="Collapsed"
+                            Name="StackPanelNoticeFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock 
+                                       Style="{StaticResource TextBlockRetry}"
+                                       />
+                            <Button 
+                                Click="ReloadNotices"
+                                Style="{StaticResource RetryButton}"
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </PivotItem>
                 <PivotItem>
@@ -198,23 +202,7 @@
                                         />
                             </Grid>
                         </StackPanel>
-                        <StackPanel 
-                            Grid.Row="1"
-                            Visibility="Collapsed"
-                            Name="StackPanelFollowerFailed"
-                            VerticalAlignment="Center">
-                            <TextBlock Text="Request could not be completed" HorizontalAlignment="Center"
-                                       Style="{StaticResource txtBlockError}"
-                                       />
-                            <Button 
-                                Click="ReloadFollowers"
-                                HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Retry" Margin="8,4"/>
-                                    <SymbolIcon Symbol="RepeatAll"/>
-                                </StackPanel>
-                            </Button>
-                        </StackPanel>
+                     
                         <ListView Name="ListViewBoardFollowers"
                                   Grid.Row="1"
                                   Margin="4"
@@ -270,6 +258,24 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <StackPanel 
+                            Grid.Row="1"
+                            Visibility="Collapsed"
+                            Name="StackPanelFollowerFailed"
+                            VerticalAlignment="Center">
+                            <TextBlock 
+                                       Style="{StaticResource TextBlockRetry}"
+                                       />
+                            <Button 
+                                Click="ReloadFollowers"
+                               Style="{StaticResource RetryButton}"
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Retry" Margin="8,4"/>
+                                    <SymbolIcon Symbol="RepeatAll"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </PivotItem>
             </Pivot>
@@ -335,6 +341,7 @@
                            Style="{StaticResource txtBlockDisplay}"
                            VerticalAlignment="Center"
                            Margin="4,0"
+                           Visibility="Collapsed"
                            Name="txtBlockNoOfFollowers"
                            Text="{Binding noOfFollowers, Mode=TwoWay}"
                            Foreground="{ThemeResource PhoneAccentBrush}"
