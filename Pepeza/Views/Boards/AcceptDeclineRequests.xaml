@@ -59,6 +59,7 @@
         </StackPanel>
         <toaster:Toastinet Name="toastErrors" 
                            Grid.Row="1" 
+                           Visibility="Collapsed"
                            VerticalAlignment="Center" 
                            Style="{StaticResource ToastStyle}"
                            Duration="4"
@@ -67,10 +68,10 @@
                   Margin="16,8"
                   Name="listviewRequests"
                   >
-           
+
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="2">
+                    <Grid  Height="80" Width="{Binding ActualWidth, ElementName=listviewRequests}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -78,59 +79,50 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Viewbox Grid.RowSpan="2"
-                                 Margin="8"
-                                 Width="60"
-                                 Height="60"
-                                 >
-                            <FFImage:FFImage Height="50"
-                                   Source="{Binding linkSmall}"
-                                   Width="50"
-                                   LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.png"
-                                   ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.png"
-                                   FadeAnimationEnabled="True"
-                                       
-                                         />
-                        </Viewbox>
-                        <TextBlock Text="{Binding fullname}"
-                                   VerticalAlignment="Top"
-                                   Margin="2,0,-0.5,0"
-                                   Grid.ColumnSpan="2"
-                                   Foreground="Black"
-                                   Style="{StaticResource BaseTextBlockStyle}"
-                                   Grid.Column="1" Grid.RowSpan="2"/>
+                        <FFImage:FFImage
+                        Height="50"
+                             Width="50"
+                             Source="{Binding linkSmall , Mode=TwoWay}"
+                             Grid.Row="1"
+                             VerticalAlignment="Bottom"
+                             Margin="10,-10"
+                                      
+                             />
+                        <TextBlock Text="{Binding fullname, Mode=TwoWay}"    
+                       Grid.ColumnSpan="2"
+                       Foreground="Black"
+                       Margin="9,25,15.333,25.167"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource BaseTextBlockStyle}"
+                       Grid.Column="1" Grid.Row="1"/>
                         <Button Content="Accept"
-                                VerticalAlignment="Top"
-                                Height="0"
-                                BorderBrush="Transparent"
-                                Background="{ThemeResource PhoneAccentBrush}"
-                                Grid.Row="1"
-                                Name="AcceptRequestButton1"
-                                Click="BtnAcceptRequest"
-                                Padding="0"
-                                Margin="28,26,0,-0.5"
-                                Tag="{Binding}"
-                                Foreground="White"
-                                Grid.Column="2" 
-                                />
+                    VerticalAlignment="Bottom"
+                    Height="0"
+                    BorderBrush="Transparent"
+                    Background="{ThemeResource PhoneAccentBrush}"
+                    Grid.Row="1"
+                    Click="BtnAcceptRequest"
+                    Padding="0"
+                    Tag="{Binding}"
+                    Foreground="White"
+                    Grid.Column="2" Margin="9.833,0,0,-23" 
+                    />
                         <Button Content="Decline" 
-                                Name="DeclineRequestBtn2"
-                                Click="BtnDeclineRequest"
-                                Grid.Row="1"
-                                VerticalAlignment="Top"
-                                Padding="0"
-                            Margin="2,26,0,-1.333"
-                              
-                                Tag="{Binding}"
-                                Background="Silver"
-                                BorderBrush="Transparent"
-                                Grid.Column="1"/>
+                    VerticalAlignment="Bottom"
+                    Click="BtnDeclineRequest"
+                    Grid.Row="1"
+                    Tag="{Binding}"
+                    Background="Silver"
+                    BorderBrush="Transparent"
+                    Grid.Column="1" Margin="0,0,0,-22.5"/>
+
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
             
         </ListView>
+     
     </Grid>
 </Page>

@@ -26,8 +26,8 @@
                 <FFImage:FFImage Height="150"
                              Width="150"
                              Margin="24,24,12,12"
-                             LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
-                             ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
+                             LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.png"
+                             ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.png"
                              Source="{Binding linkNormal}"
                              HorizontalAlignment="Left"
                              >

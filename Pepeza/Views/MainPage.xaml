@@ -416,7 +416,7 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Right">
             <Viewbox Height="35" Width="Auto">
-                <SymbolIcon Symbol="ViewAll" />
+                <Image Source="/Assets/Images/bell.png"/>
             </Viewbox>
             <TextBlock 
                 Name="txtBlockNotificationsCount"

@@ -54,12 +54,13 @@ namespace Pepeza.Views.Boards
     /// </summary>
     public sealed partial class BoardProfileAndNotices : Page
     {
-        TBoard boardFetched = null , rolesBoard = null;
+        TBoard boardFetched = null, rolesBoard = null;
         int boardId;
         bool hasRole = false;
         CoreApplicationView view = CoreApplication.GetCurrentView();
         TAvatar boardAvatar = null;
-        bool isProfileLoaded = false, areNoticesLoaded = false , areFollowersLoaded = false;
+        bool isProfileLoaded = false, areNoticesLoaded = false, areFollowersLoaded = false;
+        string role = "";
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
         public BoardProfileAndNotices()
         {
@@ -70,9 +71,9 @@ namespace Pepeza.Views.Boards
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected  async override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-           
+
             if (e.Parameter != null)
             {
                 boardId = (int)e.Parameter;
@@ -80,7 +81,7 @@ namespace Pepeza.Views.Boards
                 //Get the board details 
                 await getBoardDetailsAsync(boardId);
             }
-           
+
             await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
         }
         public async Task getBoardDetailsAsync(int boardId)
@@ -102,31 +103,32 @@ namespace Pepeza.Views.Boards
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
                 if (following != null)
                 {
-                    if(following.accepted==1)
+                    if (following.accepted == 1)
                     {
                         btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
-                    }else if(following.accepted == 0)
+                    }
+                    else if (following.accepted == 0)
                     {
                         btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                         btnFollow.IsEnabled = true;
                     }
-                    else if (following.accepted ==2)
+                    else if (following.accepted == 2)
                     {
-                        btnFollow.Content =Constants.BOARD_CONTENT_REQUESTED;
+                        btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
                         btnFollow.IsEnabled = false;
                     }
 
                 }
                 else
                 {
-                   btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
+                    btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                     btnFollow.IsEnabled = true;
                 }
-                 isProfileLoaded = true;
-                 await assignRoles(localBoard, PivotBoard.SelectedIndex);
-                 await loadFollowers(boardId);
-               
-            }   
+                isProfileLoaded = true;
+                await assignRoles(localBoard, PivotBoard.SelectedIndex);
+                await loadFollowers(boardId);
+
+            }
             else
             {
                 Dictionary<string, string> results = await BoardService.getBoard(boardId);
@@ -135,19 +137,19 @@ namespace Pepeza.Views.Boards
                     JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
                     boardFetched = new TBoard();
 
-                        boardFetched.id = (int)objResults["id"];
-                        boardFetched.orgID = (int)objResults["orgId"];
-                        boardFetched.name = (string)objResults["name"];
-                        boardFetched.noOfFollowers = (int)objResults["noOfFollowers"];
-                        boardFetched.followRestriction = (string)objResults["followRestriction"];
-                        boardFetched.desc = (string)objResults["description"];
-                        boardFetched.boardVisibility = (string)objResults["visibility"];
-                        boardFetched.dateCreated =(long)objResults["dateCreated"];
-                        boardFetched.dateUpdated = (long)objResults["dateUpdated"];
-                        boardFetched.noOfFollowRequests = numberofRequests;
-                    if (objResults["avatar"].Type!= JTokenType.Null)
+                    boardFetched.id = (int)objResults["id"];
+                    boardFetched.orgID = (int)objResults["orgId"];
+                    boardFetched.name = (string)objResults["name"];
+                    boardFetched.noOfFollowers = (int)objResults["noOfFollowers"];
+                    boardFetched.followRestriction = (string)objResults["followRestriction"];
+                    boardFetched.desc = (string)objResults["description"];
+                    boardFetched.boardVisibility = (string)objResults["visibility"];
+                    boardFetched.dateCreated = (long)objResults["dateCreated"];
+                    boardFetched.dateUpdated = (long)objResults["dateUpdated"];
+                    boardFetched.noOfFollowRequests = numberofRequests;
+                    if (objResults["avatar"].Type != JTokenType.Null)
                     {
-                       
+
                         boardAvatar = new TAvatar()
                         {
                             id = (int)objResults["avatar"]["id"],
@@ -165,13 +167,13 @@ namespace Pepeza.Views.Boards
                             userId = (int)objResults["follower_item"]["userId"],
                             boardId = (int)objResults["follower_item"]["boardId"],
                             accepted = (int)objResults["follower_item"]["accepted"],
-                           
+
                         };
-                        
-                        if (followerItem.accepted ==1)
+
+                        if (followerItem.accepted == 1)
                         {
                             btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
-                            
+
                             btnFollow.IsEnabled = true;
                             followerItem.dateAccepted = (long)objResults["follower_item"]["dateAccepted"];
                         }
@@ -180,19 +182,20 @@ namespace Pepeza.Views.Boards
                             btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                             btnFollow.IsEnabled = true;
                         }
-                        
-                        else if(followerItem.accepted ==2)
+
+                        else if (followerItem.accepted == 2)
                         {
                             btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
                             btnFollow.IsEnabled = false;
-                           
+
                         }
 
-                    }else
+                    }
+                    else
                     {
                         btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
                     }
-                   
+
                     isProfileLoaded = true;
                     rolesBoard = boardFetched;
                     this.GridBoardProfile.DataContext = boardFetched;
@@ -202,8 +205,8 @@ namespace Pepeza.Views.Boards
                     //Show a popup message 
                     App.displayMessageDialog(Constants.UNAUTHORIZED);
                     this.Frame.Navigate(typeof(LoginPage));
-                } 
-                await assignRoles(boardFetched, PivotBoard.SelectedIndex);  
+                }
+                await assignRoles(boardFetched, PivotBoard.SelectedIndex);
             }
         }
         public async Task followBoard(TBoard boardParam)
@@ -220,20 +223,21 @@ namespace Pepeza.Views.Boards
                 following.userId = (int)objResults["userId"];
                 following.boardId = (int)objResults["boardId"];
                 following.accepted = (int)objResults["accepted"];
-                if (objResults["dateAccepted"].Type != JTokenType.Null)following.dateAccepted= (long)objResults["dateAccepted"];
+                if (objResults["dateAccepted"].Type != JTokenType.Null) following.dateAccepted = (long)objResults["dateAccepted"];
                 if (await FollowingHelper.get(following.id) != null)
                 {
                     await FollowingHelper.update(following);
-                    if(await BoardHelper.getBoard(following.boardId) != null)
+                    if (await BoardHelper.getBoard(following.boardId) != null)
                     {
                         boardParam.following = 1;
                         await BoardHelper.update(boardParam);
-                    }else
+                    }
+                    else
                     {
                         boardParam.following = 1;
                         await BoardHelper.add(boardParam);
                     }
-                  
+
                 }
                 else
                 {
@@ -250,9 +254,9 @@ namespace Pepeza.Views.Boards
                     }
 
                 }
-               
+
                 //Update the number of follower
-                
+
                 if (following.accepted == 1)
                 {
                     (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (GridBoardProfile.DataContext as TBoard).noOfFollowers + 1;
@@ -276,7 +280,7 @@ namespace Pepeza.Views.Boards
             else
             {
                 //Something went wrong 
-                
+
                 btnFollow.IsEnabled = true;
             }
         }
@@ -312,7 +316,7 @@ namespace Pepeza.Views.Boards
                 else
                 {
                     btnFollow.IsEnabled = true;
-                   
+
                 }
 
             }
@@ -320,10 +324,10 @@ namespace Pepeza.Views.Boards
             {
                 //Do nothing 
             }
-           
-            
+
+
         }
-        private  async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch ((sender as Pivot).SelectedIndex)
             {
@@ -344,11 +348,11 @@ namespace Pepeza.Views.Boards
                     {
                         await loadFollowers(boardId);
                     }
-                   
-                        
+
+
                     break;
-                
-                default :
+
+                default:
                     break;
             }
         }
@@ -383,7 +387,7 @@ namespace Pepeza.Views.Boards
             var board = this.GridBoardProfile.DataContext;
             this.Frame.Navigate(typeof(UpdateBoard), board);
         }
-        private async Task assignRoles(TBoard board , int selectedIndex)
+        private async Task assignRoles(TBoard board, int selectedIndex)
         {
             hasRole = false;
 
@@ -391,10 +395,11 @@ namespace Pepeza.Views.Boards
             {
                 TCollaborator collaborator = await CollaboratorHelper.getRole((int)(Settings.getValue(Constants.USERID)), board.orgID);
                 #region check collaboration
-                if (collaborator!=null)
+                if (collaborator != null)
                 {
+                    role = collaborator.role;
                     hasRole = true;
-                    if ((collaborator.role == Constants.ADMIN ||collaborator.role == Constants.OWNER))
+                    if ((collaborator.role == Constants.ADMIN || collaborator.role == Constants.OWNER))
                     {
                         hasRole = true;
                         AppBtnEdit.Visibility = Visibility.Visible;
@@ -408,20 +413,22 @@ namespace Pepeza.Views.Boards
                         AppBtnAddNotice.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
                         CommandBarOperations.Visibility = Visibility.Visible;
- 
-                       
+                        StackPanelProfPic.IsTapEnabled = false;
+
+
                     }
                     else
                     {
-                        ImageBoardAvatar.IsTapEnabled = false;
                         CommandBarOperations.Visibility = Visibility.Collapsed;
+                        StackPanelProfPic.IsTapEnabled = false;
+
 
                     }
-                   
+
                 }
                 else
                 {
-                    ImageBoardAvatar.IsTapEnabled = false;
+                    StackPanelProfPic.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
                 }
                 if (selectedIndex == 1)
@@ -433,17 +440,25 @@ namespace Pepeza.Views.Boards
             else
             {
                 CommandBarOperations.Visibility = Visibility.Collapsed;
+                ImageBoardAvatar.IsTapEnabled = false;
             }
-           
+
         }
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AcceptDeclineRequests),boardId);
+            this.Frame.Navigate(typeof(AcceptDeclineRequests), boardId);
         }
         private void ImageBoardAvatarTapped(object sender, TappedRoutedEventArgs e)
         {
-            FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
-            view.Activated += view_Activated;
+            if (hasRole)
+            {
+                if (!role.Equals(Constants.EDITOR) && !string.IsNullOrEmpty(role))
+                {
+                    FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+                    view.Activated += view_Activated;
+                }
+            }
+
         }
         async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
@@ -463,86 +478,91 @@ namespace Pepeza.Views.Boards
                     ImageBoardAvatar.Image.Source = cropped;
                     if (await FilePickerHelper.checkHeightAndWidth(choosenFile))
                     {
-                            //Here we resume to upload the image 
-                            if (bitmap != null)
+                        //Here we resume to upload the image 
+                        if (bitmap != null)
+                        {
+                            try
                             {
-                               try
-                                {
 
-                                    //If successful , add it to isolated storage 
-                                    var file = await AvatarUploader.WriteableBitmapToStorageFile(cropped,
-                                        Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
-                                        Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board);
-                                    // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                                    Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TBoard)GridBoardProfile.DataContext).id, "board", ((TBoard)GridBoardProfile.DataContext).avatarId);
-                                    if (results.ContainsKey(Constants.SUCCESS))
+                                //If successful , add it to isolated storage 
+                                var file = await AvatarUploader.WriteableBitmapToStorageFile(cropped,
+                                    Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
+                                    Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board);
+                                // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
+                                Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TBoard)GridBoardProfile.DataContext).id, "board", ((TBoard)GridBoardProfile.DataContext).avatarId);
+                                if (results.ContainsKey(Constants.SUCCESS))
+                                {
+                                    try
                                     {
-                                        try
+                                        //Save the image locally now , remove the temp file 
+                                        JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                        TAvatar avatar = new TAvatar()
                                         {
-                                            //Save the image locally now , remove the temp file 
-                                            JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
-                                            TAvatar avatar = new TAvatar()
+                                            id = (int)avatarObject["avatar"]["id"],
+                                            linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                            linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                            dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                            dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
+                                        };
+                                        var localAvatar = await AvatarHelper.get(avatar.id);
+                                        //Update local database if they are collaborators 
+                                        if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)ImageBoardAvatar.DataContext).orgID) != null)
+                                        {
+                                            if (localAvatar != null)
                                             {
-                                                id = (int)avatarObject["avatar"]["id"],
-                                                linkNormal = (string)avatarObject["avatar"]["linkNormal"],
-                                                linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                                dateCreated = (long)avatarObject["avatar"]["dateCreated"],
-                                                dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
-                                            };
-                                            var localAvatar = await AvatarHelper.get(avatar.id);
-                                            //Update local database if they are collaborators 
-                                            if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)ImageBoardAvatar.DataContext).orgID) != null)
-                                            {
-                                                if (localAvatar != null)
-                                                {
-                                                    await AvatarHelper.update(avatar);
-                                                }
-                                                else
-                                                {
-                                                    await AvatarHelper.add(avatar);
-                                                }
+                                                await AvatarHelper.update(avatar);
                                             }
-                                            await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);  
+                                            else
+                                            {
+                                                await AvatarHelper.add(avatar);
+                                            }
                                         }
-                                        catch
-                                        {
-                                            ImageBoardAvatar.Source = originalsource;
-                                            //Throw a toast that the image failed
-                                            return;
-                                        }finally
-                                        {
-                                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-                                        }
-
-
-
+                                        await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
                                     }
-                                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                                    catch
                                     {
-                                        //Show a popup message 
-                                        App.displayMessageDialog(Constants.UNAUTHORIZED);
-                                        this.Frame.Navigate(typeof(LoginPage));
-                                    }
-                                    else
-                                    {
-                                        //Restore previous image
-                                       
                                         ImageBoardAvatar.Source = originalsource;
+                                        //Throw a toast that the image failed
+                                        return;
                                     }
-                                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                                    finally
+                                    {
+                                        PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                                    }
+
+
 
                                 }
-                                catch (Exception ex)
+                                else if (results.ContainsKey(Constants.UNAUTHORIZED))
                                 {
-                                    string x = ex.StackTrace;
+                                    //Show a popup message 
+                                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                    this.Frame.Navigate(typeof(LoginPage));
                                 }
-                                //Upload the profile pic 
-                            }
-                        }
-                        view.Activated -= view_Activated;// Unsubscribe from this event 
-                    }
+                                else
+                                {
+                                    //Restore previous image
 
+                                    ImageBoardAvatar.Source = originalsource;
+                                }
+                                PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+
+                            }
+                            catch (Exception ex)
+                            {
+                                string x = ex.StackTrace;
+                            }
+                            //Upload the profile pic 
+                        }
+                    }
+                    else
+                    {
+                        ImageBoardAvatar.Source = originalsource;
+                    }
+                    view.Activated -= view_Activated;// Unsubscribe from this event 
                 }
+
+            }
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
         }
@@ -556,7 +576,7 @@ namespace Pepeza.Views.Boards
         }
         private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BoardAnalytics) , boardId);
+            this.Frame.Navigate(typeof(BoardAnalytics), boardId);
         }
         private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -573,13 +593,13 @@ namespace Pepeza.Views.Boards
         }
         private void ReloadNotices(object sender, RoutedEventArgs e)
         {
-            StackPanelNoticeFailed.Visibility = Visibility.Collapsed; 
+            StackPanelNoticeFailed.Visibility = Visibility.Collapsed;
             loadBoardNotices(boardId);
         }
         private async Task loadFollowers(int boardId)
         {
             StackPanelLoadingFollowers.Visibility = Visibility.Visible;
-            StackPanelNoticeFailed.Visibility = Visibility.Collapsed; 
+            StackPanelNoticeFailed.Visibility = Visibility.Collapsed;
             StackPanelFollowerFailed.Visibility = Visibility.Collapsed;
             ObservableCollection<Follower> boardFollowers = new ObservableCollection<Follower>();
             try
@@ -598,10 +618,10 @@ namespace Pepeza.Views.Boards
                     }
                     else
                     {
-                       StackPanelFollowRequests.Visibility = Visibility.Collapsed;
+                        StackPanelFollowRequests.Visibility = Visibility.Collapsed;
                     }
-                   
-                    
+
+
                     if (jArray.Count > 0)
                     {
                         EmptyFollowersPlaceHolder.Visibility = Visibility.Collapsed;
@@ -654,7 +674,7 @@ namespace Pepeza.Views.Boards
                     //We hit an error :TODO :: Show a toast  
                     StackPanelFollowerFailed.Visibility = Visibility.Visible;
                     txtBlockNoOfFollowers.Visibility = Visibility.Collapsed;
-                   
+
                 }
                 StackPanelLoadingFollowers.Visibility = Visibility.Collapsed;
             }
@@ -664,7 +684,7 @@ namespace Pepeza.Views.Boards
                 txtBlockNoOfFollowers.Visibility = Visibility.Collapsed;
 
             }
-           
+
         }
         private async void ReloadFollowers(object sender, RoutedEventArgs e)
         {
@@ -712,7 +732,6 @@ namespace Pepeza.Views.Boards
             }
         }
     }
-    
-    
 }
+    
 

@@ -61,7 +61,14 @@ namespace Pepeza.Views.Boards
                                 
                                  
                             };
-                            if ((string)item["linkSmall"] == null) request.linkSmall = Constants.EMPTY_USER_PLACEHOLDER_ICON;
+                            if ((string)item["linkSmall"] == null)
+                            {
+                                request.linkSmall = Constants.EMPTY_USER_PLACEHOLDER_ICON;
+                            }
+                            else
+                            {
+                                request.linkSmall = (string)item["linkSmall"];
+                            }
                             request.fullname = request.firstName == null ? request.username : request.firstName + " " + request.lastName;
                             requestsource.Add(request);
                         }
@@ -150,6 +157,8 @@ namespace Pepeza.Views.Boards
             }
             btn.IsEnabled = true;
         }
+
+        
     }
     class FollowRequest
     {

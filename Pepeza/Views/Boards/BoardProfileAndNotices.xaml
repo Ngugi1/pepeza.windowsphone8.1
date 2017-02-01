@@ -302,15 +302,17 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel  Grid.RowSpan="4">
+            <StackPanel  
+                Tapped="ImageBoardAvatarTapped"
+                Name="StackPanelProfPic"
+                Grid.RowSpan="4">
                 <FFImage:FFImage 
                    Height="120"
                     VerticalAlignment="Bottom"
                    Name="ImageBoardAvatar"
-                   Tapped="ImageBoardAvatarTapped"
-                   LoadingPlaceholder="/Assets/Images/placeholder_board_avatar.jpg"
+                   LoadingPlaceholder="/Assets/Images/placeholder_board_avatar.png"
                     Source="{Binding linkNormal , Mode=TwoWay}"
-                    ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.jpg"
+                    ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
                    Stretch="UniformToFill"
                    Width="120"
                    RetryDelay="5"

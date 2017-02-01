@@ -28,6 +28,24 @@ namespace Shared.Db.DbHelpers.Orgs
                 return  null;
             }
         }
+        public async static Task<List<TCollaborator>> getAll()
+        {
+
+            try
+            {
+                List<TCollaborator> collaborator = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    collaborator = await connection.Table<TCollaborator>().ToListAsync();
+                }
+                return collaborator;
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public async static Task<TCollaborator> getRole(int id , int orgId)
         {
 

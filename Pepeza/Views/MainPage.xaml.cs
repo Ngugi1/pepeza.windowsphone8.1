@@ -22,8 +22,10 @@ using Pepeza.Views.UserNotifications;
 using Pepeza.Views.ViewHelpers;
 using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
+using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
+using Shared.Db.Models.Orgs;
 using Shared.Push;
 using Shared.Utitlity;
 using System;
@@ -80,7 +82,7 @@ namespace Pepeza
             updateNotificationCount();
             //Load data 
             isSelected = false;
-            loadNotices();
+            await loadNotices();
             //Load boards
             await loadBoards();
             //Orgs alpha groups
@@ -230,7 +232,7 @@ namespace Pepeza
             //Prevent background agent from being invoked 
               
         }
-        private async void loadNotices()
+        private async Task loadNotices()
         {
             try
             {
@@ -531,31 +533,45 @@ namespace Pepeza
 
         private async void CheckBoxManaging_Checked(object sender, RoutedEventArgs e)
         {
-            List<TFollowing> following = await FollowingHelper.getAll();
+            List<TCollaborator> collaborationItems = await CollaboratorHelper.getAll();
             List<TBoard> managingBoards = new List<TBoard>();
-            ObservableCollection<TBoard> boardsclone = new ObservableCollection<TBoard>(boards);
-               
-            if (following != null)
+            if (collaborationItems != null)
             {
-                if (following.Count > 0)
+                foreach (var item in collaborationItems)
                 {
-                    foreach (var item in following)
+                    List<TBoard> candidateBoards = await BoardHelper.fetchAllOrgBoards(item.orgId);
+                    managingBoards.AddRange(candidateBoards);
+                }
+                foreach (var item in managingBoards)
+                {
+                    TAvatar avatar = await AvatarHelper.get(item.avatarId);
+                    if (avatar != null)
                     {
-                        var board = boardsclone.FirstOrDefault(x => x.id == item.boardId);
-                        if (board != null) boardsclone.Remove(board); // This will leave the boards you only manage
+                        item.linkSmall = (avatar.linkSmall == null) ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : avatar.linkSmall;
                     }
-                    if (boardsclone.Count == 0)
+                }
+            }
+
+            if (managingBoards != null)
+            {
+               
+                    if (managingBoards.Count == 0)
                     {
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                        ListViewBoards.ItemsSource = boardsclone;
+                        ListViewBoards.ItemsSource = managingBoards;
                         txtBlockContent.Text = "You don't manage any boards.";
                     }
                     else
                     {
-                        ListViewBoards.ItemsSource = boardsclone;
+                        ListViewBoards.ItemsSource = managingBoards;
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
                     }
-                }
+            }
+            else
+            {
+                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                ListViewBoards.ItemsSource = managingBoards;
+                txtBlockContent.Text = "You don't manage any boards.";
             }
         }
         private async void CheckBoxFollowing_Checked(object sender, RoutedEventArgs e)

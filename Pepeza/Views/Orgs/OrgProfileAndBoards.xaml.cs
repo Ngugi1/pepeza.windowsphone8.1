@@ -749,8 +749,16 @@ namespace Pepeza.Views.Orgs
         }
         private void ImageBoardAvatarTapped(object sender, TappedRoutedEventArgs e)
         {
-            FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
-            view.Activated += view_Activated;
+            if (hasRole)
+            {
+                if (role.Equals(Constants.OWNER) || role.Equals(Constants.ADMIN))
+                {
+                    FilePickerHelper.pickFile(new List<string>() { ".jpg" }, Windows.Storage.Pickers.PickerLocationId.PicturesLibrary);
+                    view.Activated += view_Activated;
+                }
+                
+            }
+            
         }
         private async void ReloadBoards(object sender, RoutedEventArgs e)
         {

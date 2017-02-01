@@ -75,10 +75,10 @@ namespace Shared.Utitlity
                    // pickFile(PHOTOS, PickerLocationId.PicturesLibrary);
                     return false;
                 }
-                var properties = await file.GetBasicPropertiesAsync(); 
-                //if (properties.Size > FILE_SIZE)
+                //var properties = await file.GetBasicPropertiesAsync();
+                //if (properties.Size > 1024)
                 //{
-                //    await new MessageDialog("File is too large. Your image should not exceed 1 MB").ShowAsync();
+                //    await new MessageDialog("file is too large. your image should not exceed 1 mb").ShowAsync();
                 //    return false;
                 //}
 
