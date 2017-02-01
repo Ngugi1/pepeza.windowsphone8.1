@@ -110,6 +110,7 @@ namespace Pepeza.Views.Orgs
                 TCollaborator collaborator = await CollaboratorHelper.getRole(userId, OrgID);
                 if (collaborator != null)
                 {
+                    role = collaborator.role;
                     hasRole = true;
                     if (collaborator.role == Constants.EDITOR)// Editor can only view org analytics
                     {

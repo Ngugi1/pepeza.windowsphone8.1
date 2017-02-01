@@ -19,93 +19,68 @@
     </Page.Resources>
     <ScrollViewer>
     <Grid Name="RootGrid">
-            <Toast:Toastinet Name="ToastNetStatus" Style="{StaticResource ToastStyle}"/>
+            <Toast:Toastinet Name="ToastNetStatus"
+                             Visibility="Collapsed"
+                             Style="{StaticResource ToastStyle}"/>
             <StackPanel>
-            <Image Height="250"
-                             Width="250"
-                             Source="/Assets/Images/placeholder_avatar.jpg"
-                             Margin="12,12,4,4"
+                <FFImage:FFImage Height="150"
+                             Width="150"
+                             Margin="24,24,12,12"
+                             LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
+                             ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.jpg"
+                             Source="{Binding linkNormal}"
+                             HorizontalAlignment="Left"
                              >
-            </Image>
+                </FFImage:FFImage>
                 <StackPanel Name="StackPanelUploading" Visibility="Collapsed">
                     <ProgressBar IsIndeterminate="True" Margin="12,4"/>
                     <TextBlock Text="Just a moment ... " Style="{StaticResource txtBlockWait}" HorizontalAlignment="Center"/>
                 </StackPanel>
-            <TextBlock Foreground="Black"
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="Black"
                        Name="txtBlockName"
+                       Style="{StaticResource BodyTextBlockStyle}"
+                       Margin="24,12"
                        Text="{Binding name , Mode=TwoWay}"
-                       Style="{StaticResource txtBlockStyleProfileOwner}"/>
-            <TextBlock />
-            <TextBlock Text="Username" Style="{StaticResource txtBlockListViewDesc}" HorizontalAlignment="Center"/>
-            <TextBlock Text="{Binding username}" Style="{StaticResource txtBlockDisplay}"
+                      />
+                    <TextBlock />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Contact" Margin="24,12"/>
+                    <TextBlock Text="{Binding username}" Style="{StaticResource txtBlockDisplay}"
                        FontWeight="SemiBold"
+                               Margin="12"
                        Foreground="Black"
                        HorizontalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal"
-            	HorizontalAlignment="Center" Margin="142,0,143,0">
-                    <TextBlock Text="Role"
-                		VerticalAlignment="Bottom"
-                		HorizontalAlignment="Center"
-                		Style="{StaticResource txtBlockListViewDesc}"/>
-                    <Viewbox Height="30" 
-                		Margin="24,4,4,4"
-                		Width="30">
-                        <SymbolIcon Symbol="Edit" 
-                                    Name="EditSymbol"
-                			Tapped="EditSymbol_Tapped"/>
-                    </Viewbox>
                 </StackPanel>
-                <Grid>
-                    <ComboBox 
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Admin"
+                                    Margin="24,12"/>
+                        <Grid>
+                            <ComboBox 
+                                Header="Switch role"
                         Name="ComboRole"
                         BorderBrush="{ThemeResource PhoneAccentBrush}"
-                        Visibility="Collapsed"
-                        Width="150">
-                        
-                    </ComboBox>
-                <TextBlock Text="{Binding role , Mode=TwoWay}" 
-                           Name="txtBlockRole"
-                           Visibility="Visible"
-                           Foreground="Black"
-                           Style="{StaticResource txtBlockDisplay}" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-                
-            </Grid>
-            <TextBlock Text="Status" Style="{StaticResource txtBlockListViewDesc}"
-                       HorizontalAlignment="Center"/>
-                <StackPanel 
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                    <TextBlock Text="{Binding active, Mode=TwoWay}" Style="{StaticResource txtBlockDisplay}" 
-                       HorizontalAlignment="Center" 
-                               Name="txtBlockActive"
-                       Foreground="Black" 
-                       FontWeight="SemiBold"/>
+                        Visibility="Visible"
+                        Width="300">
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="158,0,94,0">
                 <Button HorizontalAlignment="Center" 
                         Name="BtnActivation"
                         Foreground="White"
+                        Width="250"
                         Click="BtnActivation_Click"
                         Content="Activate"
                         Background="{ThemeResource PhoneAccentBrush}"
                         BorderBrush="Transparent"
                         >
-                
+
                 </Button>
-                    <Viewbox 
-                        Margin="4,0"
-                        Height="30" Width="30">
-                    <ProgressRing  
-                        Name="ProgressRingUpdating"
-                        Background="Transparent"
-                        Foreground="{ThemeResource PhoneAccentBrush}"
-                        IsActive="True"
-                        IsEnabled="True"
-                        Visibility="Collapsed"/>
-                    </Viewbox>
-                </StackPanel>
             </StackPanel>
-    </Grid>
+        </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar Visibility="Collapsed" Name="CommandBarActions">

@@ -44,7 +44,7 @@ namespace Pepeza.Views.Orgs
                  if (collaborator.userId == (int)Settings.getValue(Constants.USERID))
                  {
                      BtnActivation.IsEnabled = false;
-                     EditSymbol.IsTapEnabled = false;
+                     ComboRole.IsEnabled = false;
                      AppBtnSave.IsEnabled = false;
                  }
                  if (collaborator.active == "Active")
@@ -69,6 +69,7 @@ namespace Pepeza.Views.Orgs
                  ComboRole.ItemsSource = roles;
                  if (string.IsNullOrWhiteSpace(collaborator.name)) txtBlockName.Visibility = Visibility.Collapsed;
                 this.RootGrid.DataContext = collaborator;
+                ComboRole.SelectedItem = collaborator.role;
             }
             
         }
@@ -78,10 +79,7 @@ namespace Pepeza.Views.Orgs
             if (ComboRole.SelectedItem != null)
             {
                 AppBtnSave.IsEnabled = false;
-                string oldRole = txtBlockRole.Text;
-                txtBlockRole.Text = ComboRole.SelectedItem.ToString();
-                txtBlockRole.Visibility = Visibility.Visible;
-                ComboRole.Visibility = Visibility.Collapsed;
+                string oldRole = ComboRole.SelectedItem.ToString();
                 try
                 {
                     StackPanelUploading.Visibility = Visibility.Visible;
@@ -100,13 +98,14 @@ namespace Pepeza.Views.Orgs
                     else
                     {
                         ToastNetStatus.Message = results[Constants.ERROR];
-                        txtBlockRole.Text = oldRole;
+                        ComboRole.SelectedItem  = oldRole;
                     }
                 }
                 catch
                 {
                     ToastNetStatus.Message = Constants.UNKNOWNERROR;
-                    txtBlockRole.Text = oldRole;
+                    ComboRole.SelectedItem = oldRole;
+                    
                 }
                 AppBtnSave.IsEnabled = true;
             }
@@ -118,7 +117,6 @@ namespace Pepeza.Views.Orgs
         private async void BtnActivation_Click(object sender, RoutedEventArgs e)
         {
             BtnActivation.IsEnabled = false;
-            ProgressRingUpdating.Visibility = Visibility.Visible;
             if ((RootGrid.DataContext as Pepeza.Views.Orgs.OrgProfileAndBoards.Collaborator).active == "Active")
             {
                 Dictionary<string, string> results = await OrgsService.activateDeactivateCollaborator(collaborator.orgId, false, collaborator.userId);
@@ -134,12 +132,12 @@ namespace Pepeza.Views.Orgs
                     App.displayMessageDialog(Constants.UNAUTHORIZED);
                     this.Frame.Navigate(typeof(LoginPage));
                 }
-                else if(results.ContainsKey(Constants.ERROR))
+                else if (results.ContainsKey(Constants.ERROR))
                 {
                     ToastNetStatus.Message = results[Constants.ERROR];
                 }
-                
-                
+
+
             }
             else
             {
@@ -155,21 +153,11 @@ namespace Pepeza.Views.Orgs
 
                     ToastNetStatus.Message = (string)results["message"];
                 }
-               
+
 
             }
             BtnActivation.IsEnabled = true;
-            ProgressRingUpdating.Visibility = Visibility.Collapsed;
         }
-
-        private void EditSymbol_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            CommandBarActions.Visibility = Visibility.Visible;
-            AppBtnSave.Visibility = Visibility.Visible;
-            ComboRole.Visibility = Visibility.Visible;
-            txtBlockRole.Visibility = Visibility.Collapsed;
-        }
-
        
     }
 }

@@ -25,8 +25,10 @@
                 Name="ToastStatus"
                 Style="{StaticResource ToastStyle}" VerticalAlignment="Center" Grid.Row="1" Duration="5"/>
             <StackPanel>
-                <TextBlock Margin="14,0,26,0" Style="{StaticResource txtBlockPivotHeader}"
-            		Text="search for people"
+                <TextBlock Margin="14,0,26,0"
+                           Style="{StaticResource BaseTextBlockStyle}"
+                           HorizontalAlignment="Center"
+            		Text="search for people you would like to add as collaborators"
             		VerticalAlignment="Bottom"
             		Typography.Capitals="Normal"
                            />
