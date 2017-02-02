@@ -96,17 +96,11 @@
                                          Grid.Row="1"
                                         Margin="0"
                                         FontWeight="Thin"
-                                        IsTextSelectionEnabled="True"
+                                        IsTextSelectionEnabled="False"
                                         Style="{StaticResource BaseRichTextBlockStyle}"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        
-                                        >
-                                        <Paragraph>
-                                            <Run Foreground="Black" 
-                                                      Text="{Binding board, Mode=TwoWay}"
-                                                    
-                                                 />
-                                        </Paragraph>
+                                        Common:Properties.Html="{Binding board, Mode=TwoWay}"
+                                        > 
                                     </RichTextBlock>
                                     <RichTextBlock
                                         Grid.Row="2"
@@ -418,7 +412,7 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Right">
             <Viewbox Height="40" Width="Auto">
-                <Image Source="/Assets/Images/bell.png" Tapped="StackPanelViewNotifications_Tapped" />
+                <Image Source="/Assets/Images/bell.png"/>
             </Viewbox>
             <TextBlock 
                 Name="txtBlockNotificationsCount"

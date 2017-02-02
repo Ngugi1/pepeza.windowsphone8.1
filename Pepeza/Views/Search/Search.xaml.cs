@@ -93,7 +93,7 @@ namespace Pepeza.Views
             Organization org = (sender as ListView).SelectedItem as Organization;
             if (org != null)
             {
-                this.Frame.Navigate(typeof(Views.Orgs.OrgProfileAndBoards), org);
+                this.Frame.Navigate(typeof(Views.Orgs.OrgProfileAndBoards), org.Id);
                 listViewSearchOrgs.SelectedItem = null;
             }
            

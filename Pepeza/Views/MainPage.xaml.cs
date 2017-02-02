@@ -320,14 +320,14 @@ namespace Pepeza
             try
             {
                 int selectedIndex = (sender as Pivot).SelectedIndex;
-                updateNotificationCount();
+                await updateNotificationCount();
                 switch (selectedIndex)
                 {
                         
                     case 0:
                         if (isInBackground)
                         {
-                            loadNotices();
+                            await loadNotices();
                         }
                         break;
                     case 1:
@@ -531,7 +531,7 @@ namespace Pepeza
         {
             this.Frame.Navigate(typeof(FeedbackPage));
         }
-        private async void rateAppClicked(object sender, RoutedEventArgs e)
+        private  void rateAppClicked(object sender, RoutedEventArgs e)
         {
             //await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
@@ -545,7 +545,14 @@ namespace Pepeza
                 foreach (var item in collaborationItems)
                 {
                     List<TBoard> candidateBoards = await BoardHelper.fetchAllOrgBoards(item.orgId);
-                    managingBoards.AddRange(candidateBoards);
+                    foreach (var candidate in candidateBoards)
+                    {
+                        if (managingBoards.FirstOrDefault(i=>i.id == candidate.id)==null)
+                        {
+                            managingBoards.Add(candidate);
+                        }
+                        
+                    }
                 }
                 foreach (var item in managingBoards)
                 {
@@ -568,7 +575,8 @@ namespace Pepeza
                     }
                     else
                     {
-                        ListViewBoards.ItemsSource = managingBoards;
+                        List<TBoard> distinctBoards = managingBoards.Distinct<TBoard>().ToList();
+                        ListViewBoards.ItemsSource = distinctBoards;
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
                     }
             }

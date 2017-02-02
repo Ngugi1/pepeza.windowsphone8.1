@@ -82,8 +82,14 @@ namespace Pepeza.Views.Orgs
                 {
                     org = e.Parameter as Organization;
                     OrgID = org.Id;
+
                     Settings.add(Constants.ORG_ID_TEMP, OrgID);
-                    this.GridBoardProfile.DataContext = org;
+                    this.GridBoardProfile.DataContext = new TOrgInfo()
+                    {
+                        id= org.Id,
+                        name = org.Name,
+                        username = org.Username
+                    };
                     await getOrgDetails(OrgID);
                    
                 }
@@ -186,17 +192,7 @@ namespace Pepeza.Views.Orgs
             //Determine whethe to get them locally or online , check that the org ID exists locally or not 
             TOrgInfo localOrg = await OrgHelper.get(orgID);
            
-            if (localOrg!=null)
-            {
-                TAvatar local = await AvatarHelper.get(localOrg.avatarId);
-                if (local != null && local.linkNormal != null)
-                {
-                    localOrg.linkNormal = local.linkNormal;
-                }
-                this.RootGrid.DataContext = localOrg;
-                isProfileLoaded = true;
-            }
-            else
+            if (localOrg==null)
             {
                 //This board doesnt belong to this user and he or she cannot edit it
                 Dictionary<string, string> results = await OrgsService.getOrg(orgID);
@@ -211,16 +207,16 @@ namespace Pepeza.Views.Orgs
                         description = (string)objResults["description"],
                         category = (string)objResults["category"],
                         name = (string)objResults["name"],
-                        dateCreated =(long)objResults["dateCreated"],
+                        dateCreated = (long)objResults["dateCreated"],
                         dateUpdated = (long)objResults["dateUpdated"],
                     };
                     TAvatar orgAvatar = new TAvatar()
                     {
-                         id = (int)objResults["avatar"]["id"],
-                         linkNormal = (string)objResults["avatar"]["linkNormal"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkNormal"],
-                         linkSmall = (string)objResults["avatar"]["linkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkSmall"],
-                         dateCreated = (long)objResults["avatar"]["dateUpdated"],
-                         dateUpdated = (long)objResults["avatar"]["dateUpdated"]
+                        id = (int)objResults["avatar"]["id"],
+                        linkNormal = (string)objResults["avatar"]["linkNormal"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkNormal"],
+                        linkSmall = (string)objResults["avatar"]["linkSmall"] == null ? Constants.EMPTY_ORG_PLACEHOLDER_ICON : (string)objResults["avatar"]["linkSmall"],
+                        dateCreated = (long)objResults["avatar"]["dateUpdated"],
+                        dateUpdated = (long)objResults["avatar"]["dateUpdated"]
                     };
                     info.linkNormal = orgAvatar.linkNormal;
                     this.RootGrid.DataContext = info;
@@ -237,6 +233,17 @@ namespace Pepeza.Views.Orgs
                 {
                     //There was an error , nothing to display since this is a board profile
                 }
+               
+            }
+            else
+            {
+                TAvatar local = await AvatarHelper.get(localOrg.avatarId);
+                if (local != null && local.linkNormal != null)
+                {
+                    localOrg.linkNormal = local.linkNormal;
+                }
+                this.RootGrid.DataContext = localOrg;
+                isProfileLoaded = true;
             }
         }
         private async Task loadBoardsLocally()
@@ -381,7 +388,10 @@ namespace Pepeza.Views.Orgs
             {
                 try
                 {
-                    await loadBoardsLocally();
+                    if (!await loadBoardsOnline(orgId))
+                    {
+                        await loadBoardsLocally();
+                    }
                     areBoardsLoaded = true;
                 }
                 catch
@@ -392,69 +402,76 @@ namespace Pepeza.Views.Orgs
             }
             else
             {
-                try
-                {
-                    Dictionary<string, string> orgBoards = await OrgsService.getOrgBoards(orgId);
-                    if (orgBoards != null && orgBoards.ContainsKey(Constants.SUCCESS))
-                    {
-                        //Object objResults = JObject.Parse(orgBoards[Constants.SUCCESS]);
-                        JArray boardArray = JArray.Parse(orgBoards[Constants.SUCCESS]);
-                        if (boardArray.Count > 0)
-                        {
-                            foreach (var board in boardArray)
-                            {
-                                boards.Add(new TBoard()
-                                {
-                                    id = (int)board["id"],
-                                    linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"],
-                                    name = (string)board["name"],
-                                    orgID = orgId,
-                                    desc = (string)board["description"]
-                                });
-                            }
-                            if (boards.Count == 0)
-                            {
-                                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                            }
-                            else
-                            {
-                                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-
-                            }
-                            ListViewOrgBoards.ItemsSource = boards;
-                        }
-                        else
-                        {
-                            //No boards boy
-                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                        }
-                        areBoardsLoaded = true;
-                    }
-                    else if (orgBoards.ContainsKey(Constants.UNAUTHORIZED))
-                    {
-                        //Show a popup message 
-                        App.displayMessageDialog(Constants.UNAUTHORIZED);
-                        this.Frame.Navigate(typeof(LoginPage));
-                        areBoardsLoaded = false;
-                    }
-                    else
-                    {
-                        //something went wrong , try again later
-                        laodingFailed();
-                        areBoardsLoaded = false;
-                    }
-                }
-
-                catch (Exception)
-                {
-
-                    laodingFailed();
-                    areBoardsLoaded = false;
-                }
-                
+                await loadBoardsOnline(orgId); 
             }
             fetchingBoards(false);
             return areBoardsLoaded;
+        }
+
+        private async Task<bool> loadBoardsOnline(int orgId)
+        {
+            try
+            {
+                Dictionary<string, string> orgBoards = await OrgsService.getOrgBoards(orgId);
+                if (orgBoards != null && orgBoards.ContainsKey(Constants.SUCCESS))
+                {
+                    //Object objResults = JObject.Parse(orgBoards[Constants.SUCCESS]);
+                    JArray boardArray = JArray.Parse(orgBoards[Constants.SUCCESS]);
+                    if (boardArray.Count > 0)
+                    {
+                        foreach (var board in boardArray)
+                        {
+                            boards.Add(new TBoard()
+                            {
+                                id = (int)board["id"],
+                                linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"],
+                                name = (string)board["name"],
+                                orgID = orgId,
+                                desc = (string)board["description"]
+                            });
+                        }
+                        if (boards.Count == 0)
+                        {
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+
+                        }
+                        ListViewOrgBoards.ItemsSource = boards;
+                    }
+                    else
+                    {
+                        //No boards boy
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    }
+                    areBoardsLoaded = true;
+                    return true;
+                }
+                else if (orgBoards.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                    areBoardsLoaded = false;
+                }
+                else
+                {
+                    //something went wrong , try again later
+                    laodingFailed();
+                    areBoardsLoaded = false;
+                }
+            }
+
+            catch (Exception)
+            {
+
+                laodingFailed();
+                areBoardsLoaded = false;
+            }
+            return false;
+                
         }
 
         public void laodingFailed()

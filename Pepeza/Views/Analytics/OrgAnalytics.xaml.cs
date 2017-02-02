@@ -164,7 +164,7 @@ namespace Pepeza.Views.Analytics
             double percentage = 0;
             if (previous != 0)
             {
-                percentage = ((double)(current - previous) / (double)previous) * 100;
+                percentage = Math.Floor(((double)(current - previous) / (double)previous) * 100);
             }
             else if (previous == 0 && current > 0)
             {

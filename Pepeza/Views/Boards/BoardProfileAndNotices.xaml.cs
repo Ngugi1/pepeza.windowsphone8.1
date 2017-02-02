@@ -577,14 +577,7 @@ namespace Pepeza.Views.Boards
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
         }
-        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
-        {
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                this.NavigationCacheMode = NavigationCacheMode.Disabled;
-            }
-            base.OnNavigatingFrom(e);
-        }
+       
         private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardAnalytics), boardId);
