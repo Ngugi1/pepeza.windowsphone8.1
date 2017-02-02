@@ -338,22 +338,25 @@ namespace Pepeza.Views.Profile
                             var file = await AvatarUploader.WriteableBitmapToStorageFile(cropped,
                                 Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
                                 Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user);
-                            Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, userId, "user", ((ProfileData)grid.DataContext).avatarId);
-                            if (results.ContainsKey(Constants.SUCCESS))
+                            var fileprops = await file.GetBasicPropertiesAsync();
+                            if (fileprops.Size <= 1000000)
                             {
-                                try
+                                Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, userId, "user", ((ProfileData)grid.DataContext).avatarId);
+                                if (results.ContainsKey(Constants.SUCCESS))
                                 {
-                                    //Save the image locally now , remove the temp file 
-                                    JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
-                                    TAvatar avatar = new TAvatar()
+                                    try
                                     {
-                                        id = (int)avatarObject["avatar"]["id"],
-                                        linkNormal = (string)avatarObject["avatar"]["linkNormal"],
-                                        linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                        dateCreated = (long)avatarObject["avatar"]["dateCreated"],
-                                        dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
-                                    };
-                                    var localAvatar = await AvatarHelper.get(avatar.id);
+                                        //Save the image locally now , remove the temp file 
+                                        JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                        TAvatar avatar = new TAvatar()
+                                        {
+                                            id = (int)avatarObject["avatar"]["id"],
+                                            linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                            linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                            dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                            dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
+                                        };
+                                        var localAvatar = await AvatarHelper.get(avatar.id);
                                         if (localAvatar != null)
                                         {
                                             await AvatarHelper.update(avatar);
@@ -362,42 +365,55 @@ namespace Pepeza.Views.Profile
                                         {
                                             await AvatarHelper.add(avatar);
                                         }
-                                    
 
-                                    rectProfilePic.Image.Source = cropped;
-                                    txtBlockError.Visibility = Visibility.Collapsed;
-                                    await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_user + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+
+                                        rectProfilePic.Image.Source = cropped;
+                                        txtBlockError.Visibility = Visibility.Collapsed;
+                                        await AvatarUploader.removeTempImage(file.Name);
+
+                                    }
+                                    catch
+                                    {
+                                        txtBlockError.Text = "upload failed";
+                                        rectProfilePic.Image.Source = originalSource;
+                                        txtBlockError.Visibility = Visibility.Visible;
+                                        //Throw a toast that the image failed
+                                        return;
+                                    }
+
                                 }
-                                catch
+                                else
                                 {
-                                    txtBlockError.Text = "upload failed";
+                                    //Restore previous image
+                                    txtBlockError.Text = results[Constants.ERROR];
                                     rectProfilePic.Image.Source = originalSource;
-                                    txtBlockError.Visibility = Visibility.Visible;          
-                                    //Throw a toast that the image failed
-                                    return;
+                                    txtBlockError.Visibility = Visibility.Visible;
+
+                                    //if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                                 }
-                                
+                                PBProfilePicUpdating.Visibility = Visibility.Collapsed;
                             }
                             else
                             {
-                                //Restore previous image
-                                txtBlockError.Text = results[Constants.ERROR];
                                 rectProfilePic.Image.Source = originalSource;
-                                txtBlockError.Visibility = Visibility.Visible;          
+                                App.displayMessageDialog("Image is too large, please upload an image that is atmost 1MB");
 
-                                //if (wasAvatarEmpty) ImageMask.Visibility = Visibility.Visible;
                             }
-                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
                         }
                         catch (Exception ex)
                         {
                             string x = ex.StackTrace;
-                            txtBlockError.Visibility = Visibility.Visible;          
-
+                            txtBlockError.Visibility = Visibility.Visible;
+                            rectProfilePic.Image.Source = originalSource;    
                         }
                         
                         view.Activated -= view_Activated;// Unsubscribe from this event 
+                    }
+                    else
+                    {
+                        App.displayMessageDialog("Image is too small, upload one that is atleast 250 by 250");
+
                     }
                   
                 }

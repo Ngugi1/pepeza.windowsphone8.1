@@ -49,15 +49,15 @@ namespace Shared.Server.Requests
                         }
                         else if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            bool result = await LogoutUser.forceLogout();
-                            if (result)
-                            {
-                                results.Add(Constants.UNAUTHORIZED, result.ToString());
-                            }
-                            else
-                            {
-                                results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
-                            }
+                            //bool result = await LogoutUser.forceLogout();
+                            //if (result)
+                            //{
+                            //    results.Add(Constants.UNAUTHORIZED, result.ToString());
+                            //}
+                            //else
+                            //{
+                            //    results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                            //}
                         }
                         else
                         {
@@ -128,6 +128,7 @@ namespace Shared.Server.Requests
             try
             {
                 var file = await Windows.Storage.ApplicationData.Current.TemporaryFolder.GetFileAsync(filename);
+                await file.DeleteAsync();
                 return true;
             }
             catch
@@ -146,9 +147,9 @@ namespace Shared.Server.Requests
         }
         public class FileName
         {
-            public static string temp_profpic_user { get{return "temp_profpic_user.";} }
-            public static string temp_profpic_board { get{ return "temp_profpic_board.";} }
-            public static string temp_profpic_org { get { return "temp_profpic_org."; } }
+            public static string temp_profpic_user { get{return "temp_profpic_user";} }
+            public static string temp_profpic_board { get{ return "temp_profpic_board";} }
+            public static string temp_profpic_org { get { return "temp_profpic_org"; } }
         }
         public static async Task<StorageFile> WriteWriteableBitmapToStorageFile(WriteableBitmap WB, FileFormat fileFormat, string fileName)
         {

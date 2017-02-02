@@ -71,7 +71,6 @@ namespace Shared.Utitlity
             {
                 if (bitmap.PixelHeight < HEIGHT || bitmap.PixelWidth < WIDTH)
                 {
-                    await new MessageDialog("Image is too small , pick another image").ShowAsync();
                    // pickFile(PHOTOS, PickerLocationId.PicturesLibrary);
                     return false;
                 }

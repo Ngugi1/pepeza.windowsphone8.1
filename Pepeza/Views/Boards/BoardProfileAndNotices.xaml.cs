@@ -489,67 +489,77 @@ namespace Pepeza.Views.Boards
                                     Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg,
                                     Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board);
                                 // profPic.SetSource(await file.OpenAsync(FileAccessMode.Read));
-                                Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TBoard)GridBoardProfile.DataContext).id, "board", ((TBoard)GridBoardProfile.DataContext).avatarId);
-                                if (results.ContainsKey(Constants.SUCCESS))
+                                var fileprops = await file.GetBasicPropertiesAsync();
+                                if (fileprops.Size <= 1000000)
                                 {
-                                    try
+                                    Dictionary<string, string> results = await AvatarUploader.uploadAvatar(file, ((TBoard)GridBoardProfile.DataContext).id, "board", ((TBoard)GridBoardProfile.DataContext).avatarId);
+                                    if (results.ContainsKey(Constants.SUCCESS))
                                     {
-                                        //Save the image locally now , remove the temp file 
-                                        JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
-                                        TAvatar avatar = new TAvatar()
+                                        try
                                         {
-                                            id = (int)avatarObject["avatar"]["id"],
-                                            linkNormal = (string)avatarObject["avatar"]["linkNormal"],
-                                            linkSmall = (string)avatarObject["avatar"]["linkSmall"],
-                                            dateCreated = (long)avatarObject["avatar"]["dateCreated"],
-                                            dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
-                                        };
-                                        var localAvatar = await AvatarHelper.get(avatar.id);
-                                        //Update local database if they are collaborators 
-                                        if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)ImageBoardAvatar.DataContext).orgID) != null)
-                                        {
-                                            if (localAvatar != null)
+                                            //Save the image locally now , remove the temp file 
+                                            JObject avatarObject = JObject.Parse(results[Constants.SUCCESS]);
+                                            TAvatar avatar = new TAvatar()
                                             {
-                                                await AvatarHelper.update(avatar);
-                                            }
-                                            else
+                                                id = (int)avatarObject["avatar"]["id"],
+                                                linkNormal = (string)avatarObject["avatar"]["linkNormal"],
+                                                linkSmall = (string)avatarObject["avatar"]["linkSmall"],
+                                                dateCreated = (long)avatarObject["avatar"]["dateCreated"],
+                                                dateUpdated = (long)avatarObject["avatar"]["dateUpdated"]
+                                            };
+                                            var localAvatar = await AvatarHelper.get(avatar.id);
+                                            //Update local database if they are collaborators 
+                                            if (await CollaboratorHelper.getRole((int)Settings.getValue(Constants.USERID), ((TBoard)ImageBoardAvatar.DataContext).orgID) != null)
                                             {
-                                                await AvatarHelper.add(avatar);
+                                                if (localAvatar != null)
+                                                {
+                                                    await AvatarHelper.update(avatar);
+                                                }
+                                                else
+                                                {
+                                                    await AvatarHelper.add(avatar);
+                                                }
                                             }
+                                            await AvatarUploader.removeTempImage(file.Name);
                                         }
-                                        await AvatarUploader.removeTempImage(Shared.Server.Requests.AvatarUploader.FileName.temp_profpic_board + Shared.Server.Requests.AvatarUploader.FileFormat.Jpeg);
+                                        catch
+                                        {
+                                            ImageBoardAvatar.Source = originalsource;
+                                            //Throw a toast that the image failed
+                                            return;
+                                        }
+                                        finally
+                                        {
+                                            PBProfilePicUpdating.Visibility = Visibility.Collapsed;
+                                        }
+
+
+
                                     }
-                                    catch
+                                    else if (results.ContainsKey(Constants.UNAUTHORIZED))
                                     {
+                                        //Show a popup message 
+                                        App.displayMessageDialog(Constants.UNAUTHORIZED);
+                                        this.Frame.Navigate(typeof(LoginPage));
+                                    }
+                                    else
+                                    {
+                                        //Restore previous image
                                         ImageBoardAvatar.Source = originalsource;
-                                        //Throw a toast that the image failed
-                                        return;
                                     }
-                                    finally
-                                    {
-                                        PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-                                    }
+                                    PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
-
-
-                                }
-                                else if (results.ContainsKey(Constants.UNAUTHORIZED))
-                                {
-                                    //Show a popup message 
-                                    App.displayMessageDialog(Constants.UNAUTHORIZED);
-                                    this.Frame.Navigate(typeof(LoginPage));
                                 }
                                 else
                                 {
-                                    //Restore previous image
-
+                                    App.displayMessageDialog("Image is too large, please upload an image that is atmost 1MB");
                                     ImageBoardAvatar.Source = originalsource;
                                 }
-                                PBProfilePicUpdating.Visibility = Visibility.Collapsed;
-
+                                
                             }
                             catch (Exception ex)
                             {
+                                ImageBoardAvatar.Source = originalsource;
                                 string x = ex.StackTrace;
                             }
                             //Upload the profile pic 
@@ -557,6 +567,7 @@ namespace Pepeza.Views.Boards
                     }
                     else
                     {
+                        App.displayMessageDialog("Image is too small, upload one that is atleast 250 by 250");
                         ImageBoardAvatar.Source = originalsource;
                     }
                     view.Activated -= view_Activated;// Unsubscribe from this event 
