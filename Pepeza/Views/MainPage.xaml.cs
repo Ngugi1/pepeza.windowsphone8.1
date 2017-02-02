@@ -67,9 +67,13 @@ namespace Pepeza
         {
             this.InitializeComponent();
             current = this;
-           
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            this.NavigationCacheMode = NavigationCacheMode.Disabled;
+            
+        }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -79,10 +83,11 @@ namespace Pepeza
         {
             
             //Count the number of notifications 
-            updateNotificationCount();
+            
             //Load data 
             isSelected = false;
             await loadNotices();
+            await updateNotificationCount();
             //Load boards
             await loadBoards();
             //Orgs alpha groups
@@ -143,7 +148,7 @@ namespace Pepeza
         {
             MessagePromptConfirmEmail.Visibility = Visibility.Collapsed;
         }
-        private  async void updateNotificationCount()
+        private  async Task updateNotificationCount()
         {
             int count = await TNotificationHelper.unreadNotifications();
             if (count != 0)
@@ -528,7 +533,7 @@ namespace Pepeza
         }
         private async void rateAppClicked(object sender, RoutedEventArgs e)
         {
-            await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
+            //await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
 
         private async void CheckBoxManaging_Checked(object sender, RoutedEventArgs e)

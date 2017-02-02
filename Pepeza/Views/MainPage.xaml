@@ -99,12 +99,13 @@
                                         IsTextSelectionEnabled="True"
                                         Style="{StaticResource BaseRichTextBlockStyle}"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
+                                        
                                         >
                                         <Paragraph>
-                                            <Underline>
-                                                <Run Foreground="Black" FontWeight="SemiBold" Text="{Binding board, Mode=TwoWay}"/>
-                                            </Underline>
-
+                                            <Run Foreground="Black" 
+                                                      Text="{Binding board, Mode=TwoWay}"
+                                                    
+                                                 />
                                         </Paragraph>
                                     </RichTextBlock>
                                     <RichTextBlock
@@ -411,12 +412,13 @@
         </Pivot>
         <StackPanel 
             Tapped="StackPanelViewNotifications_Tapped"
-            Orientation="Horizontal" 
-            Margin="8,2"
+            Orientation="Horizontal"
+            Width="60"
+            Margin="0"
             VerticalAlignment="Top"
             HorizontalAlignment="Right">
-            <Viewbox Height="35" Width="Auto">
-                <Image Source="/Assets/Images/bell.png"/>
+            <Viewbox Height="40" Width="Auto">
+                <Image Source="/Assets/Images/bell.png" Tapped="StackPanelViewNotifications_Tapped" />
             </Viewbox>
             <TextBlock 
                 Name="txtBlockNotificationsCount"
@@ -433,7 +435,7 @@
         <CommandBar x:Name="BottomCommandBar">
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="send feedback" Click="sendfeedback_click"/>
-                <AppBarButton Label="Rate us" Click="rateAppClicked"/>
+                <!--<AppBarButton Label="Rate us" Click="rateAppClicked"/>-->
                 <AppBarButton Click="AppBtnSettings_Click" Label="settings" />
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>

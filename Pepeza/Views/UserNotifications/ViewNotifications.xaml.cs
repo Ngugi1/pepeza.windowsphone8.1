@@ -64,10 +64,10 @@ namespace Pepeza.Views.UserNotifications
             //Load all the notices 
             double dateUpdatedLatest = await loadNotifications();
             //Automatically read all the notices 
-            autoReadAllNotifications();
+            await autoReadAllNotifications();
         }
 
-        private async void autoReadAllNotifications()
+        private async Task autoReadAllNotifications()
         {
             long dateUpdated = await TNotificationHelper.readAll();
             if (dateUpdated!=0)
