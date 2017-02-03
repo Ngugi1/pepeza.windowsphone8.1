@@ -43,6 +43,7 @@ namespace Pepeza.Server.Requests
                 try
                 {
                     HttpClient client = getHttpClient(false);
+
                     HttpResponseMessage response = await client.PostAsJsonAsync(UserAddresses.NEW_USER, toPost);
                     if (response.StatusCode == System.Net.HttpStatusCode.Created)
                     {
@@ -64,7 +65,7 @@ namespace Pepeza.Server.Requests
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
-                        JArray errors = await response.Content.ReadAsAsync<JArray>();
+                        JArray errors = JArray.Parse(await response.Content.ReadAsStringAsync());
                         results = getJArrayKeys(errors);
                         results.Add(Constants.INVALID_DATA, Constants.INVALID_DATA);
                     }
@@ -104,7 +105,7 @@ namespace Pepeza.Server.Requests
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Get the JSON string
-                        JObject obj = await response.Content.ReadAsAsync<JObject>();
+                        JObject obj = JObject.Parse(await response.Content.ReadAsStringAsync());
                         results.Add(Constants.USER_EXISTS, (string)obj["message"]);
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -123,7 +124,7 @@ namespace Pepeza.Server.Requests
                     {
                         //Request was unsuccessfull
                         results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
-                        Debug.WriteLine(await response.Content.ReadAsAsync<JObject>());
+                        Debug.WriteLine(await response.Content.ReadAsStringAsync());
 
                     }
                 }
@@ -151,7 +152,7 @@ namespace Pepeza.Server.Requests
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Request was successfull 
-                        JObject jobject = await response.Content.ReadAsAsync<JObject>();
+                        JObject jobject =JObject.Parse(await response.Content.ReadAsStringAsync());
                         results.Add(Constants.EMAIL_EXISTS, (string)jobject["message"]);
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -176,7 +177,7 @@ namespace Pepeza.Server.Requests
                 {
                     //Unknown error 
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
-                    Debug.WriteLine(response.Content.ReadAsAsync<JObject>());
+                    Debug.WriteLine(response.Content.ReadAsStringAsync());
                 }
             }
             else
@@ -245,7 +246,7 @@ namespace Pepeza.Server.Requests
                     response = await client.PostAsJsonAsync(UserAddresses.RESET_PASSWORD,toPost);
                     if (response.IsSuccessStatusCode)
                     {
-                        JObject obj = await response.Content.ReadAsAsync<JObject>();
+                        JObject obj = JObject.Parse(await response.Content.ReadAsStringAsync());
                         results.Add(Constants.SUCCESS, (string)obj["message"]);
                     }
                         else if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -291,7 +292,7 @@ namespace Pepeza.Server.Requests
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         //Updated 
-                        JObject obj = await response.Content.ReadAsAsync<JObject>();
+                        JObject obj = JObject.Parse(await response.Content.ReadAsStringAsync());
                         results.Add(Constants.UPDATED, (string)obj["message"]);
                     }
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)

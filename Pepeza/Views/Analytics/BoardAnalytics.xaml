@@ -139,7 +139,7 @@
             </Grid>
             <StackPanel Grid.Row="3">
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notices of this board"
-                       FontWeight="SemiBold"
+                       FontWeight="Normal"
                        Margin="12,8"
                        Foreground="Black"
                        />
@@ -162,6 +162,7 @@
                 <Charts:RadCartesianChart Name="RadReadReceived"
                                           Margin="12"
                                            Grid.Row="3"
+                                          Foreground="{ThemeResource PhoneAccentBrush}"
                                           Background="Transparent"
                                           ClipToBounds="False"
                                           >
@@ -178,7 +179,10 @@
                 <Charts:BarSeries
                         ShowLabels="True"
                         Foreground="{ThemeResource PhoneAccentBrush}"
-                        ItemsSource="{Binding}">
+                        ItemsSource="{Binding}"
+                    AllowSelect="True"
+                    Background="{ThemeResource PhoneAccentBrush}"
+                    >
                     <Charts:BarSeries.ValueBinding>
                         <Charts:PropertyNameDataPointBinding PropertyName="Count"/>
                     </Charts:BarSeries.ValueBinding>

@@ -217,22 +217,17 @@ namespace Pepeza
          {
             args.Cancel = true;   
             //Init update from the server
-               // Your UI update code goes here!
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,async
-() =>
-{
-    // Your UI update code goes here!
-    Dictionary<string, int> results = await SyncPushChanges.initUpdate();
-    if (results != null)
-    {
-        isInBackground = true;
-        await loadNotices();
-        await loadBoards();
-        await loadOrgs();
-        txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
-    }
-}
-);
+            // Your UI update code goes here!
+            Dictionary<string, int> results = await SyncPushChanges.initUpdate();
+            if (results != null)
+            {
+                isInBackground = true;
+                //await loadNotices();
+                //await loadBoards();
+                //await loadOrgs();
+                txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+            }
+
                
             //Prevent background agent from being invoked 
               

@@ -86,7 +86,7 @@
         <CommandBar Visibility="Collapsed" Name="CommandBarActions">
 
             <AppBarButton Icon="Accept"
-                          Visibility="Collapsed"
+                          Visibility="Visible"
                           Click="AppBtnSave_Click"
                           Name="AppBtnSave"
                           Label="Accept"/>

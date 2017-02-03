@@ -105,7 +105,7 @@
                                     <RichTextBlock
                                         Grid.Row="2"
                                         TextAlignment="Justify"
-                                        MaxLines="5"
+                                        MaxLines="3"
                                         TextWrapping="Wrap"
                                         TextTrimming="CharacterEllipsis"
                                         Style="{StaticResource BodyRichTextBlockStyle}"
