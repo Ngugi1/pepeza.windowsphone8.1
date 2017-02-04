@@ -41,6 +41,7 @@
             <TextBlock Text="Board Analytics" Grid.ColumnSpan="3"
                        Style="{StaticResource txtBlockPageHeader}"
                        FontSize="28"
+ 
                        Margin="12,0,8,8"
                        />
             <ComboBox 
@@ -139,13 +140,14 @@
             </Grid>
             <StackPanel Grid.Row="3">
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notices of this board"
-                       FontWeight="Normal"
+                       FontWeight="Thin"
                        Margin="12,8"
                        Foreground="Black"
                        />
                 <RichTextBlock Grid.Row="0"
                                Name="AltLabels"
                                FontSize="16"
+                               Style="{ThemeResource BodyRichTextBlockStyle}"
                                DataContext="{Binding}"
                                Margin="12,8"
                                HorizontalAlignment="Left">
@@ -195,7 +197,7 @@
             </Charts:RadCartesianChart>
             </StackPanel>
             <TextBlock Text="Hours when people read your notices" Grid.Row="4" 
-                        FontWeight="SemiBold"
+                        FontWeight="Thin"
                        Margin="12,8"
                        Style="{StaticResource BodyTextBlockStyle}"
                        />
