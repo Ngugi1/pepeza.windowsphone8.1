@@ -162,7 +162,7 @@
             </Grid>
             <StackPanel Grid.Row="3">
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notices of this board"
-                       FontWeight="SemiBold"
+                       FontWeight="Thin"
                        Margin="12,8"
                        Foreground="Black"
                        />
@@ -214,7 +214,7 @@
                 </Charts:RadCartesianChart>
             </StackPanel>
             <TextBlock Text="Hours when people read your notices" Grid.Row="4" 
-                        FontWeight="SemiBold"
+                        FontWeight="Thin"
                        Margin="12,8"
                        Style="{StaticResource BodyTextBlockStyle}"
                        />
