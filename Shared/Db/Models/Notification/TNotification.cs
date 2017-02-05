@@ -21,6 +21,7 @@ namespace Shared.Db.Models.Notification
         public long dateRead { get; set; }
         public long dateCreated { get; set; }
         public long dateUpdated { get; set; }
+        public long dateDeleted { get; set; }
         public int userId { get; set; }
     }
 }

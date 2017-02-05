@@ -77,44 +77,40 @@ namespace Pepeza.Views.Account
            {
             JObject details = JObject.Parse(results[Constants.APITOKEN]);
             JObject profileInfo = JObject.Parse(details["user"].ToString());
-            JObject avatar = JObject.Parse(profileInfo["avatar"].ToString());
+            //JObject avatar = JObject.Parse(profileInfo["avatar"].ToString());
             //Get profile info 
-            TUserInfo userInfo = new TUserInfo();
-            userInfo.id = (int)profileInfo["id"];
-            userInfo.emailId = (int)profileInfo["email"]["id"];
-            userInfo.firstName = (string)profileInfo["firstName"];
-            userInfo.lastName = (string)profileInfo["lastName"];
-            userInfo.username = (string)profileInfo["username"];
-            if (userInfo.username != null) { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); } else { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); }
-            userInfo.avatarId = (int)avatar["id"];
-            if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = (long)profileInfo["dateUpdated"];
-            userInfo.dateCreated = (long)profileInfo["dateCreated"];
-            //Get email iformation 
-            TEmail emailInfo = new TEmail();
-            emailInfo.emailID = (int)profileInfo["email"]["id"];
-            emailInfo.email = (string)profileInfo["email"]["email"];
-            emailInfo.verified = (int)profileInfo["email"]["verified"];
-            if(profileInfo["dateVerified"]!=null) emailInfo.dateVerified=(long)(profileInfo["email"]["dateVerified"]);
-            emailInfo.dateCreated = (long)(profileInfo["email"]["dateCreated"]);
-            if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = (long)(profileInfo["email"]["dateUpdated"]);
-            //get avatars 
-            TAvatar userAvatar = new TAvatar();
-            userAvatar.id = (int)avatar["id"];
-            userAvatar.linkSmall = (string)avatar["linkSmall"];
-            userAvatar.linkNormal = (string)avatar["linkNormal"];
-            userAvatar.dateCreated = (long)avatar["dateCreated"];
-            userAvatar.dateUpdated = (long)avatar["dateUpdated"];
+            //TUserInfo userInfo = new TUserInfo();
+            //userInfo.id = (int)profileInfo["id"];
+            //userInfo.emailId = (int)profileInfo["email"]["id"];
+            //userInfo.firstName = (string)profileInfo["firstName"];
+            //userInfo.lastName = (string)profileInfo["lastName"];
+            //userInfo.username = (string)profileInfo["username"];
+            if ((string)profileInfo["username"] != null) { isUserNameNull = false; Settings.add(Constants.ISUSERNAMESET, false); } else { isUserNameNull = true; Settings.add(Constants.ISUSERNAMESET, true); }
+            //userInfo.avatarId = (int)avatar["id"];
+            //if(profileInfo["dateUpdated"] != null) userInfo.dateUpdated = (long)profileInfo["dateUpdated"];
+            //userInfo.dateCreated = (long)profileInfo["dateCreated"];
+            ////Get email iformation 
+            //TEmail emailInfo = new TEmail();
+            //emailInfo.emailID = (int)profileInfo["email"]["id"];
+            //emailInfo.email = (string)profileInfo["email"]["email"];
+            //emailInfo.verified = (int)profileInfo["email"]["verified"];
+            //if(profileInfo["dateVerified"]!=null) emailInfo.dateVerified=(long)(profileInfo["email"]["dateVerified"]);
+            //emailInfo.dateCreated = (long)(profileInfo["email"]["dateCreated"]);
+            //if(profileInfo["dateUpdated"] != null) emailInfo.dateUpdated = (long)(profileInfo["email"]["dateUpdated"]);
+            ////get avatars 
+            //TAvatar userAvatar = new TAvatar();
+            //userAvatar.id = (int)avatar["id"];
+            //userAvatar.linkSmall = (string)avatar["linkSmall"];
+            //userAvatar.linkNormal = (string)avatar["linkNormal"];
+            //userAvatar.dateCreated = (long)avatar["dateCreated"];
+            //userAvatar.dateUpdated = (long)avatar["dateUpdated"];
             // Now get all user orgs, boards , notices and following 
             string token =  (string)details[Constants.APITOKEN];
             Settings.add(Constants.APITOKEN, (string)details[Constants.APITOKEN]);
             //Save User ID
             Settings.add(Constants.USERID, (int)profileInfo["id"]);
             // insert details 
-                await EmailHelper.add(emailInfo);
-                await AvatarHelper.add(userAvatar);
-                await UserHelper.add(userInfo);
-                //Now get all user data 
-               await getData();
+            await getData();
             }
             catch(Exception)
             {
@@ -188,7 +184,7 @@ namespace Pepeza.Views.Account
 
             if (userdata.ContainsKey(Constants.SUCCESS))
             {
-                Dictionary<string,int> results = await GetNewData.disectUserDetails(userdata, false);
+                Dictionary<string,int> results = await GetNewData.disectUserDetails(userdata, false, true);
                 if (results!=null)
                 {
                     if (results[Constants.SUCCESS] == 1)

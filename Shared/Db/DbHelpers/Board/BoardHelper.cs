@@ -1,4 +1,6 @@
-﻿using Pepeza.Db.Models.Board;
+﻿using Pepeza.Db.DbHelpers.Notice;
+using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Notices;
 using Shared.Db.DbHelpers;
 using System;
 using System.Collections.Generic;
@@ -114,6 +116,47 @@ namespace Pepeza.Db.DbHelpers.Board
             {
                 return null;
             }
+
+        }
+        public async static Task<bool> deleteBoard(int boardId)
+        {
+            //First delete all the boards avatars , follow items  and notices 
+            TBoard boardToDelete = await BoardHelper.getBoard(boardId);
+            if(boardToDelete!=null)
+            {
+		           await AvatarHelper.deleteAvatar(boardToDelete.avatarId);
+                   TFollowing following = await FollowingHelper.getFollowerByBoardId(boardId);
+                   if (following != null) await FollowingHelper.delete(following);
+                    //Get all the notices for this board
+                   List<TNotice> boardNotices = await NoticeHelper.getAllToDelete(boardToDelete.id);
+                   if (boardNotices != null)
+                   {
+                       foreach (var notice in boardNotices)
+                       {
+                           await NoticeHelper.deleteNotice(notice.noticeId);
+                       }
+                   }   
+               
+            }
+
+           
+            //Finally delete the board 
+            bool isDeleted = false; 
+            try
+            {
+                var conection = DbHelper.DbConnectionAsync();
+                if (conection != null)
+                {
+                    await conection.QueryAsync<TBoard>("DELETE FROM TBoard WHERE id=?", boardToDelete.id);
+                    isDeleted = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                isDeleted = false;
+            }
+            return isDeleted;
+            
 
         }
     }

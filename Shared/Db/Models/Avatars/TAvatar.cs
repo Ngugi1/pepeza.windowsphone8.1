@@ -14,6 +14,7 @@ namespace Shared.Db.Models.Avatars
         public string linkNormal { get; set; }
         public string linkSmall { get; set; }
         public long dateCreated { get; set; }
+        public long dateDeleted { get; set; }
         public long dateUpdated { get; set; }
     }
 }

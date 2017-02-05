@@ -27,6 +27,7 @@ namespace Shared.Db.Models.Notices
         public int isRead { get; set; }
         public bool isSubmited { get; set; }
         public bool isForbiden { get; set; }
+        public long dateDeleted { get; set; }
         public bool is_not_found { get; set; }
     }
 }

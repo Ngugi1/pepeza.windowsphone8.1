@@ -64,5 +64,42 @@ namespace Shared.Db.DbHelpers.Orgs
                 return null;
             }
         }
+        public async static Task<bool> deleteCollaborator(int orgId)
+        {
+            bool isDeleted = false;
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TCollaborator WHERE orgId=?", orgId);
+                    isDeleted = true;
+                }
+            }
+            catch(Exception)
+            {
+                 isDeleted = false;
+         
+            }
+            return isDeleted;
+        }
+        public async static Task<List<TCollaborator>> getAllForOrg(int orgId)
+        {
+
+            try
+            {
+                List<TCollaborator> collaborator = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    collaborator = await connection.QueryAsync<TCollaborator>("SELECT * FROM TCollaborator WHERE orgId=?", orgId);
+                }
+                return collaborator;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

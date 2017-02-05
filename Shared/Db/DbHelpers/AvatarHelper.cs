@@ -48,5 +48,24 @@ namespace Shared.Db.DbHelpers
             }
 
         }
+        public async static Task<bool> deleteAvatar(int avatarId)
+        {
+            bool isDeleted =  false;
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TAvatar WHERE id=?", avatarId);
+                    isDeleted = true;
+                }
+            }
+            catch (Exception)
+            {
+
+                isDeleted = false;
+            }
+            return isDeleted;
+        }
     }
 }

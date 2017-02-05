@@ -17,5 +17,7 @@ namespace Pepeza.Db.Models.Users
         public int verified { get; set; }
         public long dateCreated { get; set; }
         public long  dateUpdated { get; set; }
+        public long dateDeleted { get; set; }
+
     }
 }

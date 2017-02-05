@@ -405,6 +405,7 @@ namespace Pepeza.Views.Boards
                         AppBtnEdit.Visibility = Visibility.Visible;
                         AppBtnAddNotice.Visibility = Visibility.Visible;
                         AppBtnAnalytics.Visibility = Visibility.Visible;
+                        
                         CommandBarOperations.Visibility = Visibility.Visible;
                     }
                     else if (collaborator.role == Constants.EDITOR)
@@ -703,7 +704,6 @@ namespace Pepeza.Views.Boards
                 this.Frame.Navigate(typeof(PublicUserProfile), follower.userId);
             }
         }
-
         private void HyperLinkViewMore(object sender, RoutedEventArgs e)
         {
             if (HyperlinkExpand.Content.ToString().Contains("more"))
@@ -734,6 +734,28 @@ namespace Pepeza.Views.Boards
                     await followBoard(board);
                 }
             }
+        }
+        private async void AppBarBtnDeleteBoard_Click(object sender, RoutedEventArgs e)
+        {
+            DeletingBoardProgress.Show();
+            Dictionary<string, string> results = await BoardService.deleteBoard(boardId);
+            if (results != null)
+            {
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    // Delete the board locally
+                    await BoardHelper.deleteBoard(boardId);
+                    //Show a success message and go back
+                    ToastStatus.Message = "Deleted successfully!";
+                    this.Frame.GoBack();
+                }
+                else
+                {
+                    // Show error toast 
+                    ToastStatus.Message = "Deletion failed, try again later";
+                }
+            }
+            DeletingBoardProgress.Hide();
         }
     }
 }

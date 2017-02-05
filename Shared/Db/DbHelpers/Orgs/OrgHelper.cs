@@ -1,7 +1,10 @@
-﻿using Pepeza.Db.Models.Orgs;
+﻿using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.Models.Board;
+using Pepeza.Db.Models.Orgs;
 using Pepeza.Models.Search_Models;
 using Pepeza.Utitlity;
 using Shared.Db.DbHelpers;
+using Shared.Db.DbHelpers.Orgs;
 using Shared.Db.Models.Orgs;
 using System;
 using System.Collections.Generic;
@@ -96,7 +99,55 @@ namespace Pepeza.Db.DbHelpers
                 return null;
             }
         }
+        public async static Task<bool> deleteOrg(int orgId)
+        {
+            bool isDeleted = false;
+            var connection = DbHelper.DbConnectionAsync();
+            try
+            {
+                TOrgInfo org = await get(orgId);
+                if (org != null)
+                {
+                        //Delete org avatar 
+                        await AvatarHelper.deleteAvatar(org.avatarId);
+                        //Delete all org collaborators
+                        List<TCollaborator> collaborators = await CollaboratorHelper.getAllForOrg(org.id);
+                        if (collaborators != null)
+                        {
+                            foreach (var collaborator in collaborators)
+                            {
+                                await CollaboratorHelper.delete(collaborator);
+                            }
+                        }
+                       
+                        
+                        //Delete all the boards
+                        List<TBoard> boards = await BoardHelper.fetchAllOrgBoards(orgId);
+                        if (boards != null)
+                        {
+                            foreach (var item in boards)
+                            {
+                                await BoardHelper.deleteBoard(item.id);
+                                //Delete the avatars
+                                await AvatarHelper.deleteAvatar(item.avatarId);
+                            }
+                        }
+                       
+                }
+               
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TOrgInfo WHERE id=?", orgId);
+                }
+               
+            }
+            catch (Exception)
+            {
 
+                isDeleted = false;
+            }
+            return isDeleted;
+        }
 
     }
 }

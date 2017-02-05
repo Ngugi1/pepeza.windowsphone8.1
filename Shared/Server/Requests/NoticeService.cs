@@ -168,7 +168,6 @@ namespace Pepeza.Server.Requests
             }
             return results;
         }
-
         public async static Task<Dictionary<string, string>> getNotice(int noticeId)
         {
             System.Net.Http.HttpClient client = getHttpClient(true);
@@ -277,6 +276,46 @@ namespace Pepeza.Server.Requests
 
                 return;
             }
-        }   
+        }
+        public async static Task<Dictionary<string, string>> delete(int id)
+        {
+           System.Net.Http.HttpClient client = getHttpClient(true);
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            System.Net.Http.HttpResponseMessage response = null;
+            if (checkInternetConnection())
+            {
+                response = await client.DeleteAsync(string.Format(NoticeAddresses.DELETE_NOTICE, id));
+                if (response.IsSuccessStatusCode)
+                {
+                    //We deleted successfully 
+                    results.Add(Constants.SUCCESS, await response.Content.ReadAsStringAsync());
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    // We failed 
+                    bool result = await LogoutUser.forceLogout();
+                    if (result)
+                    {
+                        results.Add(Constants.UNAUTHORIZED, result.ToString());
+                    }
+                    else
+                    {
+                        results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
+                    }
+
+                }
+                else
+                {
+                    //general failure 
+                    results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
+                }
+            }
+            else
+            {
+                results.Add(Constants.ERROR, Constants.NO_INTERNET_CONNECTION);
+            }
+            return results;
+
+        }
     }
 }

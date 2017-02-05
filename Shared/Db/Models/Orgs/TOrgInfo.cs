@@ -24,6 +24,7 @@ namespace Pepeza.Db.Models.Orgs
         public int avatarId { get; set; }
         [Ignore]
         public string linkSmall { get; set; }
+        public long dateDeleted { get; set; }
         public string linkNormal { get; set; }
     }
 }

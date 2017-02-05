@@ -22,13 +22,12 @@ namespace Shared.Utitlity
                 {
                     
                     //Redirect to login page 
-                    string PEPEZA = "Pepeza";
                     await DbHelper.dropDatabase();
                     dbDropped = true;
                     //Delete the Pepeza folder 
                     try
                     {
-                        var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                        var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
                         await currentFolder.DeleteAsync();
                         return dbDropped && true;
                     }

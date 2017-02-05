@@ -85,7 +85,7 @@ namespace Pepeza.Views.Notices
                     if (file != null)
                     {
                         await postAttachmentNotice(toPost);
-                        //this.Frame.Navigate(typeof(BoardProfileAndNotices), boardID);// Pass a parameter that is only 
+                        this.Frame.Navigate(typeof(BoardProfileAndNotices), boardID);
                         return;
                     }
                     //Check if attachment is empty 
@@ -104,10 +104,12 @@ namespace Pepeza.Views.Notices
                                     title = title,
                                     hasAttachment = 0,
                                     content = desc,
+                                    userId =(int)Settings.getValue(Constants.USERID),
                                     dateCreated =(long)obj["dateCreated"],
                                     dateUpdated = (long)obj["dateUpdated"],
                                    
                                 });
+
                                 this.Frame.Navigate(typeof(BoardProfileAndNotices) , boardID);
                                 // Pass a parameter that is only 
                                 
@@ -170,7 +172,9 @@ namespace Pepeza.Views.Notices
                          content = toPost.content,
                          noticeId  = (int)jobject["id"],
                          hasAttachment = 1,
-                         dateCreated = (long)jobject["dateCreated"]
+                         dateCreated = (long)jobject["dateCreated"],
+                         userId = (int)Settings.getValue(Constants.USERID)
+
                        };
                     if (jobject["dateUpdated"]!=null) fileNotice.dateUpdated = (long)jobject["dateUpdated"]; //We have results , get attachment details  
 
@@ -183,7 +187,7 @@ namespace Pepeza.Views.Notices
                         dateCreated = (long)jobject["attachment"]["dateCreated"],
                         link = string.Format(NoticeAddresses.LINK_FORMAT, (int)jobject["id"])
                     };
-
+                   
                     if (jobject["attachment"]["dateUpdated"] != null) attachment.dateUpdated = (long)jobject["attachment"]["dateUpdated"];
 
 
@@ -191,6 +195,7 @@ namespace Pepeza.Views.Notices
                     //Getting the file Item 
 
                     TFile tfile = new TFile();
+                   
 
                     tfile.id = (int)jobject["file"]["id"];
                         tfile.attachmentId = (int)jobject["file"]["attachmentId"];
@@ -200,7 +205,7 @@ namespace Pepeza.Views.Notices
                        tfile.mimeType = (string)jobject["file"]["mime_type"];
                         tfile.dateCreated = (long)jobject["file"]["dateCreated"];
                      tfile.link = string.Format(NoticeAddresses.LINK_FORMAT,(int)jobject["file"]["id"]);
-                    
+                
                     var fileNameParts = tfile.fileName.Split('.');
                     int elements = fileNameParts.Length;
                     tfile.uniqueFileName = string.Format(@"{0}.{1}", Guid.NewGuid(), fileNameParts[elements - 1]);
@@ -215,7 +220,7 @@ namespace Pepeza.Views.Notices
                     //Save the attachment to another folder 
                     try
                     {
-                       folder = await ApplicationData.Current.LocalFolder.GetFolderAsync("Pepeza");
+                       folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
                     }
                     catch
                     {
@@ -241,7 +246,7 @@ namespace Pepeza.Views.Notices
                     else
                     {
                        
-                        folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("Pepeza");
+                        folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(Constants.PEPEZA);
                         if (folder!= null)
                             {
                                 await folder.CreateFileAsync(fileName);

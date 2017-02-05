@@ -1,5 +1,7 @@
 ﻿using Pepeza.Db.DbHelpers;
+using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +50,26 @@ namespace Shared.Db.DbHelpers
             }
 
         }
-
+        public async static Task deleteFile(TFile file)
+        {
+            //Delete the file from local folder 
+            if (await FilePickerHelper.deleteFileAsync(file.uniqueFileName))
+            {
+                try
+                {
+                    var connection = DbHelper.DbConnectionAsync();
+                    if (connection != null)
+                    {
+                        await connection.ExecuteAsync("DELETE FROM TFile WHERE id=?", file.id);
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                    
+                }
+            }
+           
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace Shared.Db.Models.Notices
         [Ignore]
         public string fileTypeAndSize { get; set; }
         public long size { get; set; }
+        public long dateDeleted { get; set; }
         public string link { get; set; }
         public string fileName { get; set; }
         public string mimeType { get; set; }

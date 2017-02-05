@@ -14,7 +14,7 @@ namespace Shared.Db.DbHelpers.Notice
     {
         public static async Task<List<TNoticeItem>> getAll()
         {
-           
+
             var connection = DbHelper.DbConnectionAsync();
             if (connection != null)
             {
@@ -24,22 +24,22 @@ namespace Shared.Db.DbHelpers.Notice
         }
         public static async Task<TNoticeItem> get(int id)
         {
-                try
+            try
+            {
+                TNoticeItem info = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
                 {
-                    TNoticeItem info = null;
-                    var connection = DbHelper.DbConnectionAsync();
-                    if (connection != null)
-                    {
-                        info = await connection.GetAsync<TNoticeItem>(id);
-                    }
-                   
-                    return info;
+                    info = await connection.GetAsync<TNoticeItem>(id);
                 }
-                catch (Exception)
-                {
-                return null;
-                }
+
+                return info;
             }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public static async Task<TNoticeItem> getByNoticeId(int id)
         {
             try
@@ -75,8 +75,6 @@ namespace Shared.Db.DbHelpers.Notice
                 return null;
             }
         }
-
-
         public static async Task<List<TNoticeItem>> getBoardNotices()
         {
             try
@@ -94,7 +92,28 @@ namespace Shared.Db.DbHelpers.Notice
                 return null;
             }
         }
+        public static async Task<bool> deleteNoticeItem(int noticeId)
+        {
+            bool isdeleted = false;
+
+            //Delete the attachment if it exists 
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TNoticeItem WHERE noticeId=?", noticeId);
+                    isdeleted = true;
+                }
+            }
+            catch (Exception)
+            {
+                isdeleted = false;
+                
+            }
+            return isdeleted;
 
         }
     }
+}
 

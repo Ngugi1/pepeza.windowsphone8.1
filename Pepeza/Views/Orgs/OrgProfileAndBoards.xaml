@@ -5,6 +5,7 @@
       xmlns:local="using:Pepeza.Views.Orgs"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toast="using:Toastinet"
+      xmlns:forFun="using:Coding4Fun.Toolkit.Controls"
       xmlns:common="using:Pepeza.Common"
       xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -25,6 +26,21 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <forFun:ProgressOverlay VerticalAlignment="Center"
+                                Grid.Row="0"
+                                Visibility="Collapsed"
+                                Grid.RowSpan="3"
+                                Name="DeletingOrgProgress"
+                                    >
+            <forFun:ProgressOverlay.Content>
+            <StackPanel>
+                <TextBlock Style="{StaticResource txtBlockWait}"
+                           HorizontalAlignment="Center"
+                           Text="deleting..."/>
+                <ProgressBar Margin="12,4"/>
+            </StackPanel>
+            </forFun:ProgressOverlay.Content>
+        </forFun:ProgressOverlay>
         <TextBlock 
             Margin="19.5,0,0,0"
             Style="{StaticResource BaseTextBlockStyle}"
@@ -114,6 +130,14 @@
                     Style="{StaticResource hlbtnStyle}">view more</HyperlinkButton>
             </StackPanel>
         </Grid>
+        <Grid Grid.Row="2">
+            <toast:Toastinet Name="toastStatus" 
+                             Height="50"
+                             Width="Auto"
+                             Duration="3"
+                             Background="{ThemeResource PhoneAccentBrush}"
+                             Style="{StaticResource ToastStyle}"
+                             AnimationType="Rotation"/>
         <Pivot Name="OrgPivot"
                Grid.Row="2"
                SelectedIndex="0"
@@ -370,6 +394,7 @@
                 </ScrollViewer>
             </PivotItem>
         </Pivot>
+        </Grid>
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Name="CommandBarActions" 
@@ -393,6 +418,13 @@
                           Click="AppBtnAdd_Click"
                           Name="AppBtnAdd"
                           Label="add board"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Delete" 
+                              Name="appbtnsecondarycommanddelete"
+                              Click="deleteOrg_Click"
+                              Label="delete organisation"/>
+          </CommandBar.SecondaryCommands>
+            
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

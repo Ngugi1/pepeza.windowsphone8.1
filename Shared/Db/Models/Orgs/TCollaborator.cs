@@ -17,6 +17,7 @@ namespace Shared.Db.Models.Orgs
         public int active { get; set; }
         public long dateCreated { get; set; }
         public long dateUpdated { get; set; }
+        public long dateDeleted { get; set; }
      
     }
 }

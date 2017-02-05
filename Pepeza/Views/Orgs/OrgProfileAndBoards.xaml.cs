@@ -133,6 +133,8 @@ namespace Pepeza.Views.Orgs
                             hideCommandBar();
                             // You can't add a collaborator
                         }
+                        appbtnsecondarycommanddelete.Visibility = Visibility.Collapsed;
+
                     }
                     else if (collaborator.role == Constants.ADMIN)
                     {
@@ -142,6 +144,7 @@ namespace Pepeza.Views.Orgs
                             AppBtnEdit.Visibility = Visibility.Visible;// Can edit the organisation
                             AppBtnAnalytics.Visibility = Visibility.Visible; //Can view analytics 
                             AppBtnAdd.Visibility = Visibility.Visible; //Can add a board 
+
                         }
                         else if (selectedIndex == 1)
                         {
@@ -149,6 +152,8 @@ namespace Pepeza.Views.Orgs
                             AppBtnAdd.Visibility = Visibility.Visible;
                             AppBtnEdit.Visibility = AppBtnAnalytics.Visibility = Visibility.Collapsed;
                         }
+                        appbtnsecondarycommanddelete.Visibility = Visibility.Visible;//can delete board 
+
                     }
                     else if (collaborator.role == Constants.OWNER)
                     {
@@ -163,6 +168,8 @@ namespace Pepeza.Views.Orgs
                             AppBtnAdd.Visibility = Visibility.Visible;
                             AppBtnEdit.Visibility = AppBtnAnalytics.Visibility = Visibility.Collapsed; // Let the owner be able to add collaborators
                         }
+                        appbtnsecondarycommanddelete.Visibility = Visibility.Visible;
+
                     }
                     else
                     {
@@ -407,7 +414,6 @@ namespace Pepeza.Views.Orgs
             fetchingBoards(false);
             return areBoardsLoaded;
         }
-
         private async Task<bool> loadBoardsOnline(int orgId)
         {
             try
@@ -473,7 +479,6 @@ namespace Pepeza.Views.Orgs
             return false;
                 
         }
-
         public void laodingFailed()
         {
             StackPanelBoardsFailed.Visibility = Visibility.Visible;
@@ -486,7 +491,6 @@ namespace Pepeza.Views.Orgs
                      this.Frame.Navigate(typeof(Pepeza.Views.Boards.BoardProfileAndNotices),board.id);
                 };     
          }
-       
         private void fetchingBoards(bool isFetching)
         {
             if (isFetching)
@@ -516,7 +520,6 @@ namespace Pepeza.Views.Orgs
                 AppBtnEdit.IsEnabled = false;
             }
         }
-
         async void view_Activated(CoreApplicationView sender, Windows.ApplicationModel.Activation.IActivatedEventArgs args)
         {
             //Get the photo and navigate to the photo editing page
@@ -635,7 +638,6 @@ namespace Pepeza.Views.Orgs
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
         }
-       
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.Back)
@@ -804,6 +806,29 @@ namespace Pepeza.Views.Orgs
         private void ReloadCollaborators(object sender, RoutedEventArgs e)
         {
             loadOrgCollaborators(OrgID);
+        }
+
+        private async void deleteOrg_Click(object sender, RoutedEventArgs e)
+        {
+            DeletingOrgProgress.Show();
+            //Request deletion online
+            Dictionary<string, string> results = await OrgsService.deleteOrg(OrgID);
+            if (results != null)
+            {
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    await OrgHelper.deleteOrg(OrgID);
+                    toastStatus.Message = "Organisation deleted successfully";
+                    this.Frame.GoBack();
+                }
+                else
+                {
+                    //Tell the user we failed through a toast 
+                    toastStatus.Message = results[Constants.ERROR];
+                }
+            }
+            DeletingOrgProgress.Hide();
+
         }
     }
     

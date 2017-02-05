@@ -1,5 +1,7 @@
 ﻿using Pepeza.Db.DbHelpers;
+using Shared.Db.Models.Notices;
 using Shared.Models.NoticeModels;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,5 +32,28 @@ namespace Shared.Db.DbHelpers.Notice
             }
             
         }
+        public static async Task<bool> deleteAttachment(int attachmentId)
+        {
+              try
+                {
+
+                    var connection = DbHelper.DbConnectionAsync();
+                    if (connection != null)
+                    {
+                        await connection.ExecuteAsync("DELETE FROM TAttachment WHERE id=?", attachmentId);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                   
+                }
+                catch
+                {
+                    return false;
+                }
+           
+            }
     }
 }

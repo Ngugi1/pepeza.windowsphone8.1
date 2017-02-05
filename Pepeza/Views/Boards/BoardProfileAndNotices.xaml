@@ -7,7 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:Common="using:Pepeza.Common"
+    xmlns:forFun ="using:Coding4Fun.Toolkit.Controls"
     xmlns:converter1="using:Pepeza"
+    xmlns:toaster="using:Toastinet"
     xmlns:converter="using:Pepeza.Views.Boards"
     xmlns:FFImage="using:FFImageLoading"
     RequestedTheme="Light"
@@ -29,6 +31,27 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="2">
+            <toaster:Toastinet Style="{StaticResource ToastStyle}"
+                               Height="50"
+                               Name="ToastStatus"
+                               Width="Auto"
+                               />
+            <forFun:ProgressOverlay VerticalAlignment="Center"
+                                   Name="DeletingBoardProgress"
+                                    Visibility="Collapsed"
+                                    >
+                <forFun:ProgressOverlay.Content>
+                    <StackPanel>
+                        <TextBlock 
+                         Text="deleting..."
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource txtBlockWait}"/>
+                        <ProgressBar Margin="12,4"/>
+                    </StackPanel>
+                </forFun:ProgressOverlay.Content>
+               
+            </forFun:ProgressOverlay>
+            
             <Pivot SelectedIndex="0" 
                    Name="PivotBoard"
                    SelectionChanged="Pivot_SelectionChanged">
@@ -393,6 +416,13 @@
         <CommandBar Name="CommandBarOperations"
                     Visibility="Collapsed"
                     >
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="delete board" 
+                              Icon="Delete"
+                              Name="AppBarBtnDeleteBoard"
+                              Click="AppBarBtnDeleteBoard_Click"
+                              />
+            </CommandBar.SecondaryCommands>
             <AppBarButton 
                           Name="AppBtnAnalytics"
                           Visibility="Collapsed"
@@ -414,5 +444,6 @@
                          Visibility="Collapsed"
                           Label="new notice"/>
         </CommandBar>
+ 
     </Page.BottomAppBar>
 </Page>

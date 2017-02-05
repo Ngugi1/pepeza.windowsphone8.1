@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pepeza.Utitlity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -105,8 +106,6 @@ namespace Shared.Utitlity
             }
             return bytes;
         }
-
-
         public static WriteableBitmap centerCropImage(WriteableBitmap image)
         {
             
@@ -136,6 +135,55 @@ namespace Shared.Utitlity
             var resized = WriteableBitmapExtensions.Resize(cropped, 250, 250, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
 
             return resized;
+        }
+        public static async Task<bool> deleteFileAsync(string fileUniqueName)
+        {
+            try
+            {
+                //Look for the file in the local folder
+                if (await folderExists(Constants.PEPEZA))
+                {
+                    if (await fileExists(fileUniqueName))
+                    {
+                        var folder =  await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                        if (folder != null)
+                        {
+                            var file = await folder.GetFileAsync(fileUniqueName);
+                           await  file.DeleteAsync();
+                        }
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private static async Task<bool> folderExists(string folderName)
+        {
+            try
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(folderName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        private static async Task<bool> fileExists(string fileName)
+        {
+            try
+            {
+                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
+                await folder.GetFileAsync(fileName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

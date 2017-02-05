@@ -1,6 +1,7 @@
 ﻿using Pepeza.Db.DbHelpers.Board;
 using Pepeza.Db.Models.Board;
 using Pepeza.Db.Models.Notices;
+using Shared.Db.DbHelpers;
 using Shared.Db.DbHelpers.Notice;
 using Shared.Db.Models.Notices;
 using Shared.Models.NoticeModels;
@@ -53,7 +54,11 @@ namespace Pepeza.Db.DbHelpers.Notice
                         TNotice notice = await NoticeHelper.get(item.noticeId);
                         notice.isRead = item.isRead;
                         TBoard board =  await BoardHelper.getBoard(notice.boardId);
-                        notice.board = board.name;
+                        if (board != null)
+                        {
+                            notice.board = board.name;
+                        }
+                        
                         notice.date_created_display = DateTimeFormatter.UnixTimestampToDate(notice.dateCreated);
                         if (notice.hasAttachment == 1)
                         {
@@ -76,8 +81,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                 return null;
             }
 
-        }
-
+        } 
         public static async Task<List<TNotice>> getAll(int id)
         {
 
@@ -94,13 +98,23 @@ namespace Pepeza.Db.DbHelpers.Notice
                     {
                         //Get the respective notices 
                         TNoticeItem noticeitem = await NoticeItemHelper.getByNoticeId(item.noticeId);
-                        item.isRead = item.isRead;
+                        if (noticeitem != null)
+                        {
+                            item.isRead = noticeitem.isRead;
+                        }
+                        else
+                        {
+                            item.isRead = 1;
+                        }
                         TBoard board = await BoardHelper.getBoard(item.boardId);
-                        item.board = board.name;
+                        if (board != null)
+                        {
+                            item.board = board.name;
+                        }
                         item.date_created_display = DateTimeFormatter.UnixTimestampToDate(item.dateCreated);
                         if (item.hasAttachment == 1)
                         {
-                            var attacho = await AttachmentHelper.get(noticeitem.noticeId);
+                            var attacho = await AttachmentHelper.get(item.noticeId);
                             if (attacho != null)
                             {
                                 item.attachmentId = attacho.id;
@@ -118,6 +132,59 @@ namespace Pepeza.Db.DbHelpers.Notice
                 return null;
             }
 
+        }
+        public static async Task<List<TNotice>> getAllToDelete(int id)
+        {
+            List<TNotice> notices = new List<TNotice>();
+            try
+            {
+                var connect = DbHelper.DbConnectionAsync();
+                if (connect != null)
+                {
+                    notices = await connect.QueryAsync<TNotice>("SELECT * FROM TNotice WHERE boardId=?", id);
+                }
+            }
+            catch
+            {
+
+            }
+            return notices;
+        }
+        public static async Task<bool> deleteNotice(int noticeId)
+        {
+            //Delete the notice Item 
+            TNotice notice = await get(noticeId);
+            //Delete notice items for this notice 
+            await NoticeItemHelper.deleteNoticeItem(notice.noticeId);
+            if (notice.hasAttachment ==1)
+            {
+                TAttachment attachment = await AttachmentHelper.get(noticeId);
+                //Delete the attachment and associated file and TFile objects 
+                TFile file = await FileHelper.getByAttachmentId(attachment.id);
+                if (file != null)
+                {
+                    await FileHelper.deleteFile(file);
+                }
+                await AttachmentHelper.deleteAttachment(attachment.id);
+            }
+           
+            bool isDeleted = false;
+            //Delete all notice items and then delete the notice
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TNotice WHERE noticeId=?", noticeId);
+                    isDeleted = true;
+
+                }
+            }
+            catch (Exception)
+            {
+                isDeleted = false;
+            }
+            return isDeleted; ;
         }
     }
 

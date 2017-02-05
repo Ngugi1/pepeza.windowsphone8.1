@@ -93,6 +93,7 @@ namespace Pepeza.Db.Models.Board
             set { _linkNormal = value; onPropertyChanged("linkNormal"); }
         }
 
+        public long dateDeleted { get; set; }
 
     }
 }

@@ -20,5 +20,7 @@ namespace Pepeza.Db.Models.Board
         public int accepted { get; set; }
         public int declined { get; set; }
         public long dateAccepted { get; set; }
+        public long dateDeleted { get; set; }
+
     }
 }

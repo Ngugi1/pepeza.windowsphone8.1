@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:forFun="using:Coding4Fun.Toolkit.Controls"
     xmlns:toast="using:Toastinet"
     RequestedTheme="Light"
     xmlns:Common="using:Pepeza.Common"
@@ -17,8 +18,24 @@
             <toast:Toastinet VerticalAlignment="Bottom" 
                              Duration="3"
                              Name="ToastStatus"
-                             Foreground="{ThemeResource PhoneAccentBrush}"
+                             Style="{StaticResource ToastStyle}"
+                             Width="Auto"
+                             Height="50"
                              />
+            <forFun:ProgressOverlay VerticalAlignment="Center"
+                                   Visibility="Collapsed"
+                                    Name="DeletingNoticeProgress"
+                                    >
+                <forFun:ProgressOverlay.Content>
+                    <StackPanel>
+                        <TextBlock 
+                         Text="deleting..."
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource txtBlockWait}"/>
+                        <ProgressBar Margin="12,4"/>
+                    </StackPanel>
+                </forFun:ProgressOverlay.Content>
+            </forFun:ProgressOverlay>
             <StackPanel VerticalAlignment="Center"
                         Name="StackPanelLoading"
                         Visibility="Collapsed"
@@ -154,6 +171,9 @@
                           Click="AppBarButton_Click"
                           Label="Analytics">
             </AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="delete notice" Name="AppBtnDeleteNotice" Click="AppBtnDeleteNotice_Click"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Db.DbHelpers;
 using Pepeza.Db.DbHelpers.Board;
+using Pepeza.Db.DbHelpers.Notice;
 using Pepeza.Db.DbHelpers.User;
 using Pepeza.Db.Models;
 using Pepeza.Db.Models.Board;
@@ -313,6 +314,7 @@ namespace Pepeza.Views.Notices
                         if (collaborator.role == Constants.EDITOR || collaborator.role == Constants.ADMIN || collaborator.role == Constants.OWNER)
                         {
                             CommandBarControls.Visibility = Visibility.Visible;
+
                         }
                     }
             }
@@ -577,13 +579,34 @@ namespace Pepeza.Views.Notices
                 txtBlockDownload.Text = "download attachment";
                 SymbolOperation.Symbol = Symbol.Download;
                 HLBDownloadAttachment.Visibility = Visibility.Visible;
-                new MessageDialog("File could not be located. Redownload the file").ShowAsync();
+                App.displayMessageDialog("File could not be located. Redownload the file");
             }
         }
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
 
             this.Frame.Navigate(typeof(NoticeAnalytics), new Dictionary<string, string>() { { "id", noticeId.ToString() }, { "title", noticeTitle} });
+        }
+
+        private async void AppBtnDeleteNotice_Click(object sender, RoutedEventArgs e)
+        {
+            DeletingNoticeProgress.Show();
+            Dictionary<string, string> results = await NoticeService.delete(noticeId);
+            if (results != null)
+            {
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    await NoticeHelper.deleteNotice(noticeId);
+                    ToastStatus.Message = "deleted successfully";
+                    this.Frame.GoBack();
+                }
+                else if(results.ContainsKey(Constants.ERROR))
+                {
+                    //show a toast
+                    ToastStatus.Message = "deletion failed, try again later";
+                }
+            }
+            DeletingNoticeProgress.Hide();
         }
        
     }

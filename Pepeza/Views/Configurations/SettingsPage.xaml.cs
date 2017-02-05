@@ -102,12 +102,12 @@ namespace Pepeza.Views.Configurations
                 if (await LocalUserHelper.clearLocalSettingsForUser())
                 {
                     //Redirect to login page 
-                    string PEPEZA = "Pepeza";
+                   
                     await DbHelper.dropDatabase();
                     //Delete the Pepeza folder 
                     try
                     {
-                        var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(PEPEZA);
+                        var currentFolder = await ApplicationData.Current.LocalFolder.GetFolderAsync(Constants.PEPEZA);
                         await currentFolder.DeleteAsync();
                     }
                     catch

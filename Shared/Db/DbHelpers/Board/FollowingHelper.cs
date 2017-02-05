@@ -72,7 +72,6 @@ namespace Pepeza.Db.DbHelpers.Board
             }
 
         }
-
         public async static Task<TFollowing> getFollowerByBoardId(int boardId)
         {
             try
@@ -95,6 +94,26 @@ namespace Pepeza.Db.DbHelpers.Board
                 return null;
 
             }
+        }
+        public async static Task<bool> deleteFollowerItem(int boardId)
+        {
+            bool isDeleted = false;
+            try
+            {
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    await connection.ExecuteAsync("DELETE FROM TFollowing WHERE boardId=?", boardId);
+                    isDeleted = true;
+                }
+            }
+            catch (Exception)
+            {
+                isDeleted = false;
+            }
+            return isDeleted;
+            
+           
         }
     }
 }
