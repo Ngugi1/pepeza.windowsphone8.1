@@ -36,12 +36,22 @@ namespace Pepeza.Db.DbHelpers
         public async static Task<int> update(object Info)
         {
             int affectedRows = 0;
-            var connection = DbHelper.DbConnectionAsync();
-            if (connection != null && Info != null)
+            try
             {
-                affectedRows = await connection.UpdateAsync(Info);
+               
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null && Info != null)
+                {
+                    affectedRows = await connection.UpdateAsync(Info);
 
+                }
             }
+            catch(Exception ex)
+            {
+                ex.ToString();
+                return 0;
+            }
+           
             return affectedRows;
         }
         public async static Task<int> delete(object Info)

@@ -59,6 +59,7 @@ namespace Pepeza.Views.Orgs
         public int OrgID { get; set; }
         bool hasRole = false;
         string role;
+        string follow = "follow", unfollow = "unfollow", requested = "requested";
         Organization org = null;
         CoreApplicationView view = CoreApplication.GetCurrentView();
         Type toNavigateTo = null;
@@ -260,9 +261,18 @@ namespace Pepeza.Views.Orgs
             {
                 foreach (var item in boards)
                 {
+                    if (await FollowingHelper.getFollowingBoard(item.id))
+                    {
+                        item.following = 1;
+                    }
+                    else
+                    {
+                        item.following = 0;
+                    }
                     var avatar = await AvatarHelper.get(item.avatarId);
                     if (avatar != null)
                     {
+                       
                         item.linkSmall = avatar.linkSmall == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : avatar.linkSmall;
                     }
                     else
@@ -435,6 +445,21 @@ namespace Pepeza.Views.Orgs
                                 orgID = orgId,
                                 desc = (string)board["description"]
                             });
+                        }
+                        if (boards.Count > 0)
+                        {
+                            //Determine if you foolow these boards 
+                            foreach (var followCandidate in boards)
+                            {
+                                if (await FollowingHelper.getFollowingBoard(followCandidate.id))
+                                {
+                                    followCandidate.following = 1;
+                                }
+                                else
+                                {
+                                    followCandidate.following = 0;
+                                }
+                            }
                         }
                         if (boards.Count == 0)
                         {
@@ -807,7 +832,6 @@ namespace Pepeza.Views.Orgs
         {
             loadOrgCollaborators(OrgID);
         }
-
         private async void deleteOrg_Click(object sender, RoutedEventArgs e)
         {
             DeletingOrgProgress.Show();
@@ -830,6 +854,179 @@ namespace Pepeza.Views.Orgs
             DeletingOrgProgress.Hide();
 
         }
+
+        private async void BtnFollowUnfollowClick(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            TBoard board = (TBoard)btn.Tag;
+            string btncontent = btn.Content.ToString();
+            if (board != null)
+            {
+                //Check the type of board 
+                if (btncontent.Equals(follow))
+                {
+                    await followBoard(board , btn);
+                }
+                else if (btncontent.Equals(unfollow))
+                {
+                    await unfollowBoard(board , btn);
+                }
+               
+            }
+            
+        }
+        public async Task followBoard(TBoard boardParam , Button btnFollow)
+        {
+            btnFollow.IsEnabled = false;
+            Dictionary<string, string> results = await BoardService.followBoard(boardParam.id);
+            if (results.ContainsKey(Constants.SUCCESS))
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.FOLLOW);
+                //We have followed the board
+                JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                TFollowing following = new TFollowing();
+                following.id = (int)objResults["id"];
+                following.userId = (int)objResults["userId"];
+                following.boardId = (int)objResults["boardId"];
+                following.accepted = (int)objResults["accepted"];
+                if (objResults["dateAccepted"].Type != JTokenType.Null) following.dateAccepted = (long)objResults["dateAccepted"];
+                if (await FollowingHelper.get(following.id) != null)
+                {
+                    await FollowingHelper.update(following);
+                    if (await BoardHelper.getBoard(following.boardId) != null)
+                    {
+                        boardParam.following = 1;
+                        await BoardHelper.update(boardParam);
+                    }
+                    else
+                    {
+                        boardParam.following = 1;
+                        await BoardHelper.add(boardParam);
+                    }
+
+                }
+                else
+                {
+                    await FollowingHelper.add(following);
+                    if (await BoardHelper.getBoard(following.boardId) != null)
+                    {
+                        boardParam.following = 1;
+                        await BoardHelper.update(boardParam);
+                    }
+                    else
+                    {
+                        boardParam.following = 1;
+                        await BoardHelper.add(boardParam);
+                    }
+
+                }
+
+                //Update the number of follower
+
+                if (following.accepted == 1)
+                {
+                    (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (GridBoardProfile.DataContext as TBoard).noOfFollowers + 1;
+                    btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
+                    btnFollow.IsEnabled = true;
+                }
+                else
+                {
+                    btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
+                }
+               
+            }
+            else if (results.ContainsKey(Constants.UNAUTHORIZED))
+            {
+                //Show a popup message 
+                App.displayMessageDialog(Constants.UNAUTHORIZED);
+                this.Frame.Navigate(typeof(LoginPage));
+            }
+            else
+            {
+                //Something went wrong 
+
+                btnFollow.IsEnabled = true;
+            }
+        }
+        public async Task unfollowBoard(TBoard boardUnfollow , Button btnFollow)
+        {
+            try
+            {
+                btnFollow.IsEnabled = false;
+                Dictionary<string, string> results = await BoardService.unfollowBoard(boardUnfollow.id);
+                if (results.ContainsKey(Constants.SUCCESS))
+                {
+                    //We have followed the board
+                    JObject objResults = JObject.Parse(results[Constants.SUCCESS]);
+                    TFollowing localFollower = await FollowingHelper.getFollowerByBoardId(boardUnfollow.id);
+                    if (localFollower != null)
+                    {
+                        await FollowingHelper.delete(localFollower);
+                        if ((this.GridBoardProfile.DataContext as TBoard).noOfFollowers > 0)
+                        {
+                            (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (this.GridBoardProfile.DataContext as TBoard).noOfFollowers - 1;
+                        }
+                    }
+                    btnFollow.IsEnabled = true;
+                    btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
+                   
+                }
+                else if (results.ContainsKey(Constants.UNAUTHORIZED))
+                {
+                    //Show a popup message 
+                    App.displayMessageDialog(Constants.UNAUTHORIZED);
+                    this.Frame.Navigate(typeof(LoginPage));
+                }
+                else
+                {
+                    btnFollow.IsEnabled = true;
+
+                }
+
+            }
+            catch
+            {
+                //Do nothing 
+            }
+
+
+        }
+        
     }
+
+
+    public class IntToFollowing : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((int)value == 1)
+            {
+                return "unfollow";
+            }
+            else if((int)value ==0)
+            {
+                return "follow";
+            }
+            else if ((int)value == 2)
+            {
+                return "requested";
+            }
+            else
+            {
+                return "follow";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((string)value == "unfollow")
+            {
+                return 1;
+            }
+            return 0;
+        }
+    }
+    
     
 }

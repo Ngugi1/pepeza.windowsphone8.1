@@ -7,6 +7,7 @@
       xmlns:toast="using:Toastinet"
       xmlns:forFun="using:Coding4Fun.Toolkit.Controls"
       xmlns:common="using:Pepeza.Common"
+      xmlns:IntTofollowing="using:Pepeza.Views.Orgs"
       xmlns:FFImage="using:FFImageLoading"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       RequestedTheme="Light"
@@ -17,6 +18,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <IntTofollowing:IntToFollowing x:Key="IntToFollowing"/>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -188,7 +190,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                                         <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
                                     <FFImage:FFImage
                                             Grid.RowSpan="2"
                                             ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
@@ -213,8 +216,19 @@
                                                    Margin="8,0,14,0"
                                                    Style="{StaticResource txtBlockListViewDesc}"
                                                    Text="{Binding desc}" />
+                                        <!--<Button Style="{StaticResource ButtonBlue}" 
+                                                Grid.RowSpan="2"
+                                                Width="Auto"
+                                                Padding="0"
+                                                Foreground="White"
+                                                FontWeight="ExtraLight"
+                                                Click="BtnFollowUnfollowClick"
+                                                Tag="{Binding}"
+                                                Background="{ThemeResource PhoneAccentBrush}"
+                                                Grid.Column="2"
+                                                Content="{Binding following, Converter={StaticResource IntToFollowing}}"/>-->
 
-                                </Grid>
+                                    </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
