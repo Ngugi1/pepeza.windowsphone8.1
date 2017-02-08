@@ -19,44 +19,44 @@
     <ScrollViewer VerticalScrollMode="Auto" 
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollMode="Auto">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <toast:Toastinet Name="ToastStatus" 
-                         Duration="10"
-                         Visibility="Collapsed"
-                         Style="{StaticResource ToastStyle}" VerticalAlignment="Bottom" Grid.Row="3"/>
+
             <TextBlock Text="Give feedback" 
                    Style="{StaticResource txtBlockPageHeader}"
                    Foreground="Black"
                    />
-        <StackPanel Grid.Row="1" Visibility="Collapsed" Name="StackPanelProgress">
-            <ProgressBar IsIndeterminate="True" Margin="12"/>
-            <TextBlock Text="Sending feedback..." Style="{StaticResource txtBlockWait}"
+            <StackPanel Grid.Row="2" 
+                    Margin="12,4,0,0"
+                    Visibility="Collapsed" Name="StackPanelProgress">
+                <ProgressBar IsIndeterminate="True" Margin="12"/>
+                <TextBlock Text="Sending feedback..." Style="{StaticResource txtBlockWait}"
                        HorizontalAlignment="Center"
                        />
-        </StackPanel>
-            <Grid Grid.Row="2">
+            </StackPanel>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-        <StackPanel 
+
+                <StackPanel 
             Tapped="StackPanelSmile"
             Grid.Row="2"
             Grid.Column="0"
             Name="SmileStackPanel"
             Orientation="Vertical">
-            <Image Width="50" 
+                    <Image Width="50" 
                    Source="/Assets/Images/ic_mood_smile.png"
                    Height="50">
-                
-            </Image>
+
+                    </Image>
                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" 
                                HorizontalAlignment="Center"
                                Text="Happy" />
@@ -65,30 +65,30 @@
                                Visibility="Collapsed"
                                Fill="{ThemeResource PhoneAccentBrush}"/>
                 </StackPanel >
-        <StackPanel 
+                <StackPanel 
             Grid.Column="1"
                     Name="ConfuseStackPanel"
                     Tapped="StackPanel_Confused"
                   
                    >
-            <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_confused.png"/>
-            <TextBlock 
+                    <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_confused.png"/>
+                    <TextBlock 
                 HorizontalAlignment="Center"
                 Style="{StaticResource BaseTextBlockStyle}" Text="Confused"/>
                     <Rectangle Height="5" 
                                Name="RectangleConfused"
                                Fill="{ThemeResource PhoneAccentBrush}"/>
 
-                   
-        </StackPanel>
-        <StackPanel 
+
+                </StackPanel>
+                <StackPanel 
             Grid.Column="2"
             Tapped="StackPanelFrown"
             Grid.Row="4"
             Name="FrownStackPanel"
                     Orientation="Vertical">
-            <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_sad.png"/>
-            <TextBlock 
+                    <Image Height="50" Width="50" Source="/Assets/Images/ic_mood_sad.png"/>
+                    <TextBlock 
                 HorizontalAlignment="Center"
                 Style="{StaticResource BaseTextBlockStyle}" Text="Annoyed"
                 VerticalAlignment="Center"/>
@@ -98,8 +98,9 @@
                                Fill="{ThemeResource PhoneAccentBrush}"/>
                 </StackPanel>
             </Grid>
-            <StackPanel Grid.Row="6">
-            <TextBox  
+            <StackPanel Grid.Row="6" 
+                        Margin="12,12,24,12">
+                <TextBox  
                 Grid.Row="3"
                       Margin="12,24"
                       Name="txtBoxFeedBack"
@@ -107,13 +108,26 @@
                       Header="Tell us why you feel this way?"
                       PlaceholderText="I like pepeza :-)"
                       Style="{StaticResource txtBoxStyle}"/>
-        </StackPanel>
-       
-    </Grid>
+
+                <TextBlock 
+                    Name="txtBlockError"
+                    Style="{StaticResource txtBlockError}"/>
+                <toast:Toastinet Name="ToastStatus" 
+                         Duration="5"
+                         Visibility="Visible"
+                                 
+                             Width="Auto"
+                             VerticalAlignment="Bottom"
+                         Style="{StaticResource ToastStyle}"  Grid.Row="3"/>
+            </StackPanel>
+
+
+        </Grid>
     </ScrollViewer>
     <Page.BottomAppBar>
         <CommandBar>
             <AppBarButton Icon="Comment" 
+                          Name="AppBtnSendFeedBack"
                           Click="SendFeedBackClicked"
                           Label="comment"/>
         </CommandBar>
