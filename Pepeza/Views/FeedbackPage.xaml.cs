@@ -31,7 +31,7 @@ namespace Pepeza.Views
         {
             this.InitializeComponent();
         }
-        string mood;
+        string mood = "confused";
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -66,14 +66,21 @@ namespace Pepeza.Views
 
         private async void SendFeedBackClicked(object sender, RoutedEventArgs e)
         {
+            AppBtnSendFeedBack.IsEnabled = false;
+            txtBlockError.Visibility = Visibility.Collapsed;
             if (string.IsNullOrWhiteSpace(mood))
             {
-                ToastStatus.Message = "Please tap on any of moods";
+                txtBlockError.Text = "Please tap on any of moods";
+                AppBtnSendFeedBack.IsEnabled = true;
+                txtBlockError.Visibility = Visibility.Visible;
                 return;
             }
             if (string.IsNullOrWhiteSpace(txtBoxFeedBack.Text))
             {
-                ToastStatus.Message = "Please add a comment";
+                txtBlockError.Text = "Please add a comment";
+                txtBlockError.Visibility = Visibility.Visible;
+                AppBtnSendFeedBack.IsEnabled = true;
+
                 return;
             }
             var x = Package.Current.Id.Version.Build.ToString();
@@ -85,6 +92,7 @@ namespace Pepeza.Views
             {
                 JObject json = JObject.Parse(resulst[Constants.SUCCESS]);
                 ToastStatus.Message = (string)json["message"] + "\n Thanks for your feedback!";
+                ToastStatus.Duration = 5;
             }
             else if (resulst.ContainsKey(Constants.UNAUTHORIZED))
             {
@@ -94,11 +102,20 @@ namespace Pepeza.Views
             }
             else
             {
-                
-                ToastStatus.Message = (string)resulst[Constants.ERROR];
+                txtBlockError.Visibility = Visibility.Visible;
+                txtBlockError.Text = (string)resulst[Constants.ERROR];
             }
             StackPanelProgress.Visibility = Visibility.Collapsed;
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.FEEDBACKSENT);
+            try
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.FEEDBACKSENT);
+            }
+            catch
+            {
+                
+            }
+
+            AppBtnSendFeedBack.IsEnabled = true;
             
         }
     }
