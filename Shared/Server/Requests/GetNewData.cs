@@ -793,7 +793,7 @@ namespace Pepeza.Server.Requests
                         orgCollaborator.active = (int)item["active"];
                         orgCollaborator.role = (string)item["role"];
                         orgCollaborator.dateCreated = (long)item["dateCreated"];
-
+                        orgCollaborator.dateDeleted = (long)item["dateDeleted"];
                         if (item["dateUpdated"].Type != JTokenType.Null) orgCollaborator.dateUpdated =(long)item["dateUpdated"];
                         if (orgCollaborator.dateDeleted == 0)
                         {
@@ -845,14 +845,22 @@ namespace Pepeza.Server.Requests
                             notice_poster.firstName = (string)poster["firstName"];
                             notice_poster.lastName = (string)poster["lastName"];
                             notice_poster.dateCreated = (long)poster["dateCreated"];
-                            notice_poster.dateUpdated = (long)poster["dateCreated"];
                             notice_poster.emailId = (int)poster["emailId"];
                             notice_poster.avatarId =(int)poster["avatarId"];
                             notice_poster.visibility = (string)poster["visibility"];
                             notice_poster.dateDeleted = (long)poster["dateDeleted"];
+                            if (poster["dateUpdated"].Type != JTokenType.Null) notice_poster.dateUpdated = (long)poster["dateUpdated"];
                             if (notice_poster.dateDeleted == 0)
                             {
-                                await DBHelperBase.add(notice_poster);
+                                if (NoticeHelper.get(notice_poster.id) != null)
+                                {
+                                    await DBHelperBase.update(notice_poster);
+                                }
+                                else
+                                {
+                                    await DBHelperBase.add(notice_poster);
+
+                                }
 
                             }
                         
@@ -876,10 +884,8 @@ namespace Pepeza.Server.Requests
                         if (item["dateUpdated"].Type != JTokenType.Null) email.dateUpdated = (long)item["dateUpdated"];
                         email.dateCreated = (long)item["dateCreated"];
                         if (email.dateDeleted == 0)
-                        await EmailHelper.add(email);
                         {
                             await EmailHelper.add(email);
-
                         }
                        
                     }
@@ -892,20 +898,17 @@ namespace Pepeza.Server.Requests
                 {
                     if (follower_items.Count > 0)
                     {
-                        TFollowing followeitem = new TFollowing()
-                        {
-                            id = (int)item["id"],
-                            accepted = (int)item["accepted"],
-                            userId = (int)item["userId"],
-                            boardId = (int)item["boardId"],
-                            declined = (int)item["declined"],
-                            dateCreated = (long)item["dateCreated"],
-                            dateDeclined = (long)item["dateDeclined"],
-                            dateAccepted =  (long)item["dateAccepted"],
-                            dateUpdated = (long)item["dateUpdated"],
-                            dateDeleted = (long)item["dateDeleted"]
+                        TFollowing followeitem = new TFollowing();
+                       
+                            followeitem.id = (int)item["id"];
+                            followeitem.accepted = (int)item["accepted"];
+                            followeitem.userId = (int)item["userId"];
+                            followeitem.boardId = (int)item["boardId"];
+                            followeitem.declined = (int)item["declined"];
+                            followeitem.dateCreated = (long)item["dateCreated"];
+                            followeitem.dateUpdated = (long)item["dateUpdated"];
+                            followeitem.dateDeleted = (long)item["dateDeleted"];
                             
-                        };
                         if (item["dateDeclined"].Type != JTokenType.Null) followeitem.dateDeclined = (long)item["dateDeclined"];
                         if (item["dateUpdated"].Type != JTokenType.Null) followeitem.dateUpdated = (long)item["dateUpdated"];
                         if (item["dateAccepted"].Type != JTokenType.Null) followeitem.dateAccepted = (long)item["dateAccepted"];
@@ -934,8 +937,7 @@ namespace Pepeza.Server.Requests
                             orgID = (int)item["organizationId"],
                             dateCreated = (long)item["dateCreated"],
                             followRestriction = (string)item["followRestriction"],
-                            dateDeleted = (long)item["dateDeleted"],
-                            dateUpdated = (long)item["dateUpdated"]
+                            dateDeleted = (long)item["dateDeleted"]
 
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) board.dateUpdated = (long)item["dateUpdated"];
@@ -966,7 +968,6 @@ namespace Pepeza.Server.Requests
                             description = (string)item["description"],
                             dateCreated = (long)item["dateCreated"],
                             dateDeleted = (long)item["dateDeleted"],
-                            dateUpdated = (long)item["dateUpdated"]
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) org.dateUpdated=(long)item["dateUpdated"];
                         if (org.dateDeleted == 0)
@@ -989,7 +990,6 @@ namespace Pepeza.Server.Requests
                             linkSmall = (string)item["linkSmall"],
                             linkNormal = (string)item["linkNormal"],
                             dateCreated = (long)item["dateCreated"],
-                            dateUpdated = (long)item["dateUpdated"],
                             dateDeleted = (long)item["dateDeleted"]
                         };
                         if (item["dateUpdated"].Type != JTokenType.Null) fetchedAvatar.dateUpdated = (long)item["dateUpdated"];
@@ -1024,7 +1024,14 @@ namespace Pepeza.Server.Requests
 
                     if (poster_avatar.dateDeleted == 0)
                     {
-                        await DBHelperBase.add(poster_avatar);
+                        if (await AvatarHelper.get(poster_avatar.id) != null)
+                        {
+                            await AvatarHelper.update(poster_avatar);
+
+                        }else
+                        {
+                            await DBHelperBase.add(poster_avatar);
+                        }
                     }
                     
 
@@ -1060,42 +1067,7 @@ namespace Pepeza.Server.Requests
                     }
                 }
                 #endregion
-                #region Notices
-                List<TNotice> list_notices = new List<TNotice>();
-                foreach (var item in notices)
-                {
-                    if (notices.Count > 0)
-                    {
-                        TNotice notice = new TNotice()
-                        {
-                            noticeId = (int)item["id"],
-                            boardId = (int)item["boardId"],
-                            userId = (int)item["userId"],
-                            title = (string)item["title"],
-                            hasAttachment = (int)item["hasAttachment"],
-                            content = (string)item["content"],
-                            dateCreated = (long)item["dateCreated"],
-                            dateDeleted = (long)item["dateDeleted"]
-                            
-                        };
-                        if (item["dateUpdated"].Type != JTokenType.Null) notice.dateUpdated = (long)item["dateUpdated"];
-                        
-                            await NoticeHelper.add(notice);
-                        
-                        list_notices.Add(notice);
-                    }
-                   
-                }
-                foreach (var item in list_notices)
-                {
-                   
-                    TNoticeItem check = items.FirstOrDefault(i=>i.noticeId == (int)item.noticeId);
-                    item.isRead = check.isRead;
-
-                }
-                ActionCenterHelper.updateActionCenter(list_notices);
-                
-                #endregion
+          
                 #region Attachments 
                 foreach (var item in attachments)
                 {
@@ -1153,6 +1125,42 @@ namespace Pepeza.Server.Requests
                 }
 
                 #endregion
+                #region Notices
+                List<TNotice> list_notices = new List<TNotice>();
+                foreach (var item in notices)
+                {
+                    if (notices.Count > 0)
+                    {
+                        TNotice notice = new TNotice()
+                        {
+                            noticeId = (int)item["id"],
+                            boardId = (int)item["boardId"],
+                            userId = (int)item["userId"],
+                            title = (string)item["title"],
+                            hasAttachment = (int)item["hasAttachment"],
+                            content = (string)item["content"],
+                            dateCreated = (long)item["dateCreated"],
+                            dateDeleted = (long)item["dateDeleted"]
+
+                        };
+                        if (item["dateUpdated"].Type != JTokenType.Null) notice.dateUpdated = (long)item["dateUpdated"];
+
+                        await NoticeHelper.add(notice);
+
+                        list_notices.Add(notice);
+                    }
+
+                }
+                foreach (var item in list_notices)
+                {
+
+                    TNoticeItem check = items.FirstOrDefault(i => i.noticeId == (int)item.noticeId);
+                    item.isRead = check.isRead;
+
+                }
+                ActionCenterHelper.updateActionCenter(list_notices);
+
+                #endregion
                 #region Notifications
                 foreach (var item in notifications)
                 {
@@ -1197,10 +1205,10 @@ namespace Pepeza.Server.Requests
                 Settings.add(Constants.DATA_PUSHED, true);
                 results.Add(Constants.SUCCESS, 1);
                 return results;
-            }catch
+            }catch(Exception ex)
             {
                 Settings.add(Constants.DATA_PUSHED, false);
-                results.Add(Constants.SUCCESS, 1);
+                results.Add(Constants.SUCCESS, 0);
 
                 return results;
             }
