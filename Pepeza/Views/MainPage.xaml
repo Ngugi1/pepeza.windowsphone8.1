@@ -149,7 +149,6 @@
                         Width="320"
                         Background="Transparent"
                         Margin="12,4"
-                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
                         HorizontalAlignment="Center"
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
@@ -218,7 +217,8 @@
                                MinWidth="50"
                                 Name="CheckBoxFollowing"
                                 Checked="CheckBoxFollowing_Checked"
-                                Content="Following" Margin="28.333,0,-2.833,0" 
+                                Content="Following" 
+                            Margin="28.333,0,-2.833,0" 
                             />
                     </Grid>
                    
@@ -244,18 +244,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <FlyoutBase.AttachedFlyout>
-                                        <MenuFlyout Placement="Right">
-                                            <MenuFlyoutItem Name="MenuFlyOutEdit"
-                                                            Click="MenuFlyOutEditBoard_Tapped"
-                                               
-                                                            Text="edit" />
-                                            <MenuFlyoutItem 
-                                                Name="MenuFlyoutDelete"
-                                                Click="MenuFlyoutItemBoard_Delete"
-                                                Text="delete" />
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
+                                    
                                     <FFImage:FFImage
                                         Grid.RowSpan="2"
                                         ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
@@ -327,7 +316,7 @@
                         HorizontalAlignment="Center"
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
-                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
+                        
                         AdMediatorError="AdMediatorControl_AdMediatorError"
                         Name="BoardsTabAd"/>
                 </Grid>
@@ -358,18 +347,6 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <FlyoutBase.AttachedFlyout>
-                                        <MenuFlyout>
-                                            <MenuFlyoutItem 
-                                                Name="MenuFlyoutEdit"
-                                                Click="MenuFlyoutEditOrg_Click"
-                                                Text="edit" />
-                                            <MenuFlyoutItem 
-                                                Name="MenuFlyoutDelete"
-                                                Click="MenuFlyoutDeleteOrg_Click"
-                                                Text="delete" />
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
                                     <FFImage:FFImage
                                         Height="50"
                                         Width="50"
@@ -428,7 +405,7 @@
                         Margin="12,4"
                         HorizontalAlignment="Center"
                         Grid.Row="1"
-                        AdMediatorFilled="OrgTabAd_AdMediatorFilled"
+                        
                         VerticalAlignment="Bottom"
                         AdMediatorError="AdMediatorControl_AdMediatorError"
                         Name="OrgTabAd"/>

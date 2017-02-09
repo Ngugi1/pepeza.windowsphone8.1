@@ -69,11 +69,6 @@ namespace Pepeza
             current = this;
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            this.NavigationCacheMode = NavigationCacheMode.Disabled;
-            
-        }
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -81,20 +76,13 @@ namespace Pepeza
         /// This parameter is typically used to configure the page.</param> 
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            //Count the number of notifications 
-            
             //Load data 
-            isSelected = false;
             await loadNotices();
-            await updateNotificationCount();
             //Load boards
             await loadBoards();
             //Orgs alpha groups
             await loadOrgs();
             //Set up followers
-            //await loadFollowing();
-            isSelected = true;
             this.Frame.BackStack.Clear();
             //Register push notifications
             var isPushTokenSubmitted = Settings.getValue(Constants.IS_PUSH_TOKEN_SUBMITTED);
@@ -102,7 +90,7 @@ namespace Pepeza
             {
                 if (!(bool)isPushTokenSubmitted)
                 {
-                    Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED ,await registerPush());   
+                    Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED ,await registerPush());    // Submit the tokea as much as possible, they expire anytime
                 }
             }
             else
@@ -115,7 +103,10 @@ namespace Pepeza
                 bool updated = (bool)Settings.getValue(Constants.DATA_PUSHED);
                 if (!updated)
                 {
-                    await GetNewData.getNewData();
+                    if (App.CheckInternet())
+                    {
+                        await GetNewData.getNewData();
+                    }
                 }
             }
             //Check whether the email is confirmed 
@@ -141,8 +132,8 @@ namespace Pepeza
             }
             //Clear the backstack 
             this.Frame.BackStack.Clear();
-
-            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.Disk);
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.Memory);
         }
         void MainPage_Click(object sender, RoutedEventArgs e)
         {
@@ -164,52 +155,57 @@ namespace Pepeza
         }
         public async  Task<bool> registerPush()
         {
-            //Check if access status and revoke , makes sure your app works well when there is an update
-            BackgroundExecutionManager.RemoveAccess();
-            //Unregister the Background Agent 
-            var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
-            if (entry.Value != null)
-            {
-                entry.Value.Unregister(true);
-            }
-            //is registration complete?
             bool isRegistered = false;
-            //Request Access 
-            var access = await BackgroundExecutionManager.RequestAccessAsync();
-            if (access == BackgroundAccessStatus.Denied)
+            if (App.CheckInternet())
             {
-                MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
-                prompt.Show();
-                return isRegistered;
-            }
+                //Check if access status and revoke , makes sure your app works well when there is an update
+                BackgroundExecutionManager.RemoveAccess();
+                //Unregister the Background Agent 
+                var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
+                if (entry.Value != null)
+                {
+                    entry.Value.Unregister(true);
+                }
+                //is registration complete?
+               
+                //Request Access 
+                var access = await BackgroundExecutionManager.RequestAccessAsync();
+                if (access == BackgroundAccessStatus.Denied)
+                {
+                    MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
+                    prompt.Show();
+                    return isRegistered;
+                }
 
-            //Granted 
-            BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
-            taskBuilder.Name = "PepezaPushBackgroundTask";
-            PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
-            taskBuilder.SetTrigger(pushTrigger);
-            //Define Entry Point 
-            taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
-            taskBuilder.Register();
-            string uri = String.Empty;
-            try
-            {
-                //Get the channel 
-                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                uri = channel.Uri;
+                //Granted 
+                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                taskBuilder.Name = "PepezaPushBackgroundTask";
+                PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
+                taskBuilder.SetTrigger(pushTrigger);
+                //Define Entry Point 
+                taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
+                taskBuilder.Register();
+                string uri = String.Empty;
+                try
+                {
 
-                //Register foreground APP to receive push when running
-                channel.PushNotificationReceived += channel_PushNotificationReceived;
+                    var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                    uri = channel.Uri;
 
-                // Upload the URI to Pepeza Backend 
-                bool isUriSent = await BackendService.submitPushUri(uri);
-                isRegistered = (isUriSent == true) ? true : false;
+                    //Register foreground APP to receive push when running
+                    channel.PushNotificationReceived += channel_PushNotificationReceived;
 
-            }
-            catch (Exception ex)
-            {
-                string s = ex.Message;
-                isRegistered = false;
+                    // Upload the URI to Pepeza Backend 
+                    bool isUriSent = await BackendService.submitPushUri(uri);
+                    isRegistered = (isUriSent == true) ? true : false;
+
+                }
+                catch (Exception ex)
+                {
+                    string s = ex.Message;
+                    isRegistered = false;
+                }
+               
             }
             return isRegistered;
         }
@@ -290,13 +286,12 @@ namespace Pepeza
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
+            if (App.CheckInternet())
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
+            }
         }
         //TODO :: Reload the notices
-        public async static void reloadNotices()
-        {
-            await Task.Delay(2);
-        }
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
         {  
           this.Frame.Navigate(typeof(AddOrg));       
@@ -305,7 +300,7 @@ namespace Pepeza
         {
             //Get the selected board and navigate to profile/notices
             TBoard board = (sender as ListView).SelectedItem as TBoard;
-            if(board!=null&& isSelected==true)
+            if(board!=null)
             {
                 this.Frame.Navigate(typeof(BoardProfileAndNotices),board.id);
             }
@@ -355,15 +350,7 @@ namespace Pepeza
             }
            
       }    
-        private void ListViewFollowing_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {   
-            //Following is just a board , push the user to board profile
-            TBoard selected = ((sender as ListView).SelectedItem as TBoard);
-            if (selected != null && isSelected == true)
-            {
-                this.Frame.Navigate(typeof(BoardProfileAndNotices), selected.id);
-            }
-        }
+        
         private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -373,100 +360,6 @@ namespace Pepeza
             {
                 this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
             }
-        }
-        private void Grid_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            // showFlyOutMenu(sender, e);
-        }
-        private void showFlyOutMenu(object sender , HoldingRoutedEventArgs e)
-        {
-            FrameworkElement element = sender as FrameworkElement;
-            FlyoutBase flyout = FlyoutBase.GetAttachedFlyout(element);
-            flyout.ShowAt(element);
-        }
-        private async void MenuFlyoutItemBoard_Delete(object sender, RoutedEventArgs e)
-        {
-            var datacontext = getFrameworkElement(e).DataContext as TBoard;
-            Dictionary<string, string> deleteResults = await BoardService.deleteBoard(datacontext.id);
-            Dictionary<string,string> isSuccess = await BoardViewHelper.isBoardDeleted(deleteResults , datacontext);
-            if(isSuccess.ContainsKey(Pepeza.Utitlity.Constants.DELETED))
-            {
-                //show toast with given message 
-                boards.Remove(datacontext);
-                ListViewBoards.ItemsSource = boards;
-                ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
-            }
-            else if (deleteResults.ContainsKey(Constants.UNAUTHORIZED))
-            {
-                //Show a popup message 
-                App.displayMessageDialog(Constants.UNAUTHORIZED);
-                this.Frame.Navigate(typeof(LoginPage));
-            }
-            else
-            {
-                //toast 
-                ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.NOT_DELETED];
-            }
-        
-        }
-        private void MenuFlyOutEditBoard_Tapped(object sender, RoutedEventArgs e)
-        {
-            var datacontext = getFrameworkElement(e).DataContext as TBoard;
-            if (datacontext != null)
-            {
-                this.Frame.Navigate(typeof(UpdateBoard), datacontext);
-            }
-        }
-        private void MenuFlyoutEditOrg_Click(object sender, RoutedEventArgs e)
-        {
-            var datacontext = getFrameworkElement(e).DataContext as TOrgInfo;
-            if (datacontext != null&&datacontext.description!=null)
-            {
-                this.Frame.Navigate(typeof(EditOrg), datacontext);
-            }
-            else
-            {
-                ToastSuccessFailure.Message = Pepeza.Utitlity.Constants.PERMISSION_DENIED;
-            }
-        }
-        private async void MenuFlyoutDeleteOrg_Click(object sender, RoutedEventArgs e)
-        {
-            var org = getFrameworkElement(e).DataContext as TOrgInfo;
-            if (org != null && org.description != null)
-            {
-                Dictionary<string, string> delResults = await OrgsService.deleteOrg(org.id);
-                Dictionary<string, string> isSuccess = await OrgViewHelper.isOrgDeleted(org, delResults);
-                if (isSuccess.ContainsKey(Pepeza.Utitlity.Constants.DELETED))
-                {
-                    //Toast success
-                    ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.DELETED];
-                    orgs.Remove(org);
-                    ListViewOrgs.ItemsSource = orgs;
-                }
-                else if (delResults.ContainsKey(Constants.UNAUTHORIZED))
-                {
-                    //Show a popup message 
-                    App.displayMessageDialog(Constants.UNAUTHORIZED);
-                    this.Frame.Navigate(typeof(LoginPage));
-                }
-                else
-                {
-                    //toast fail
-                    ToastSuccessFailure.Message = isSuccess[Pepeza.Utitlity.Constants.NOT_DELETED];
-                }
-            }
-            else
-            {
-                ToastSuccessFailure.Message = Pepeza.Utitlity.Constants.NOT_DELETED;
-            }
-        }
-        private FrameworkElement getFrameworkElement(RoutedEventArgs e )
-        {
-            return (e.OriginalSource as FrameworkElement);
-        }
-        private void OrgGrid_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-            //showFlyOutMenu(sender, e);
         }
         private void AppBtnSettings_Click(object sender, RoutedEventArgs e)
         {
@@ -495,18 +388,11 @@ namespace Pepeza
                 this.Frame.Navigate(typeof(NoticeDetails), notice);
             }
         }
-        private void AdMediatorControl_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
-        {
-            string company = e.Error.Message + "  ===============  ";
-        }
         private void StackPanelViewNotifications_Tapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ViewNotifications));
         }
-        private void OrgTabAd_AdMediatorFilled(object sender, Microsoft.AdMediator.Core.Events.AdSdkEventArgs e)
-        {
-            string company = e.SdkEventArgs + "  ===============  "+e.Name ;
-        }
+       
         private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
         {
             ListViewBoards.ItemsSource = boards;
@@ -626,6 +512,10 @@ namespace Pepeza
         private void SearchIconTapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Search));
+            if (App.CheckInternet())
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
+            }
         }
     }
     public class IntToAttachment : IValueConverter

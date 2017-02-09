@@ -137,7 +137,7 @@ namespace Pepeza
             }
             
         }
-        private bool CheckInternet()
+        public static bool CheckInternet()
         {
             var connectionProfile = NetworkInformation.GetInternetConnectionProfile();
             return connectionProfile != null && connectionProfile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
