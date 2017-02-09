@@ -19,13 +19,22 @@ namespace Shared.Server.OAuth.Services
         public static string Provider { get { return "google"; } }
         public static void Login()
         {
-            var googleUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" + Uri.EscapeDataString(AuthConstants.GoogleAppId) + "&redirect_uri=" + Uri.EscapeDataString("urn:ietf:wg:oauth:2.0:oob") + "&response_type=code&scope=" + Uri.EscapeDataString("profile https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me email"));
+            var googleUrl = new StringBuilder();
+            googleUrl.Append("https://accounts.google.com/o/oauth2/auth?client_id=");
+            googleUrl.Append(Uri.EscapeDataString(AuthConstants.GoogleAppId));
+            googleUrl.Append("&scope=openid%20email%20profile");
+            googleUrl.Append("&redirect_uri=");
+            googleUrl.Append(Uri.EscapeDataString("urn:ietf:wg:oauth:2.0:oob"));
+            googleUrl.Append("&response_type=code"); 
+
+            //var googleUrl = new Uri("https://accounts.google.com/o/oauth2/auth?client_id=" +
+            //    Uri.EscapeDataString(AuthConstants.GoogleAppId) + 
+            //    "&redirect_uri=" + Uri.EscapeDataString("urn:ietf:wg:oauth:2.0:oob") + 
+            //    "&response_type=code&scope="+"openid%20email%20profile");
             ValueSet data = new ValueSet();
             KeyValuePair<string, string> kv = new KeyValuePair<string, string>("google", "google");
-
-
             data.Add("google", "google");
-            WebAuthenticationBroker.AuthenticateAndContinue(googleUrl, new Uri(AuthConstants.GoogleEndUri), data, WebAuthenticationOptions.UseTitle);
+            WebAuthenticationBroker.AuthenticateAndContinue(new Uri(googleUrl.ToString()), new Uri(AuthConstants.GoogleEndUri), data, WebAuthenticationOptions.UseTitle);
 
     }
     /// <summary>
@@ -33,7 +42,7 @@ namespace Shared.Server.OAuth.Services
     /// </summary>
     /// <param name="webAuthResultResponseData"></param>
     /// <returns></returns>
-    private static string Getcode(string webAuthResultResponseData)
+        private static string Getcode(string webAuthResultResponseData)
         {
 
             if (string.IsNullOrEmpty(webAuthResultResponseData)) return null;
@@ -75,7 +84,6 @@ namespace Shared.Server.OAuth.Services
                 return null;
             }
         }
-
         /// <summary>
         /// Uses code to get an access token from ggole servers , this  is the token passed to the pepeza server 
         /// </summary>
@@ -105,7 +113,7 @@ namespace Shared.Server.OAuth.Services
                         {
                             var data = await auth.Content.ReadAsStringAsync();
                             var j = JToken.Parse(data);
-                            var token = j.SelectToken("access_token");
+                            var token = j.SelectToken("id_token");
                             results.Add(Constants.SUCCESS, token.ToString());
                         }
                         else
@@ -125,6 +133,50 @@ namespace Shared.Server.OAuth.Services
             }
 
             return results;
+        }
+        public static async Task<JObject> getProfile(string access_token)
+        {
+
+
+             JObject json = null;
+            HttpClient httpClient = new HttpClient();
+
+            var searchUrl = "https://www.googleapis.com/oauth2/v2/userinfo";
+
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + access_token);
+
+            try
+            {
+                HttpResponseMessage response = await httpClient.GetAsync(searchUrl);
+                json= JObject.Parse(await response.Content.ReadAsStringAsync());
+                var jj = json;
+            }
+            catch (HttpRequestException hre)
+            {
+                // DebugPrint(hre.Message);
+            }
+            return json;
+        }
+        public static async Task<JObject> getUserInfo(string access_token)
+        {
+
+
+            JObject json = null;
+            HttpClient httpClient = new HttpClient();
+
+            var searchUrl = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + access_token;
+
+            try
+            {
+                HttpResponseMessage response = await httpClient.GetAsync(searchUrl);
+                json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                var jj = json;
+            }
+            catch (HttpRequestException hre)
+            {
+                // DebugPrint(hre.Message);
+            }
+            return json;
         }
     }
 }

@@ -516,22 +516,9 @@ namespace Pepeza.Server.Requests
                         string data = await response.Content.ReadAsStringAsync();
                         results.Add(Constants.APITOKEN, data);
                     }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        bool result = await LogoutUser.forceLogout();
-                        if (result)
-                        {
-                            results.Add(Constants.UNAUTHORIZED, result.ToString());
-                        }
-                        else
-                        {
-                            results.Add(Constants.ERROR, Constants.UNAUTHORIZED);
-                        }
-                    }
                     else if(response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         JObject json = JObject.Parse(await response.Content.ReadAsStringAsync());
-
                         results.Add(Constants.ERROR, (string)json["message"]);
                     }
                     else if (response.StatusCode == HttpStatusCode.BadRequest)
