@@ -64,7 +64,6 @@
                         </TextBlock>
                     </PivotItem.Header>
                     <Grid>
-
                         <StackPanel 
                             Name="EmptyNoticesPlaceHolder"
                             Visibility="Collapsed"
@@ -140,6 +139,25 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                        <StackPanel 
+                            Name="EmptyNoticesPlaceHolderWithRole"
+                            Visibility="Collapsed"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="Add your first notice"
+                                       HorizontalAlignment="Center"
+                                       TextLineBounds="Full"
+                                       Style="{StaticResource TitleTextBlockStyle}"
+                                       Foreground="Black"
+                                       Typography.Capitals="Unicase"
+                                       />
+                            <Viewbox Width="50"
+                                     Tapped="AddBtnTapped"
+                                     Height="50">
+                                <SymbolIcon  
+                                    Foreground="{ThemeResource PhoneAccentBrush}"
+                                    Symbol="Add"/>
+                            </Viewbox>
+                        </StackPanel>
                         <StackPanel 
                             Visibility="Collapsed"
                             Name="StackPanelNoticeFailed"

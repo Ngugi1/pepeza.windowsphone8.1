@@ -514,12 +514,13 @@ namespace Pepeza
             if (boards.Count == 0)
             {
                 EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                txtBlockContent.Text = "All boards will appear here.";
+                txtBlockContent.Text = "There are no boards to display, search and discover new boards";
+                ViewBoxSearchBoards.Visibility = Visibility.Visible;
             }
             else
             {
                 EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-                txtBlockContent.Text = "All boards will appear here.";
+                txtBlockContent.Text = "There are no boards to display, search and discover new boards.";
             }
         }
         private void sendfeedback_click(object sender, RoutedEventArgs e)
@@ -567,6 +568,8 @@ namespace Pepeza
                         EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
                         ListViewBoards.ItemsSource = managingBoards;
                         txtBlockContent.Text = "You don't manage any boards.";
+                        ViewBoxSearchBoards.Visibility = Visibility.Collapsed;
+
                     }
                     else
                     {
@@ -617,9 +620,15 @@ namespace Pepeza
                 else
                 {
                     EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                    txtBlockContent.Text = "You haven't followed any boards yet";
+                    txtBlockContent.Text = "You haven't followed any boards yet , search and discover new boards to follow.";
+                    ViewBoxSearchBoards.Visibility = Visibility.Visible;
                 }
             }
+        }
+
+        private void SearchIconTapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Search));
         }
     }
     public class IntToAttachment : IValueConverter

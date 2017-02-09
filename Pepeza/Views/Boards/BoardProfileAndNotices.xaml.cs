@@ -56,11 +56,11 @@ namespace Pepeza.Views.Boards
     {
         TBoard boardFetched = null, rolesBoard = null;
         int boardId;
-        bool hasRole = false;
         CoreApplicationView view = CoreApplication.GetCurrentView();
         TAvatar boardAvatar = null;
         bool isProfileLoaded = false, areNoticesLoaded = false, areFollowersLoaded = false;
         string role = "";
+        bool hasRole = false;
         ObservableCollection<TNotice> noticeDataSource = new ObservableCollection<TNotice>();
         public BoardProfileAndNotices()
         {
@@ -98,7 +98,7 @@ namespace Pepeza.Views.Boards
                 {
                     localBoard.linkNormal = boardAvatar.linkNormal == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : boardAvatar.linkNormal;
                 }
-
+                await assignRoles(localBoard, PivotBoard.SelectedIndex);
                 this.GridBoardProfile.DataContext = localBoard;
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
                 if (following != null)
@@ -125,7 +125,6 @@ namespace Pepeza.Views.Boards
                     btnFollow.IsEnabled = true;
                 }
                 isProfileLoaded = true;
-                await assignRoles(localBoard, PivotBoard.SelectedIndex);
                 await loadFollowers(boardId);
 
             }
@@ -333,7 +332,7 @@ namespace Pepeza.Views.Boards
             {
                 case 0:
                     //Load notices if not loaded already
-                    await assignRoles(rolesBoard, PivotBoard.SelectedIndex);
+                    bool role = await assignRoles(rolesBoard, PivotBoard.SelectedIndex);
                     if (!areNoticesLoaded)
                     {
                         StackPanelNoticesLoading.Visibility = Visibility.Visible;
@@ -360,15 +359,24 @@ namespace Pepeza.Views.Boards
         {
             try
             {
+                EmptyNoticesPlaceHolderWithRole.Visibility = EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
                 StackPanelNoticesLoading.Visibility = Visibility.Visible;
                 List<TNotice> noticelist = new List<TNotice>(await NoticeHelper.getAll(boardId));
                 if (noticelist.Count == 0)
                 {
-                    EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+                    if (!string.IsNullOrEmpty(role))
+                    {
+                        EmptyNoticesPlaceHolderWithRole.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
                     EmptyNoticesPlaceHolder.Visibility = Visibility.Collapsed;
+                    EmptyNoticesPlaceHolderWithRole.Visibility = Visibility.Collapsed;
                 }
 
 
@@ -387,10 +395,8 @@ namespace Pepeza.Views.Boards
             var board = this.GridBoardProfile.DataContext;
             this.Frame.Navigate(typeof(UpdateBoard), board);
         }
-        private async Task assignRoles(TBoard board, int selectedIndex)
+        private async Task<bool> assignRoles(TBoard board, int selectedIndex)
         {
-            hasRole = false;
-
             if (board != null)
             {
                 TCollaborator collaborator = await CollaboratorHelper.getRole((int)(Settings.getValue(Constants.USERID)), board.orgID);
@@ -431,6 +437,7 @@ namespace Pepeza.Views.Boards
                 {
                     StackPanelProfPic.IsTapEnabled = false;
                     CommandBarOperations.Visibility = Visibility.Collapsed;
+                    hasRole = false;
                 }
                 if (selectedIndex == 1)
                 {
@@ -442,8 +449,9 @@ namespace Pepeza.Views.Boards
             {
                 CommandBarOperations.Visibility = Visibility.Collapsed;
                 ImageBoardAvatar.IsTapEnabled = false;
+                hasRole = false;
             }
-
+            return hasRole;
         }
         private void btnViewFollowers_Click(object sender, RoutedEventArgs e)
         {
@@ -578,7 +586,6 @@ namespace Pepeza.Views.Boards
             PBProfilePicUpdating.Visibility = Visibility.Collapsed;
 
         }
-       
         private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BoardAnalytics), boardId);
@@ -756,6 +763,11 @@ namespace Pepeza.Views.Boards
                 }
             }
             DeletingBoardProgress.Hide();
+        }
+
+        private void AddBtnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddNoticePage), boardId);
         }
     }
 }

@@ -282,13 +282,31 @@ namespace Pepeza.Views.Orgs
                 }
                 if (boards.Count == 0)
                 {
-                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    if (hasRole)
+                    {
+                        EmptyBoardsPlaceHolderWithRole.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                    EmptyBoardsPlaceHolder.Visibility = EmptyBoardsPlaceHolderWithRole.Visibility  = Visibility.Collapsed;
                 }
                 areBoardsLoaded = true;
+            }
+            else
+            {
+                if (hasRole)
+                {
+                    EmptyBoardsPlaceHolderWithRole.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                }
             }
             
             ListViewOrgBoards.ItemsSource = boards;
@@ -461,21 +479,20 @@ namespace Pepeza.Views.Orgs
                                 }
                             }
                         }
-                        if (boards.Count == 0)
-                        {
-                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-
-                        }
+                       
                         ListViewOrgBoards.ItemsSource = boards;
                     }
                     else
                     {
                         //No boards boy
-                        EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        if (hasRole)
+                        {
+                            EmptyBoardsPlaceHolderWithRole.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                        }
                     }
                     areBoardsLoaded = true;
                     return true;
@@ -990,6 +1007,11 @@ namespace Pepeza.Views.Orgs
             }
 
 
+        }
+
+        private void AddBtnFirstBoardTapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddBoard), OrgID);
         }
         
     }

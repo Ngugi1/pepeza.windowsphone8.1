@@ -240,7 +240,31 @@
                                    Style="{StaticResource txtBlockWait}"
                                    Text="fetching boards..." />
                     </StackPanel>
-                    <StackPanel 
+                        <StackPanel 
+                        Grid.Row="1"
+                        Name="EmptyBoardsPlaceHolderWithRole"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                           
+                            <TextBlock Text="No boards to display , add your first board"
+                                   TextLineBounds="Full"
+                                       TextAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                            <Viewbox Width="50" 
+                                     Tapped="AddBtnFirstBoardTapped"
+                                     Height="50">
+                                <SymbolIcon  Symbol="Add"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
+                               
+                                         />
+                            </Viewbox>
+                        </StackPanel>
+                        <StackPanel 
                             Grid.Row="1"
                             Visibility="Collapsed"
                             Name="StackPanelBoardsFailed"
