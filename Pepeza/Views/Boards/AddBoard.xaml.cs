@@ -123,13 +123,26 @@ namespace Pepeza.Views.Boards
                 };
                 TBoard toInsert = new TBoard();
                 toInsert.id = (int)board["id"];
+                toInsert.following = 1;
                 toInsert.name = (string)model.Name;
                 toInsert.desc = (string)model.Desc;
                 toInsert.orgID = orgId;
                 toInsert.followRestriction = followRestriction;
                 toInsert.dateUpdated = (long)board["dateUpdated"];
                 toInsert.dateCreated = (long)board["dateCreated"];
-                toInsert.avatarId = avatar.id; 
+
+                TFollowing followerItem = new TFollowing()
+                {
+                    id= (int)board["follower_item"]["id"],
+                    userId = (int)board["follower_item"]["userId"],
+                    boardId = (int)board["follower_item"]["boardId"],
+                    accepted = (int)board["follower_item"]["accepted"],
+                    dateAccepted = (long)board["follower_item"]["dateAccepted"],
+                    dateCreated = toInsert.dateCreated,
+                    dateUpdated = toInsert.dateUpdated,
+                };
+                toInsert.avatarId = avatar.id;
+                await FollowingHelper.add(followerItem);
                await BoardHelper.addBoard(toInsert);
                await AvatarHelper.add(avatar);
                 this.Frame.Navigate(typeof(BoardProfileAndNotices), toInsert.id);
