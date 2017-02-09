@@ -209,7 +209,7 @@ namespace Pepeza.Server.Requests
                             notice_poster.firstName = (string)poster["firstName"];
                             notice_poster.lastName = (string)poster["lastName"];
                             notice_poster.dateCreated = (long)poster["dateCreated"];
-                            notice_poster.dateUpdated = (long)poster["dateCreated"];
+                            notice_poster.dateUpdated = poster["dateCreated"] == null ? 0 : (long)poster["dateCreated"]; 
                             notice_poster.emailId = (int)poster["emailId"];
                             notice_poster.avatarId = (int)poster["avatarId"];
                             notice_poster.visibility = (string)poster["visibility"];
@@ -295,9 +295,6 @@ namespace Pepeza.Server.Requests
                                 boardId = (int)item["boardId"],
                                 declined = (int)item["declined"],
                                 dateCreated = (long)item["dateCreated"],
-                                dateDeclined = (long)item["dateDeclined"],
-                                dateAccepted = (long)item["dateAccepted"],
-                                dateUpdated = (long)item["dateUpdated"],
                                 dateDeleted = (long)item["dateDeleted"]
 
                             };
@@ -345,7 +342,6 @@ namespace Pepeza.Server.Requests
                                 dateCreated = (long)item["dateCreated"],
                                 followRestriction = (string)item["followRestriction"],
                                 dateDeleted = (long)item["dateDeleted"],
-                                dateUpdated = (long)item["dateUpdated"]
 
                             };
                             if (item["dateUpdated"].Type != JTokenType.Null) board.dateUpdated = (long)item["dateUpdated"];
@@ -386,7 +382,6 @@ namespace Pepeza.Server.Requests
                                 description = (string)item["description"],
                                 dateCreated = (long)item["dateCreated"],
                                 dateDeleted = (long)item["dateDeleted"],
-                                dateUpdated = (long)item["dateUpdated"]
                             };
                             if (item["dateUpdated"].Type != JTokenType.Null) org.dateUpdated = (long)item["dateUpdated"];
                             var localorg = await OrgHelper.get(org.id);
@@ -424,7 +419,6 @@ namespace Pepeza.Server.Requests
                                 linkSmall = (string)item["linkSmall"],
                                 linkNormal = (string)item["linkNormal"],
                                 dateCreated = (long)item["dateCreated"],
-                                dateUpdated = (long)item["dateUpdated"],
                                 dateDeleted = (long)item["dateDeleted"]
                             };
                             if (item["dateUpdated"].Type != JTokenType.Null) fetchedAvatar.dateUpdated = (long)item["dateUpdated"];
@@ -463,12 +457,11 @@ namespace Pepeza.Server.Requests
                                 linkSmall = (string)posteravatar["linkSmall"],
                                 linkNormal = (string)posteravatar["linkNormal"],
                                 dateCreated = (long)posteravatar["dateCreated"],
-                                dateUpdated = (long)posteravatar["dateUpdated"],
                                 dateDeleted = (long)posteravatar["dateDeleted"]
 
 
                             };
-                            if (posteravatar["dateDeleted"].Type != JTokenType.Null) poster_avatar.dateDeleted = (long)posteravatar["dateDeleted"];
+                            if (posteravatar["dateUpdated"].Type != JTokenType.Null) poster_avatar.dateDeleted = (long)posteravatar["dateUpdated"];
                             var localposteravatar = await AvatarHelper.getPosterAvatar((int)posteravatar["id"]);
                             if (localposteravatar != null)
                             {
@@ -595,7 +588,6 @@ namespace Pepeza.Server.Requests
                         item.isRead = check.isRead;
 
                     }
-                    ActionCenterHelper.updateActionCenter(list_notices);
 
                     #endregion
                     #region Attachments
@@ -609,7 +601,6 @@ namespace Pepeza.Server.Requests
                                 type = (string)item["type"],
                                 noticeId = (int)item["noticeId"],
                                 dateCreated = (long)item["dateCreated"],
-                                dateUpdated = (long)item["dateUpdated"],
                                 dateDeleted = (long)item["dateDeleted"]
 
                             };
@@ -737,6 +728,7 @@ namespace Pepeza.Server.Requests
 
                         }
                     }
+                    ActionCenterHelper.updateActionCenter(list_notices);
                     long lastUpdate = (long)content["last_updated"];
                     Settings.add(Constants.LAST_UPDATED, lastUpdate);
                     Settings.add(Constants.DATA_PUSHED, true);

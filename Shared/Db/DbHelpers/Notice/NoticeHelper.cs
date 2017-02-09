@@ -62,7 +62,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                         notice.date_created_display = DateTimeFormatter.UnixTimestampToDate(notice.dateCreated);
                         if (notice.hasAttachment == 1)
                         {
-                            var attacho = await AttachmentHelper.get(notice.noticeId);
+                            var attacho = await AttachmentHelper.getByNoticeId(notice.noticeId);
                             if (attacho != null)
                             {
                                 notice.attachmentId = attacho.id;
@@ -114,7 +114,7 @@ namespace Pepeza.Db.DbHelpers.Notice
                         item.date_created_display = DateTimeFormatter.UnixTimestampToDate(item.dateCreated);
                         if (item.hasAttachment == 1)
                         {
-                            var attacho = await AttachmentHelper.get(item.noticeId);
+                            var attacho = await AttachmentHelper.getByNoticeId(item.noticeId);
                             if (attacho != null)
                             {
                                 item.attachmentId = attacho.id;
@@ -158,7 +158,7 @@ namespace Pepeza.Db.DbHelpers.Notice
             await NoticeItemHelper.deleteNoticeItem(notice.noticeId);
             if (notice.hasAttachment ==1)
             {
-                TAttachment attachment = await AttachmentHelper.get(noticeId);
+                TAttachment attachment = await AttachmentHelper.getByNoticeId(noticeId);
                 //Delete the attachment and associated file and TFile objects 
                 TFile file = await FileHelper.getByAttachmentId(attachment.id);
                 if (file != null)

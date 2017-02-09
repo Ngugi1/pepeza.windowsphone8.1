@@ -141,8 +141,8 @@ namespace Pepeza
             }
             //Clear the backstack 
             this.Frame.BackStack.Clear();
-           
-         await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
+
+            await ImageService.Instance.InvalidateCacheAsync(CacheType.All);
         }
         void MainPage_Click(object sender, RoutedEventArgs e)
         {
@@ -507,7 +507,6 @@ namespace Pepeza
         {
             string company = e.SdkEventArgs + "  ===============  "+e.Name ;
         }
-       
         private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
         {
             ListViewBoards.ItemsSource = boards;
@@ -531,7 +530,6 @@ namespace Pepeza
         {
             //await Launcher.LaunchUriAsync(new Uri("ms-windows-store:reviewapp?appid=" + CurrentApp.AppId));
         }
-
         private async void CheckBoxManaging_Checked(object sender, RoutedEventArgs e)
         {
             List<TCollaborator> collaborationItems = await CollaboratorHelper.getAll();
@@ -625,7 +623,6 @@ namespace Pepeza
                 }
             }
         }
-
         private void SearchIconTapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Search));

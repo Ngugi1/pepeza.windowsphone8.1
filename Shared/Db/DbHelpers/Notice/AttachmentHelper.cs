@@ -12,7 +12,7 @@ namespace Shared.Db.DbHelpers.Notice
 {
     public class AttachmentHelper : DBHelperBase
     {
-        public static async Task<TAttachment> get(int id)
+        public static async Task<TAttachment> getByNoticeId(int id)
         {
            
 
@@ -32,6 +32,27 @@ namespace Shared.Db.DbHelpers.Notice
             }
             
         }
+        public static async Task<TAttachment> get(int id)
+        {
+
+
+            try
+            {
+                List<TAttachment> attachment = null;
+                var connection = DbHelper.DbConnectionAsync();
+                if (connection != null)
+                {
+                    attachment = await connection.QueryAsync<TAttachment>("SELECT * FROM TAttachment WHERE id=?", id);
+                }
+                return attachment.FirstOrDefault();
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+        
         public static async Task<bool> deleteAttachment(int attachmentId)
         {
               try
