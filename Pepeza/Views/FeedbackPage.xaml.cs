@@ -53,7 +53,7 @@ namespace Pepeza.Views
             RectangelHappy.Visibility = RectangleAnnoyed.Visibility = Visibility.Collapsed;
             mood = "confused";
             RectangleConfused.Visibility = Visibility.Visible;
-
+           
         }
 
         private void StackPanelFrown(object sender, TappedRoutedEventArgs e)
@@ -61,7 +61,7 @@ namespace Pepeza.Views
             mood = "annoyed";
             RectangleConfused.Visibility = RectangelHappy.Visibility = Visibility.Collapsed;
             RectangleAnnoyed.Visibility = Visibility.Visible;
-
+           
         }
 
         private async void SendFeedBackClicked(object sender, RoutedEventArgs e)
@@ -112,11 +112,11 @@ namespace Pepeza.Views
             }
             catch
             {
-
+                
             }
 
             AppBtnSendFeedBack.IsEnabled = true;
-
+            
         }
     }
 }

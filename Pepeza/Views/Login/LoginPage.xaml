@@ -95,7 +95,7 @@
                             Grid.Row="1"
                             Visibility="Visible"
                             Margin="12">
-                    <TextBlock Text="Login with facebook ?" 
+                    <TextBlock Text="Login with facebook or google?" 
                                Typography.Capitals="Normal"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource txtBlockDisplay}"
@@ -103,53 +103,80 @@
                                />
                     
                     <Button 
-                        Visibility="Collapsed"
+                        Visibility="Visible"
+                        FontFamily="Segoe UI Light"
                         Click="LoginWithGoogle"
                         HorizontalAlignment="Center"
                         BorderBrush="Transparent" 
-                        
+                        Background="#4285F4"
+                        Padding="2"
+                      
+                        Foreground="White"
                         BorderThickness="2"
-                        Width="{Binding ActualWidth, ElementName=btnLoginWithFacebook}">
-                        <StackPanel Orientation="Horizontal"
-                                    Background="Blue"
-                                    
-                                    HorizontalAlignment="Left" Width="246">
-                            <Image
-                                Margin="4"
-                                HorizontalAlignment="Left"
-                                Source="/Assets/Images/gplus.png"
-                                Height="50" Width="50"/>
-
+                       >
+                        <Grid HorizontalAlignment="Left">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox  
+                                                                          >
+                                <StackPanel 
+                                    HorizontalAlignment="Left"
+                                       Grid.Column="0"
+                                    Height="40"
+                                      VerticalAlignment="Center"
+                                    Width="40"
+                                    Background="White">
+                                    <Image Source="/Assets/Images/google.png" />
+                                </StackPanel>
+                            </Viewbox>
                             <TextBlock 
-                                Margin="8,4"
-                                VerticalAlignment="Center"
+                                Margin="8"
+                                Grid.Column="1"
+                                Text="Login with google"
                                 Foreground="White"
-                                Text="sign in with google" 
-                                Style="{StaticResource txtBlockDisplay}"/>
-                        </StackPanel>
+                                FontWeight="SemiBold"
+                                Style="{StaticResource BaseTextBlockStyle}"
+                                       VerticalAlignment="Center"
+                                       />
+                        </Grid>
+                       
                     </Button>
                     <Button 
                         Click="LoginWithFacebook"  
                         Visibility="Visible"
+                        Background="#3b5998"
                         HorizontalAlignment="Center" 
                         Name="btnLoginWithFacebook"
                         BorderBrush="Transparent"
-                        BorderThickness="2">
-                        <StackPanel Orientation="Horizontal"
-                                    Background="#3b5998"
-                                    
-                                    HorizontalAlignment="Left">
-                            <Image
-                                HorizontalAlignment="Left"
-                                Margin="4"
-                                Source="/Assets/Images/fbook.png" Height="50"
-                                Width="50"/>
+                        BorderThickness="2"
+                      Padding="2"
+                        >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Viewbox Height="40" 
+                                       Grid.Column="0"
+                                     Width="40" VerticalAlignment="Center"
+                                     Margin="0"
+                                     >
+                              
+                                    <Image Source="/Assets/Images/facebook.png" />
+                               
+                            </Viewbox>
                             <TextBlock 
-                                Margin="8,4"
-                                VerticalAlignment="Center"
+                                Margin="8"
+                                Grid.Column="1"
+                                Style="{StaticResource BodyTextBlockStyle}"
+                                Text="Login with facebook"
                                 Foreground="White"
-                                Text="sign in with facebook" Style="{StaticResource txtBlockDisplay}"/>
-                        </StackPanel>
+                                FontWeight="SemiBold"
+                                       VerticalAlignment="Center"
+                                       />
+                        </Grid>
                     </Button>
                     <TextBlock Text="Could not login"
                                Name="txtBlockError"

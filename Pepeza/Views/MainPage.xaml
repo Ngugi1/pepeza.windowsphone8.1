@@ -47,24 +47,7 @@
                 Margin="{StaticResource PivotItemMargin}">
                 <Grid>
 
-                    <StackPanel 
-                        Name="EmptyNoticesPlaceHolder"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
-
-                        <Viewbox Width="100" Height="100">
-                            <SymbolIcon  
-                                Foreground="{ThemeResource PhoneAccentBrush}"
-                                Symbol="Read"/>
-                        </Viewbox>
-                        <TextBlock Text="New notices will appear here"
-                                   HorizontalAlignment="Center"
-                                   TextLineBounds="Full"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
+                   
                     <ListView Margin="19.5,0,8,0"
                               SelectionChanged="ListViewNotices_SelectionChanged"
                               Name="ListViewNotices">
@@ -131,6 +114,35 @@
 
 
                     </ListView>
+                    <StackPanel 
+                        Name="EmptyNoticesPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center"
+                        
+                        >
+                        <Viewbox Width="100"
+                                 Tapped="SearchIconTapped"
+                                 Height="100">
+                            <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="Read"/>
+                        </Viewbox>
+                        <TextBlock Text="New notices will appear here, search and discover boards to start receiving notices"
+                                   HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                                   TextLineBounds="Full"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                        <Viewbox Width="50"
+                                 Tapped="SearchIconTapped"
+                                 Height="50">
+                            <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="Find"/>
+                        </Viewbox>
+                    </StackPanel>
                     <WindowsPhone81:AdMediatorControl
                         Id="NoticeAdId" 
                         Height="50" 
@@ -209,28 +221,7 @@
                                 Content="Following" Margin="28.333,0,-2.833,0" 
                             />
                     </Grid>
-                    <StackPanel 
-                        Grid.Row="1"
-                        Name="EmptyBoardsPlaceHolder"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
-
-                        <Viewbox Width="100" 
-                                 Height="100">
-                            <SymbolIcon  Symbol="OtherUser"
-                                         Foreground="{ThemeResource PhoneAccentBrush}"
-                               
-                                         />
-                        </Viewbox>
-                        <TextBlock Text="All boards will appear here"
-                                   TextLineBounds="Full"
-                                   Name="txtBlockContent"
-                                   HorizontalAlignment="Center"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
+                   
                     <ListView Name="ListViewBoards"
                               Grid.Row="1"
                               SelectionChanged="ListViewBoards_SelectionChanged">
@@ -295,6 +286,38 @@
                         </ListView.ItemTemplate>
 
                     </ListView>
+                    <StackPanel 
+                        Grid.Row="1"
+                        Name="EmptyBoardsPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+
+                        <Viewbox Width="100" 
+                                 Height="100">
+                            <SymbolIcon  Symbol="OtherUser"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
+                               
+                                         />
+                        </Viewbox>
+                        <TextBlock Text="All boards will appear here"
+                                   TextLineBounds="Full"
+                                   Name="txtBlockContent"
+                                   HorizontalAlignment="Center"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                        <Viewbox Width="50"
+                                 Name="ViewBoxSearchBoards"
+                                 Tapped="SearchIconTapped"
+                                 Height="50">
+                            <SymbolIcon  
+                                Foreground="{ThemeResource PhoneAccentBrush}"
+                                Symbol="Find"/>
+                        </Viewbox>
+
+
+                    </StackPanel>
                     <WindowsPhone81:AdMediatorControl
                         Id="BoardAdId" 
                         Height="50"
@@ -314,24 +337,7 @@
                 Margin="{StaticResource PivotItemMargin}">
 
                 <Grid>
-                    <StackPanel
-                        Name="EmptyOrgsPlaceHolder"
-                        Visibility="Collapsed"
-                        VerticalAlignment="Center">
-                        <Viewbox Width="100" Height="100">
-                            <SymbolIcon  Symbol="List"
-                                         Foreground="{ThemeResource PhoneAccentBrush}"
-                                         />
-                        </Viewbox>
-                        <TextBlock Text="All organisations you belong to will appear here"
-                                   TextLineBounds="Full"
-                                   HorizontalAlignment="Center"
-                                   TextAlignment="Center"
-                                   Style="{StaticResource TitleTextBlockStyle}"
-                                   Foreground="Black"
-                                   Typography.Capitals="Unicase"
-                                   />
-                    </StackPanel>
+                    
                     <ListView Name="ListViewOrgs"
                               SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemContainerStyle>
@@ -388,6 +394,32 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+                    <StackPanel
+                        Name="EmptyOrgsPlaceHolder"
+                        Visibility="Collapsed"
+                        VerticalAlignment="Center">
+                        <Viewbox Width="100" Height="100">
+                            <SymbolIcon  Symbol="List"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
+                                         />
+                        </Viewbox>
+                        <TextBlock Text="You don't belong to any organisations yet, create your first organisation or search."
+                                   
+                                   TextLineBounds="Full"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Foreground="Black"
+                                   Typography.Capitals="Unicase"
+                                   />
+                        <Viewbox Width="50" 
+                                 Tapped="SearchIconTapped"
+                                 Height="50">
+                            <SymbolIcon  Symbol="Find"
+                                         Foreground="{ThemeResource PhoneAccentBrush}"
+                                         />
+                        </Viewbox>
+                    </StackPanel>
                     <WindowsPhone81:AdMediatorControl
                         Id="OrgAdId"
                         Height="50"

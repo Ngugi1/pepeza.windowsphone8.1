@@ -167,8 +167,10 @@ namespace Pepeza.Views
                 {
                     if (args.WebAuthenticationResult != null)
                     {
+                        
                         token = await GoogleService.GetAccessToken(args.WebAuthenticationResult);
                         providerName = GoogleService.Provider;
+                        var jsn = await GoogleService.getProfile(token);
                     }
                     else
                     {
@@ -181,6 +183,7 @@ namespace Pepeza.Views
                    if (args.WebAuthenticationResult != null)
                    {
                        token = await FacebookService.GetAccessTokenFromWebResults(args.WebAuthenticationResult);
+                       var json  = await GoogleService.getUserInfo(token);
                    }
                    else
                    {   return;
