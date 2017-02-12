@@ -57,7 +57,11 @@ namespace Shared.Db.DbHelpers.Orgs
                 {
                     collaborator = await connection.QueryAsync<TCollaborator>("SELECT * FROM TCollaborator WHERE userId =? AND orgId=?", id, orgId);
                 }
-                return collaborator.FirstOrDefault();
+                if (collaborator != null)
+                {
+                   return collaborator.FirstOrDefault();
+                }
+                return null;
             }
             catch
             {

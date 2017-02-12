@@ -24,7 +24,12 @@ namespace Shared.Db.DbHelpers.Notice
                 {
                     attachment = await connection.QueryAsync<TAttachment>("SELECT * FROM TAttachment WHERE noticeId=?", id);
                 }
-                return attachment.FirstOrDefault();
+                if (attachment != null)
+                {
+                    return attachment.FirstOrDefault();
+
+                }
+                return null;
             }
             catch
             {
@@ -44,7 +49,11 @@ namespace Shared.Db.DbHelpers.Notice
                 {
                     attachment = await connection.QueryAsync<TAttachment>("SELECT * FROM TAttachment WHERE id=?", id);
                 }
-                return attachment.FirstOrDefault();
+                if (attachment != null)
+                {
+                    return attachment.FirstOrDefault();
+                }
+                return null;
             }
             catch
             {

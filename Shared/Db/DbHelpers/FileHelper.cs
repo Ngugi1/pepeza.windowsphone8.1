@@ -42,7 +42,12 @@ namespace Shared.Db.DbHelpers
                 {
                     file = await connection.QueryAsync<TFile>("SELECT * FROM  TFile WHERE attachmentId=?", id);
                 }
-                return file.FirstOrDefault();
+                if (file != null)
+                {
+                    return file.FirstOrDefault();
+
+                }
+                return null;
             }
             catch
             {

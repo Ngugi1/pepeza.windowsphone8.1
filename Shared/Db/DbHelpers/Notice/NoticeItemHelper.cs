@@ -50,8 +50,11 @@ namespace Shared.Db.DbHelpers.Notice
                 {
                     info = await connection.QueryAsync<TNoticeItem>("SELECT * FROM TNoticeItem WHERE noticeId=?", id);
                 }
-
-                return info.FirstOrDefault();
+                if (info != null)
+                {
+                    return info.FirstOrDefault();
+                }
+                return null;
             }
             catch (Exception)
             {

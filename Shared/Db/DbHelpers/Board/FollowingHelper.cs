@@ -81,9 +81,13 @@ namespace Pepeza.Db.DbHelpers.Board
                 if (connection != null)
                 {
                     info = await connection.QueryAsync<TFollowing>("SELECT * FROM TFollowing WHERE boardId = ?" , boardId);
-                    if (info != null && info.Count > 0)
+                    if (info != null)
                     {
-                        return info.FirstOrDefault();
+                        if (info.Count > 0)
+                        {
+                            return info.FirstOrDefault();
+                        }
+                        return null;
                     }
                 }
 

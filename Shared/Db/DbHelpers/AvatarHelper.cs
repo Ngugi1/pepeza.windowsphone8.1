@@ -29,25 +29,6 @@ namespace Shared.Db.DbHelpers
             }
 
         }
-        public async static Task<TNoticePosterAvatar> getPosterAvatar(int id)
-        {
-
-            try
-            {
-                TNoticePosterAvatar avatar = null;
-                var connection = DbHelper.DbConnectionAsync();
-                if (connection != null)
-                {
-                    avatar = await connection.GetAsync<TNoticePosterAvatar>(id);
-                }
-                return avatar;
-            }
-            catch
-            {
-                return null;
-            }
-
-        }
         public async static Task<bool> deleteAvatar(int avatarId)
         {
             bool isDeleted =  false;
