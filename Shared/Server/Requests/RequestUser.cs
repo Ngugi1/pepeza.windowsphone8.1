@@ -209,8 +209,8 @@ namespace Pepeza.Server.Requests
                     }
                     else
                     {
-                        
-                        results.Add(Constants.LOG_FAILED, await response.Content.ReadAsStringAsync());
+                        JObject json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                        results.Add(Constants.LOG_FAILED,(string)json.SelectToken("message"));
                     }
                     
                 }

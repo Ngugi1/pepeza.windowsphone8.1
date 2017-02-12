@@ -18,7 +18,6 @@ using Shared.Db.Models.Avatars;
 using Shared.Db.Models.Notices;
 using Shared.Db.Models.Notification;
 using Shared.Db.Models.Orgs;
-using Shared.Db.Models.Users;
 using Shared.Models.NoticeModels;
 using Shared.Push;
 using Shared.TilesAndActionCenter;
@@ -202,8 +201,7 @@ namespace Pepeza.Server.Requests
                     {
                         if (notice_posters.Count > 0)
                         {
-                            TNoticePoster notice_poster = new TNoticePoster();
-
+                            TUserInfo notice_poster = new TUserInfo();
                             notice_poster.id = (int)poster["id"];
                             notice_poster.username = (string)poster["username"];
                             notice_poster.firstName = (string)poster["firstName"];
@@ -213,9 +211,8 @@ namespace Pepeza.Server.Requests
                             notice_poster.emailId = (int)poster["emailId"];
                             notice_poster.avatarId = (int)poster["avatarId"];
                             notice_poster.visibility = (string)poster["visibility"];
-                            notice_poster.password = (string)poster["password"];
                             notice_poster.dateDeleted = (long)poster["dateDeleted"];
-                            var localPoster = await NoticePosterHelper.get(notice_poster.id);
+                            var localPoster = await UserHelper.getUserInfo(notice_poster.id);
                             if (localPoster != null)
                             {
                                 if (notice_poster.dateDeleted == 0)
@@ -451,7 +448,7 @@ namespace Pepeza.Server.Requests
                     {
                         if (notice_posters_avatars.Count > 0)
                         {
-                            TNoticePosterAvatar poster_avatar = new TNoticePosterAvatar()
+                            TAvatar poster_avatar = new TAvatar()
                             {
                                 id = (int)posteravatar["id"],
                                 linkSmall = (string)posteravatar["linkSmall"],
@@ -462,7 +459,7 @@ namespace Pepeza.Server.Requests
 
                             };
                             if (posteravatar["dateUpdated"].Type != JTokenType.Null) poster_avatar.dateDeleted = (long)posteravatar["dateUpdated"];
-                            var localposteravatar = await AvatarHelper.getPosterAvatar((int)posteravatar["id"]);
+                            var localposteravatar = await AvatarHelper.get((int)posteravatar["id"]);
                             if (localposteravatar != null)
                             {
                                 if (poster_avatar.dateDeleted == 0)
@@ -583,9 +580,12 @@ namespace Pepeza.Server.Requests
                     }
                     foreach (var item in list_notices)
                     {
-
-                        TNoticeItem check = items.FirstOrDefault(i => i.noticeId == (int)item.noticeId);
-                        item.isRead = check.isRead;
+                        if (items != null)
+                        {
+                            TNoticeItem check = items.FirstOrDefault(i => i.noticeId == (int)item.noticeId);
+                            item.isRead = check.isRead;
+                        }
+                       
 
                     }
 
@@ -844,7 +844,7 @@ namespace Pepeza.Server.Requests
                             if (poster["dateUpdated"].Type != JTokenType.Null) notice_poster.dateUpdated = (long)poster["dateUpdated"];
                             if (notice_poster.dateDeleted == 0)
                             {
-                                if (NoticeHelper.get(notice_poster.id) != null)
+                                if (UserHelper.getUserInfo(notice_poster.id) != null)
                                 {
                                     await DBHelperBase.update(notice_poster);
                                 }
@@ -1145,9 +1145,12 @@ namespace Pepeza.Server.Requests
                 }
                 foreach (var item in list_notices)
                 {
-
-                    TNoticeItem check = items.FirstOrDefault(i => i.noticeId == (int)item.noticeId);
-                    item.isRead = check.isRead;
+                    if (items != null)
+                    {
+                        TNoticeItem check = items.FirstOrDefault(i => i.noticeId == (int)item.noticeId);
+                        item.isRead = check.isRead;
+                    }
+                    
 
                 }
                 ActionCenterHelper.updateActionCenter(list_notices);
