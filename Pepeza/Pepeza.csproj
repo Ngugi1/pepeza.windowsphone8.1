@@ -120,6 +120,9 @@
     <Compile Include="Views\Account\DeactivateAccount.xaml.cs">
       <DependentUpon>DeactivateAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Account\InitialPage.xaml.cs">
+      <DependentUpon>InitialPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Account\SetUpPage.xaml.cs">
       <DependentUpon>SetUpPage.xaml</DependentUpon>
     </Compile>
@@ -259,6 +262,10 @@
     <Page Include="Views\Account\DeactivateAccount.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Account\InitialPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Account\SetUpPage.xaml">
       <Generator>MSBuild:Compile</Generator>

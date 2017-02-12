@@ -92,16 +92,13 @@
     <Compile Include="Db\DbHelpers\AvatarHelper.cs" />
     <Compile Include="Db\DbHelpers\FileHelper.cs" />
     <Compile Include="Db\DbHelpers\Notice\AttachmentHelper.cs" />
-    <Compile Include="Db\DbHelpers\Notice\NoticePosterHelper.cs" />
     <Compile Include="Db\DbHelpers\Orgs\CollaboratorHelper.cs" />
     <Compile Include="Db\DbHelpers\TNotificationHelper.cs" />
-    <Compile Include="Db\Models\Avatars\TNoticePosterAvatar.cs" />
     <Compile Include="Db\Models\Avatars\TAvatar.cs" />
     <Compile Include="Db\Models\Notices\TAttachment.cs" />
     <Compile Include="Db\Models\Notices\TFile.cs" />
     <Compile Include="Db\Models\Notification\TNotification.cs" />
     <Compile Include="Db\Models\Orgs\TCollaborator.cs" />
-    <Compile Include="Db\Models\Users\TNoticePoster.cs" />
     <Compile Include="Models\NoticesModels\NoticeCollection.cs" />
     <Compile Include="Push\ListContainer.cs" />
     <Compile Include="Server\OAuth\AuthConstants.cs" />
