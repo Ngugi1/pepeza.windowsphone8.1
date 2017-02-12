@@ -69,7 +69,7 @@ namespace Pepeza.Views.Notices
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.VIEWNOTICE);
+           
             StackPanelDetails.Visibility = Visibility.Collapsed;
             StackPanelLoading.Visibility = Visibility.Visible;
             if (e.Parameter != null && e.Parameter.GetType() == typeof(TNotice))
@@ -175,16 +175,19 @@ namespace Pepeza.Views.Notices
                 }
                 //Get the poster of the notice 
                // Dictionary<string,string>
-                TUserInfo userInfo = await NoticePosterHelper.get(notice.userId);
-                if (userInfo.firstName != null && userInfo.lastName != null)
+                TUserInfo userInfo = await UserHelper.getUserInfo(notice.userId);
+                if (userInfo != null)
                 {
-                    notice.poster = userInfo.firstName + " " + userInfo.lastName;
+                    if (userInfo.firstName != null && userInfo.lastName != null)
+                    {
+                        notice.poster = userInfo.firstName + " " + userInfo.lastName;
+                    }
+                    else
+                    {
+                        notice.poster = userInfo.username;
+                    }
                 }
-                else
-                {
-                    notice.poster = userInfo.username;
-                }
-
+                
                 this.RootGrid.DataContext = notice;
                 noticeTitle = notice.title;
                 await NoticeService.submitReadNoticeItems();
@@ -298,6 +301,13 @@ namespace Pepeza.Views.Notices
 
             //}
             #endregion
+            try
+            {
+                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.VIEWNOTICE);
+            }
+            catch(Exception)
+            {
+            }
             StackPanelDetails.Visibility = Visibility.Visible;
             StackPanelLoading.Visibility = Visibility.Collapsed;
         }
