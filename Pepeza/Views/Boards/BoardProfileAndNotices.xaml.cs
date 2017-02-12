@@ -98,6 +98,10 @@ namespace Pepeza.Views.Boards
                 {
                     localBoard.linkNormal = boardAvatar.linkNormal == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : boardAvatar.linkNormal;
                 }
+                else
+                {
+                    localBoard.linkNormal = Constants.EMPTY_BOARD_PLACEHOLDER_ICON;
+                }
                 await assignRoles(localBoard, PivotBoard.SelectedIndex);
                 this.GridBoardProfile.DataContext = localBoard;
                 TFollowing following = await FollowingHelper.getFollowerByBoardId(localBoard.id);
