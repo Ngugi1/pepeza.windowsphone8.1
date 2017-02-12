@@ -246,9 +246,21 @@ namespace Pepeza.Views.Orgs
             else
             {
                 TAvatar local = await AvatarHelper.get(localOrg.avatarId);
-                if (local != null && local.linkNormal != null)
+                if (local != null)
                 {
-                    localOrg.linkNormal = local.linkNormal;
+                    if (local.linkNormal != null)
+                    {
+                        localOrg.linkNormal = local.linkNormal;
+                    }
+                    else
+                    {
+                        localOrg.linkNormal = Constants.EMPTY_ORG_PLACEHOLDER_ICON;
+                    }
+                   
+                }
+                else
+                {
+                    localOrg.linkNormal = Constants.EMPTY_ORG_PLACEHOLDER_ICON;
                 }
                 this.RootGrid.DataContext = localOrg;
                 isProfileLoaded = true;
