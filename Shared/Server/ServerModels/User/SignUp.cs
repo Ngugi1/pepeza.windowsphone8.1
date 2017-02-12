@@ -12,5 +12,6 @@ namespace Pepeza.Server.ServerModels.User
         public string email { get; set; }
         public string password { get; set; }
         public int pushId { get; set; }
+        public string  platform { get; set; }
     }
 }
