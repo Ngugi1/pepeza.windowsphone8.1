@@ -133,7 +133,7 @@ namespace Pepeza.Views
         {
 
             return new Pepeza.Server.ServerModels.Login() { username = textBoxUsername.Text.Trim(), 
-                password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID};
+                password = txtBoxPassword.Password.Trim() , pushId = Constants.PUSH_ID , platform = Constants.PLATFORM};
         }
         private void hylResetPassword_Click(object sender, RoutedEventArgs e)
         {
@@ -198,7 +198,7 @@ namespace Pepeza.Views
                     {
                         results = await RequestUser.sendOAuthToken(new Dictionary<string, string>()
                         {
-                            {"providerName", providerName }, {"accessToken", token} , {"pushId", pushId}
+                            {"providerName", providerName }, {"accessToken", token} , {"pushId", pushId} ,{"platform" , Constants.PLATFORM}
                         });
                             if (results.ContainsKey(Constants.APITOKEN))
                             {

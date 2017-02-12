@@ -103,7 +103,7 @@
                                />
                     
                     <Button 
-                        Visibility="Visible"
+                        Visibility="Collapsed"
                         FontFamily="Segoe UI Light"
                         Click="LoginWithGoogle"
                         HorizontalAlignment="Center"
