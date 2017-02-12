@@ -2,6 +2,7 @@
 using Pepeza.Db.Models.Notices;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -198,7 +199,15 @@ namespace Pepeza.Views.Analytics
             {
                 foreach (JObject item in jArray)
                 {
-                    int hour = (int)item["hour"];
+                    int hour = (int)item["hour"] + DateTimeFormatter.getTimezoneOffset();
+                    if (hour > 23)
+                    {
+                        hour = hour - 24;
+                    }
+                    else if (hour < 0)
+                    {
+                        hour = 24 + hour;
+                    }
                     int no_of_reads = (int)item["no_of_reads"];
                     available_hours.ElementAt<OrgStatItem>(hour).Read = no_of_reads;
                 }
@@ -210,7 +219,9 @@ namespace Pepeza.Views.Analytics
         {
             if (e.Parameter != null)
             {
-                orgId = (int)e.Parameter;
+                Dictionary<string, string> parameters = e.Parameter as Dictionary<string, string>;
+                orgId = int.Parse(parameters["id"]);
+                txtBlockTitle.Text = parameters["title"];
                 await getAnalytics(orgId);
             }
         }

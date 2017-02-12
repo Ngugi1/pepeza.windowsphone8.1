@@ -45,12 +45,20 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <!--Highlights -->
-            <TextBlock Text="Organisation Analytics" Grid.ColumnSpan="3"
+                <StackPanel>
+                    <TextBlock Text=" organisation analytics" Grid.ColumnSpan="3"
                        Style="{StaticResource txtBlockPageHeader}"
-                       FontSize="28"
+                       FontSize="{ThemeResource TextStyleMediumFontSize}"
                        Margin="12,0,8,8"
                        />
-            <ComboBox 
+                    <TextBlock 
+                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                               Text=""
+                               Margin="12,0"
+                               Name="txtBlockTitle"
+                               />
+                </StackPanel>
+                <ComboBox 
                 Grid.Row="1"
                 Name="ComboBoxPeriods"
                 SelectionChanged="ComboBox_SelectionChanged"
@@ -172,13 +180,13 @@
                                DataContext="{Binding}"
                                Margin="12,8"
                                HorizontalAlignment="Left">
-                    <Paragraph>
-                        <Bold>Read</Bold>
+                    <Paragraph Margin="8">
+                        <Span>READ</Span>
                         <Run  x:Name="ReadPercentage" Text="{Binding Percentage}" 
                               Foreground="{ThemeResource PhoneAccentBrush}"/>
                     </Paragraph>
-                    <Paragraph>
-                        <Bold>Received</Bold>
+                    <Paragraph Margin="8">
+                        <Span>RECEIVED</Span>
                         <Run x:Name="ReceivedPercentage" Text="{Binding Percentage}" Foreground="{ThemeResource PhoneAccentBrush}" />
                     </Paragraph>
                 </RichTextBlock>

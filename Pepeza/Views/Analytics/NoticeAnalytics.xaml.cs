@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Pepeza.Server.Requests;
 using Pepeza.Utitlity;
+using Shared.Utitlity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -149,7 +150,15 @@ namespace Pepeza.Views.Analytics
             {
                 foreach (JObject item in jArray)
                 {
-                    int hour = (int)item["hour"];
+                    int hour = (int)item["hour"] + DateTimeFormatter.getTimezoneOffset();
+                    if (hour > 23)
+                    {
+                        hour = hour - 24;
+                    }
+                    else if (hour < 0)
+                    {
+                        hour = 24 + hour;
+                    }
                     int no_of_reads = (int)item["no_of_reads"];
                     available_hours.ElementAt<NoticeStatItem>(hour).Read = no_of_reads;
                     //foreach (JProperty property in item.Properties())

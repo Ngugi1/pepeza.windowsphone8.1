@@ -188,21 +188,22 @@
                                 </TransitionCollection>
                             </ListView.ItemContainerTransitions>
                             <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid 
+                                <DataTemplate>
+                                    <Grid 
+                                      Width="{Binding ActualWidth, ElementName=ListViewOrgBoards}"
                                         Height="70"
                                     Margin="0"
                                         Style="{StaticResource GridListViewItemTemplate}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                         <ColumnDefinition Width="Auto" />
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                    <FFImage:FFImage
+                                        <FFImage:FFImage
                                             Grid.RowSpan="2"
                                             ErrorPlaceholder="/Assets/Images/placeholder_board_avatar.png"
                                             LoadingPlaceholder="/Assets/Images/placeholder_board_avatar.png"
@@ -215,18 +216,18 @@
                                             Width="50"
                                             Source="{Binding linkSmall}"
                                             >
-                                    </FFImage:FFImage>
-                                    <TextBlock Grid.Row="0"
+                                        </FFImage:FFImage>
+                                        <TextBlock Grid.Row="0"
                                                    Grid.Column="1"
                                                    Margin="8,10,8,6"
                                                    Style="{StaticResource txtBlockListViewItemHeader}"
                                                    Text="{Binding name}" />
-                                    <TextBlock Grid.Row="1"
+                                        <TextBlock Grid.Row="1"
                                                    Grid.Column="1"
                                                    Margin="8,0,14,0"
                                                    Style="{StaticResource txtBlockListViewDesc}"
                                                    Text="{Binding desc}" />
-                                        <!--<Button Style="{StaticResource ButtonBlue}" 
+                                        <Button Style="{StaticResource ButtonBlue}" 
                                                 Grid.RowSpan="2"
                                                 Width="Auto"
                                                 Padding="0"
@@ -236,12 +237,12 @@
                                                 Tag="{Binding}"
                                                 Background="{ThemeResource PhoneAccentBrush}"
                                                 Grid.Column="2"
-                                                Content="{Binding following, Converter={StaticResource IntToFollowing}}"/>-->
+                                                Content="{Binding following, Converter={StaticResource IntToFollowing}}"/>
 
                                     </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     <StackPanel Name="StackPanelLoading"
                                 Visibility="Collapsed"
                                 VerticalAlignment="Center">

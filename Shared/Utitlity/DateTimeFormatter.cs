@@ -18,7 +18,11 @@ namespace Shared.Utitlity
             var localDateTime = actualTimeDate.ToLocalTime();
             return localDateTime;
         }
-
+        public static int getTimezoneOffset()
+        {
+            DateTimeOffset offset = new DateTimeOffset(DateTime.Now);
+            return (int)offset.Offset.TotalHours;
+        }
         public static long ToUnixTimestamp(DateTime date)
         {
             return (long)date.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds;

@@ -592,7 +592,12 @@ namespace Pepeza.Views.Boards
         }
         private void AppBarButton_BoardAnalytics_click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(BoardAnalytics), boardId);
+            TBoard board = GridBoardProfile.DataContext as TBoard;
+            if (board != null)
+            {
+                this.Frame.Navigate(typeof(BoardAnalytics), new Dictionary<string, string>() { {"id", boardId.ToString()} , {"title" , board.name}});
+            }
+
         }
         private void ListViewNotices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

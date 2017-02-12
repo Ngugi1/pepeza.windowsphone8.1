@@ -437,6 +437,7 @@ namespace Pepeza.Views.Orgs
                 {
                     if (!await loadBoardsOnline(orgId))
                     {
+                        StackPanelBoardsFailed.Visibility = Visibility.Collapsed;
                         await loadBoardsLocally();
                     }
                     areBoardsLoaded = true;
@@ -473,25 +474,11 @@ namespace Pepeza.Views.Orgs
                                 linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"],
                                 name = (string)board["name"],
                                 orgID = orgId,
-                                desc = (string)board["description"]
+                                desc = (string)board["description"],
+                                following = board["follower_item"] == null ? 0 : (int)board["followerItem"]["accepted"]
+
                             });
                         }
-                        if (boards.Count > 0)
-                        {
-                            //Determine if you foolow these boards 
-                            foreach (var followCandidate in boards)
-                            {
-                                if (await FollowingHelper.getFollowingBoard(followCandidate.id))
-                                {
-                                    followCandidate.following = 1;
-                                }
-                                else
-                                {
-                                    followCandidate.following = 0;
-                                }
-                            }
-                        }
-                       
                         ListViewOrgBoards.ItemsSource = boards;
                     }
                     else
@@ -743,7 +730,8 @@ namespace Pepeza.Views.Orgs
         }
         private void AppBtinAnalytics_clicked(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(OrgAnalytics), OrgID);
+            TOrgInfo org = GridBoardProfile.DataContext as TOrgInfo;
+            this.Frame.Navigate(typeof(OrgAnalytics), new Dictionary<string, string>() { {"id", OrgID.ToString()} , {"title", org.name}});
         }
         public class Collaborator : Bindable
         {
@@ -892,11 +880,11 @@ namespace Pepeza.Views.Orgs
             if (board != null)
             {
                 //Check the type of board 
-                if (btncontent.Equals(follow))
+                if (board.following ==0)
                 {
                     await followBoard(board , btn);
                 }
-                else if (btncontent.Equals(unfollow))
+                else if (board.following == 1)
                 {
                     await unfollowBoard(board , btn);
                 }

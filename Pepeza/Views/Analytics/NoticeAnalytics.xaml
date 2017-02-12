@@ -43,16 +43,22 @@
             <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         <!--Title-->
-            
-            <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Notice Analytics"
+
+                <StackPanel>
+                    <TextBlock Text="notice Analytics" Grid.ColumnSpan="3"
+                       Style="{StaticResource txtBlockPageHeader}"
+                       FontSize="{ThemeResource TextStyleMediumFontSize}"
                        Margin="12,0,8,8"
-                       Style="{StaticResource txtBlockPageHeader}" 
-                       FontSize="28"/>
-                
-        </StackPanel>
-            
-            <StackPanel Grid.Row="1">
+                       />
+                    <TextBlock 
+                        Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"
+                               Text=""
+                               Margin="12,0"
+                               Name="txtBlockTitle"
+                               />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
                 <ComboBox BorderThickness="0,0,0,2"
                           Name="ComboPeriod"
                           SelectionChanged="ComboSelectionChanged"
@@ -64,14 +70,7 @@
                     <ComboBoxItem Content="Last 7 Days" IsSelected="True"/>
                     <ComboBoxItem Content="Last 30 Days"/>
                 </ComboBox>
-                <TextBlock 
-                       Name="txtBlockTitle"
-                       Style="{StaticResource txtBlockListViewItemHeader}"
-                       TextTrimming="CharacterEllipsis"
-                       TextWrapping="NoWrap"
-                       FontWeight="Bold"
-                       Margin="12,8"
-                       />
+               
               
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" Text="Number of people who received and read this notice"
                        FontWeight="Thin"
@@ -122,13 +121,13 @@
                                DataContext="{Binding}"
                                Margin="12,8"
                                HorizontalAlignment="Left">
-                    <Paragraph>
-                        <Bold>Read</Bold>
+                    <Paragraph Margin="8">
+                            <Span>READ</Span>
                         <Run  x:Name="ReadPercentage" Text="{Binding Percentage}" 
                               Foreground="{ThemeResource PhoneAccentBrush}"/>
                     </Paragraph>
-                    <Paragraph>
-                        <Bold>Received</Bold>
+                    <Paragraph Margin="8">
+                        <Span>RECEIVED</Span>
                         <Run x:Name="ReceivedPercentage" Text="{Binding Percentage}" Foreground="{ThemeResource PhoneAccentBrush}" />
                     </Paragraph>
                 </RichTextBlock>
