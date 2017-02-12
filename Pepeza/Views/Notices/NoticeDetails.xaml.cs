@@ -190,6 +190,7 @@ namespace Pepeza.Views.Notices
                 
                 this.RootGrid.DataContext = notice;
                 noticeTitle = notice.title;
+                StackPanelLoading.Visibility = Visibility.Collapsed;
                 await NoticeService.submitReadNoticeItems();
             }
             #region Remote notice 

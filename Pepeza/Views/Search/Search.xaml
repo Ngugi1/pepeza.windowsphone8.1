@@ -48,7 +48,18 @@
                     </PivotItem.Header>
                     <ListView Name="ListViewUser"
                               ItemTemplate="{StaticResource ListViewSearchUserTemplate}"
-                              SelectionChanged="ListViewUser_SelectionChanged" />
+                              SelectionChanged="ListViewUser_SelectionChanged">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
+                    </ListView>
 
                 </PivotItem>
                 <PivotItem Margin="19.5,0,19,0">
@@ -57,7 +68,18 @@
                     </PivotItem.Header>
                     <ListView Name="ListViewBoards"
                               ItemTemplate="{StaticResource ListViewSearchBoards}"
-                              SelectionChanged="ListViewBoards_SelectionChanged" />
+                              SelectionChanged="ListViewBoards_SelectionChanged" >
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
+                    </ListView>
                 </PivotItem>
                 <PivotItem Margin="19.5,0,19,0">
                     <PivotItem.Header>
@@ -65,7 +87,18 @@
                     </PivotItem.Header>
                     <ListView Name="listViewSearchOrgs"
                               ItemTemplate="{StaticResource ListViewSearchOrgs}"
-                              SelectionChanged="listViewSearchOrgs_SelectionChanged" />
+                              SelectionChanged="listViewSearchOrgs_SelectionChanged" >
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
+                    </ListView>
                 </PivotItem>
             </Pivot>
             <TextBlock Name="txtBlockWhat"

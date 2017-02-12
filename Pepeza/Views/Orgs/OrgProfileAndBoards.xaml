@@ -177,7 +177,17 @@
                     </StackPanel>
                     <ListView Name="ListViewOrgBoards"     
                               SelectionChanged="ListViewOrgBoards_SelectionChanged" >
-                        <ListView.ItemTemplate>
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                    <AddDeleteThemeTransition/>
+                                    <NavigationThemeTransition/>
+                                    <ContentThemeTransition/>
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
+                            <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid 
                                         Height="70"
@@ -345,8 +355,17 @@
                         <ListView Name="ListViewCollaborators"
                               SelectionChanged="ListViewCollaborators_SelectionChanged"
                               >
-
-                            <ListView.ItemTemplate>
+                                <ListView.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                        <AddDeleteThemeTransition/>
+                                        <NavigationThemeTransition/>
+                                        <ContentThemeTransition/>
+                                    </TransitionCollection>
+                                </ListView.ItemContainerTransitions>
+                                <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid
                                     Margin="0,8"

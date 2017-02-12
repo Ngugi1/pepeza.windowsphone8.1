@@ -158,6 +158,16 @@
                         SelectionChanged="listViewOrgs_SelectionChanged"
                         Margin="19.5,4"
                         Name="listViewOrgs" ItemTemplate="{StaticResource ListViewSearchOrgs}">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
                     </ListView>
                     <StackPanel 
                             Grid.Row="1"
@@ -239,6 +249,16 @@
                         Margin="19.5,4"
                         SelectionChanged="ListViewFollowing_SelectionChanged"
                         Name="ListViewFollowing">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>

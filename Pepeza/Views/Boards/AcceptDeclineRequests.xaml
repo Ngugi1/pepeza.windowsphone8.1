@@ -25,6 +25,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="follow requests" 
                    Margin="20,0"
+                   FontSize="{ThemeResource TextStyleExtraLargeFontSize}"
                    Style="{StaticResource txtBlockPageHeader}"
                    Foreground="Black"
                    />
@@ -68,6 +69,16 @@
                   Margin="16,8"
                   Name="listviewRequests"
                   >
+            <ListView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                    <AddDeleteThemeTransition/>
+                    <NavigationThemeTransition/>
+                    <ContentThemeTransition/>
+                </TransitionCollection>
+            </ListView.ItemContainerTransitions>
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -82,10 +93,13 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <FFImage:FFImage
-                        Height="50"
-                             Width="50"
-                             Source="{Binding linkSmall , Mode=TwoWay}"
-                             Grid.Row="1"
+                        Height="60"
+                         Width="60"
+                        Source="{Binding linkSmall,Mode=TwoWay}"
+                        LoadingPlaceholder="/Assets/Images/placeholder_user_avatar.png"
+                        ErrorPlaceholder="/Assets/Images/placeholder_user_avatar.png"
+                        FadeAnimationEnabled="True"     
+                        Grid.Row="1"
                              VerticalAlignment="Bottom"
                              Margin="10,-10"
                                       
@@ -93,7 +107,7 @@
                         <TextBlock Text="{Binding fullname, Mode=TwoWay}"    
                        Grid.ColumnSpan="2"
                        Foreground="Black"
-                       Margin="9,25,15.333,25.167"
+                       Margin="9,21,15.333,29.167"
                        VerticalAlignment="Center"
                        Style="{StaticResource BaseTextBlockStyle}"
                        Grid.Column="1" Grid.Row="1"/>
@@ -121,7 +135,7 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            
+           
         </ListView>
      
     </Grid>

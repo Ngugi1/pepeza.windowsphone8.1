@@ -4,6 +4,7 @@
                     xmlns:FFImage="using:FFImageLoading"
                     xmlns:local="using:Pepeza.Styles">
 
+    
     <!--  Thickness  -->
     <Thickness x:Key="PivotItemMargin">4,4,4,4</Thickness>
 

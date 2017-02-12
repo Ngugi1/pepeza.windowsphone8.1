@@ -94,6 +94,16 @@
                         <ListView Margin="19.5,0"
                                   SelectionChanged="ListViewNotices_SelectionChanged"
                                   Name="ListViewNotices">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                    <AddDeleteThemeTransition/>
+                                    <NavigationThemeTransition/>
+                                    <ContentThemeTransition/>
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -251,6 +261,16 @@ TextTrimming="CharacterEllipsis"
                                   Margin="4"
                                   SelectionChanged="ListViewBoardFollowers_SelectionChanged"
                                   >
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                    <AddDeleteThemeTransition/>
+                                    <NavigationThemeTransition/>
+                                    <ContentThemeTransition/>
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />

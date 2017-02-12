@@ -52,6 +52,16 @@
                               SelectionChanged="ListViewNotices_SelectionChanged"
                               Name="ListViewNotices"
                               >
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -78,17 +88,16 @@
                                                VerticalAlignment="Bottom"
                                            FontSize="{ThemeResource TextStyleExtraLargeFontSize}"
                                                Style="{ThemeResource ListViewItemTextBlockStyle}"/>
-                                    <RichTextBlock 
+                                    <TextBlock 
                                          Grid.Row="1"
                                         Margin="0"
                                         FontWeight="SemiBold"
                                         IsTextSelectionEnabled="False" 
-                                        Foreground="Gray"
-                                        Style="{StaticResource  BaseRichTextBlockStyle}"
+                                       Style="{ThemeResource ControlContextualInfoTextBlockStyle}" 
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                         Common:Properties.Html="{Binding board, Mode=TwoWay}"
+                                        Text="{Binding board, Mode=TwoWay}"
                                         >
-                                    </RichTextBlock>
+                                    </TextBlock>
                                     <RichTextBlock
                                         Grid.Row="2"
                                         TextAlignment="Justify"
@@ -252,13 +261,31 @@
                     <ListView Name="ListViewBoards"
                               Grid.Row="1"
                               SelectionChanged="ListViewBoards_SelectionChanged">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             </Style>
                         </ListView.ItemContainerStyle>
+                        <ItemsControl>
+                            <ItemsControl.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <AddDeleteThemeTransition/>
+                                </TransitionCollection>
+                            </ItemsControl.ItemContainerTransitions>
+                        </ItemsControl>
                         <ListView.ItemTemplate>
                             <DataTemplate>
+
                                 <Grid 
                                     Height="70"
                 
@@ -365,6 +392,16 @@
                     </StackPanel>
                     <ListView Name="ListViewOrgs"
                               SelectionChanged="ListViewOrgs_SelectionChanged">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition IsStaggeringEnabled="True" 
+                                 FromVerticalOffset="200" 
+                                 FromHorizontalOffset="200"/>
+                                <AddDeleteThemeTransition/>
+                                <NavigationThemeTransition/>
+                                <ContentThemeTransition/>
+                            </TransitionCollection>
+                        </ListView.ItemContainerTransitions>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
