@@ -61,7 +61,7 @@ namespace Pepeza
         public static ObservableCollection<TOrgInfo> orgs { get; set; }
         public static ObservableCollection<TBoard> following{ get; set; }
         public static ObservableCollection<Shared.Models.NoticesModels.NoticeCollection> notices { get; set; }
-        bool isSelected = false, isInBackground = false;
+        bool isInBackground = false , areNoticesLoaded = false, areBoardsLoaded = false , areOrgsLoaded = false;
         AdMediatorControl control = new AdMediatorControl();
         public MainPage()
         {
@@ -73,17 +73,14 @@ namespace Pepeza
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param> 
+        /// This parameter is typically used to configure the page.</param>
+        
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //Load data 
-            await loadNotices();
-            //Load boards
-            await loadBoards();
-            //Orgs alpha groups
-            await loadOrgs();
-            //Set up followers
             this.Frame.BackStack.Clear();
+            await loadNotices();
+            await loadBoards();
+            await loadOrgs();
             //Register push notifications
             var isPushTokenSubmitted = Settings.getValue(Constants.IS_PUSH_TOKEN_SUBMITTED);
             if (isPushTokenSubmitted != null)
@@ -141,72 +138,88 @@ namespace Pepeza
         }
         private  async Task updateNotificationCount()
         {
-            int count = await TNotificationHelper.unreadNotifications();
-            if (count != 0)
-            {   
-                txtBlockNotificationsCount.Visibility = Visibility.Visible;
-                txtBlockNotificationsCount.Text = count.ToString();
-            }
-            else
+            try
             {
-                txtBlockNotificationsCount.Visibility = Visibility.Collapsed;
-                txtBlockNotificationsCount.Text = count.ToString();
+                int count = await TNotificationHelper.unreadNotifications();
+                if (count != 0)
+                {
+                    txtBlockNotificationsCount.Visibility = Visibility.Visible;
+                    txtBlockNotificationsCount.Text = count.ToString();
+                }
+                else
+                {
+                    txtBlockNotificationsCount.Visibility = Visibility.Collapsed;
+                    txtBlockNotificationsCount.Text = count.ToString();
+                }
             }
+            catch
+            {
+
+            }
+           
         }
         public async  Task<bool> registerPush()
         {
             bool isRegistered = false;
-            if (App.CheckInternet())
+            try
             {
-                //Check if access status and revoke , makes sure your app works well when there is an update
-                BackgroundExecutionManager.RemoveAccess();
-                //Unregister the Background Agent 
-                var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
-                if (entry.Value != null)
+                if (App.CheckInternet())
                 {
-                    entry.Value.Unregister(true);
+                    //Check if access status and revoke , makes sure your app works well when there is an update
+                    BackgroundExecutionManager.RemoveAccess();
+                    //Unregister the Background Agent 
+                    var entry = BackgroundTaskRegistration.AllTasks.FirstOrDefault(keyval => keyval.Value.Name == "PepezaPushBackgroundTask");
+                    if (entry.Value != null)
+                    {
+                        entry.Value.Unregister(true);
+                    }
+                    //is registration complete?
+
+                    //Request Access 
+                    var access = await BackgroundExecutionManager.RequestAccessAsync();
+                    if (access == BackgroundAccessStatus.Denied)
+                    {
+                        MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
+                        prompt.Show();
+                        return isRegistered;
+                    }
+
+                    //Granted 
+                    BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                    taskBuilder.Name = "PepezaPushBackgroundTask";
+                    PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
+                    taskBuilder.SetTrigger(pushTrigger);
+                    //Define Entry Point 
+                    taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
+                    taskBuilder.Register();
+                    string uri = String.Empty;
+                    try
+                    {
+
+                        var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                        uri = channel.Uri;
+
+                        //Register foreground APP to receive push when running
+                        channel.PushNotificationReceived += channel_PushNotificationReceived;
+
+                        // Upload the URI to Pepeza Backend 
+                        bool isUriSent = await BackendService.submitPushUri(uri);
+                        isRegistered = (isUriSent == true) ? true : false;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        string s = ex.Message;
+                        isRegistered = false;
+                    }
+
                 }
-                //is registration complete?
-               
-                //Request Access 
-                var access = await BackgroundExecutionManager.RequestAccessAsync();
-                if (access == BackgroundAccessStatus.Denied)
-                {
-                    MessagePrompt prompt = MessagePromptHelpers.getMessagePrompt("Notifications Disabled", "You won't be able to receive Notifications.Please go to Battery Saver->Pepeza->Allow App to run in background and enable");
-                    prompt.Show();
-                    return isRegistered;
-                }
-
-                //Granted 
-                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
-                taskBuilder.Name = "PepezaPushBackgroundTask";
-                PushNotificationTrigger pushTrigger = new PushNotificationTrigger();
-                taskBuilder.SetTrigger(pushTrigger);
-                //Define Entry Point 
-                taskBuilder.TaskEntryPoint = "PepezaPushBackgroundTask.PepezaPushHelper";
-                taskBuilder.Register();
-                string uri = String.Empty;
-                try
-                {
-
-                    var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                    uri = channel.Uri;
-
-                    //Register foreground APP to receive push when running
-                    channel.PushNotificationReceived += channel_PushNotificationReceived;
-
-                    // Upload the URI to Pepeza Backend 
-                    bool isUriSent = await BackendService.submitPushUri(uri);
-                    isRegistered = (isUriSent == true) ? true : false;
-
-                }
-                catch (Exception ex)
-                {
-                    string s = ex.Message;
-                    isRegistered = false;
-                }
-               
             }
+            catch
+            {
+
+            }
+           
             return isRegistered;
         }
          async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
@@ -215,21 +228,25 @@ namespace Pepeza
             //Init update from the server
             // Your UI update code goes here!
             Dictionary<string, int> results = await SyncPushChanges.initUpdate();
-            if (results != null)
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async
+            () =>
             {
-                isInBackground = true;
-                //await loadNotices();
-                //await loadBoards();
-                //await loadOrgs();
-                txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
-            }
-
-               
-            //Prevent background agent from being invoked 
+                if (results != null)
+                {
+                    isInBackground = true;
+                    await loadNotices();
+                    await loadBoards();
+                    await loadOrgs();
+                    txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+                }
+           });
+          //Prevent background agent from being invoked 
               
         }
         private async Task loadNotices()
         {
+          //  StackPanelLoadingNotices.Visibility = Visibility.Visible;
+            areNoticesLoaded = false;
             try
             {
                 ListContainer container = new ListContainer();
@@ -245,51 +262,88 @@ namespace Pepeza
               
 
                 ListViewNotices.ItemsSource = container.noticesList;
+                areNoticesLoaded = true;
             }
             catch 
             {
                 EmptyNoticesPlaceHolder.Visibility = Visibility.Visible;
             }
+           // StackPanelLoadingNotices.Visibility = Visibility.Collapsed;
+
         }
         private async Task<bool> loadOrgs()
         {
-            orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
-            if (orgs.Count == 0)
+         //   StackPanelLoadingOrgs.Visibility = Visibility.Visible;
+
+            areOrgsLoaded = false;
+            try
             {
-                EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
+                orgs = new ObservableCollection<TOrgInfo>(await Db.DbHelpers.OrgHelper.getAllOrgs());
+                if (orgs.Count == 0)
+                {
+                    EmptyOrgsPlaceHolder.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
+                }
+
+                ListViewOrgs.ItemsSource = orgs;
+                areOrgsLoaded = true;
             }
-            else
+            catch
             {
-                EmptyOrgsPlaceHolder.Visibility = Visibility.Collapsed;
+
             }
-            
-            ListViewOrgs.ItemsSource = orgs;
-            return true;
+           
+           // StackPanelLoadingOrgs.Visibility = Visibility.Collapsed;
+
+            return areOrgsLoaded;
         }
         private async Task<bool> loadBoards()
         {
-            boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
-            if (boards.Count == 0)
+            //StackPanelLoadingBoards.Visibility = Visibility.Visible;
+            try
             {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                txtBlockContent.Text = "All boards will appear here";
+                areBoardsLoaded = false;
+                boards = new ObservableCollection<TBoard>(await Db.DbHelpers.Board.BoardHelper.fetchAllBoards());
+                if (boards.Count == 0)
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    txtBlockContent.Text = "All boards will appear here";
+                }
+                else
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                }
+
+                ListViewBoards.ItemsSource = boards;
+                RadioButtonAll.IsChecked = true;
+                areBoardsLoaded = true;
             }
-            else
+            catch
             {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                
             }
-            
-            ListViewBoards.ItemsSource = boards;
-            RadioButtonAll.IsChecked = true;
-            return true;
+            //StackPanelLoadingBoards.Visibility = Visibility.Collapsed;
+
+            return areBoardsLoaded;
         }
         private void AppBarBtnSearch_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Views.Search));
-            if (App.CheckInternet())
+            try
             {
-                Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
+                if (App.CheckInternet())
+                {
+                    Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
+                }
             }
+            catch
+            {
+
+            }
+           
         }
         //TODO :: Reload the notices
         private void AppBtnAdd_Click(object sender, RoutedEventArgs e)
@@ -321,13 +375,13 @@ namespace Pepeza
                         }
                         break;
                     case 1:
-                        if (isInBackground)
+                        if (!areBoardsLoaded)
                         {
                             await loadBoards();
                         }
                         break;
                     case 2:
-                        if (isInBackground)
+                        if (!areOrgsLoaded)
                         {
                             await loadOrgs();
                         }
@@ -356,7 +410,7 @@ namespace Pepeza
 
             TOrgInfo org = (sender as ListView).SelectedItem as TOrgInfo;
 
-            if (org != null && isSelected == true)
+            if (org != null)
             {
                 this.Frame.Navigate(typeof(OrgProfileAndBoards), org);
             }
@@ -427,10 +481,14 @@ namespace Pepeza
                     List<TBoard> candidateBoards = await BoardHelper.fetchAllOrgBoards(item.orgId);
                     foreach (var candidate in candidateBoards)
                     {
-                        if (managingBoards.FirstOrDefault(i=>i.id == candidate.id)==null)
+                        if (managingBoards != null)
                         {
-                            managingBoards.Add(candidate);
+                            if (managingBoards.FirstOrDefault(i => i.id == candidate.id) == null)
+                            {
+                                managingBoards.Add(candidate);
+                            }
                         }
+                        
                         
                     }
                 }

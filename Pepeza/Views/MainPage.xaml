@@ -48,9 +48,10 @@
                 <Grid>
 
                    
-                    <ListView Margin="19.5,0,8,0"
+                    <ListView Margin="19.5,0,8,12"
                               SelectionChanged="ListViewNotices_SelectionChanged"
-                              Name="ListViewNotices">
+                              Name="ListViewNotices"
+                              >
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -58,7 +59,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,8">
+                                <Grid Margin="0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -69,35 +70,41 @@
                                         <ColumnDefinition Width="Auto"/>
 
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding title , Mode=TwoWay}" 
+                                    <TextBlock  Text="{Binding title, Mode=TwoWay}"  
                                                Foreground="Black"
                                                Margin="0"
-                                               FontWeight="SemiBold"
+                                              TextWrapping="NoWrap"
+                                           TextTrimming="CharacterEllipsis"
                                                VerticalAlignment="Bottom"
-                                               Style="{StaticResource txtBlockListViewItemHeader}"/>
+                                           FontSize="{ThemeResource TextStyleExtraLargeFontSize}"
+                                               Style="{ThemeResource ListViewItemTextBlockStyle}"/>
                                     <RichTextBlock 
                                          Grid.Row="1"
                                         Margin="0"
-                                        FontWeight="Thin"
-                                        IsTextSelectionEnabled="False"
-                                        Style="{StaticResource BaseRichTextBlockStyle}"
+                                        FontWeight="SemiBold"
+                                        IsTextSelectionEnabled="False" 
+                                        Foreground="Gray"
+                                        Style="{StaticResource  BaseRichTextBlockStyle}"
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
-                                        Common:Properties.Html="{Binding board, Mode=TwoWay}"
-                                        > 
+                                         Common:Properties.Html="{Binding board, Mode=TwoWay}"
+                                        >
                                     </RichTextBlock>
                                     <RichTextBlock
                                         Grid.Row="2"
                                         TextAlignment="Justify"
-                                        MaxLines="3"
-                                        TextWrapping="Wrap"
+                                        TextWrapping="NoWrap"
+                                        Margin="2"
+                                        MaxLines="1"
                                         TextTrimming="CharacterEllipsis"
                                         Style="{StaticResource BodyRichTextBlockStyle}"
                                         IsTextSelectionEnabled="False"
                                         FontSize="{StaticResource TextStyleMediumFontSize}"
+                                        
                                         Foreground="{Binding isRead, Converter={StaticResource IntToForeground}}" 
-                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"/>
+                                        Common:Properties.Html="{Binding content , Mode=TwoWay}"
+                                    />
                                     <TextBlock 
-                                        Text="{Binding date_created_display}" 
+                                        Text="February 24" 
                                         HorizontalAlignment="Left"
                                         Margin="4"
                                         VerticalAlignment="Bottom"
@@ -111,9 +118,19 @@
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-
+                      
 
                     </ListView>
+                    <StackPanel VerticalAlignment="Center"
+                                Visibility="Collapsed"
+                                Name="StackPanelLoadingNotices"
+                                >
+                        <TextBlock  
+                            Text="Loading your notices.."
+                            Style="{StaticResource txtBlockWait}" 
+                            HorizontalAlignment="Center"/>
+                        <ProgressBar  Margin="12"/>
+                    </StackPanel>
                     <StackPanel 
                         Name="EmptyNoticesPlaceHolder"
                         Visibility="Collapsed"
@@ -152,7 +169,6 @@
                         HorizontalAlignment="Center"
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
-                        AdMediatorError="AdMediatorControl_AdMediatorError"
                         Name="NoticesTabAd"/>
                     <ForFun:MessagePrompt 
                                        Message="We sent you an email with confirmation link. Click on the link to confirm your email"
@@ -221,7 +237,18 @@
                             Margin="28.333,0,-2.833,0" 
                             />
                     </Grid>
-                   
+                    <StackPanel VerticalAlignment="Center"
+                                Visibility="Collapsed"
+                                
+                                Grid.Row="1"
+                                Name="StackPanelLoadingBoards"
+                                >
+                        <TextBlock  
+                            Text="Loading your boards.."
+                            Style="{StaticResource txtBlockWait}" 
+                            HorizontalAlignment="Center"/>
+                        <ProgressBar  Margin="12"/>
+                    </StackPanel>
                     <ListView Name="ListViewBoards"
                               Grid.Row="1"
                               SelectionChanged="ListViewBoards_SelectionChanged">
@@ -234,7 +261,7 @@
                             <DataTemplate>
                                 <Grid 
                                     Height="70"
-                                    Holding="Grid_Holding"
+                
                                     Style="{StaticResource GridListViewItemTemplate}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -317,8 +344,7 @@
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
                         
-                        AdMediatorError="AdMediatorControl_AdMediatorError"
-                        Name="BoardsTabAd"/>
+                       Name="BoardsTabAd"/>
                 </Grid>
             </PivotItem>
             <PivotItem 
@@ -326,7 +352,17 @@
                 Margin="{StaticResource PivotItemMargin}">
 
                 <Grid>
-                    
+                    <StackPanel VerticalAlignment="Center"
+                                Visibility="Collapsed"
+                                Name="StackPanelLoadingOrgs"
+                                >
+                        <TextBlock  
+                            Text="Loading your organisations.."
+                            Style="{StaticResource txtBlockWait}" 
+                            HorizontalAlignment="Center"/>
+                        <ProgressBar  Margin="12"/>
+
+                    </StackPanel>
                     <ListView Name="ListViewOrgs"
                               SelectionChanged="ListViewOrgs_SelectionChanged">
                         <ListView.ItemContainerStyle>
@@ -337,7 +373,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Name="OrgGrid"
-                                      Holding="OrgGrid_Holding"
+                                      
                                       Style="{StaticResource GridListViewItemTemplate}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
@@ -407,7 +443,7 @@
                         Grid.Row="1"
                         
                         VerticalAlignment="Bottom"
-                        AdMediatorError="AdMediatorControl_AdMediatorError"
+     
                         Name="OrgTabAd"/>
 
                 </Grid>

@@ -37,6 +37,7 @@ using Windows.UI.Xaml.Navigation;
 using Shared.Server.Requests;
 using Pepeza.Views.Signup;
 using Pepeza.Views.Configurations;
+using Pepeza.Views.Account;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -266,19 +267,19 @@ namespace Pepeza
                         }
                     }else
                     {
-                        pageToNavigate = typeof(LoginPage);
+                        pageToNavigate = typeof(InitialPage);
                     }
                     
                 }
                 else
                 {
-                    pageToNavigate = typeof(LoginPage);
+                    pageToNavigate = typeof(InitialPage);
                 }
 
             }
             else
             {
-                pageToNavigate = typeof(LoginPage);
+                pageToNavigate = typeof(InitialPage);
             }
             Frame rootFrame = Window.Current.Content as Frame;
             // Do not repeat app initialization when the Window already has content,
