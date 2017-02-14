@@ -163,35 +163,29 @@ namespace Pepeza.Views.Boards
                     }
                     if (objResults["follower_item"].Type != JTokenType.Null)
                     {
-                        boardFetched.following = (int)objResults["follower_item"]["accepted"];
-                        TFollowing followerItem = new TFollowing()
+                        //Check if they are following 
+                        if ((bool)objResults["follower_item"]["accepted"]) // User request accepted 
                         {
-                            id = (int)objResults["follower_item"]["id"],
-                            userId = (int)objResults["follower_item"]["userId"],
-                            boardId = (int)objResults["follower_item"]["boardId"],
-                            accepted = (int)objResults["follower_item"]["accepted"],
-
-                        };
-
-                        if (followerItem.accepted == 1)
-                        {
+                            boardFetched.following = 1;
                             btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
-
-                            btnFollow.IsEnabled = true;
-                            followerItem.dateAccepted = (long)objResults["follower_item"]["dateAccepted"];
                         }
-                        else if (followerItem.accepted == 0)
+                        else if ((bool)objResults["follower_item"]["invite"]) // User invited to follow a board 
                         {
-                            btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
-                            btnFollow.IsEnabled = true;
-                        }
+                            boardFetched.following = 3;
+                            btnFollow.Content = Constants.BOARD_CONTENT_INVITED;
 
-                        else if (followerItem.accepted == 2)
+                        }
+                        else if (!(bool)objResults["follower_item"]["declined"]) //User has requested to follow a booard 
                         {
+                            boardFetched.following = 2;
                             btnFollow.Content = Constants.BOARD_CONTENT_REQUESTED;
                             btnFollow.IsEnabled = false;
-
                         }
+                        else
+                        {
+                            boardFetched.following = 0;
+                        }
+                       
 
                     }
                     else
@@ -741,13 +735,17 @@ namespace Pepeza.Views.Boards
             TBoard board = GridBoardProfile.DataContext as TBoard;
             if (board != null)
             {
-                if (btnFollow.Content.ToString().Contains(Constants.BOARD_CONTENT_UNFOLLOW))
+                if (btnFollow.Content.Equals(Constants.BOARD_CONTENT_UNFOLLOW))
                 {
                     await unfollowBoard(board);
                 }
-                else if (btnFollow.Content.ToString().Contains(Constants.BOARD_CONTENT_FOLLOW))
+                else if (btnFollow.Content.Equals(Constants.BOARD_CONTENT_FOLLOW))
                 {
                     await followBoard(board);
+                }
+                else if (btnFollow.Content.Equals(Constants.BOARD_CONTENT_INVITED))
+                {
+                    //Accept the invitation 
                 }
             }
         }

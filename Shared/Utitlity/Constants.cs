@@ -55,9 +55,13 @@ namespace Pepeza.Utitlity
         public static int BOARD_FOLLOWING { get { return 1; } }
         public static int BOARD_REQUESTED { get { return 2; } }
         public static int NOT_FOLLOWING { get { return 0; } }
-        public static string BOARD_CONTENT_FOLLOW { get { return "Follow"; } }
-        public static string BOARD_CONTENT_UNFOLLOW { get { return "Unfollow"; } }
-        public static string BOARD_CONTENT_REQUESTED { get { return "Request sent"; } }
+        //Btn follow contents 
+        public static string BOARD_CONTENT_FOLLOW { get { return "follow"; } }
+        public static string BOARD_CONTENT_UNFOLLOW { get { return "following"; } }
+        public static string BOARD_CONTENT_REQUESTED { get { return "requested"; } }
+        public static string BOARD_CONTENT_INVITED { get { return "accept invitation"; } }
+
+        //Application version 
         public static string APP_VERSION { get { return Package.Current.Id.Version.Major.ToString() + "." + 
             Package.Current.Id.Version.Minor.ToString() +"."+Package.Current.Id.Version.Build.ToString()+ 
             "." + Package.Current.Id.Version.Revision.ToString();} }

@@ -271,7 +271,7 @@ namespace Pepeza.Server.Requests
                         results.Add(Constants.ERROR, dbug);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     results.Add(Constants.ERROR, Constants.UNKNOWNERROR);
                 }

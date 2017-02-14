@@ -417,11 +417,12 @@ TextTrimming="CharacterEllipsis"
                           Background="{ThemeResource PhoneAccentBrush}"
                           Name="btnFollow"
                           VerticalAlignment="Bottom"
-                          
                           Foreground="White"
                           Click="bthFollowClicked"
                           Grid.Row="2"
-                          IsEnabled="True"/>
+                          IsEnabled="True" Style="{StaticResource BtnBlue}">
+              
+            </Button>
             <RichTextBlock 
                 Grid.Row="3" 
                 Grid.ColumnSpan="2"

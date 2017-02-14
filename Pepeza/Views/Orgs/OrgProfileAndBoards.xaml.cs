@@ -468,16 +468,41 @@ namespace Pepeza.Views.Orgs
                     {
                         foreach (var board in boardArray)
                         {
-                            boards.Add(new TBoard()
+                            var b = new TBoard()
                             {
                                 id = (int)board["id"],
                                 linkSmall = (string)board["linkSmall"] == null ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : (string)board["linkSmall"],
                                 name = (string)board["name"],
                                 orgID = orgId,
                                 desc = (string)board["description"],
-                                following = board["follower_item"] == null ? 0 : (int)board["followerItem"]["accepted"]
-
-                            });
+                                followRestriction = (string)board["followRestriction"]
+                                
+                            };
+                            if (board["follower_item"].Type != JTokenType.Null)
+                            {
+                               //Check if they are following 
+                                if ((int)board["follower_item"]["accepted"] == 1) // User request accepted 
+                                {
+                                    b.following = 1;
+                                }
+                                else if ((int)board["follower_item"]["invite"] == 1) // User invited to follow a board 
+                                {
+                                    b.following = 3;
+                                }
+                                else if ((int)board["follower_item"]["declined"] == 0) //User has requested to follow a booard 
+                                {
+                                    b.following = 2;
+                                }
+                                else
+                                {
+                                    b.following = 0;
+                                }
+                            }
+                            else
+                            {
+                                b.following = 0; // show following 
+                            }
+                            boards.Add(b);
                         }
                         ListViewOrgBoards.ItemsSource = boards;
                     }
@@ -871,7 +896,6 @@ namespace Pepeza.Views.Orgs
             DeletingOrgProgress.Hide();
 
         }
-
         private async void BtnFollowUnfollowClick(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -942,7 +966,6 @@ namespace Pepeza.Views.Orgs
 
                 if (following.accepted == 1)
                 {
-                    (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (GridBoardProfile.DataContext as TBoard).noOfFollowers + 1;
                     btnFollow.Content = Constants.BOARD_CONTENT_UNFOLLOW;
                     btnFollow.IsEnabled = true;
                 }
@@ -979,10 +1002,6 @@ namespace Pepeza.Views.Orgs
                     if (localFollower != null)
                     {
                         await FollowingHelper.delete(localFollower);
-                        if ((this.GridBoardProfile.DataContext as TBoard).noOfFollowers > 0)
-                        {
-                            (this.GridBoardProfile.DataContext as TBoard).noOfFollowers = (this.GridBoardProfile.DataContext as TBoard).noOfFollowers - 1;
-                        }
                     }
                     btnFollow.IsEnabled = true;
                     btnFollow.Content = Constants.BOARD_CONTENT_FOLLOW;
@@ -1001,14 +1020,14 @@ namespace Pepeza.Views.Orgs
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
                 //Do nothing 
+                
             }
 
 
         }
-
         private void AddBtnFirstBoardTapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AddBoard), OrgID);
@@ -1024,27 +1043,35 @@ namespace Pepeza.Views.Orgs
         {
             if ((int)value == 1)
             {
-                return "unfollow";
+                return Constants.BOARD_CONTENT_UNFOLLOW;
             }
             else if((int)value ==0)
             {
-                return "follow";
+                return Constants.BOARD_CONTENT_FOLLOW;
             }
             else if ((int)value == 2)
             {
-                return "requested";
+                return Constants.BOARD_CONTENT_INVITED;
+            }
+            else if ((int)value == 3)
+            {
+                return Constants.BOARD_CONTENT_FOLLOW;
             }
             else
             {
-                return "follow";
+                return Constants.BOARD_CONTENT_FOLLOW; ;
             }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            if ((string)value == "unfollow")
+            if ((string)value == Constants.BOARD_CONTENT_UNFOLLOW)
             {
                 return 1;
+            }
+            else if ((string)value == Constants.BOARD_CONTENT_INVITED)
+            {
+                return 3;
             }
             return 0;
         }
