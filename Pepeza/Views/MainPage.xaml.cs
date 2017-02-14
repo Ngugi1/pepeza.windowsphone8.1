@@ -87,7 +87,7 @@ namespace Pepeza
             {
                 if (!(bool)isPushTokenSubmitted)
                 {
-                    Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED ,await registerPush());    // Submit the tokea as much as possible, they expire anytime
+                    Settings.add(Constants.IS_PUSH_TOKEN_SUBMITTED, await registerPush());    // Submit the tokea as much as possible, they expire anytime
                 }
             }
             else
@@ -224,24 +224,26 @@ namespace Pepeza
         }
          async void channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
          {
-            args.Cancel = true;   
-            //Init update from the server
-            // Your UI update code goes here!
-            Dictionary<string, int> results = await SyncPushChanges.initUpdate();
-            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async
-            () =>
-            {
-                if (results != null)
-                {
-                    isInBackground = true;
-                    await loadNotices();
-                    await loadBoards();
-                    await loadOrgs();
-                    txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
-                }
-           });
-          //Prevent background agent from being invoked 
-              
+             if (args.NotificationType == PushNotificationType.Raw)
+             {
+                 string content = args.RawNotification.Content;
+                 args.Cancel = true;
+                 //Init update from the server
+                 // Your UI update code goes here!
+                 Dictionary<string, int> results = await SyncPushChanges.initUpdate();
+                 await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async
+                 () =>
+                 {
+                     if (results != null)
+                     {
+                         isInBackground = true;
+                         await loadNotices();
+                         await loadBoards();
+                         await loadOrgs();
+                         txtBlockNotificationsCount.Text = (Settings.getValue(Constants.NOTIFICATION_COUNT)).ToString();
+                     }
+                 });
+             }     
         }
         private async Task loadNotices()
         {
@@ -403,8 +405,7 @@ namespace Pepeza
                 string s = ex.Message;
             }
            
-      }    
-        
+      }     
         private void ListViewOrgs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -445,22 +446,26 @@ namespace Pepeza
         private void StackPanelViewNotifications_Tapped(object sender, TappedRoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(ViewNotifications));
-        }
-       
+        }  
         private void checkBoxAll_Checked(object sender, RoutedEventArgs e)
         {
-            ListViewBoards.ItemsSource = boards;
-            if (boards.Count == 0)
+            if (areBoardsLoaded)
             {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
-                txtBlockContent.Text = "There are no boards to display, search and discover new boards";
-                ViewBoxSearchBoards.Visibility = Visibility.Visible;
+                ListViewBoards.ItemsSource = null;
+                ListViewBoards.ItemsSource = boards;
+                if (boards.Count == 0)
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Visible;
+                    txtBlockContent.Text = "There are no boards to display, search and discover new boards";
+                    ViewBoxSearchBoards.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
+                    txtBlockContent.Text = "There are no boards to display, search and discover new boards.";
+                }
             }
-            else
-            {
-                EmptyBoardsPlaceHolder.Visibility = Visibility.Collapsed;
-                txtBlockContent.Text = "There are no boards to display, search and discover new boards.";
-            }
+            
         }
         private void sendfeedback_click(object sender, RoutedEventArgs e)
         {
@@ -472,6 +477,7 @@ namespace Pepeza
         }
         private async void CheckBoxManaging_Checked(object sender, RoutedEventArgs e)
         {
+            ProgressBarFiltering.Visibility = Visibility.Visible;
             List<TCollaborator> collaborationItems = await CollaboratorHelper.getAll();
             List<TBoard> managingBoards = new List<TBoard>();
             if (collaborationItems != null)
@@ -498,6 +504,10 @@ namespace Pepeza
                     if (avatar != null)
                     {
                         item.linkSmall = (avatar.linkSmall == null) ? Constants.EMPTY_BOARD_PLACEHOLDER_ICON : avatar.linkSmall;
+                    }
+                    else
+                    {
+                        item.linkSmall = Constants.EMPTY_BOARD_PLACEHOLDER_ICON;
                     }
                 }
             }
@@ -526,9 +536,13 @@ namespace Pepeza
                 ListViewBoards.ItemsSource = managingBoards;
                 txtBlockContent.Text = "You don't manage any boards.";
             }
+            ProgressBarFiltering.Visibility = Visibility.Collapsed;
+
         }
         private async void CheckBoxFollowing_Checked(object sender, RoutedEventArgs e)
         {
+            ProgressBarFiltering.Visibility = Visibility.Visible;
+            ListViewBoards.ItemsSource = null;
             List<TBoard> tfollowing = new List<TBoard>();
             List<TFollowing> following = await FollowingHelper.getAll();
             if (following != null)
@@ -566,6 +580,8 @@ namespace Pepeza
                     ViewBoxSearchBoards.Visibility = Visibility.Visible;
                 }
             }
+            ProgressBarFiltering.Visibility = Visibility.Collapsed;
+
         }
         private void SearchIconTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -574,6 +590,16 @@ namespace Pepeza
             {
                 Microsoft.HockeyApp.HockeyClient.Current.TrackEvent(TrackedEvents.SEARCH);
             }
+        }
+        private void OrgTabAd_AdMediatorError(object sender, Microsoft.AdMediator.Core.Events.AdMediatorFailedEventArgs e)
+        {
+            return;
+        }
+        private void OrgTabAd_AdSdkError(object sender, Microsoft.AdMediator.Core.Events.AdFailedEventArgs e)
+        {
+            string ex = e.ErrorDescription;
+            var x = e.ToString();
+            return;
         }
     }
     public class IntToAttachment : IValueConverter

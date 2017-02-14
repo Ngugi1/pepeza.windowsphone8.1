@@ -70,35 +70,7 @@ namespace Pepeza.Db.DbHelpers
             }
              
         }
-        public async static Task<List<TOrgInfo>> getAuthorizedOrgs(int userId)
-        {
-            try
-            {
-                List<TOrgInfo> orgs = new List<TOrgInfo>();
-                List<TCollaborator> collaborators = new List<TCollaborator>();
-                var connection = DbHelper.DbConnectionAsync();
-                if (connection != null)
-                {
-                    collaborators = await connection.QueryAsync<TCollaborator>("SELECT * FROM TCollaborator WHERE userId=? AND (role=? OR role=?)", userId, Constants.ADMIN, Constants.OWNER);
-                    if (collaborators != null && collaborators.Count > 0)
-                    {
-                        foreach (TCollaborator collaborator in collaborators)
-                        {
-                            TOrgInfo org = await connection.GetAsync<TOrgInfo>(collaborator.orgId);
-                            if (org != null)
-                            {
-                                orgs.Add(org);
-                            }
-                        }
-                    }
-                }
-                return orgs;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+       
         public async static Task<bool> deleteOrg(int orgId)
         {
             bool isDeleted = false;

@@ -420,7 +420,7 @@ TextTrimming="CharacterEllipsis"
                           Foreground="White"
                           Click="bthFollowClicked"
                           Grid.Row="2"
-                          IsEnabled="True" Style="{StaticResource BtnBlue}">
+                          IsEnabled="True">
               
             </Button>
             <RichTextBlock 

@@ -95,7 +95,7 @@
                             Grid.Row="1"
                             Visibility="Visible"
                             Margin="12">
-                    <TextBlock Text="Login with facebook or google?" 
+                    <TextBlock Text="Login with facebook" 
                                Typography.Capitals="Normal"
                                Foreground="{ThemeResource PhoneAccentBrush}"
                                Style="{StaticResource txtBlockDisplay}"

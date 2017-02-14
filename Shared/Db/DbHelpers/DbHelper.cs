@@ -91,6 +91,7 @@ namespace Pepeza.Db.DbHelpers
         }
         public static SQLiteAsyncConnection DbConnectionAsync()
         {
+            SQLite3.Config(SQLite3.ConfigOption.Serialized);
             return new SQLiteAsyncConnection(DbConstants.DB_PATH);
         }   
         public static SQLiteConnection DbConnection()

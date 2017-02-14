@@ -59,10 +59,10 @@
                             Foreground="White"
                             Symbol="Directions"/>
                     </Viewbox>
-                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <StackPanel Grid.Row="3" >
                         <TextBlock 
                            Foreground="White"
-                            Text="keep swiping to get started or"
+                            Text="keep swiping to get started or skip"
                        Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,12"
                       TextWrapping="WrapWholeWords"
@@ -118,11 +118,10 @@
                             Foreground="White"
                             Symbol="People"/>
                     </Viewbox>
-                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <StackPanel Grid.Row="3" >
                         <TextBlock 
                            Foreground="White"
-                               FontWeight="SemiBold"
-                            Text="keep swiping to get started or"
+                            Text="keep swiping to get started or skip"
                        Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,12"
                       TextWrapping="WrapWholeWords"
@@ -173,10 +172,10 @@
                             Foreground="White"
                             Symbol="Admin"/>
                     </Viewbox>
-                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <StackPanel Grid.Row="3">
                         <TextBlock 
                            Foreground="White"
-                            Text="keep swiping to get started or"
+                            Text="keep swiping to get started or skip"
                        Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="0,12"
                       TextWrapping="WrapWholeWords"

@@ -69,7 +69,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0">
+                                <Grid Margin="0,2">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -91,7 +91,7 @@
                                     <TextBlock 
                                          Grid.Row="1"
                                         Margin="0"
-                                        FontWeight="SemiBold"
+                                        FontWeight="Normal"
                                         IsTextSelectionEnabled="False" 
                                        Style="{ThemeResource ControlContextualInfoTextBlockStyle}" 
                                         FontSize="{ThemeResource TextStyleLargeFontSize}"
@@ -169,16 +169,18 @@
                                 Symbol="Find"/>
                         </Viewbox>
                     </StackPanel>
-                    <WindowsPhone81:AdMediatorControl
+                    <!--<WindowsPhone81:AdMediatorControl
                         Id="NoticeAdId" 
-                        Height="50" 
+                        Height="50"  
+                        AdMediatorError="OrgTabAd_AdMediatorError"
+                        AdSdkError="OrgTabAd_AdSdkError"
                         Width="320"
                         Background="Transparent"
                         Margin="12,4"
                         HorizontalAlignment="Center"
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
-                        Name="NoticesTabAd"/>
+                        Name="NoticesTabAd"/>-->
                     <ForFun:MessagePrompt 
                                        Message="We sent you an email with confirmation link. Click on the link to confirm your email"
                                        Width="Auto"
@@ -361,17 +363,19 @@
 
 
                     </StackPanel>
-                    <WindowsPhone81:AdMediatorControl
+                    <!--<WindowsPhone81:AdMediatorControl
                         Id="BoardAdId" 
                         Height="50"
                         Width="320"
+                        AdMediatorError="OrgTabAd_AdMediatorError"
+                        AdSdkError="OrgTabAd_AdSdkError"
                         Background="Transparent"
                         Margin="12,4"
                         HorizontalAlignment="Center"
                         Grid.Row="1"
                         VerticalAlignment="Bottom"
                         
-                       Name="BoardsTabAd"/>
+                       Name="BoardsTabAd"/>-->
                 </Grid>
             </PivotItem>
             <PivotItem 
@@ -470,18 +474,20 @@
                                          />
                         </Viewbox>
                     </StackPanel>
-                    <WindowsPhone81:AdMediatorControl
+                    <!--<WindowsPhone81:AdMediatorControl
                         Id="OrgAdId"
                         Height="50"
                         Width="320"
+                        AdMediatorError="OrgTabAd_AdMediatorError"
+                        AdSdkError="OrgTabAd_AdSdkError"
                         Background="Transparent"
                         Margin="12,4"
                         HorizontalAlignment="Center"
                         Grid.Row="1"
-                        
+                        RequestedTheme="Light"
                         VerticalAlignment="Bottom"
      
-                        Name="OrgTabAd"/>
+                        Name="OrgTabAd"/>-->
 
                 </Grid>
             </PivotItem>
@@ -499,7 +505,7 @@
             <TextBlock 
                 Name="txtBlockNotificationsCount"
                 Style="{StaticResource txtBlockStatus}"
-                Margin="4,0"
+                Margin="2,0"
                 FontWeight="Bold"
                 Visibility="Collapsed"
                 Foreground="{ThemeResource PhoneAccentBrush}"

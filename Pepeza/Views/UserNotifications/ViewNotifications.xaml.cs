@@ -37,6 +37,7 @@ namespace Pepeza.Views.UserNotifications
         public ViewNotifications()
         {
             this.InitializeComponent();
+            this.NavigationCacheMode = NavigationCacheMode.Required;
         }
         private class DisplayNotification
         {
@@ -64,7 +65,7 @@ namespace Pepeza.Views.UserNotifications
             //Load all the notices 
             double dateUpdatedLatest = await loadNotifications();
             //Automatically read all the notices 
-            await autoReadAllNotifications();
+            //
         }
 
         private async Task autoReadAllNotifications()
@@ -73,12 +74,14 @@ namespace Pepeza.Views.UserNotifications
             if (dateUpdated!=0)
             {
                 //Update the server for read notifications 
-                await NotificationService.submitReadNotifications(dateUpdated);  
+                await NotificationService.submitReadNotifications(dateUpdated);
+                
             }
         }
 
         private async Task<double> loadNotifications()
         {
+            StackPanelLoading.Visibility = Visibility.Visible;
             try
             {
                 List<TNotification> notifications = await TNotificationHelper.getAll();
@@ -181,6 +184,8 @@ namespace Pepeza.Views.UserNotifications
 
                     }
                    ListViewNotifications.ItemsSource = displays;
+                   StackPanelLoading.Visibility = Visibility.Collapsed;
+                   await autoReadAllNotifications();
                    return notifications.Last().dateUpdated;
 
                 }
